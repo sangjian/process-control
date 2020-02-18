@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="379.8203125" y="326.0">cn.ideabuffer.process.node.condition.AbstractIfConditionNode</node>
+    <node x="124.8203125" y="326.0">cn.ideabuffer.process.node.condition.AbstractSwitchConditionNode</node>
+    <node x="15.0" y="479.0">cn.ideabuffer.process.Context</node>
+    <node x="588.7005208333333" y="158.0">cn.ideabuffer.process.node.condition.ConditionNode</node>
+    <node x="519.2005208333333" y="79.0">cn.ideabuffer.process.ExecutableNode</node>
+    <node x="20.5" y="400.0">cn.ideabuffer.process.Scope</node>
+    <node x="406.9505208333333" y="0.0">cn.ideabuffer.process.node.Node</node>
+    <node x="0.0" y="558.0">cn.ideabuffer.process.ContextBase</node>
+    <node x="749.7005208333333" y="158.0">cn.ideabuffer.process.ExpectableNode</node>
+    <node x="288.5755208333333" y="237.0">cn.ideabuffer.process.ChainBase</node>
+    <node x="172.0" y="400.0">cn.ideabuffer.process.PostProcessor</node>
+    <node x="163.57552083333331" y="158.0">cn.ideabuffer.process.AbstractExecutableNode</node>
+    <node x="0.0" y="79.0">cn.ideabuffer.process.AbstractNode</node>
+    <node x="677.4505208333333" y="237.0">cn.ideabuffer.process.node.condition.IfConditionNode</node>
+    <node x="453.0755208333333" y="237.0">cn.ideabuffer.process.node.condition.SwitchConditionNode</node>
+    <node x="384.5755208333333" y="158.0">cn.ideabuffer.process.Chain</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="cn.ideabuffer.process.Chain" target="cn.ideabuffer.process.ExecutableNode">
+      <point x="0.0" y="-14.5" />
+      <point x="426.0755208333333" y="138.0" />
+      <point x="574.7005208333333" y="138.0" />
+      <point x="-18.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.node.condition.AbstractIfConditionNode" target="cn.ideabuffer.process.node.condition.IfConditionNode">
+      <point x="50.5" y="-14.5" />
+      <point x="531.3203125" y="306.0" />
+      <point x="751.9505208333333" y="306.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.ChainBase" target="cn.ideabuffer.process.Chain">
+      <point x="28.25" y="-14.5" />
+      <point x="373.3255208333333" y="212.0" />
+      <point x="426.0755208333333" y="212.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.Context" target="cn.ideabuffer.process.Scope">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.node.condition.AbstractIfConditionNode" target="cn.ideabuffer.process.AbstractNode">
+      <point x="-50.5" y="-14.5" />
+      <point x="430.3203125" y="286.0" />
+      <point x="153.07552083333331" y="286.0" />
+      <point x="153.07552083333331" y="138.0" />
+      <point x="67.0" y="138.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.node.condition.IfConditionNode" target="cn.ideabuffer.process.node.condition.ConditionNode">
+      <point x="0.0" y="-14.5" />
+      <point x="751.9505208333333" y="212.0" />
+      <point x="694.4505208333333" y="212.0" />
+      <point x="35.25" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.node.condition.AbstractSwitchConditionNode" target="cn.ideabuffer.process.AbstractNode">
+      <point x="-58.75" y="-14.5" />
+      <point x="183.5703125" y="306.0" />
+      <point x="30.6953125" y="306.0" />
+      <point x="30.6953125" y="138.0" />
+      <point x="22.333333333333314" y="138.0" />
+      <point x="-44.666666666666686" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.node.condition.AbstractSwitchConditionNode" target="cn.ideabuffer.process.node.condition.SwitchConditionNode">
+      <point x="58.75" y="-14.5" />
+      <point x="301.0703125" y="296.0" />
+      <point x="544.0755208333333" y="296.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.ExpectableNode" target="cn.ideabuffer.process.ExecutableNode">
+      <point x="0.0" y="-14.5" />
+      <point x="823.7005208333333" y="128.0" />
+      <point x="648.7005208333333" y="128.0" />
+      <point x="55.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.AbstractExecutableNode" target="cn.ideabuffer.process.ExecutableNode">
+      <point x="50.25" y="-14.5" />
+      <point x="314.3255208333333" y="128.0" />
+      <point x="537.7005208333333" y="128.0" />
+      <point x="-55.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.AbstractNode" target="cn.ideabuffer.process.node.Node">
+      <point x="0.0" y="-14.5" />
+      <point x="67.0" y="54.0" />
+      <point x="427.2005208333333" y="54.0" />
+      <point x="-20.25" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.ExecutableNode" target="cn.ideabuffer.process.node.Node">
+      <point x="0.0" y="-14.5" />
+      <point x="593.2005208333333" y="54.0" />
+      <point x="467.7005208333333" y="54.0" />
+      <point x="20.25" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.ContextBase" target="cn.ideabuffer.process.Context">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.node.condition.ConditionNode" target="cn.ideabuffer.process.ExecutableNode">
+      <point x="0.0" y="-14.5" />
+      <point x="659.2005208333333" y="138.0" />
+      <point x="611.7005208333333" y="138.0" />
+      <point x="18.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.node.condition.SwitchConditionNode" target="cn.ideabuffer.process.node.condition.ConditionNode">
+      <point x="0.0" y="-14.5" />
+      <point x="544.0755208333333" y="212.0" />
+      <point x="623.9505208333333" y="212.0" />
+      <point x="-35.25" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.AbstractExecutableNode" target="cn.ideabuffer.process.AbstractNode">
+      <point x="-50.25" y="-14.5" />
+      <point x="213.82552083333331" y="128.0" />
+      <point x="111.66666666666663" y="128.0" />
+      <point x="44.66666666666663" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.ChainBase" target="cn.ideabuffer.process.AbstractExecutableNode">
+      <point x="-28.25" y="-14.5" />
+      <point x="316.8255208333333" y="212.0" />
+      <point x="264.0755208333333" y="212.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.6934673366834171" x="358.0" y="288.5" />
+  <SelectedNodes>
+    <node>cn.ideabuffer.process.Context</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
