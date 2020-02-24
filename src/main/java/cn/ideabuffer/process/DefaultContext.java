@@ -1,5 +1,8 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.block.Block;
+import cn.ideabuffer.process.block.DefaultBlock;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

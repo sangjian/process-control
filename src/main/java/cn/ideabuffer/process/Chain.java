@@ -10,6 +10,6 @@ public interface Chain extends ExecutableNode {
 
     Chain addConditionNode(ConditionNode node);
 
-    Chain addNodeGroup(NodeGroup group);
+    Chain addNodeGroup(ExecutableNodeGroup group);
 
 }

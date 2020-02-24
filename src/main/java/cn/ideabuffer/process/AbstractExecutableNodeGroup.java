@@ -11,34 +11,26 @@ import java.util.concurrent.Future;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class ExecutableNodeGroupBase implements NodeGroup {
-
-    private String id;
+public abstract class AbstractExecutableNodeGroup extends AbstractExecutableNode implements ExecutableNodeGroup {
 
     private ExecutableNode[] nodes = new ExecutableNode[0];
 
-    private ExecutorService executor;
-
-    public ExecutableNodeGroupBase(String id) {
-        this(id, null);
+    public AbstractExecutableNodeGroup() {
+        this(null, null);
     }
 
-    public ExecutableNodeGroupBase(String id, ExecutableNode... nodes) {
-        this.id = id;
+    public AbstractExecutableNodeGroup(ExecutableNode... nodes) {
+        this(null, nodes);
+    }
+
+    public AbstractExecutableNodeGroup(String id, ExecutableNode... nodes) {
+        super(id);
         if(nodes != null) {
             this.nodes = nodes;
         }
     }
 
 
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    public ExecutorService getExecutor() {
-        return executor;
-    }
 
     @Override
     public ExecutableNode[] getNodes() {
@@ -46,23 +38,7 @@ public abstract class ExecutableNodeGroupBase implements NodeGroup {
     }
 
     @Override
-    public ExecutableNode getNode(String nodeId) {
-        for (ExecutableNode node : nodes) {
-            if(node.getId().equals(nodeId)) {
-                return node;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public ExecutableNodeGroupBase executeFrom(ExecutorService executor) {
-        this.executor = executor;
-        return this;
-    }
-
-    @Override
-    public ExecutableNodeGroupBase addNode(ExecutableNode node) {
+    public ExecutableNodeGroup addNode(ExecutableNode node) {
         if(node == null) {
             throw  new NullPointerException();
         }

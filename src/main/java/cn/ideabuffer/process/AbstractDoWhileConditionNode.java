@@ -1,5 +1,10 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.block.Block;
+import cn.ideabuffer.process.block.BlockFacade;
+import cn.ideabuffer.process.block.BlockWrapper;
+import cn.ideabuffer.process.block.DefaultBlock;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +29,8 @@ public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditio
         }
 
         Block doWhileBlock = new DefaultBlock(true, true, context.getBlock());
-        ContextWrapper whileContext = new ContextWrapper(context, doWhileBlock);
+        BlockWrapper blockWrapper = new BlockWrapper(doWhileBlock);
+        ContextWrapper whileContext = new ContextWrapper(context, new BlockFacade(blockWrapper));
         while (true) {
             boolean hasBreak = false;
             for (ExecutableNode node : list) {
@@ -32,11 +38,11 @@ public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditio
                 if (stop) {
                     return true;
                 }
-                if (doWhileBlock.hasBroken()) {
+                if (blockWrapper.hasBroken()) {
                     hasBreak = true;
                     break;
                 }
-                if (doWhileBlock.hasContinued()) {
+                if (blockWrapper.hasContinued()) {
                     break;
                 }
             }
@@ -47,8 +53,8 @@ public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditio
             if (!Boolean.TRUE.equals(judgement)) {
                 break;
             }
-            doWhileBlock.resetBreak();
-            doWhileBlock.resetContinue();
+            blockWrapper.resetBreak();
+            blockWrapper.resetContinue();
         }
 
         return false;

@@ -19,53 +19,54 @@ import java.util.concurrent.Executors;
 public class ChainTest {
 
 
-    //@Test
-    //public void testChainBase() throws Exception {
-    //    ExecutorService executorService = Executors.newFixedThreadPool(3);
-    //    Chain chain = new ChainBase("testChain");
-    //    Chain c2 = new ChainBase("testSubChain");
-    //    c2.addProcessNode(new TestNode1("c-test1"))
-    //        .addProcessNode(new TestNode2("c-test2"));
-    //    Context context = new DefaultContext();
-    //    context.put("k", 0);
-    //    chain
-    //        .addProcessNode(new TestNode1("test1"))
-    //        //.addConditionNode(new TestCondition1("testCondition1")
-    //        //                    .addTrueNode(new TestNode1("testNode1"))
-    //        //                    .addFalseNode(new TestNode1("testNode2")));
-    //        .addNodeGroup(new TestGroup("testGroup")
-    //                        .addNode(new TestGroupNode1("testGroup1"))
-    //                        .addNode(new TestGroupNode2("testGroup2"))
-    //                        //.addNode(c2)
-    //                        .executeFrom(executorService))
-    //        .addProcessNode(new TestNode2("test2"));
-    //    chain.execute(context);
-    //
-    //}
-    //
-    //@Test
-    //public void testSwitch() throws Exception {
-    //    Chain chain = new ChainBase("testChain");
-    //    Context context = new DefaultContext();
-    //    context.put("k", 1);
-    //    chain.addConditionNode(new TestSwitchCondition("testSwitchCondition")
-    //                            .switchCase(new TestCaseNode("testCaseNode1"))
-    //                            .switchCase(new TestCaseNode2("testCaseNode2"))
-    //                            .defaultCase(new TestCaseNode3("testCaseNode3")));
-    //    chain.execute(context);
-    //}
-    //
-    //@Test
-    //public void testWhile() throws Exception {
-    //    Chain chain = new ChainBase("testChain");
-    //    Context context = new DefaultContext();
-    //    context.put("k", 1);
-    //    chain.addConditionNode(new TestWhileCondition("testWhileCondition")
-    //                            .addNode(new TestWhileNode1("testWhileNode1"))
-    //                            .addNode(new TestWhileNode1("testWhileNode2"))
-    //                            .addNode(new TestWhileNode1("testWhileNode3")));
-    //    chain.execute(context);
-    //}
+    @Test
+    public void testChainBase() throws Exception {
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        Chain chain = new ChainBase("testChain");
+        Chain c2 = new ChainBase("testSubChain");
+        c2.addProcessNode(new TestNode1("c-test1"))
+            .addProcessNode(new TestNode2("c-test2"));
+        Context context = new DefaultContext();
+        context.put("k", 0);
+        chain
+            .addProcessNode(new TestNode1("test1"))
+            //.addConditionNode(new TestCondition1("testCondition1")
+            //                    .addTrueNode(new TestNode1("testNode1"))
+            //                    .addFalseNode(new TestNode1("testNode2")));
+            .addNodeGroup(new TestGroup("testGroup")
+                            .addNode(new TestGroupNode1("testGroup1"))
+                            .addNode(new TestGroupNode2("testGroup2"))
+                            //.addNode(c2)
+                            //.executeOn(executorService)
+                        )
+            .addProcessNode(new TestNode2("test2"));
+        chain.execute(context);
+
+    }
+
+    @Test
+    public void testSwitch() throws Exception {
+        Chain chain = new ChainBase("testChain");
+        Context context = new DefaultContext();
+        context.put("k", 1);
+        chain.addConditionNode(new TestSwitchCondition("testSwitchCondition")
+                                .switchCase(new TestCaseNode("testCaseNode1"))
+                                .switchCase(new TestCaseNode2("testCaseNode2"))
+                                .defaultCase(new TestCaseNode3("testCaseNode3")));
+        chain.execute(context);
+    }
+
+    @Test
+    public void testWhile() throws Exception {
+        Chain chain = new ChainBase("testChain");
+        Context context = new DefaultContext();
+        context.put("k", 1);
+        chain.addConditionNode(new TestWhileCondition("testWhileCondition")
+                                .addNode(new TestWhileNode1("testWhileNode1"))
+                                .addNode(new TestWhileNode1("testWhileNode2"))
+                                .addNode(new TestWhileNode1("testWhileNode3")));
+        chain.execute(context);
+    }
 
     public static void main(String[] args) {
 

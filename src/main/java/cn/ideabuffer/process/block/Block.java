@@ -1,4 +1,4 @@
-package cn.ideabuffer.process;
+package cn.ideabuffer.process.block;
 
 import java.util.Map;
 
@@ -16,20 +16,11 @@ public interface Block extends Map<Object, Object> {
 
     boolean allowContinue();
 
-    boolean breakable();
-
-    boolean continuable();
-
     void doBreak();
 
     void doContinue();
 
-    boolean hasBroken();
+    boolean breakable();
 
-    boolean hasContinued();
-
-    void resetBreak();
-
-    void resetContinue();
-
+    boolean continuable();
 }

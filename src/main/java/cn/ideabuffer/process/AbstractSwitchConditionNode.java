@@ -1,21 +1,44 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.block.Block;
+import cn.ideabuffer.process.block.BlockFacade;
+import cn.ideabuffer.process.block.BlockWrapper;
+import cn.ideabuffer.process.block.DefaultBlock;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class AbstractSwitchConditionNode<V> extends AbstractNode implements SwitchConditionNode<V> {
+public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableNode implements SwitchConditionNode<V> {
 
     private List<ExpectableNode<V>> nodes;
 
     private ExecutableNode defaultNode;
 
+    public AbstractSwitchConditionNode() {
+        this(null);
+    }
+
     public AbstractSwitchConditionNode(String id) {
+        this(id, new ArrayList<>());
+    }
+
+    public AbstractSwitchConditionNode(String id, List<ExpectableNode<V>> nodes) {
+        this(id, nodes, null);
+    }
+
+    public AbstractSwitchConditionNode(String id, List<ExpectableNode<V>> nodes,
+        ExecutableNode defaultNode) {
         super(id);
-        nodes = new ArrayList<>();
+        if(nodes == null) {
+            throw new NullPointerException();
+        }
+        this.nodes = nodes;
+        this.defaultNode = defaultNode;
     }
 
     @Override
@@ -52,7 +75,8 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractNode implem
         V judgement = judge(context);
 
         Block switchBlock = new DefaultBlock(true, false, context.getBlock());
-        ContextWrapper switchContext = new ContextWrapper(context, switchBlock);
+        BlockWrapper blockWrapper = new BlockWrapper(switchBlock);
+        ContextWrapper switchContext = new ContextWrapper(context, new BlockFacade(blockWrapper));
         boolean hasBroken = false;
         for (ExpectableNode<V> node : list) {
             V expectation = node.expectation();
@@ -66,7 +90,7 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractNode implem
             if(stop) {
                 return true;
             }
-            if(switchBlock.hasBroken() || switchBlock.hasContinued()) {
+            if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
                 hasBroken = true;
                 break;
             }
@@ -76,5 +100,10 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractNode implem
             return defaultNode.execute(switchContext);
         }
         return false;
+    }
+
+    @Override
+    public ExecutableNode executeOn(ExecutorService executor) {
+        return null;
     }
 }

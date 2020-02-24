@@ -9,7 +9,6 @@ import cn.ideabuffer.process.AbstractExecutableNode;
  * @date 2020/01/19
  */
 public class TestCaseNode extends AbstractExecutableNode implements ExpectableNode<Integer> {
-
     public TestCaseNode(String id) {
         super(id);
     }
@@ -21,7 +20,7 @@ public class TestCaseNode extends AbstractExecutableNode implements ExpectableNo
 
     @Override
     public boolean execute(Context context) throws Exception {
-        System.out.println("id=" + getId() + ", k = " + context.get("k"));
+        System.out.println("k = " + context.get("k"));
         //if(context.breakable()) {
         //    context.doBreak();
         //}

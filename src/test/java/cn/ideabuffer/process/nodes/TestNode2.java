@@ -10,7 +10,6 @@ import cn.ideabuffer.process.AbstractExecutableNode;
  * @date 2020/01/18
  */
 public class TestNode2 extends AbstractExecutableNode implements PostProcessor, ExpectableNode<Integer> {
-
     public TestNode2(String id) {
         super(id);
     }

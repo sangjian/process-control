@@ -8,7 +8,6 @@ import cn.ideabuffer.process.Context;
  * @date 2020/01/20
  */
 public class TestWhileNode1 extends AbstractExecutableNode {
-
     public TestWhileNode1(String id) {
         super(id);
     }
@@ -20,7 +19,7 @@ public class TestWhileNode1 extends AbstractExecutableNode {
         if(k == 4) {
             context.getBlock().doContinue();
         }
-        System.out.println(String.format("id:%s, k:%d", getId(), k));
+        System.out.println(String.format("k:%d", k));
         return false;
     }
 }

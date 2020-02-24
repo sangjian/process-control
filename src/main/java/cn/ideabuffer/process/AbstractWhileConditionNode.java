@@ -1,5 +1,10 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.block.Block;
+import cn.ideabuffer.process.block.BlockFacade;
+import cn.ideabuffer.process.block.BlockWrapper;
+import cn.ideabuffer.process.block.DefaultBlock;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +12,7 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class AbstractWhileConditionNode extends AbstractNode implements WhileConditionNode {
+public abstract class AbstractWhileConditionNode extends AbstractExecutableNode implements WhileConditionNode {
 
     private List<ExecutableNode> nodes;
 
@@ -37,26 +42,27 @@ public abstract class AbstractWhileConditionNode extends AbstractNode implements
             return false;
         }
 
-        Block whileBlock = new DefaultBlock(context.getBlock());
-        ContextWrapper whileContext = new ContextWrapper(context, whileBlock);
+        Block whileBlock = new DefaultBlock(true, true, context.getBlock());
+        BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
+        ContextWrapper whileContext = new ContextWrapper(context, new BlockFacade(blockWrapper));
         while (true) {
             Boolean judgement = judge(whileContext);
             if (!Boolean.TRUE.equals(judgement)) {
                 break;
             }
-            whileBlock.resetBreak();
-            whileBlock.resetContinue();
+            blockWrapper.resetBreak();
+            blockWrapper.resetContinue();
             boolean hasBreak = false;
             for (ExecutableNode node : list) {
                 boolean stop = node.execute(whileContext);
                 if (stop) {
                     return true;
                 }
-                if (whileBlock.hasBroken()) {
+                if (blockWrapper.hasBroken()) {
                     hasBreak = true;
                     break;
                 }
-                if (whileBlock.hasContinued()) {
+                if (blockWrapper.hasContinued()) {
                     break;
                 }
             }

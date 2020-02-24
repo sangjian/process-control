@@ -1,5 +1,10 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.block.Block;
+import cn.ideabuffer.process.block.BlockFacade;
+import cn.ideabuffer.process.block.BlockWrapper;
+import cn.ideabuffer.process.block.DefaultBlock;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +12,7 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class AbstractIfConditionNode<E> extends AbstractNode implements IfConditionNode<E> {
+public abstract class AbstractIfConditionNode<E> extends AbstractExecutableNode implements IfConditionNode<E> {
 
     private List<ExecutableNode> trueNodeList;
 
@@ -58,13 +63,14 @@ public abstract class AbstractIfConditionNode<E> extends AbstractNode implements
             nodeList = falseNodeList;
         }
         Block ifBlock = new DefaultBlock(context.getBlock());
-        ContextWrapper contextWrapper = new ContextWrapper(context, ifBlock);
+        BlockWrapper blockWrapper = new BlockWrapper(ifBlock);
+        ContextWrapper contextWrapper = new ContextWrapper(context, new BlockFacade(blockWrapper));
         for (ExecutableNode node : nodeList) {
             boolean stop = node.execute(contextWrapper);
             if(stop) {
                 return true;
             }
-            if(ifBlock.hasBroken() || ifBlock.hasContinued()) {
+            if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
                 break;
             }
         }

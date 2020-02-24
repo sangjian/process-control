@@ -8,6 +8,9 @@ public abstract class AbstractNode implements Node {
 
     private String id;
 
+    public AbstractNode() {
+    }
+
     public AbstractNode(String id) {
         this.id = id;
     }
@@ -17,4 +20,8 @@ public abstract class AbstractNode implements Node {
         return id;
     }
 
+    @Override
+    public boolean enabled(Context context) {
+        return true;
+    }
 }

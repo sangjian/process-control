@@ -1,5 +1,8 @@
 package cn.ideabuffer.process;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+
 /**
  * @author sangjian.sj
  * @date 2020/01/18
@@ -39,7 +42,7 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
     }
 
     @Override
-    public Chain addNodeGroup(NodeGroup group) {
+    public Chain addNodeGroup(ExecutableNodeGroup group) {
         return addNode(group);
     }
 
@@ -65,7 +68,12 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
 
             if (node instanceof ExecutableNode) {
                 try {
-                    stop = ((ExecutableNode)node).execute(context);
+                    ExecutorService executor = ((ExecutableNode)node).getExecutor();
+                    if(executor != null) {
+                        executor.execute(new NodeTask((ExecutableNode)node, context));
+                    } else {
+                        stop = ((ExecutableNode)node).execute(context);
+                    }
                     if (stop) {
                         break;
                     }
@@ -109,4 +117,22 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
         return true;
     }
 
+    class NodeTask implements Runnable {
+        ExecutableNode node;
+        Context context;
+
+        NodeTask(ExecutableNode node, Context context) {
+            this.node = node;
+            this.context = context;
+        }
+
+        @Override
+        public void run() {
+            try {
+                node.execute(context);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

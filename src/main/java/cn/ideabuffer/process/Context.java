@@ -1,5 +1,7 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.block.Block;
+
 import java.util.Map;
 
 /**

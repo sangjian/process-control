@@ -1,32 +1,32 @@
-package cn.ideabuffer.process;
+package cn.ideabuffer.process.block;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author sangjian.sj
- * @date 2020/02/06
+ * @date 2020/02/22
  */
-public class DefaultBlock extends ConcurrentHashMap<Object, Object> implements Block {
+public abstract class AbstractBlock extends ConcurrentHashMap<Object, Object> implements Block {
 
-    private boolean breakable;
+    protected boolean breakable;
 
-    private boolean continuable;
+    protected boolean continuable;
 
     protected boolean hasBroken;
 
     protected boolean hasContinued;
 
-    private Block parent;
+    protected Block parent;
 
-    public DefaultBlock() {
+    public AbstractBlock() {
         this(null);
     }
 
-    public DefaultBlock(Block parent) {
+    public AbstractBlock(Block parent) {
         this(false, false, parent);
     }
 
-    public DefaultBlock(boolean breakable, boolean continuable, Block parent) {
+    public AbstractBlock(boolean breakable, boolean continuable, Block parent) {
         this.breakable = breakable;
         this.continuable = continuable;
         this.parent = parent;
@@ -34,11 +34,7 @@ public class DefaultBlock extends ConcurrentHashMap<Object, Object> implements B
 
     @Override
     public <K, V> V get(K key, V defaultValue) {
-        V value = (V)get(key);
-        if(value != null) {
-            return value;
-        }
-        return defaultValue;
+        return null;
     }
 
     @Override
@@ -66,16 +62,6 @@ public class DefaultBlock extends ConcurrentHashMap<Object, Object> implements B
             return parent.allowContinue();
         }
         return false;
-    }
-
-    @Override
-    public boolean breakable() {
-        return breakable;
-    }
-
-    @Override
-    public boolean continuable() {
-        return continuable;
     }
 
     @Override
@@ -107,34 +93,12 @@ public class DefaultBlock extends ConcurrentHashMap<Object, Object> implements B
     }
 
     @Override
-    public boolean hasBroken() {
-        if(hasBroken) {
-            return true;
-        }
-        if(parent != null) {
-            return parent.hasBroken();
-        }
-        return false;
+    public boolean breakable() {
+        return breakable;
     }
 
     @Override
-    public boolean hasContinued() {
-        if(hasContinued) {
-            return true;
-        }
-        if(parent != null) {
-            return parent.hasBroken();
-        }
-        return false;
-    }
-
-    @Override
-    public void resetBreak() {
-        this.hasBroken = false;
-    }
-
-    @Override
-    public void resetContinue() {
-        this.hasContinued = false;
+    public boolean continuable() {
+        return continuable;
     }
 }

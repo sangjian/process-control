@@ -1,5 +1,7 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.block.Block;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +28,7 @@ public class ContextWrapper implements Context {
 
     @Override
     public <K, V> V get(K key, V defaultValue) {
-        return null;
+        return context.get(key, defaultValue);
     }
 
     @Override

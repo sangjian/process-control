@@ -8,7 +8,6 @@ import cn.ideabuffer.process.AbstractExecutableNode;
  * @date 2020/01/18
  */
 public class TestGroupNode1 extends AbstractExecutableNode {
-
     public TestGroupNode1(String id) {
         super(id);
     }
