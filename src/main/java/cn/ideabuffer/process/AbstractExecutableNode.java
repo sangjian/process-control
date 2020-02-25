@@ -1,5 +1,6 @@
 package cn.ideabuffer.process;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -26,5 +27,20 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     @Override
     public ExecutorService getExecutor() {
         return executor;
+    }
+
+    class NodeTask implements Callable<Boolean>{
+        ExecutableNode node;
+        Context context;
+
+        NodeTask(ExecutableNode node, Context context) {
+            this.node = node;
+            this.context = context;
+        }
+
+        @Override
+        public Boolean call() throws Exception {
+            return node.execute(context);
+        }
     }
 }

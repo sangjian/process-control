@@ -1,6 +1,8 @@
 package cn.ideabuffer.process;
 
-import java.util.concurrent.Callable;
+import cn.ideabuffer.process.condition.ConditionNode;
+import cn.ideabuffer.process.group.ExecutableNodeGroup;
+
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -56,7 +58,6 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
         running = true;
         Exception exception = null;
 
-
         boolean stop = false;
         int i;
         for (i = 0; i < nodes.length; i++) {
@@ -69,8 +70,8 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
             if (node instanceof ExecutableNode) {
                 try {
                     ExecutorService executor = ((ExecutableNode)node).getExecutor();
-                    if(executor != null) {
-                        executor.execute(new NodeTask((ExecutableNode)node, context));
+                    if (executor != null && !(node instanceof ExecutableNodeGroup)) {
+                        executor.submit(new NodeTask((ExecutableNode)node, context));
                     } else {
                         stop = ((ExecutableNode)node).execute(context);
                     }
@@ -85,16 +86,16 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
 
         }
 
-        if(i >= nodes.length) {
+        if (i >= nodes.length) {
             i--;
         }
         boolean processed = false;
         for (; i >= 0; i--) {
             Node node = nodes[i];
-            if(node instanceof PostProcessor) {
+            if (node instanceof PostProcessor) {
                 try {
                     boolean result = ((PostProcessor)node).postProcess(context, exception);
-                    if(result) {
+                    if (result) {
                         processed = true;
                     }
                 } catch (Exception e) {
@@ -110,29 +111,9 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
         return stop;
     }
 
-
-
     @Override
     public boolean enabled(Context context) {
         return true;
     }
 
-    class NodeTask implements Runnable {
-        ExecutableNode node;
-        Context context;
-
-        NodeTask(ExecutableNode node, Context context) {
-            this.node = node;
-            this.context = context;
-        }
-
-        @Override
-        public void run() {
-            try {
-                node.execute(context);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 }

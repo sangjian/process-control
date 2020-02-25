@@ -1,5 +1,6 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.executor.ExecuteStrategies;
 import cn.ideabuffer.process.nodes.*;
 import cn.ideabuffer.process.nodes.cases.TestCaseNode;
 import cn.ideabuffer.process.nodes.cases.TestCaseNode2;
@@ -37,7 +38,7 @@ public class ChainTest {
                             .addNode(new TestGroupNode1("testGroup1"))
                             .addNode(new TestGroupNode2("testGroup2"))
                             //.addNode(c2)
-                            //.executeOn(executorService)
+                            .executeOn(executorService)
                         )
             .addProcessNode(new TestNode2("test2"));
         chain.execute(context);
@@ -66,6 +67,28 @@ public class ChainTest {
                                 .addNode(new TestWhileNode1("testWhileNode2"))
                                 .addNode(new TestWhileNode1("testWhileNode3")));
         chain.execute(context);
+    }
+
+    @Test
+    public void testSerial() throws Exception {
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        Chain chain = new ChainBase("testChain");
+        Context context = new DefaultContext();
+        context.put("k", 1);
+        chain.addNodeGroup(new TestGroup("testGroup")
+            .addNode(new TestGroupNode1("testGroup1"))
+            .addNode(new TestGroupNode2("testGroup2"))
+            .executeOn(executorService)
+            .executeStrategy(ExecuteStrategies.SERIAL));
+        chain.execute(context);
+    }
+
+    @Test
+    public void testBlock() {
+        Chain chain = new ChainBase("testChain");
+        Context context = new DefaultContext();
+        context.put("k", 1);
+
     }
 
     public static void main(String[] args) {

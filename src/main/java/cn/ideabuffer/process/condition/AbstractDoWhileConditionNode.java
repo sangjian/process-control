@@ -1,5 +1,8 @@
-package cn.ideabuffer.process;
+package cn.ideabuffer.process.condition;
 
+import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.ContextWrapper;
+import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockFacade;
 import cn.ideabuffer.process.block.BlockWrapper;
@@ -12,27 +15,13 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class AbstractWhileConditionNode extends AbstractExecutableNode implements WhileConditionNode {
+public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditionNode {
 
     private List<ExecutableNode> nodes;
 
-    public AbstractWhileConditionNode(String id) {
+    public AbstractDoWhileConditionNode(String id) {
         super(id);
         nodes = new ArrayList<>();
-    }
-
-    @Override
-    public WhileConditionNode addNode(ExecutableNode node) {
-        if (node == null) {
-            throw new NullPointerException();
-        }
-        nodes.add(node);
-        return this;
-    }
-
-    @Override
-    public List<ExecutableNode> getNodes() {
-        return nodes;
     }
 
     @Override
@@ -42,16 +31,10 @@ public abstract class AbstractWhileConditionNode extends AbstractExecutableNode 
             return false;
         }
 
-        Block whileBlock = new DefaultBlock(true, true, context.getBlock());
-        BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
+        Block doWhileBlock = new DefaultBlock(true, true, context.getBlock());
+        BlockWrapper blockWrapper = new BlockWrapper(doWhileBlock);
         ContextWrapper whileContext = new ContextWrapper(context, new BlockFacade(blockWrapper));
         while (true) {
-            Boolean judgement = judge(whileContext);
-            if (!Boolean.TRUE.equals(judgement)) {
-                break;
-            }
-            blockWrapper.resetBreak();
-            blockWrapper.resetContinue();
             boolean hasBreak = false;
             for (ExecutableNode node : list) {
                 boolean stop = node.execute(whileContext);
@@ -69,6 +52,12 @@ public abstract class AbstractWhileConditionNode extends AbstractExecutableNode 
             if (hasBreak) {
                 break;
             }
+            Boolean judgement = judge(whileContext);
+            if (!Boolean.TRUE.equals(judgement)) {
+                break;
+            }
+            blockWrapper.resetBreak();
+            blockWrapper.resetContinue();
         }
 
         return false;

@@ -1,9 +1,7 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.AbstractExecutableNode;
-import cn.ideabuffer.process.AbstractExecutableNodeGroup;
-import cn.ideabuffer.process.ExecutableNode;
+import cn.ideabuffer.process.group.AbstractExecutableNodeGroup;
 
 /**
  * @author sangjian.sj
