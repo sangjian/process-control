@@ -34,7 +34,7 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
     }
 
     @Override
-    public Chain addProcessNode(AbstractExecutableNode node) {
+    public Chain addProcessNode(ExecutableNode node) {
         return addNode(node);
     }
 
@@ -70,10 +70,10 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
             if (node instanceof ExecutableNode) {
                 try {
                     ExecutorService executor = ((ExecutableNode)node).getExecutor();
-                    if (executor != null && !(node instanceof ExecutableNodeGroup)) {
-                        executor.submit(new NodeTask((ExecutableNode)node, context));
-                    } else {
+                    if(node instanceof ExecutableNodeGroup || executor == null) {
                         stop = ((ExecutableNode)node).execute(context);
+                    } else {
+                        executor.submit(new NodeTask((ExecutableNode)node, context));
                     }
                     if (stop) {
                         break;

@@ -16,7 +16,7 @@ public abstract class AbstractExecutableNodeGroup extends AbstractExecutableNode
 
     private ExecutableNode[] nodes = new ExecutableNode[0];
 
-    private ExecuteStrategy executeStrategy = ExecuteStrategies.ASYNC;
+    private ExecuteStrategy executeStrategy = ExecuteStrategies.SERIAL;
 
     public AbstractExecutableNodeGroup() {
         this(null);
@@ -27,27 +27,24 @@ public abstract class AbstractExecutableNodeGroup extends AbstractExecutableNode
     }
 
     public AbstractExecutableNodeGroup(String id, ExecutableNode... nodes) {
-        this(id, null, nodes);
-    }
-
-    public AbstractExecutableNodeGroup(String id, ExecuteStrategy executeStrategy, ExecutableNode... nodes) {
         super(id);
         if(nodes != null) {
             this.nodes = nodes;
-        }
-        if(executeStrategy != null) {
-            this.executeStrategy = executeStrategy;
         }
     }
 
     @Override
     public ExecutableNodeGroup executeOn(ExecutorService executor) {
-        super.executeOn(executor);
+        this.executeOn(executor, ExecuteStrategies.SERIAL);
         return this;
     }
 
     @Override
-    public ExecutableNodeGroup executeStrategy(ExecuteStrategy strategy) {
+    public ExecutableNodeGroup executeOn(ExecutorService executor, ExecuteStrategy strategy) {
+        super.executeOn(executor);
+        if(strategy == null) {
+            throw new NullPointerException();
+        }
         this.executeStrategy = strategy;
         return this;
     }

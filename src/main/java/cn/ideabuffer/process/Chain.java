@@ -9,7 +9,7 @@ import cn.ideabuffer.process.group.ExecutableNodeGroup;
  */
 public interface Chain extends ExecutableNode {
 
-    Chain addProcessNode(AbstractExecutableNode node);
+    Chain addProcessNode(ExecutableNode node);
 
     Chain addConditionNode(ConditionNode node);
 

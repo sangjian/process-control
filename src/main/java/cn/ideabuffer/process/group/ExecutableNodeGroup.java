@@ -18,7 +18,7 @@ public interface ExecutableNodeGroup extends ExecutableNode {
     @Override
     ExecutableNodeGroup executeOn(ExecutorService executor);
 
-    ExecutableNodeGroup executeStrategy(ExecuteStrategy strategy);
+    ExecutableNodeGroup executeOn(ExecutorService executor, ExecuteStrategy strategy);
 
     ExecuteStrategy getExecuteStrategy();
 }

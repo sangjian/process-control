@@ -78,8 +78,7 @@ public class ChainTest {
         chain.addNodeGroup(new TestGroup("testGroup")
             .addNode(new TestGroupNode1("testGroup1"))
             .addNode(new TestGroupNode2("testGroup2"))
-            .executeOn(executorService)
-            .executeStrategy(ExecuteStrategies.SERIAL));
+            .executeOn(executorService, ExecuteStrategies.SERIAL));
         chain.execute(context);
     }
 
