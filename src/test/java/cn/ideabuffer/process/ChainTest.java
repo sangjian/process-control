@@ -8,6 +8,7 @@ import cn.ideabuffer.process.nodes.cases.TestCaseNode3;
 import cn.ideabuffer.process.nodes.cases.TestWhileNode1;
 import cn.ideabuffer.process.nodes.conditions.TestSwitchCondition;
 import cn.ideabuffer.process.nodes.conditions.TestWhileCondition;
+import cn.ideabuffer.process.nodes.trycatch.*;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
@@ -88,6 +89,22 @@ public class ChainTest {
         Context context = new DefaultContext();
         context.put("k", 1);
 
+    }
+
+    @Test
+    public void testTryCatchFinally() throws Exception {
+        Chain chain = new ChainBase("testChain");
+        Context context = new DefaultContext();
+        context.put("k", 1);
+        chain.addProcessNode(new TryCatchFinallyNode()
+            .addTryNode(new TryNode1())
+            .addTryNode(new TryNode2())
+            .addCatchNode(new CatchNode1())
+            .addCatchNode(new CatchNode2())
+            .addFinallyNode(new FinallyNode1())
+            .addFinallyNode(new FinallyNode2())
+            .catchOnException(NullPointerException.class));
+        chain.execute(context);
     }
 
     public static void main(String[] args) {
