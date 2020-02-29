@@ -5,9 +5,7 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.block.Block;
-import cn.ideabuffer.process.block.BlockFacade;
 import cn.ideabuffer.process.block.BlockWrapper;
-import cn.ideabuffer.process.block.DefaultBlock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +44,9 @@ public abstract class AbstractWhileConditionNode extends AbstractExecutableNode 
             return false;
         }
 
-        Block whileBlock = new DefaultBlock(true, true, context.getBlock());
+        Block whileBlock = new Block(true, true, context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
-        ContextWrapper whileContext = new ContextWrapper(context, new BlockFacade(blockWrapper));
+        ContextWrapper whileContext = new ContextWrapper(context, whileBlock);
         while (true) {
             Boolean judgement = judge(whileContext);
             if (!Boolean.TRUE.equals(judgement)) {

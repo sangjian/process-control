@@ -2,6 +2,7 @@ package cn.ideabuffer.process.executor;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
+import cn.ideabuffer.process.block.BlockWrapper;
 
 import java.util.concurrent.ExecutorService;
 
@@ -17,9 +18,13 @@ public class SerialExecuteStrategy implements ExecuteStrategy {
             return false;
         }
         try {
+            BlockWrapper blockWrapper = new BlockWrapper(context.getBlock());
             for (ExecutableNode node : nodes) {
                 if(node.execute(context)) {
                     return true;
+                }
+                if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
+                    break;
                 }
             }
             return false;

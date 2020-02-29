@@ -4,58 +4,29 @@ package cn.ideabuffer.process.block;
  * @author sangjian.sj
  * @date 2020/02/22
  */
-public class BlockWrapper extends BlockFacade {
+public class BlockWrapper extends Block {
 
-
-    protected boolean hasBroken;
-
-    protected boolean hasContinued;
+    private Block block;
 
     public BlockWrapper(Block block) {
-        super(block);
+        this.block = block;
     }
 
     @Override
-    public void doBreak() {
-        if (breakable()) {
-            hasBroken = true;
-            return;
-        }
-        if (!allowBreak()) {
-            throw new IllegalStateException();
-        }
-        if (parent() != null) {
-            parent().doBreak();
-        }
-    }
+    public boolean breakable() {return block.breakable();}
 
     @Override
-    public void doContinue() {
-        if (continuable()) {
-            hasContinued = true;
-            return;
-        }
-        if (!allowContinue()) {
-            throw new IllegalStateException();
-        }
-        if (parent() != null) {
-            parent().doContinue();
-        }
-    }
+    public boolean continuable() {return block.continuable();}
 
-    public boolean hasBroken() {
-        return hasBroken;
-    }
+    @Override
+    public boolean hasBroken() {return block.hasBroken();}
 
-    public boolean hasContinued() {
-        return hasContinued;
-    }
+    @Override
+    public boolean hasContinued() {return block.hasContinued();}
 
-    public void resetBreak() {
-        this.hasBroken = false;
-    }
+    @Override
+    public void resetBreak() {block.resetBreak();}
 
-    public void resetContinue() {
-        this.hasContinued = false;
-    }
+    @Override
+    public void resetContinue() {block.resetContinue();}
 }

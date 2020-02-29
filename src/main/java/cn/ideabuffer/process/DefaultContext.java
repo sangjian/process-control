@@ -1,7 +1,6 @@
 package cn.ideabuffer.process;
 
 import cn.ideabuffer.process.block.Block;
-import cn.ideabuffer.process.block.DefaultBlock;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,7 +13,7 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
     private Block block;
 
     public DefaultContext() {
-        this(new DefaultBlock());
+        this(new Block());
     }
 
     public DefaultContext(Block block) {

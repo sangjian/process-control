@@ -2,9 +2,7 @@ package cn.ideabuffer.process;
 
 
 import cn.ideabuffer.process.block.Block;
-import cn.ideabuffer.process.block.BlockFacade;
 import cn.ideabuffer.process.block.BlockWrapper;
-import cn.ideabuffer.process.block.DefaultBlock;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -66,12 +64,15 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
             throw new RuntimeException("'catch' or 'finally' expected");
         }
         try {
-            Block tryBlock = new DefaultBlock(context.getBlock());
+            Block tryBlock = new Block(context.getBlock());
             BlockWrapper blockWrapper = new BlockWrapper(tryBlock);
-            ContextWrapper contextWrapper = new ContextWrapper(context, new BlockFacade(blockWrapper));
+            ContextWrapper contextWrapper = new ContextWrapper(context, tryBlock);
             for (ExecutableNode node : tryNodes) {
                 if(node.execute(contextWrapper)) {
                     return true;
+                }
+                if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
+                    break;
                 }
             }
         } catch (Exception e) {
@@ -83,21 +84,27 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
                 }
             }
             if(matched) {
-                Block catchBlock = new DefaultBlock(context.getBlock());
+                Block catchBlock = new Block(context.getBlock());
                 BlockWrapper blockWrapper = new BlockWrapper(catchBlock);
-                ContextWrapper contextWrapper = new ContextWrapper(context, new BlockFacade(blockWrapper));
+                ContextWrapper contextWrapper = new ContextWrapper(context, catchBlock);
                 for (ExecutableNode node : catchNodes) {
                     if(node.execute(contextWrapper)) {
+                        return true;
+                    }
+                    if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
                         break;
                     }
                 }
             }
         } finally {
-            Block finallyBlock = new DefaultBlock(context.getBlock());
+            Block finallyBlock = new Block(context.getBlock());
             BlockWrapper blockWrapper = new BlockWrapper(finallyBlock);
-            ContextWrapper contextWrapper = new ContextWrapper(context, new BlockFacade(blockWrapper));
+            ContextWrapper contextWrapper = new ContextWrapper(context, finallyBlock);
             for (ExecutableNode node : finallyNodes) {
                 if(node.execute(contextWrapper)) {
+                    break;
+                }
+                if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
                     break;
                 }
             }

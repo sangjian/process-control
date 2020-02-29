@@ -2,9 +2,7 @@ package cn.ideabuffer.process.condition;
 
 import cn.ideabuffer.process.*;
 import cn.ideabuffer.process.block.Block;
-import cn.ideabuffer.process.block.BlockFacade;
 import cn.ideabuffer.process.block.BlockWrapper;
-import cn.ideabuffer.process.block.DefaultBlock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,9 +73,9 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableN
         }
         V judgement = judge(context);
 
-        Block switchBlock = new DefaultBlock(true, false, context.getBlock());
+        Block switchBlock = new Block(true, false, context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(switchBlock);
-        ContextWrapper switchContext = new ContextWrapper(context, new BlockFacade(blockWrapper));
+        ContextWrapper switchContext = new ContextWrapper(context, switchBlock);
         boolean hasBroken = false;
         for (ExpectableNode<V> node : list) {
             V expectation = node.expectation();

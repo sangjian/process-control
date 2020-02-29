@@ -5,9 +5,7 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.block.Block;
-import cn.ideabuffer.process.block.BlockFacade;
 import cn.ideabuffer.process.block.BlockWrapper;
-import cn.ideabuffer.process.block.DefaultBlock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,9 +64,9 @@ public abstract class AbstractIfConditionNode<E> extends AbstractExecutableNode 
         } else {
             nodeList = falseNodeList;
         }
-        Block ifBlock = new DefaultBlock(context.getBlock());
+        Block ifBlock = new Block(context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(ifBlock);
-        ContextWrapper contextWrapper = new ContextWrapper(context, new BlockFacade(blockWrapper));
+        ContextWrapper contextWrapper = new ContextWrapper(context, ifBlock);
         for (ExecutableNode node : nodeList) {
             boolean stop = node.execute(contextWrapper);
             if(stop) {

@@ -2,7 +2,9 @@ package cn.ideabuffer.process.group;
 
 import cn.ideabuffer.process.AbstractExecutableNode;
 import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.ExecutableNode;
+import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.executor.ExecuteStrategies;
 import cn.ideabuffer.process.executor.ExecuteStrategy;
 
@@ -74,7 +76,9 @@ public abstract class AbstractExecutableNodeGroup extends AbstractExecutableNode
     @Override
     public boolean execute(Context context) throws Exception {
         try {
-            if(executeStrategy.execute(executor, context, nodes)) {
+            Block groupBlock = new Block(context.getBlock());
+            ContextWrapper contextWrapper = new ContextWrapper(context, groupBlock);
+            if(executeStrategy.execute(executor, contextWrapper, nodes)) {
                 return true;
             }
         } catch (Exception e) {
