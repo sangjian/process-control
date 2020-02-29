@@ -15,11 +15,8 @@ import java.util.List;
  */
 public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditionNode {
 
-    private List<ExecutableNode> nodes;
-
     public AbstractDoWhileConditionNode(String id) {
         super(id);
-        nodes = new ArrayList<>();
     }
 
     @Override
@@ -31,26 +28,15 @@ public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditio
 
         Block doWhileBlock = new Block(true, true, context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(doWhileBlock);
-        ContextWrapper whileContext = new ContextWrapper(context, doWhileBlock);
+        ContextWrapper doWhileContext = new ContextWrapper(context, doWhileBlock);
         while (true) {
-            boolean hasBreak = false;
-            for (ExecutableNode node : list) {
-                boolean stop = node.execute(whileContext);
-                if (stop) {
-                    return true;
-                }
-                if (blockWrapper.hasBroken()) {
-                    hasBreak = true;
-                    break;
-                }
-                if (blockWrapper.hasContinued()) {
-                    break;
-                }
+            if(executeNodes(list, doWhileContext, blockWrapper)) {
+                return true;
             }
-            if (hasBreak) {
+            if (blockWrapper.hasBroken()) {
                 break;
             }
-            Boolean judgement = judge(whileContext);
+            Boolean judgement = judge(doWhileContext);
             if (!Boolean.TRUE.equals(judgement)) {
                 break;
             }

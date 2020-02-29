@@ -14,9 +14,9 @@ import java.util.concurrent.ExecutorService;
  */
 public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableNode implements SwitchConditionNode<V> {
 
-    private List<ExpectableNode<V>> nodes;
+    private List<ExpectableNode<V>> caseNodes;
 
-    private ExecutableNode defaultNode;
+    private List<ExecutableNode> defaultNodes;
 
     public AbstractSwitchConditionNode() {
         this(null);
@@ -26,18 +26,26 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableN
         this(id, new ArrayList<>());
     }
 
-    public AbstractSwitchConditionNode(String id, List<ExpectableNode<V>> nodes) {
-        this(id, nodes, null);
+    public AbstractSwitchConditionNode(String id, List<ExpectableNode<V>> caseNodes) {
+        this(id, caseNodes, null);
     }
 
-    public AbstractSwitchConditionNode(String id, List<ExpectableNode<V>> nodes,
-        ExecutableNode defaultNode) {
+    public AbstractSwitchConditionNode(String id, List<ExpectableNode<V>> caseNodes,
+        List<ExecutableNode> defaultNodes) {
         super(id);
-        if(nodes == null) {
+        if(caseNodes == null) {
             throw new NullPointerException();
         }
-        this.nodes = nodes;
-        this.defaultNode = defaultNode;
+        this.caseNodes = caseNodes;
+        this.defaultNodes = defaultNodes;
+    }
+
+    public void setCaseNodes(List<ExpectableNode<V>> caseNodes) {
+        this.caseNodes = caseNodes;
+    }
+
+    public void setDefaultNodes(List<ExecutableNode> defaultNodes) {
+        this.defaultNodes = defaultNodes;
     }
 
     @Override
@@ -45,24 +53,24 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableN
         if(node == null) {
             throw new NullPointerException();
         }
-        nodes.add(node);
+        caseNodes.add(node);
         return this;
     }
 
     @Override
     public SwitchConditionNode<V> defaultCase(ExecutableNode node) {
-        this.defaultNode = node;
+        this.defaultNodes.add(node);
         return this;
     }
 
     @Override
-    public ExecutableNode getDefaultNode() {
-        return this.defaultNode;
+    public List<ExecutableNode> getDefaultNodes() {
+        return defaultNodes;
     }
 
     @Override
     public List<ExpectableNode<V>> getCaseNodes() {
-        return nodes;
+        return caseNodes;
     }
 
     @Override
@@ -95,14 +103,20 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableN
             }
 
         }
-        if(!hasBroken) {
-            return defaultNode.execute(switchContext);
+        if(hasBroken) {
+            return false;
+        }
+        if(defaultNodes == null || defaultNodes.size() == 0) {
+            return false;
+        }
+        for (ExecutableNode node : defaultNodes) {
+            if(node.execute(switchContext)) {
+                return true;
+            }
+            if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
+                break;
+            }
         }
         return false;
-    }
-
-    @Override
-    public ExecutableNode executeOn(ExecutorService executor) {
-        return null;
     }
 }

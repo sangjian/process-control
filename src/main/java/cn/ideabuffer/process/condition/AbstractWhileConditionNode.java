@@ -23,6 +23,10 @@ public abstract class AbstractWhileConditionNode extends AbstractExecutableNode 
         nodes = new ArrayList<>();
     }
 
+    public void setNodes(List<ExecutableNode> nodes) {
+        this.nodes = nodes;
+    }
+
     @Override
     public WhileConditionNode addNode(ExecutableNode node) {
         if (node == null) {
@@ -54,25 +58,31 @@ public abstract class AbstractWhileConditionNode extends AbstractExecutableNode 
             }
             blockWrapper.resetBreak();
             blockWrapper.resetContinue();
-            boolean hasBreak = false;
-            for (ExecutableNode node : list) {
-                boolean stop = node.execute(whileContext);
-                if (stop) {
-                    return true;
-                }
-                if (blockWrapper.hasBroken()) {
-                    hasBreak = true;
-                    break;
-                }
-                if (blockWrapper.hasContinued()) {
-                    break;
-                }
+            if(executeNodes(list, whileContext, blockWrapper)) {
+                return true;
             }
-            if (hasBreak) {
+            if (blockWrapper.hasBroken()) {
                 break;
             }
         }
 
+        return false;
+    }
+
+    protected boolean executeNodes(List<ExecutableNode> list, Context context, BlockWrapper blockWrapper)
+        throws Exception {
+        for (ExecutableNode node : list) {
+            boolean stop = node.execute(context);
+            if (stop) {
+                return true;
+            }
+            if (blockWrapper.hasBroken()) {
+                break;
+            }
+            if (blockWrapper.hasContinued()) {
+                break;
+            }
+        }
         return false;
     }
 }

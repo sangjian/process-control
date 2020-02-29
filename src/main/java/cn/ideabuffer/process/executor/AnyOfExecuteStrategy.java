@@ -11,7 +11,8 @@ import java.util.stream.Stream;
  * @author sangjian.sj
  * @date 2020/02/25
  */
-public class AllCompleteExecuteStrategy implements ExecuteStrategy {
+public class AnyOfExecuteStrategy implements ExecuteStrategy {
+
     @Override
     public boolean execute(ExecutorService executor, Context context, ExecutableNode[] nodes) throws Exception {
         if(nodes == null || nodes.length == 0) {
@@ -21,7 +22,7 @@ public class AllCompleteExecuteStrategy implements ExecuteStrategy {
             throw new NullPointerException();
         }
 
-        CompletableFuture.allOf(Stream.of(nodes)
+        CompletableFuture.anyOf(Stream.of(nodes)
             .map(node -> CompletableFuture.supplyAsync(() -> {
                 try {
                     return node.execute(context);
@@ -29,7 +30,6 @@ public class AllCompleteExecuteStrategy implements ExecuteStrategy {
                     throw new RuntimeException(e);
                 }
             })).toArray(CompletableFuture[]::new)).get();
-
 
         return false;
     }

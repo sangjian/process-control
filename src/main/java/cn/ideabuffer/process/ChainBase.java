@@ -13,7 +13,7 @@ public class ChainBase extends AbstractExecutableNode implements Chain {
 
     private Node[] nodes = new Node[0];
 
-    protected boolean running;
+    private volatile boolean running;
 
     public ChainBase(String id) {
         super(id);

@@ -10,8 +10,8 @@ public class ExecuteStrategies {
 
     public static final ExecuteStrategy ASYNC = new AsyncExecuteStrategy();
 
-    public static final ExecuteStrategy AT_LEAST_ONE_COMPLETE = new AtLeastOneCompleteExecuteStrategy();
+    public static final ExecuteStrategy ANY_OF = new AnyOfExecuteStrategy();
 
-    public static final ExecuteStrategy ALL_COMPLETE = new AllCompleteExecuteStrategy();
+    public static final ExecuteStrategy ALL_OF = new AllOfExecuteStrategy();
 
 }

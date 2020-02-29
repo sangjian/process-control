@@ -17,6 +17,6 @@ public interface SwitchConditionNode<V> extends ConditionNode<V> {
 
     List<ExpectableNode<V>> getCaseNodes();
 
-    ExecutableNode getDefaultNode();
+    List<ExecutableNode> getDefaultNodes();
 
 }

@@ -35,6 +35,14 @@ public abstract class AbstractExecutableNodeGroup extends AbstractExecutableNode
         }
     }
 
+    public void setNodes(ExecutableNode[] nodes) {
+        this.nodes = nodes;
+    }
+
+    public void setExecuteStrategy(ExecuteStrategy executeStrategy) {
+        this.executeStrategy = executeStrategy;
+    }
+
     @Override
     public ExecutableNodeGroup executeOn(ExecutorService executor) {
         this.executeOn(executor, ExecuteStrategies.SERIAL);

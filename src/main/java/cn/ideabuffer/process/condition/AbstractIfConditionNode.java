@@ -16,14 +16,22 @@ import java.util.List;
  */
 public abstract class AbstractIfConditionNode<E> extends AbstractExecutableNode implements IfConditionNode<E> {
 
-    private List<ExecutableNode> trueNodeList;
+    private List<ExecutableNode> trueNodes;
 
-    private List<ExecutableNode> falseNodeList;
+    private List<ExecutableNode> falseNodes;
 
     public AbstractIfConditionNode(String id) {
         super(id);
-        trueNodeList = new ArrayList<>();
-        falseNodeList = new ArrayList<>();
+        trueNodes = new ArrayList<>();
+        falseNodes = new ArrayList<>();
+    }
+
+    public void setTrueNodes(List<ExecutableNode> trueNodes) {
+        this.trueNodes = trueNodes;
+    }
+
+    public void setFalseNodes(List<ExecutableNode> falseNodes) {
+        this.falseNodes = falseNodes;
     }
 
     @Override
@@ -31,7 +39,7 @@ public abstract class AbstractIfConditionNode<E> extends AbstractExecutableNode 
         if(node == null) {
             throw new NullPointerException();
         }
-        trueNodeList.add(node);
+        trueNodes.add(node);
         return this;
     }
 
@@ -40,18 +48,18 @@ public abstract class AbstractIfConditionNode<E> extends AbstractExecutableNode 
         if(node == null) {
             throw new NullPointerException();
         }
-        falseNodeList.add(node);
+        falseNodes.add(node);
         return this;
     }
 
     @Override
     public List<ExecutableNode> getTrueNodes() {
-        return trueNodeList;
+        return trueNodes;
     }
 
     @Override
     public List<ExecutableNode> getFalseNodes() {
-        return falseNodeList;
+        return falseNodes;
     }
 
     @Override
@@ -60,9 +68,12 @@ public abstract class AbstractIfConditionNode<E> extends AbstractExecutableNode 
         Boolean judgement = judge(context);
         List<ExecutableNode> nodeList;
         if (Boolean.TRUE.equals(judgement)) {
-            nodeList = trueNodeList;
+            nodeList = trueNodes;
         } else {
-            nodeList = falseNodeList;
+            nodeList = falseNodes;
+        }
+        if(nodeList == null || nodeList.size() == 0) {
+            return false;
         }
         Block ifBlock = new Block(context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(ifBlock);
