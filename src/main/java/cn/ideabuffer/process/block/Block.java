@@ -32,12 +32,13 @@ public class Block extends ConcurrentHashMap<Object, Object> {
         this.parent = parent;
     }
 
-    public <K, V> V get(K key, V defaultValue) {
-        return null;
-    }
-
-    public Block parent() {
-        return parent;
+    public <V> V get(Object key, V defaultValue) {
+        Object value = get(key);
+        if(value == null) {
+            return defaultValue;
+        }
+        //noinspection unchecked
+        return (V)value;
     }
 
     public boolean allowBreak() {
