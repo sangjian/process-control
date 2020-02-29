@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.nodes.conditions;
 
-import cn.ideabuffer.process.condition.AbstractIfConditionNode;
 import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.condition.AbstractIfConditionNode;
 
 /**
  * @author sangjian.sj

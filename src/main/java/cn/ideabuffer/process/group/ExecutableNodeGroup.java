@@ -11,8 +11,17 @@ import java.util.concurrent.ExecutorService;
  */
 public interface ExecutableNodeGroup extends ExecutableNode {
 
+    /**
+     * 获取分组节点列表
+     * @return
+     */
     ExecutableNode[] getNodes();
 
+    /**
+     * 增加分组节点
+     * @param node
+     * @return
+     */
     ExecutableNodeGroup addNode(ExecutableNode node);
 
     @Override

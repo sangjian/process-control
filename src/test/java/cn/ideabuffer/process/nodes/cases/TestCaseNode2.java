@@ -1,8 +1,8 @@
 package cn.ideabuffer.process.nodes.cases;
 
+import cn.ideabuffer.process.AbstractExecutableNode;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExpectableNode;
-import cn.ideabuffer.process.AbstractExecutableNode;
 
 /**
  * @author sangjian.sj
@@ -21,7 +21,7 @@ public class TestCaseNode2 extends AbstractExecutableNode implements ExpectableN
 
     @Override
     public boolean execute(Context context) throws Exception {
-        System.out.println("k = " + context.get("k"));
+        System.out.println("id = " + getId() + "k = " + context.get("k"));
         //if(context.breakable()) {
         //    context.doBreak();
         //}

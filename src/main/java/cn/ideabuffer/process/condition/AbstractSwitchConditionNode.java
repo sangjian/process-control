@@ -6,7 +6,6 @@ import cn.ideabuffer.process.block.BlockWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 /**
  * @author sangjian.sj
@@ -23,7 +22,7 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableN
     }
 
     public AbstractSwitchConditionNode(String id) {
-        this(id, new ArrayList<>());
+        this(id, null);
     }
 
     public AbstractSwitchConditionNode(String id, List<ExpectableNode<V>> caseNodes) {
@@ -33,11 +32,8 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableN
     public AbstractSwitchConditionNode(String id, List<ExpectableNode<V>> caseNodes,
         List<ExecutableNode> defaultNodes) {
         super(id);
-        if(caseNodes == null) {
-            throw new NullPointerException();
-        }
-        this.caseNodes = caseNodes;
-        this.defaultNodes = defaultNodes;
+        this.caseNodes = caseNodes == null ? new ArrayList<>() : caseNodes;
+        this.defaultNodes = defaultNodes == null ? new ArrayList<>() : defaultNodes;
     }
 
     public void setCaseNodes(List<ExpectableNode<V>> caseNodes) {

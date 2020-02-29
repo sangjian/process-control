@@ -51,7 +51,7 @@ public class ChainTest {
         Chain chain = new ChainBase("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
-        chain.addConditionNode(new TestSwitchCondition("testSwitchCondition")
+        chain.addProcessNode(new TestSwitchCondition("testSwitchCondition")
                                 .switchCase(new TestCaseNode("testCaseNode1"))
                                 .switchCase(new TestCaseNode2("testCaseNode2"))
                                 .defaultCase(new TestCaseNode3("testCaseNode3")));
