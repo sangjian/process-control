@@ -4,6 +4,7 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
 
 import java.util.concurrent.ExecutorService;
+import java.util.function.Function;
 
 /**
  * @author sangjian.sj
@@ -20,5 +21,5 @@ public interface ExecuteStrategy {
      * @return
      * @throws Exception
      */
-    boolean execute(ExecutorService executor, Context context, ExecutableNode[] nodes) throws Exception;
+    boolean execute(ExecutorService executor, Context context, ExecutableNode... nodes) throws Exception;
 }

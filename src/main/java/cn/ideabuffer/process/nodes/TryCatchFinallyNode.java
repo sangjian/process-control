@@ -59,7 +59,7 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public boolean doExecute(Context context) throws Exception {
         if(tryNodes == null || tryNodes.isEmpty()) {
             return false;
         }

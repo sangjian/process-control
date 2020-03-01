@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.condition;
+package cn.ideabuffer.process.branch;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
@@ -9,7 +9,7 @@ import cn.ideabuffer.process.ExecutableNode;
  * @author sangjian.sj
  * @date 2020/01/19
  */
-public interface ConditionNode<V> extends ExecutableNode {
+public interface BranchNode<V> extends ExecutableNode {
 
     /**
      * 判断执行逻辑

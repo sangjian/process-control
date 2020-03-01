@@ -6,12 +6,18 @@ package cn.ideabuffer.process.executor;
  */
 public class ExecuteStrategies {
 
-    public static final ExecuteStrategy SERIAL = new SerialExecuteStrategy();
+    public static final ExecuteStrategy SERIAL = new SerialStrategy();
 
-    public static final ExecuteStrategy ASYNC = new AsyncExecuteStrategy();
+    public static final ExecuteStrategy ASYNC = new AsyncStrategy();
 
-    public static final ExecuteStrategy ANY_OF = new AnyOfExecuteStrategy();
+    public static final ExecuteStrategy PARALLEL = new ParallelStrategy();
 
-    public static final ExecuteStrategy ALL_OF = new AllOfExecuteStrategy();
+    public static final ExecuteStrategy AT_LEAST_ONE_DONE = new AtLeastOneDoneStrategy();
+
+    public static final ExecuteStrategy AT_LEAST_ONE_CONTINUED = new AtLeastOneContinuedStrategy();
+
+    public static final ExecuteStrategy ALL_DONE = new AllDoneStrategy();
+
+    public static final ExecuteStrategy ALL_CONTINUED = new AllContinuedStrategy();
 
 }

@@ -2,8 +2,9 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
+import cn.ideabuffer.process.executor.ExecuteStrategies;
+import cn.ideabuffer.process.executor.ExecuteStrategy;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -12,6 +13,10 @@ import java.util.concurrent.ExecutorService;
  */
 public abstract class AbstractExecutableNode extends AbstractNode implements ExecutableNode {
 
+    private ExecutorService executor;
+
+    private ExecuteStrategy executeStrategy = ExecuteStrategies.SERIAL;
+
     public AbstractExecutableNode() {
     }
 
@@ -19,7 +24,13 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
         super(id);
     }
 
-    protected ExecutorService executor;
+    public void setExecutor(ExecutorService executor) {
+        this.executor = executor;
+    }
+
+    public void setExecuteStrategy(ExecuteStrategy executeStrategy) {
+        this.executeStrategy = executeStrategy;
+    }
 
     @Override
     public ExecutableNode executeOn(ExecutorService executor) {
@@ -28,22 +39,61 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     }
 
     @Override
+    public ExecutableNode executeOn(ExecutorService executor, ExecuteStrategy strategy) {
+        this.executor = executor;
+        if(strategy != null) {
+            this.executeStrategy = strategy;
+        }
+        return this;
+    }
+
+    @Override
+    public ExecuteStrategy getExecuteStrategy() {
+        return executeStrategy;
+    }
+
+    @Override
+    public boolean execute(Context context) throws Exception {
+        ExecutableNodeFacade facade = new ExecutableNodeFacade(this);
+        return executeStrategy.execute(executor, context, facade);
+    }
+
+    protected abstract boolean doExecute(Context context) throws Exception;
+
+    @Override
     public ExecutorService getExecutor() {
         return executor;
     }
 
-    class NodeTask implements Callable<Boolean>{
-        ExecutableNode node;
-        Context context;
+    class ExecutableNodeFacade implements ExecutableNode {
 
-        NodeTask(ExecutableNode node, Context context) {
+        private AbstractExecutableNode node;
+
+        ExecutableNodeFacade(AbstractExecutableNode node) {
             this.node = node;
-            this.context = context;
         }
 
         @Override
-        public Boolean call() throws Exception {
-            return node.execute(context);
+        public boolean execute(Context context) throws Exception {return node.doExecute(context);}
+
+        @Override
+        public ExecutorService getExecutor() {return node.getExecutor();}
+
+        @Override
+        public ExecutableNode executeOn(ExecutorService executor) {return node.executeOn(executor);}
+
+        @Override
+        public ExecutableNode executeOn(ExecutorService executor, ExecuteStrategy strategy) {
+            return node.executeOn(executor, strategy);
         }
+
+        @Override
+        public ExecuteStrategy getExecuteStrategy() {return node.getExecuteStrategy();}
+
+        @Override
+        public String getId() {return node.getId();}
+
+        @Override
+        public boolean enabled(Context context) {return node.enabled(context);}
     }
 }

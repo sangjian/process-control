@@ -13,7 +13,7 @@ public class TestWhileNode1 extends AbstractExecutableNode {
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public boolean doExecute(Context context) throws Exception {
         int k = context.get("k", 0);
         context.put("k", ++k);
         if(k == 4) {

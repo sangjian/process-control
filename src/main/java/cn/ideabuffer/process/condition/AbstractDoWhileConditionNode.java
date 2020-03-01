@@ -8,6 +8,8 @@ import cn.ideabuffer.process.block.BlockWrapper;
 
 import java.util.List;
 
+import static cn.ideabuffer.process.executor.ExecuteStrategies.SERIAL;
+
 /**
  * @author sangjian.sj
  * @date 2020/01/18
@@ -19,9 +21,12 @@ public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditio
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
-        List<ExecutableNode> list = getNodes();
-        if (list == null || list.size() == 0) {
+    public boolean doExecute(Context context) throws Exception {
+        if(getBranch() == null) {
+            return false;
+        }
+        List<ExecutableNode> list = getBranch().getNodes();
+        if (list == null || list.isEmpty()) {
             return false;
         }
 
@@ -29,7 +34,7 @@ public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditio
         BlockWrapper blockWrapper = new BlockWrapper(doWhileBlock);
         ContextWrapper doWhileContext = new ContextWrapper(context, doWhileBlock);
         while (true) {
-            if(executeNodes(list, doWhileContext, blockWrapper)) {
+            if(getBranch().execute(doWhileContext)) {
                 return true;
             }
             if (blockWrapper.hasBroken()) {

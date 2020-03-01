@@ -7,7 +7,7 @@ import cn.ideabuffer.process.condition.AbstractIfConditionNode;
  * @author sangjian.sj
  * @date 2020/01/19
  */
-public class TestCondition1 extends AbstractIfConditionNode<Integer> {
+public class TestCondition1 extends AbstractIfConditionNode {
 
     public TestCondition1(String id) {
         super(id);

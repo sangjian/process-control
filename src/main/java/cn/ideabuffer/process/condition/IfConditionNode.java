@@ -1,39 +1,53 @@
 package cn.ideabuffer.process.condition;
 
+import cn.ideabuffer.process.branch.Branch;
+import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.ExecutableNode;
-
-import java.util.List;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/20
  */
-public interface IfConditionNode<E> extends ConditionNode<Boolean> {
+public interface IfConditionNode extends BranchNode<Boolean> {
 
     /**
      * 添加true分支节点
-     * @param node
+     * @param branch
      * @return
      */
-    IfConditionNode<E> addTrueNode(ExecutableNode node);
+    IfConditionNode trueBranch(Branch branch);
 
     /**
      * 添加false分支节点
-     * @param node
+     * @param branch
      * @return
      */
-    IfConditionNode<E> addFalseNode(ExecutableNode node);
+    IfConditionNode falseBranch(Branch branch);
+
+    /**
+     * 添加true分支节点
+     * @param nodes
+     * @return
+     */
+    IfConditionNode trueBranch(ExecutableNode... nodes);
+
+    /**
+     * 添加false分支节点
+     * @param nodes
+     * @return
+     */
+    IfConditionNode falseBranch(ExecutableNode... nodes);
 
     /**
      * 获取true分支节点
      * @return
      */
-    List<ExecutableNode> getTrueNodes();
+    Branch getTrueBranch();
 
     /**
      * 获取false分支节点
      * @return
      */
-    List<ExecutableNode> getFalseNodes();
+    Branch getFalseBranch();
 
 }

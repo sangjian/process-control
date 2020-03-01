@@ -1,93 +1,97 @@
 package cn.ideabuffer.process.condition;
 
+import cn.ideabuffer.process.block.BlockWrapper;
+import cn.ideabuffer.process.branch.Branch;
+import cn.ideabuffer.process.executor.ExecuteStrategy;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.block.Block;
-import cn.ideabuffer.process.block.BlockWrapper;
+import cn.ideabuffer.process.branch.DefaultBranch;
 
-import java.util.ArrayList;
-import java.util.List;
+import static cn.ideabuffer.process.executor.ExecuteStrategies.SERIAL;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class AbstractIfConditionNode<E> extends AbstractExecutableNode implements IfConditionNode<E> {
+public abstract class AbstractIfConditionNode extends AbstractExecutableNode implements IfConditionNode {
 
-    private List<ExecutableNode> trueNodes;
+    private Branch trueBranch;
 
-    private List<ExecutableNode> falseNodes;
+    private Branch falseBranch;
 
     public AbstractIfConditionNode(String id) {
+        this(null, null, null);
+    }
+
+    public AbstractIfConditionNode(String id, Branch trueBranch, Branch falseBranch) {
         super(id);
-        trueNodes = new ArrayList<>();
-        falseNodes = new ArrayList<>();
+        this.trueBranch = trueBranch;
+        this.falseBranch = falseBranch;
     }
 
-    public void setTrueNodes(List<ExecutableNode> trueNodes) {
-        this.trueNodes = trueNodes;
+    public void setTrueBranch(Branch trueBranch) {
+        this.trueBranch = trueBranch;
     }
 
-    public void setFalseNodes(List<ExecutableNode> falseNodes) {
-        this.falseNodes = falseNodes;
+    public void setFalseBranch(Branch falseBranch) {
+        this.falseBranch = falseBranch;
     }
 
     @Override
-    public IfConditionNode<E> addTrueNode(ExecutableNode node) {
-        if(node == null) {
-            throw new NullPointerException();
-        }
-        trueNodes.add(node);
+    public IfConditionNode trueBranch(Branch branch) {
+        this.trueBranch = branch;
         return this;
     }
 
     @Override
-    public IfConditionNode<E> addFalseNode(ExecutableNode node) {
-        if(node == null) {
-            throw new NullPointerException();
-        }
-        falseNodes.add(node);
+    public IfConditionNode falseBranch(Branch branch) {
+        this.falseBranch = branch;
         return this;
     }
 
     @Override
-    public List<ExecutableNode> getTrueNodes() {
-        return trueNodes;
+    public IfConditionNode trueBranch(ExecutableNode... nodes) {
+        if(trueBranch == null) {
+            trueBranch = new DefaultBranch();
+        }
+        trueBranch.addNodes(nodes);
+        return this;
     }
 
     @Override
-    public List<ExecutableNode> getFalseNodes() {
-        return falseNodes;
+    public IfConditionNode falseBranch(ExecutableNode... nodes) {
+        if(falseBranch == null) {
+            falseBranch = new DefaultBranch();
+        }
+        falseBranch.addNodes(nodes);
+        return this;
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public Branch getTrueBranch() {
+        return trueBranch;
+    }
 
+    @Override
+    public Branch getFalseBranch() {
+        return falseBranch;
+    }
+
+    @Override
+    protected boolean doExecute(Context context) throws Exception {
         Boolean judgement = judge(context);
-        List<ExecutableNode> nodeList;
-        if (Boolean.TRUE.equals(judgement)) {
-            nodeList = trueNodes;
-        } else {
-            nodeList = falseNodes;
-        }
-        if(nodeList == null || nodeList.size() == 0) {
+        Branch branch = Boolean.TRUE.equals(judgement) ? trueBranch : falseBranch;
+        if(branch == null || branch.getNodes() == null || branch.getNodes().size() == 0) {
             return false;
         }
         Block ifBlock = new Block(context.getBlock());
-        BlockWrapper blockWrapper = new BlockWrapper(ifBlock);
         ContextWrapper contextWrapper = new ContextWrapper(context, ifBlock);
-        for (ExecutableNode node : nodeList) {
-            boolean stop = node.execute(contextWrapper);
-            if(stop) {
-                return true;
-            }
-            if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
-                break;
-            }
+        if(branch.execute(contextWrapper)) {
+            return true;
         }
         return false;
-
     }
 }

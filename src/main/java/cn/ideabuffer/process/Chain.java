@@ -1,7 +1,7 @@
 package cn.ideabuffer.process;
 
-import cn.ideabuffer.process.condition.ConditionNode;
-import cn.ideabuffer.process.group.ExecutableNodeGroup;
+import cn.ideabuffer.process.branch.BranchNode;
+import cn.ideabuffer.process.nodes.ExecutableNodeGroup;
 
 /**
  * @author sangjian.sj
@@ -21,7 +21,7 @@ public interface Chain extends ExecutableNode {
      * @param node 条件节点
      * @return
      */
-    Chain addConditionNode(ConditionNode node);
+    Chain addConditionNode(BranchNode node);
 
     /**
      * 增加节点组

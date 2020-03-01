@@ -33,14 +33,11 @@ public class ChainTest {
         chain
             .addProcessNode(new TestNode1("test1"))
             //.addConditionNode(new TestCondition1("testCondition1")
-            //                    .addTrueNode(new TestNode1("testNode1"))
-            //                    .addFalseNode(new TestNode1("testNode2")));
-            .addNodeGroup(new TestGroup("testGroup")
-                            .addNode(new TestGroupNode1("testGroup1"))
-                            .addNode(new TestGroupNode2("testGroup2"))
-                            //.addNode(c2)
-                            .executeOn(executorService)
-                        )
+            //                    .trueBranch(new TestNode1("testNode1"))
+            //                    .falseBranch(new TestNode1("testNode2")));
+            .addNodeGroup(new ExecutableNodeGroup("testGroup")
+                .addNodes(new TestGroupNode1("testGroup1"), new TestGroupNode2("testGroup2"))
+                .executeOn(executorService))
             .addProcessNode(new TestNode2("test2"));
         chain.execute(context);
 
@@ -76,9 +73,8 @@ public class ChainTest {
         Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
-        chain.addNodeGroup(new TestGroup("testGroup")
-            .addNode(new TestGroupNode1("testGroup1"))
-            .addNode(new TestGroupNode2("testGroup2"))
+        chain.addNodeGroup(new ExecutableNodeGroup("testGroup")
+            .addNodes(new TestGroupNode1("testGroup1"), new TestGroupNode2("testGroup2"))
             .executeOn(executorService, ExecuteStrategies.SERIAL));
         chain.execute(context);
     }

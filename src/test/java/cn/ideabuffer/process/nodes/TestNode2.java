@@ -19,7 +19,7 @@ public class TestNode2 extends AbstractExecutableNode implements PostProcessor, 
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public boolean doExecute(Context context) throws Exception {
         System.out.println("id=" + getId() + ", k = " + context.get("k"));
         Thread.sleep(2000);
         return false;

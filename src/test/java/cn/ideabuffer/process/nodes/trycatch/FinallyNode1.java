@@ -9,7 +9,7 @@ import cn.ideabuffer.process.Context;
  */
 public class FinallyNode1 extends AbstractExecutableNode {
     @Override
-    public boolean execute(Context context) throws Exception {
+    public boolean doExecute(Context context) throws Exception {
         System.out.println("in FinallyNode1");
         return false;
     }

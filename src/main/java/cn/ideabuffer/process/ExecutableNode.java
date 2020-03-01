@@ -1,5 +1,8 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.executor.ExecuteStrategy;
+import cn.ideabuffer.process.nodes.ExecutableNodeGroup;
+
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -36,4 +39,7 @@ public interface ExecutableNode extends Node {
      */
     ExecutableNode executeOn(ExecutorService executor);
 
+    ExecutableNode executeOn(ExecutorService executor, ExecuteStrategy strategy);
+
+    ExecuteStrategy getExecuteStrategy();
 }

@@ -19,7 +19,7 @@ public class TestCaseNode3 extends AbstractExecutableNode implements ExpectableN
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public boolean doExecute(Context context) throws Exception {
         System.out.println("id = " + getId() + "k = " + context.get("k"));
         return false;
     }

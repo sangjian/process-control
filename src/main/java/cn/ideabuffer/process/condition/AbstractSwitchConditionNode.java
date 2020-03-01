@@ -6,6 +6,7 @@ import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,17 +47,18 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableN
     }
 
     @Override
-    public SwitchConditionNode<V> switchCase(ExpectableNode<V> node) {
-        if(node == null) {
-            throw new NullPointerException();
+    public SwitchConditionNode<V> switchCase(ExpectableNode<V>... nodes) {
+        if(nodes != null && nodes.length > 0) {
+            caseNodes.addAll(new ArrayList<>(Arrays.asList(nodes)));
         }
-        caseNodes.add(node);
         return this;
     }
 
     @Override
-    public SwitchConditionNode<V> defaultCase(ExecutableNode node) {
-        this.defaultNodes.add(node);
+    public SwitchConditionNode<V> defaultCase(ExecutableNode... nodes) {
+        if(nodes != null && nodes.length > 0) {
+            defaultNodes.addAll(new ArrayList<>(Arrays.asList(nodes)));
+        }
         return this;
     }
 
@@ -71,9 +73,9 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableN
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public boolean doExecute(Context context) throws Exception {
         List<ExpectableNode<V>> list = getCaseNodes();
-        if(list == null || list.size() == 0) {
+        if(list == null || list.isEmpty()) {
             return false;
         }
         V judgement = judge(context);
@@ -103,7 +105,7 @@ public abstract class AbstractSwitchConditionNode<V> extends AbstractExecutableN
         if(hasBroken) {
             return false;
         }
-        if(defaultNodes == null || defaultNodes.size() == 0) {
+        if(defaultNodes == null || defaultNodes.isEmpty()) {
             return false;
         }
         for (ExecutableNode node : defaultNodes) {

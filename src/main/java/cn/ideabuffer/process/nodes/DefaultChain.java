@@ -1,10 +1,7 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.*;
-import cn.ideabuffer.process.condition.ConditionNode;
-import cn.ideabuffer.process.group.ExecutableNodeGroup;
-
-import java.util.concurrent.ExecutorService;
+import cn.ideabuffer.process.branch.BranchNode;
 
 /**
  * @author sangjian.sj
@@ -40,7 +37,7 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
     }
 
     @Override
-    public Chain addConditionNode(ConditionNode node) {
+    public Chain addConditionNode(BranchNode node) {
         return addNode(node);
     }
 
@@ -50,7 +47,7 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public boolean doExecute(Context context) throws Exception {
 
         if (context == null) {
             context = new DefaultContext();
@@ -70,11 +67,8 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
 
             if (node instanceof ExecutableNode) {
                 try {
-                    ExecutorService executor = ((ExecutableNode)node).getExecutor();
-                    if(node instanceof ExecutableNodeGroup || executor == null) {
-                        stop = ((ExecutableNode)node).execute(context);
-                    } else {
-                        executor.submit(new NodeTask((ExecutableNode)node, context));
+                    if(((ExecutableNode)node).execute(context)) {
+                        stop = true;
                     }
                     if (stop) {
                         break;

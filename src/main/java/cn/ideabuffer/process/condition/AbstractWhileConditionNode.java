@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.condition;
 
+import cn.ideabuffer.process.branch.Branch;
+import cn.ideabuffer.process.branch.DefaultBranch;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
@@ -8,7 +10,10 @@ import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockWrapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static cn.ideabuffer.process.executor.ExecuteStrategies.SERIAL;
 
 /**
  * @author sangjian.sj
@@ -16,35 +21,45 @@ import java.util.List;
  */
 public abstract class AbstractWhileConditionNode extends AbstractExecutableNode implements WhileConditionNode {
 
-    private List<ExecutableNode> nodes;
+    private Branch branch;
 
     public AbstractWhileConditionNode(String id) {
         super(id);
-        nodes = new ArrayList<>();
+        branch = new DefaultBranch() {};
     }
 
-    public void setNodes(List<ExecutableNode> nodes) {
-        this.nodes = nodes;
+    public AbstractWhileConditionNode(Branch branch) {
+        this.branch = branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
     }
 
     @Override
-    public WhileConditionNode addNode(ExecutableNode node) {
-        if (node == null) {
-            throw new NullPointerException();
+    public WhileConditionNode addNode(ExecutableNode... nodes) {
+        if(nodes == null || nodes.length == 0) {
+            return this;
         }
-        nodes.add(node);
+        if (branch == null) {
+            branch = new DefaultBranch();
+        }
+        branch.addNodes(nodes);
         return this;
     }
 
     @Override
-    public List<ExecutableNode> getNodes() {
-        return nodes;
+    public Branch getBranch() {
+        return branch;
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
-        List<ExecutableNode> list = getNodes();
-        if (list == null || list.size() == 0) {
+    protected boolean doExecute(Context context) throws Exception {
+        if(branch == null) {
+            return false;
+        }
+        List<ExecutableNode> list = branch.getNodes();
+        if (list == null || list.isEmpty()) {
             return false;
         }
 
@@ -52,13 +67,13 @@ public abstract class AbstractWhileConditionNode extends AbstractExecutableNode 
         BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
         ContextWrapper whileContext = new ContextWrapper(context, whileBlock);
         while (true) {
+            blockWrapper.resetBreak();
+            blockWrapper.resetContinue();
             Boolean judgement = judge(whileContext);
             if (!Boolean.TRUE.equals(judgement)) {
                 break;
             }
-            blockWrapper.resetBreak();
-            blockWrapper.resetContinue();
-            if(executeNodes(list, whileContext, blockWrapper)) {
+            if(branch.execute(whileContext)) {
                 return true;
             }
             if (blockWrapper.hasBroken()) {
@@ -66,23 +81,6 @@ public abstract class AbstractWhileConditionNode extends AbstractExecutableNode 
             }
         }
 
-        return false;
-    }
-
-    protected boolean executeNodes(List<ExecutableNode> list, Context context, BlockWrapper blockWrapper)
-        throws Exception {
-        for (ExecutableNode node : list) {
-            boolean stop = node.execute(context);
-            if (stop) {
-                return true;
-            }
-            if (blockWrapper.hasBroken()) {
-                break;
-            }
-            if (blockWrapper.hasContinued()) {
-                break;
-            }
-        }
         return false;
     }
 }

@@ -10,7 +10,7 @@ import cn.ideabuffer.process.Context;
 public class CatchNode2 extends AbstractExecutableNode {
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public boolean doExecute(Context context) throws Exception {
         System.out.println("in CatchNode2");
         return false;
     }
