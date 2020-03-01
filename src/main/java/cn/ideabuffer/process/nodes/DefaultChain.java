@@ -1,5 +1,6 @@
-package cn.ideabuffer.process;
+package cn.ideabuffer.process.nodes;
 
+import cn.ideabuffer.process.*;
 import cn.ideabuffer.process.condition.ConditionNode;
 import cn.ideabuffer.process.group.ExecutableNodeGroup;
 
@@ -9,13 +10,13 @@ import java.util.concurrent.ExecutorService;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class ChainBase extends AbstractExecutableNode implements Chain {
+public class DefaultChain extends AbstractExecutableNode implements Chain {
 
     private Node[] nodes = new Node[0];
 
     private volatile boolean running;
 
-    public ChainBase(String id) {
+    public DefaultChain(String id) {
         super(id);
     }
 

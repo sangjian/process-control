@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.nodes.trycatch;
 
-import cn.ideabuffer.process.AbstractExecutableNode;
+import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.Context;
 
 /**

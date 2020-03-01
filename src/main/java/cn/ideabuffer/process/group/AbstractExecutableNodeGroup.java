@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.group;
 
-import cn.ideabuffer.process.AbstractExecutableNode;
+import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.ExecutableNode;

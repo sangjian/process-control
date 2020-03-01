@@ -24,8 +24,8 @@ public class ChainTest {
     @Test
     public void testChainBase() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        Chain chain = new ChainBase("testChain");
-        Chain c2 = new ChainBase("testSubChain");
+        Chain chain = new DefaultChain("testChain");
+        Chain c2 = new DefaultChain("testSubChain");
         c2.addProcessNode(new TestNode1("c-test1"))
             .addProcessNode(new TestNode2("c-test2"));
         Context context = new DefaultContext();
@@ -48,7 +48,7 @@ public class ChainTest {
 
     @Test
     public void testSwitch() throws Exception {
-        Chain chain = new ChainBase("testChain");
+        Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
         chain.addProcessNode(new TestSwitchCondition("testSwitchCondition")
@@ -60,7 +60,7 @@ public class ChainTest {
 
     @Test
     public void testWhile() throws Exception {
-        Chain chain = new ChainBase("testChain");
+        Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
         chain.addConditionNode(new TestWhileCondition("testWhileCondition")
@@ -73,7 +73,7 @@ public class ChainTest {
     @Test
     public void testSerial() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        Chain chain = new ChainBase("testChain");
+        Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
         chain.addNodeGroup(new TestGroup("testGroup")
@@ -85,7 +85,7 @@ public class ChainTest {
 
     @Test
     public void testBlock() {
-        Chain chain = new ChainBase("testChain");
+        Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
 
@@ -93,7 +93,7 @@ public class ChainTest {
 
     @Test
     public void testTryCatchFinally() throws Exception {
-        Chain chain = new ChainBase("testChain");
+        Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
         chain.addProcessNode(new TryCatchFinallyNode()

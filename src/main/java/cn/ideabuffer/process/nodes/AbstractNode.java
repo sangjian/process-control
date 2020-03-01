@@ -1,4 +1,7 @@
-package cn.ideabuffer.process;
+package cn.ideabuffer.process.nodes;
+
+import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.Node;
 
 /**
  * @author sangjian.sj
