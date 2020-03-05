@@ -85,36 +85,4 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
             }
         }
     }
-
-    class ExecutableNodeFacade implements ExecutableNode {
-
-        private AbstractExecutableNode node;
-
-        ExecutableNodeFacade(AbstractExecutableNode node) {
-            this.node = node;
-        }
-
-        @Override
-        public boolean execute(Context context) throws Exception {return node.doExecute(context);}
-
-        @Override
-        public ExecutorService getExecutor() {return node.getExecutor();}
-
-        @Override
-        public ExecutableNode parallel() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public ExecutableNode parallel(ExecutorService executor) {
-            throw new UnsupportedOperationException();
-        }
-
-
-        @Override
-        public String getId() {return node.getId();}
-
-        @Override
-        public boolean enabled(Context context) {return node.enabled(context);}
-    }
 }
