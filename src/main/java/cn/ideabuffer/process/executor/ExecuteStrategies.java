@@ -6,9 +6,9 @@ package cn.ideabuffer.process.executor;
  */
 public class ExecuteStrategies {
 
-    public static final ExecuteStrategy SERIAL = new SerialStrategy();
+    public static final ExecuteStrategy SERIAL_PROCEEDED = new SerialStrategy();
 
-    public static final ExecuteStrategy PARALLEL = new ParallelStrategy();
+    public static final ExecuteStrategy PARALLELED = new ParallelStrategy();
 
     public static final ExecuteStrategy AT_LEAST_ONE_FINISHED = new AtLeastOneFinishedStrategy();
 
