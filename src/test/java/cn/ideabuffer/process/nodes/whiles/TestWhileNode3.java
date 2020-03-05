@@ -1,14 +1,14 @@
 package cn.ideabuffer.process.nodes.whiles;
 
+import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
-import cn.ideabuffer.process.Context;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/20
  */
-public class TestWhileNode1 extends AbstractExecutableNode {
+public class TestWhileNode3 extends AbstractExecutableNode {
     @Override
     public boolean doExecute(Context context) throws Exception {
         Block block = context.getBlock();

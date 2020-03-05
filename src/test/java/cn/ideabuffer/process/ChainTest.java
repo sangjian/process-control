@@ -1,18 +1,18 @@
 package cn.ideabuffer.process;
 
 import cn.ideabuffer.process.branch.Branches;
-import cn.ideabuffer.process.branch.DefaultBranch;
 import cn.ideabuffer.process.condition.Conditions;
-import cn.ideabuffer.process.nodes.DefaultChain;
-import cn.ideabuffer.process.nodes.TestNode1;
-import cn.ideabuffer.process.nodes.TestNode2;
-import cn.ideabuffer.process.nodes.TryCatchFinallyNode;
+import cn.ideabuffer.process.nodes.*;
 import cn.ideabuffer.process.nodes.ifs.TestFalseBrance;
 import cn.ideabuffer.process.nodes.ifs.TestIfRule;
 import cn.ideabuffer.process.nodes.ifs.TestTrueBrance;
 import cn.ideabuffer.process.nodes.trycatch.*;
 import cn.ideabuffer.process.nodes.whiles.TestWhileNode1;
+import cn.ideabuffer.process.nodes.whiles.TestWhileNode2;
+import cn.ideabuffer.process.nodes.whiles.TestWhileNode3;
 import cn.ideabuffer.process.nodes.whiles.TestWhileRule;
+import cn.ideabuffer.process.rule.Rule;
+import cn.ideabuffer.process.rule.Rules;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
@@ -48,7 +48,7 @@ public class ChainTest {
         Context context = new DefaultContext();
         context.put("k", 0);
         chain
-            .addProcessNode(Branches.newDefaultBranch(new TestNode1(), new TestNode2()).parallel());
+            .addProcessNode(Branches.newDefaultBranch(new TestNode1(), new TestNode2()).parallel(executorService));
         chain.execute(context);
         Thread.sleep(10000);
     }
@@ -59,7 +59,7 @@ public class ChainTest {
         Context context = new DefaultContext();
         context.put("k", 1);
         TestIfRule rule = new TestIfRule();
-        chain.addConditionNode(Conditions.newIf().when(rule).then(new TestTrueBrance())
+        chain.addIf(Conditions.newIf().when(rule).then(new TestTrueBrance())
             .otherwise(new TestFalseBrance()));
         chain.execute(context);
     }
@@ -69,8 +69,57 @@ public class ChainTest {
         Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         TestWhileRule rule = new TestWhileRule();
-        chain.addConditionNode(Conditions.newWhile().when(rule)
-                                .then(new TestWhileNode1("testWhileNode1"), new TestWhileNode1("testWhileNode2"), new TestWhileNode1("testWhileNode3")));
+        chain.addWhile(Conditions.newWhile().when(rule)
+            .then(new TestWhileNode1(), new TestWhileNode2(),
+                new TestWhileNode3())
+            .parallel());
+        chain.execute(context);
+        Thread.sleep(10000);
+    }
+
+    @Test
+    public void testNesting() throws Exception {
+        Chain chain = new DefaultChain("testChain");
+        Context context = new DefaultContext();
+        TestWhileRule rule = new TestWhileRule();
+        chain.addWhile(Conditions.newWhile().when((ctx) -> {
+            System.out.println("in while --");
+            return true;
+        }).then(
+            Conditions.newWhile().when(rule)
+            .then(
+                new TestWhileNode1(),
+                new TestWhileNode2(),
+                Conditions.newIf().when(rule).then(
+                    Conditions.newIf().when((ctx) -> true).then(new TestBreakNode()).end(),
+                    new TestNode1())
+                    .end(),
+                new TestWhileNode3())));
+        chain.execute(context);
+        Thread.sleep(10000);
+    }
+
+    @Test
+    public void testAndRule() throws Exception {
+        Chain chain = new DefaultChain("testChain");
+        Context context = new DefaultContext();
+        chain.addIf(Conditions.newIf().when(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestNode1()).otherwise(new TestNode2()));
+        chain.execute(context);
+    }
+
+    @Test
+    public void testOrRule() throws Exception {
+        Chain chain = new DefaultChain("testChain");
+        Context context = new DefaultContext();
+        chain.addIf(Conditions.newIf().when(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1()).otherwise(new TestNode2()));
+        chain.execute(context);
+    }
+
+    @Test
+    public void testNotRule() throws Exception {
+        Chain chain = new DefaultChain("testChain");
+        Context context = new DefaultContext();
+        chain.addIf(Conditions.newIf().when(Rules.not((ctx) -> true)).then(new TestNode1()).otherwise(new TestNode2()));
         chain.execute(context);
     }
 
@@ -80,8 +129,6 @@ public class ChainTest {
         Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
-        //chain.addNodeGroup(new NodeGroup()
-        //    .addNodes(new TestGroupNode1("testGroup1"), new TestGroupNode2("testGroup2")));
         long start = System.currentTimeMillis();
         chain.execute(context);
         System.out.println("cost:" + (System.currentTimeMillis() - start) / 1000);
