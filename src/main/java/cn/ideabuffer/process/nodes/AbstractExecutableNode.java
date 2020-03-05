@@ -2,6 +2,8 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.*;
 import java.util.concurrent.ExecutorService;
@@ -11,6 +13,8 @@ import java.util.concurrent.ExecutorService;
  * @date 2020/01/18
  */
 public abstract class AbstractExecutableNode extends AbstractNode implements ExecutableNode {
+
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private boolean parallel = false;
 
