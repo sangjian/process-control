@@ -1,7 +1,11 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.branch.Branches;
+import cn.ideabuffer.process.branch.DefaultBranch;
 import cn.ideabuffer.process.condition.Conditions;
 import cn.ideabuffer.process.nodes.DefaultChain;
+import cn.ideabuffer.process.nodes.TestNode1;
+import cn.ideabuffer.process.nodes.TestNode2;
 import cn.ideabuffer.process.nodes.TryCatchFinallyNode;
 import cn.ideabuffer.process.nodes.ifs.TestFalseBrance;
 import cn.ideabuffer.process.nodes.ifs.TestIfRule;
@@ -23,24 +27,30 @@ public class ChainTest {
 
     @Test
     public void testChainBase() throws Exception {
-        //ExecutorService executorService = Executors.newFixedThreadPool(3);
-        //Chain chain = new DefaultChain("testChain");
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        Chain chain = new DefaultChain("testChain");
         //Chain c2 = new DefaultChain("testSubChain");
-        //c2.addProcessNode(new TestNode1("c-test1"))
-        //    .addProcessNode(new TestNode2("c-test2"));
-        //Context context = new DefaultContext();
-        //context.put("k", 0);
-        //chain
-        //    .addProcessNode(new TestNode1("test1"))
-        //    //.addConditionNode(new TestCondition1("testCondition1")
-        //    //                    .trueBranch(new TestNode1("testNode1"))
-        //    //                    .falseBranch(new TestNode1("testNode2")));
-        //    .addNodeGroup(new NodeGroup("testGroup")
-        //        .addNodes(new TestGroupNode1("testGroup1"), new TestGroupNode2("testGroup2"))
-        //        .executeOn(executorService))
-        //    .addProcessNode(new TestNode2("test2"));
-        //chain.execute(context);
+        //c2.addProcessNode(new TestNode1())
+        //.addProcessNode(new TestNode2());
+        Context context = new DefaultContext();
+        context.put("k", 0);
+        chain
+            .addProcessNode(new TestNode1())
+            .addProcessNode(new TestNode2());
+        chain.execute(context);
 
+    }
+
+    @Test
+    public void testBranch() throws Exception {
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        Chain chain = new DefaultChain("testChain");
+        Context context = new DefaultContext();
+        context.put("k", 0);
+        chain
+            .addProcessNode(Branches.newDefaultBranch(new TestNode1(), new TestNode2()).parallel());
+        chain.execute(context);
+        Thread.sleep(10000);
     }
 
     @Test

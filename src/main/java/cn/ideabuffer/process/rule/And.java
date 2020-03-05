@@ -8,18 +8,19 @@ import cn.ideabuffer.process.Context;
  */
 public class And implements Rule {
 
-    private Rule r1;
+    private Rule[] rules;
 
-    private Rule r2;
-
-    public And(Rule r1, Rule r2) {
-        this.r1 = r1;
-        this.r2 = r2;
+    public And(Rule... rules) {
+        this.rules = rules;
     }
 
     @Override
     public boolean match(Context context) {
-
-        return r1.match(context) && r2.match(context);
+        for (Rule rule : rules) {
+            if(!rule.match(context)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

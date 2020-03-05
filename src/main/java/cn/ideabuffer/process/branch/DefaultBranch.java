@@ -4,12 +4,13 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static cn.ideabuffer.process.executor.ExecuteStrategies.SERIAL;
+import static cn.ideabuffer.process.executor.ExecuteStrategies.SERIAL_PROCEEDED;
 
 /**
  * @author sangjian.sj
@@ -61,8 +62,8 @@ public class DefaultBranch extends AbstractExecutableNode implements Branch {
     }
 
     @Override
-    public DefaultBranch addNodes(ExecutableNode... nodes) {
-        if(nodes != null && nodes.length > 0) {
+    public DefaultBranch addNodes(@NotNull ExecutableNode... nodes) {
+        if(nodes.length > 0) {
             this.nodes.addAll(Arrays.asList(nodes));
         }
         return this;
@@ -83,7 +84,7 @@ public class DefaultBranch extends AbstractExecutableNode implements Branch {
 
     @Override
     protected boolean doExecute(Context context) throws Exception {
-        return SERIAL.execute(getExecutor(), context, this);
+        return SERIAL_PROCEEDED.execute(getExecutor(), context, this);
     }
 
     @Override

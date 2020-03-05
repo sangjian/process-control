@@ -94,7 +94,7 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
                         processed = true;
                     }
                 } catch (Exception e) {
-
+                    // do something...
                 }
             }
         }
