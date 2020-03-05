@@ -1,14 +1,14 @@
 package cn.ideabuffer.process;
 
-import cn.ideabuffer.process.executor.ExecuteStrategies;
-import cn.ideabuffer.process.nodes.*;
-import cn.ideabuffer.process.nodes.cases.TestCaseNode;
-import cn.ideabuffer.process.nodes.cases.TestCaseNode2;
-import cn.ideabuffer.process.nodes.cases.TestCaseNode3;
-import cn.ideabuffer.process.nodes.cases.TestWhileNode1;
-import cn.ideabuffer.process.nodes.conditions.TestSwitchCondition;
-import cn.ideabuffer.process.nodes.conditions.TestWhileCondition;
+import cn.ideabuffer.process.condition.Conditions;
+import cn.ideabuffer.process.nodes.DefaultChain;
+import cn.ideabuffer.process.nodes.TryCatchFinallyNode;
+import cn.ideabuffer.process.nodes.ifs.TestFalseBrance;
+import cn.ideabuffer.process.nodes.ifs.TestIfRule;
+import cn.ideabuffer.process.nodes.ifs.TestTrueBrance;
 import cn.ideabuffer.process.nodes.trycatch.*;
+import cn.ideabuffer.process.nodes.whiles.TestWhileNode1;
+import cn.ideabuffer.process.nodes.whiles.TestWhileRule;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
@@ -23,35 +23,34 @@ public class ChainTest {
 
     @Test
     public void testChainBase() throws Exception {
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
-        Chain chain = new DefaultChain("testChain");
-        Chain c2 = new DefaultChain("testSubChain");
-        c2.addProcessNode(new TestNode1("c-test1"))
-            .addProcessNode(new TestNode2("c-test2"));
-        Context context = new DefaultContext();
-        context.put("k", 0);
-        chain
-            .addProcessNode(new TestNode1("test1"))
-            //.addConditionNode(new TestCondition1("testCondition1")
-            //                    .trueBranch(new TestNode1("testNode1"))
-            //                    .falseBranch(new TestNode1("testNode2")));
-            .addNodeGroup(new ExecutableNodeGroup("testGroup")
-                .addNodes(new TestGroupNode1("testGroup1"), new TestGroupNode2("testGroup2"))
-                .executeOn(executorService))
-            .addProcessNode(new TestNode2("test2"));
-        chain.execute(context);
+        //ExecutorService executorService = Executors.newFixedThreadPool(3);
+        //Chain chain = new DefaultChain("testChain");
+        //Chain c2 = new DefaultChain("testSubChain");
+        //c2.addProcessNode(new TestNode1("c-test1"))
+        //    .addProcessNode(new TestNode2("c-test2"));
+        //Context context = new DefaultContext();
+        //context.put("k", 0);
+        //chain
+        //    .addProcessNode(new TestNode1("test1"))
+        //    //.addConditionNode(new TestCondition1("testCondition1")
+        //    //                    .trueBranch(new TestNode1("testNode1"))
+        //    //                    .falseBranch(new TestNode1("testNode2")));
+        //    .addNodeGroup(new NodeGroup("testGroup")
+        //        .addNodes(new TestGroupNode1("testGroup1"), new TestGroupNode2("testGroup2"))
+        //        .executeOn(executorService))
+        //    .addProcessNode(new TestNode2("test2"));
+        //chain.execute(context);
 
     }
 
     @Test
-    public void testSwitch() throws Exception {
+    public void testIf() throws Exception {
         Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
-        chain.addProcessNode(new TestSwitchCondition("testSwitchCondition")
-                                .switchCase(new TestCaseNode("testCaseNode1"))
-                                .switchCase(new TestCaseNode2("testCaseNode2"))
-                                .defaultCase(new TestCaseNode3("testCaseNode3")));
+        TestIfRule rule = new TestIfRule();
+        chain.addConditionNode(Conditions.newIf().when(rule).then(new TestTrueBrance())
+            .otherwise(new TestFalseBrance()));
         chain.execute(context);
     }
 
@@ -59,11 +58,9 @@ public class ChainTest {
     public void testWhile() throws Exception {
         Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
-        context.put("k", 1);
-        chain.addConditionNode(new TestWhileCondition("testWhileCondition")
-                                .addNode(new TestWhileNode1("testWhileNode1"))
-                                .addNode(new TestWhileNode1("testWhileNode2"))
-                                .addNode(new TestWhileNode1("testWhileNode3")));
+        TestWhileRule rule = new TestWhileRule();
+        chain.addConditionNode(Conditions.newWhile().when(rule)
+                                .then(new TestWhileNode1("testWhileNode1"), new TestWhileNode1("testWhileNode2"), new TestWhileNode1("testWhileNode3")));
         chain.execute(context);
     }
 
@@ -73,10 +70,11 @@ public class ChainTest {
         Chain chain = new DefaultChain("testChain");
         Context context = new DefaultContext();
         context.put("k", 1);
-        chain.addNodeGroup(new ExecutableNodeGroup("testGroup")
-            .addNodes(new TestGroupNode1("testGroup1"), new TestGroupNode2("testGroup2"))
-            .executeOn(executorService, ExecuteStrategies.SERIAL));
+        //chain.addNodeGroup(new NodeGroup()
+        //    .addNodes(new TestGroupNode1("testGroup1"), new TestGroupNode2("testGroup2")));
+        long start = System.currentTimeMillis();
         chain.execute(context);
+        System.out.println("cost:" + (System.currentTimeMillis() - start) / 1000);
     }
 
     @Test

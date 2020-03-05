@@ -1,7 +1,7 @@
 package cn.ideabuffer.process;
 
 import cn.ideabuffer.process.branch.BranchNode;
-import cn.ideabuffer.process.nodes.ExecutableNodeGroup;
+import cn.ideabuffer.process.nodes.NodeGroup;
 
 /**
  * @author sangjian.sj
@@ -28,6 +28,6 @@ public interface Chain extends ExecutableNode {
      * @param group 节点组
      * @return
      */
-    Chain addNodeGroup(ExecutableNodeGroup group);
+    Chain addNodeGroup(NodeGroup group);
 
 }

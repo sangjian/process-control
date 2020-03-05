@@ -2,7 +2,9 @@ package cn.ideabuffer.process.executor;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
+import cn.ideabuffer.process.branch.Branch;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Function;
 
@@ -22,4 +24,12 @@ public interface ExecuteStrategy {
      * @throws Exception
      */
     boolean execute(ExecutorService executor, Context context, ExecutableNode... nodes) throws Exception;
+
+    default boolean execute(ExecutorService executor, Context context, Branch branch) throws Exception {
+        if(branch == null || branch.getNodes() == null || branch.getNodes().size() == 0) {
+            return false;
+        }
+        ExecutableNode[] arr = new ExecutableNode[branch.getNodes().size()];
+        return execute(executor, context, branch.getNodes().toArray(arr));
+    }
 }

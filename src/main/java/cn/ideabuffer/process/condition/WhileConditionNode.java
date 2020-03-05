@@ -2,27 +2,80 @@ package cn.ideabuffer.process.condition;
 
 import cn.ideabuffer.process.branch.Branch;
 import cn.ideabuffer.process.branch.BranchNode;
-import cn.ideabuffer.process.ExecutableNode;
+import cn.ideabuffer.process.nodes.AbstractExecutableNode;
+import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.ContextWrapper;
+import cn.ideabuffer.process.block.Block;
+import cn.ideabuffer.process.block.BlockWrapper;
+import cn.ideabuffer.process.rule.Rule;
 
-import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author sangjian.sj
- * @date 2020/01/20
+ * @date 2020/01/18
  */
-public interface WhileConditionNode extends BranchNode<Boolean> {
+public class WhileConditionNode extends AbstractExecutableNode implements BranchNode {
 
-    /**
-     * 增加while分支节点
-     * @param nodes 可执行节点
-     * @return
-     */
-    WhileConditionNode addNode(ExecutableNode... nodes);
+    protected Rule rule;
 
-    /**
-     * 获取while分支节点列表
-     * @return
-     */
-    Branch getBranch();
+    protected Branch branch;
 
+    public WhileConditionNode(Rule rule, Branch branch) {
+        this.rule = rule;
+        this.branch = branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
+    }
+
+
+
+    @Override
+    public WhileConditionNode parallel() {
+        super.parallel();
+        return this;
+    }
+
+    @Override
+    public WhileConditionNode parallel(ExecutorService executor) {
+        super.parallel(executor);
+        return this;
+    }
+
+    @Override
+    public boolean execute(Context context) throws Exception {
+        if(rule == null) {
+            throw new RuntimeException("rule cann't be null");
+        }
+        return super.execute(context);
+    }
+
+    @Override
+    protected boolean doExecute(Context context) throws Exception {
+        if(branch == null) {
+            return false;
+        }
+
+        Block whileBlock = new Block(true, true, context.getBlock());
+        BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
+        ContextWrapper whileContext = new ContextWrapper(context, whileBlock);
+        while (true) {
+            blockWrapper.resetBreak();
+            blockWrapper.resetContinue();
+
+            if (!rule.match(whileContext)) {
+                break;
+            }
+            if(branch.execute(whileContext)) {
+                return true;
+            }
+            if (blockWrapper.hasBroken()) {
+                break;
+            }
+        }
+
+        return false;
+    }
 }

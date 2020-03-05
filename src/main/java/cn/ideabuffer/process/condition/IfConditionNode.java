@@ -1,53 +1,68 @@
 package cn.ideabuffer.process.condition;
 
+import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.ContextWrapper;
+import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.branch.Branch;
 import cn.ideabuffer.process.branch.BranchNode;
-import cn.ideabuffer.process.ExecutableNode;
+import cn.ideabuffer.process.nodes.AbstractExecutableNode;
+import cn.ideabuffer.process.rule.Rule;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author sangjian.sj
- * @date 2020/01/20
+ * @date 2020/01/18
  */
-public interface IfConditionNode extends BranchNode<Boolean> {
+public class IfConditionNode extends AbstractExecutableNode implements BranchNode {
 
-    /**
-     * 添加true分支节点
-     * @param branch
-     * @return
-     */
-    IfConditionNode trueBranch(Branch branch);
+    private Rule rule;
 
-    /**
-     * 添加false分支节点
-     * @param branch
-     * @return
-     */
-    IfConditionNode falseBranch(Branch branch);
+    private Branch trueBranch;
 
-    /**
-     * 添加true分支节点
-     * @param nodes
-     * @return
-     */
-    IfConditionNode trueBranch(ExecutableNode... nodes);
+    private Branch falseBranch;
 
-    /**
-     * 添加false分支节点
-     * @param nodes
-     * @return
-     */
-    IfConditionNode falseBranch(ExecutableNode... nodes);
+    public IfConditionNode(Rule rule, Branch trueBranch) {
+        this.rule = rule;
+        this.trueBranch = trueBranch;
+    }
 
-    /**
-     * 获取true分支节点
-     * @return
-     */
-    Branch getTrueBranch();
+    public IfConditionNode(Rule rule, Branch trueBranch, Branch falseBranch) {
+        this.rule = rule;
+        this.trueBranch = trueBranch;
+        this.falseBranch = falseBranch;
+    }
 
-    /**
-     * 获取false分支节点
-     * @return
-     */
-    Branch getFalseBranch();
+    public void setTrueBranch(Branch trueBranch) {
+        this.trueBranch = trueBranch;
+    }
+
+    public void setFalseBranch(Branch falseBranch) {
+        this.falseBranch = falseBranch;
+    }
+
+    @Override
+    public IfConditionNode parallel() {
+        super.parallel();
+        return this;
+    }
+
+    @Override
+    public IfConditionNode parallel(ExecutorService executor) {
+        super.parallel(executor);
+        return this;
+    }
+
+    @Override
+    protected boolean doExecute(Context context) throws Exception {
+
+        Block ifBlock = new Block(context.getBlock());
+        ContextWrapper contextWrapper = new ContextWrapper(context, ifBlock);
+        Branch branch = rule.match(contextWrapper) ? trueBranch : falseBranch;
+        if(branch == null ) {
+            return false;
+        }
+        return branch.execute(contextWrapper);
+    }
 
 }

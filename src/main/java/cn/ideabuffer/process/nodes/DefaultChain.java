@@ -42,7 +42,7 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
     }
 
     @Override
-    public Chain addNodeGroup(ExecutableNodeGroup group) {
+    public Chain addNodeGroup(NodeGroup group) {
         return addNode(group);
     }
 

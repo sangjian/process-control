@@ -18,7 +18,7 @@ public class TestGroupNode2 extends AbstractExecutableNode {
 
     @Override
     public boolean doExecute(Context context) throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(3000);
         System.out.println(Thread.currentThread().getName() + "in testGroupNode2");
         return false;
     }

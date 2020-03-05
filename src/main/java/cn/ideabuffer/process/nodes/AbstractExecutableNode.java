@@ -2,9 +2,8 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
-import cn.ideabuffer.process.executor.ExecuteStrategies;
-import cn.ideabuffer.process.executor.ExecuteStrategy;
 
+import java.util.concurrent.*;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -13,9 +12,19 @@ import java.util.concurrent.ExecutorService;
  */
 public abstract class AbstractExecutableNode extends AbstractNode implements ExecutableNode {
 
+    private boolean parallel = false;
+
     private ExecutorService executor;
 
-    private ExecuteStrategy executeStrategy = ExecuteStrategies.SERIAL;
+    private static final Executor DEFAULT_POOL = new ThreadPerTaskExecutor();
+
+    static final class ThreadPerTaskExecutor implements Executor {
+
+        @Override
+        public void execute(Runnable r) {
+            new Thread(r).start();
+        }
+    }
 
     public AbstractExecutableNode() {
     }
@@ -28,34 +37,29 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
         this.executor = executor;
     }
 
-    public void setExecuteStrategy(ExecuteStrategy executeStrategy) {
-        this.executeStrategy = executeStrategy;
-    }
-
     @Override
-    public ExecutableNode executeOn(ExecutorService executor) {
-        this.executor = executor;
+    public ExecutableNode parallel() {
+        this.parallel = true;
         return this;
     }
 
     @Override
-    public ExecutableNode executeOn(ExecutorService executor, ExecuteStrategy strategy) {
+    public ExecutableNode parallel(ExecutorService executor) {
+        this.parallel = true;
         this.executor = executor;
-        if(strategy != null) {
-            this.executeStrategy = strategy;
-        }
         return this;
-    }
-
-    @Override
-    public ExecuteStrategy getExecuteStrategy() {
-        return executeStrategy;
     }
 
     @Override
     public boolean execute(Context context) throws Exception {
-        ExecutableNodeFacade facade = new ExecutableNodeFacade(this);
-        return executeStrategy.execute(executor, context, facade);
+        if(parallel && executor == null) {
+            DEFAULT_POOL.execute(new NodeTask(context));
+        } else if(executor != null) {
+            executor.execute(new NodeTask(context));
+        } else {
+            return doExecute(context);
+        }
+        return false;
     }
 
     protected abstract boolean doExecute(Context context) throws Exception;
@@ -63,6 +67,23 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     @Override
     public ExecutorService getExecutor() {
         return executor;
+    }
+
+    class NodeTask implements Runnable{
+        Context context;
+
+        NodeTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void run() {
+            try {
+                doExecute(context);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     class ExecutableNodeFacade implements ExecutableNode {
@@ -80,15 +101,15 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
         public ExecutorService getExecutor() {return node.getExecutor();}
 
         @Override
-        public ExecutableNode executeOn(ExecutorService executor) {return node.executeOn(executor);}
-
-        @Override
-        public ExecutableNode executeOn(ExecutorService executor, ExecuteStrategy strategy) {
-            return node.executeOn(executor, strategy);
+        public ExecutableNode parallel() {
+            throw new UnsupportedOperationException();
         }
 
         @Override
-        public ExecuteStrategy getExecuteStrategy() {return node.getExecuteStrategy();}
+        public ExecutableNode parallel(ExecutorService executor) {
+            throw new UnsupportedOperationException();
+        }
+
 
         @Override
         public String getId() {return node.getId();}

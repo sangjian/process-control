@@ -5,6 +5,7 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.ParallelBranchNode;
 import cn.ideabuffer.process.branch.DefaultBranch;
+import cn.ideabuffer.process.executor.ExecuteStrategy;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     private List<Branch> branches;
 
+    private ExecuteStrategy strategy;
 
     public DefaultParallelBranchNode() {
         this(null);
@@ -34,9 +36,14 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
         this.branches = branches;
     }
 
+    public void setStrategy(ExecuteStrategy strategy) {
+        this.strategy = strategy;
+    }
+
     @Override
-    public Boolean judge(Context context) {
-        return true;
+    public ParallelBranchNode proceedWhen(ExecuteStrategy strategy) {
+        this.strategy = strategy;
+        return this;
     }
 
     @Override
@@ -48,7 +55,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     protected boolean doExecute(Context context) throws Exception {
         ExecutableNode[] nodes = new ExecutableNode[branches.size()];
 
-        return getExecuteStrategy().execute(getExecutor(), context, branches.toArray(nodes));
+        return this.strategy.execute(getExecutor(), context, branches.toArray(nodes));
     }
 
     @Override

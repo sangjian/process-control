@@ -8,16 +8,14 @@ public class ExecuteStrategies {
 
     public static final ExecuteStrategy SERIAL = new SerialStrategy();
 
-    public static final ExecuteStrategy ASYNC = new AsyncStrategy();
-
     public static final ExecuteStrategy PARALLEL = new ParallelStrategy();
 
-    public static final ExecuteStrategy AT_LEAST_ONE_DONE = new AtLeastOneDoneStrategy();
+    public static final ExecuteStrategy AT_LEAST_ONE_FINISHED = new AtLeastOneFinishedStrategy();
 
-    public static final ExecuteStrategy AT_LEAST_ONE_CONTINUED = new AtLeastOneContinuedStrategy();
+    public static final ExecuteStrategy AT_LEAST_ONE_PROCEEDED = new AtLeastOneProceededStrategy();
 
-    public static final ExecuteStrategy ALL_DONE = new AllDoneStrategy();
+    public static final ExecuteStrategy ALL_FINISHED = new AllFinishedStrategy();
 
-    public static final ExecuteStrategy ALL_CONTINUED = new AllContinuedStrategy();
+    public static final ExecuteStrategy ALL_PROCEEDED = new AllProceededStrategy();
 
 }

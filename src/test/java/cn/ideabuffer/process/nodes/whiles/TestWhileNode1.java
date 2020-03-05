@@ -1,5 +1,6 @@
-package cn.ideabuffer.process.nodes.cases;
+package cn.ideabuffer.process.nodes.whiles;
 
+import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.Context;
 
@@ -14,10 +15,11 @@ public class TestWhileNode1 extends AbstractExecutableNode {
 
     @Override
     public boolean doExecute(Context context) throws Exception {
-        int k = context.get("k", 0);
-        context.put("k", ++k);
+        Block block = context.getBlock();
+        int k = block.get("k", 0);
+        block.put("k", ++k);
         if(k == 4) {
-            context.getBlock().doContinue();
+            block.doBreak();
         }
         System.out.println(String.format("k:%d", k));
         return false;

@@ -2,31 +2,24 @@ package cn.ideabuffer.process.condition;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
-import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockWrapper;
-
-import java.util.List;
-
-import static cn.ideabuffer.process.executor.ExecuteStrategies.SERIAL;
+import cn.ideabuffer.process.branch.Branch;
+import cn.ideabuffer.process.rule.Rule;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditionNode {
+public class DoWhileConditionNode extends WhileConditionNode {
 
-    public AbstractDoWhileConditionNode(String id) {
-        super(id);
+    public DoWhileConditionNode(Rule rule, Branch branch) {
+        super(rule, branch);
     }
 
     @Override
     public boolean doExecute(Context context) throws Exception {
-        if(getBranch() == null) {
-            return false;
-        }
-        List<ExecutableNode> list = getBranch().getNodes();
-        if (list == null || list.isEmpty()) {
+        if(branch == null) {
             return false;
         }
 
@@ -34,14 +27,13 @@ public abstract class AbstractDoWhileConditionNode extends AbstractWhileConditio
         BlockWrapper blockWrapper = new BlockWrapper(doWhileBlock);
         ContextWrapper doWhileContext = new ContextWrapper(context, doWhileBlock);
         while (true) {
-            if(getBranch().execute(doWhileContext)) {
+            if(branch.execute(doWhileContext)) {
                 return true;
             }
             if (blockWrapper.hasBroken()) {
                 break;
             }
-            Boolean judgement = judge(doWhileContext);
-            if (!Boolean.TRUE.equals(judgement)) {
+            if(!rule.match(context)) {
                 break;
             }
             blockWrapper.resetBreak();

@@ -5,14 +5,14 @@ import cn.ideabuffer.process.ExecutableNode;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Stream;
 
 /**
  * @author sangjian.sj
  * @date 2020/02/25
  */
-public class AtLeastOneDoneStrategy implements ExecuteStrategy {
-
+public class AllFinishedStrategy implements ExecuteStrategy {
     @Override
     public boolean execute(ExecutorService executor, Context context, ExecutableNode... nodes) throws Exception {
         if(nodes == null || nodes.length == 0) {
@@ -22,14 +22,15 @@ public class AtLeastOneDoneStrategy implements ExecuteStrategy {
             throw new NullPointerException();
         }
 
-        CompletableFuture.anyOf(Stream.of(nodes)
+        CompletableFuture.allOf(Stream.of(nodes)
             .map(node -> CompletableFuture.supplyAsync(() -> {
                 try {
                     return node.execute(context);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            })).toArray(CompletableFuture[]::new)).get();
+            }, executor)).toArray(CompletableFuture[]::new)).get();
+
 
         return false;
     }
