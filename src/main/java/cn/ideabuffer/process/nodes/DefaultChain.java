@@ -2,6 +2,9 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.*;
 import cn.ideabuffer.process.branch.BranchNode;
+import cn.ideabuffer.process.condition.DoWhileConditionNode;
+import cn.ideabuffer.process.condition.IfConditionNode;
+import cn.ideabuffer.process.condition.WhileConditionNode;
 
 /**
  * @author sangjian.sj
@@ -37,12 +40,22 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
     }
 
     @Override
-    public Chain addConditionNode(BranchNode node) {
+    public Chain addIf(IfConditionNode node) {
         return addNode(node);
     }
 
     @Override
-    public Chain addNodeGroup(NodeGroup group) {
+    public Chain addWhile(WhileConditionNode node) {
+        return addNode(node);
+    }
+
+    @Override
+    public Chain addDoWhile(DoWhileConditionNode node) {
+        return addNode(node);
+    }
+
+    @Override
+    public Chain addGroup(NodeGroup group) {
         return addNode(group);
     }
 
