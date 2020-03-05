@@ -3,6 +3,7 @@ package cn.ideabuffer.process;
 import cn.ideabuffer.process.branch.Branch;
 import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.executor.ExecuteStrategy;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -10,9 +11,9 @@ import cn.ideabuffer.process.executor.ExecuteStrategy;
  */
 public interface ParallelBranchNode extends BranchNode {
 
-    ParallelBranchNode addBranch(ExecutableNode... nodes);
+    ParallelBranchNode addBranch(@NotNull ExecutableNode... nodes);
 
-    ParallelBranchNode addBranch(Branch branch);
+    ParallelBranchNode addBranch(@NotNull Branch branch);
 
-    ParallelBranchNode proceedWhen(ExecuteStrategy strategy);
+    ParallelBranchNode proceedWhen(@NotNull ExecuteStrategy strategy);
 }

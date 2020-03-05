@@ -5,7 +5,9 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.ParallelBranchNode;
 import cn.ideabuffer.process.branch.DefaultBranch;
+import cn.ideabuffer.process.executor.ExecuteStrategies;
 import cn.ideabuffer.process.executor.ExecuteStrategy;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     private List<Branch> branches;
 
-    private ExecuteStrategy strategy;
+    private ExecuteStrategy strategy = ExecuteStrategies.PARALLELED;
 
     public DefaultParallelBranchNode() {
         this(null);
@@ -32,16 +34,16 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
         this.branches = branches;
     }
 
-    public void setBranches(List<Branch> branches) {
+    public void setBranches(@NotNull List<Branch> branches) {
         this.branches = branches;
     }
 
-    public void setStrategy(ExecuteStrategy strategy) {
+    public void setStrategy(@NotNull ExecuteStrategy strategy) {
         this.strategy = strategy;
     }
 
     @Override
-    public ParallelBranchNode proceedWhen(ExecuteStrategy strategy) {
+    public ParallelBranchNode proceedWhen(@NotNull ExecuteStrategy strategy) {
         this.strategy = strategy;
         return this;
     }
@@ -59,18 +61,16 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     }
 
     @Override
-    public ParallelBranchNode addBranch(ExecutableNode... nodes) {
-        if(nodes != null && nodes.length > 0) {
+    public ParallelBranchNode addBranch(@NotNull ExecutableNode... nodes) {
+        if(nodes.length > 0) {
             branches.add(new DefaultBranch(nodes));
         }
         return this;
     }
 
     @Override
-    public ParallelBranchNode addBranch(Branch branch) {
-        if(branch != null) {
-            this.branches.add(branch);
-        }
+    public ParallelBranchNode addBranch(@NotNull Branch branch) {
+        this.branches.add(branch);
         return this;
     }
 }

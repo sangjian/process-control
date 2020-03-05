@@ -2,6 +2,7 @@ package cn.ideabuffer.process.branch;
 
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface Branch extends ExecutableNode {
 
-    Branch addNodes(ExecutableNode... nodes);
+    Branch addNodes(@NotNull ExecutableNode... nodes);
 
     List<ExecutableNode> getNodes();
 
