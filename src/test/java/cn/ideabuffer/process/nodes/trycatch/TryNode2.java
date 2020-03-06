@@ -12,6 +12,7 @@ public class TryNode2 extends AbstractExecutableNode {
     @Override
     public boolean doExecute(Context context) throws Exception {
         System.out.println("in TryNode2");
-        return false;
+
+        throw new NullPointerException();
     }
 }

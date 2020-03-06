@@ -6,11 +6,9 @@ import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockWrapper;
+import cn.ideabuffer.process.branch.Branch;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author sangjian.sj
@@ -18,98 +16,57 @@ import java.util.Set;
  */
 public class TryCatchFinallyNode extends AbstractExecutableNode {
 
-    private List<ExecutableNode> tryNodes;
+    private Branch tryBranch;
 
-    private List<ExecutableNode> catchNodes;
+    private Map<Class<? extends Throwable>, Branch> catchMap;
 
-    private List<ExecutableNode> finallyNodes;
+    private Branch finallyBranch;
 
-    private Set<Class<? extends Exception>> expSet;
-
-    public TryCatchFinallyNode() {
-        this(null);
-    }
-
-    public TryCatchFinallyNode(String id) {
-        super(id);
-        tryNodes = new ArrayList<>();
-        catchNodes = new ArrayList<>();
-        finallyNodes = new ArrayList<>();
-        expSet = new HashSet<>();
-    }
-
-    public TryCatchFinallyNode addTryNode(ExecutableNode node) {
-        tryNodes.add(node);
-        return this;
-    }
-
-    public TryCatchFinallyNode addCatchNode(ExecutableNode node) {
-        catchNodes.add(node);
-        return this;
-    }
-
-    public TryCatchFinallyNode addFinallyNode(ExecutableNode node) {
-        finallyNodes.add(node);
-        return this;
-    }
-
-    public TryCatchFinallyNode catchOnException(Class<? extends Exception> expClass) {
-        expSet.add(expClass);
-        return this;
+    public TryCatchFinallyNode(Branch tryBranch,
+        Map<Class<? extends Throwable>, Branch> catchMap, Branch finallyBranch) {
+        this.tryBranch = tryBranch;
+        this.catchMap = catchMap;
+        this.finallyBranch = finallyBranch;
+        if(this.catchMap == null) {
+            this.catchMap = new HashMap<>(4, 1);
+        }
     }
 
     @Override
     public boolean doExecute(Context context) throws Exception {
-        if(tryNodes == null || tryNodes.isEmpty()) {
-            return false;
-        }
-        if(catchNodes.isEmpty() && finallyNodes.isEmpty()) {
+
+        if(catchMap.isEmpty() && finallyBranch == null) {
             throw new RuntimeException("'catch' or 'finally' expected");
         }
         try {
+            if(tryBranch == null || tryBranch.getNodes().isEmpty()) {
+                return false;
+            }
             Block tryBlock = new Block(context.getBlock());
-            BlockWrapper blockWrapper = new BlockWrapper(tryBlock);
             ContextWrapper contextWrapper = new ContextWrapper(context, tryBlock);
-            for (ExecutableNode node : tryNodes) {
-                if(node.execute(contextWrapper)) {
-                    return true;
-                }
-                if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            boolean matched = expSet.isEmpty();
-            for (Class<? extends Exception> c : expSet) {
-                if(e.getClass().isAssignableFrom(c)) {
-                    matched = true;
-                    break;
-                }
-            }
-            if(matched) {
-                Block catchBlock = new Block(context.getBlock());
-                BlockWrapper blockWrapper = new BlockWrapper(catchBlock);
-                ContextWrapper contextWrapper = new ContextWrapper(context, catchBlock);
-                for (ExecutableNode node : catchNodes) {
-                    if(node.execute(contextWrapper)) {
-                        return true;
-                    }
-                    if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
-                        break;
+            return tryBranch.execute(contextWrapper);
+        } catch (Throwable e) {
+            if(!catchMap.isEmpty()) {
+                for (Map.Entry<Class<? extends Throwable>, Branch> entry : catchMap.entrySet()) {
+                    Class<? extends Throwable> expClass = entry.getKey();
+                    Branch catchBranch = entry.getValue();
+                    if(expClass.isAssignableFrom(e.getClass())) {
+                        if(catchBranch == null) {
+                            continue;
+                        }
+                        Block catchBlock = new Block(context.getBlock());
+                        ContextWrapper contextWrapper = new ContextWrapper(context, catchBlock);
+                        if(catchBranch.execute(contextWrapper)) {
+                            return true;
+                        }
                     }
                 }
             }
         } finally {
-            Block finallyBlock = new Block(context.getBlock());
-            BlockWrapper blockWrapper = new BlockWrapper(finallyBlock);
-            ContextWrapper contextWrapper = new ContextWrapper(context, finallyBlock);
-            for (ExecutableNode node : finallyNodes) {
-                if(node.execute(contextWrapper)) {
-                    break;
-                }
-                if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
-                    break;
-                }
+            if(finallyBranch != null) {
+                Block finallyBlock = new Block(context.getBlock());
+                ContextWrapper contextWrapper = new ContextWrapper(context, finallyBlock);
+                finallyBranch.execute(contextWrapper);
             }
         }
 

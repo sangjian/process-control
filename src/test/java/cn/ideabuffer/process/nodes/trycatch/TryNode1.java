@@ -12,6 +12,6 @@ public class TryNode1 extends AbstractExecutableNode {
     @Override
     public boolean doExecute(Context context) throws Exception {
         System.out.println("in TryNode1");
-        throw new IllegalStateException();
+        return false;
     }
 }

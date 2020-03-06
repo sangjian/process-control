@@ -29,6 +29,16 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
     }
 
     @Override
+    public <V> V get(Object key, Class<V> valueType) {
+        Object value = get(key);
+        if(value == null) {
+            return null;
+        }
+        //noinspection unchecked
+        return (V)value;
+    }
+
+    @Override
     public <K, V> V get(K key, V defaultValue) {
         //noinspection unchecked
         V value = (V)get(key);

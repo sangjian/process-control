@@ -12,6 +12,8 @@ public interface Context extends Map<Object, Object> {
 
     Block getBlock();
 
+    <V> V get(Object key, Class<V> valueType);
+
     <K, V> V get(K key, V defaultValue);
 
 }
