@@ -70,6 +70,6 @@ public class DefaultBranch extends AbstractExecutableNode implements Branch {
 
     @Override
     protected boolean doExecute(Context context) throws Exception {
-        return SERIAL_EXECUTOR.execute(getExecutor(), null, context, this);
+        return SERIAL_EXECUTOR.execute(context, this);
     }
 }

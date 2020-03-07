@@ -9,7 +9,7 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/02/25
  */
-public interface NodeExecutor {
+public interface SerialExecutor {
 
-    boolean execute(Executor executor, ProceedStrategy proceedStrategy, Context context, ExecutableNode... nodes) throws Exception;
+    boolean execute(Context context, ExecutableNode... nodes) throws Exception;
 }

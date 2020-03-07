@@ -5,17 +5,15 @@ import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.block.BlockWrapper;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ExecutorService;
 
 /**
  * @author sangjian.sj
  * @date 2020/02/25
  */
-public class DefaultSerialExecutor implements NodeExecutor {
+public class DefaultSerialExecutor implements SerialExecutor {
 
     @Override
-    public boolean execute(Executor executor, ProceedStrategy proceedStrategy, Context context, ExecutableNode... nodes) throws Exception {
+    public boolean execute(Context context, ExecutableNode... nodes) throws Exception {
         if(nodes == null || nodes.length == 0) {
             return false;
         }

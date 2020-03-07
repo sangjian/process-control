@@ -6,8 +6,8 @@ package cn.ideabuffer.process.executor;
  */
 public class NodeExecutors {
 
-    public static final NodeExecutor SERIAL_EXECUTOR = new DefaultSerialExecutor();
+    public static final SerialExecutor SERIAL_EXECUTOR = new DefaultSerialExecutor();
 
-    public static final NodeExecutor PARALLEL_EXECUTOR = new DefaultParallelExecutor();
+    public static final ParallelExecutor PARALLEL_EXECUTOR = new DefaultParallelExecutor();
 
 }

@@ -1,6 +1,5 @@
 package cn.ideabuffer.process;
 
-import cn.ideabuffer.process.executor.NodeExecutor;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
 

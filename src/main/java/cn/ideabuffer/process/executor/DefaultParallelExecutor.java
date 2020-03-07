@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,7 +14,7 @@ import java.util.stream.Stream;
  * @author sangjian.sj
  * @date 2020/02/25
  */
-public class DefaultParallelExecutor implements NodeExecutor {
+public class DefaultParallelExecutor implements ParallelExecutor {
 
     @Override
     public boolean execute(Executor executor, @NotNull ProceedStrategy proceedStrategy, Context context, ExecutableNode... nodes) throws Exception {
