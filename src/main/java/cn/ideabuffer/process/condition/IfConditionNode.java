@@ -3,40 +3,38 @@ package cn.ideabuffer.process.condition;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.block.Block;
-import cn.ideabuffer.process.branch.Branch;
 import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.rule.Rule;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class IfConditionNode extends AbstractExecutableNode implements BranchNode {
+public class IfConditionNode extends AbstractExecutableNode {
 
-    private Branch trueBranch;
+    private BranchNode trueBranch;
 
-    private Branch falseBranch;
+    private BranchNode falseBranch;
 
-    public IfConditionNode(Rule rule, Branch trueBranch) {
+    public IfConditionNode(Rule rule, BranchNode trueBranch) {
         super(rule);
         this.trueBranch = trueBranch;
     }
 
-    public IfConditionNode(Rule rule, Branch trueBranch, Branch falseBranch) {
+    public IfConditionNode(Rule rule, BranchNode trueBranch, BranchNode falseBranch) {
         super(rule);
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;
     }
 
-    public void setTrueBranch(Branch trueBranch) {
+    public void setTrueBranch(BranchNode trueBranch) {
         this.trueBranch = trueBranch;
     }
 
-    public void setFalseBranch(Branch falseBranch) {
+    public void setFalseBranch(BranchNode falseBranch) {
         this.falseBranch = falseBranch;
     }
 
@@ -70,7 +68,7 @@ public class IfConditionNode extends AbstractExecutableNode implements BranchNod
 
         Block ifBlock = new Block(context.getBlock());
         ContextWrapper contextWrapper = new ContextWrapper(context, ifBlock);
-        Branch branch = rule.match(contextWrapper) ? trueBranch : falseBranch;
+        BranchNode branch = rule.match(contextWrapper) ? trueBranch : falseBranch;
         if(branch == null ) {
             return false;
         }

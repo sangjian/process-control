@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.condition;
 
-import cn.ideabuffer.process.branch.Branch;
 import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.Context;
@@ -10,24 +9,23 @@ import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.rule.Rule;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class WhileConditionNode extends AbstractExecutableNode implements BranchNode {
+public class WhileConditionNode extends AbstractExecutableNode {
 
     protected Rule rule;
 
-    protected Branch branch;
+    protected BranchNode branch;
 
-    public WhileConditionNode(Rule rule, Branch branch) {
+    public WhileConditionNode(Rule rule, BranchNode branch) {
         this.rule = rule;
         this.branch = branch;
     }
 
-    public void setBranch(Branch branch) {
+    public void setBranch(BranchNode branch) {
         this.branch = branch;
     }
 

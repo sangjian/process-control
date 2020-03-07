@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.ExecutableNode;
-import cn.ideabuffer.process.branch.Branch;
+import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.branch.DefaultBranch;
 import cn.ideabuffer.process.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.condition.IfConditionNode;
@@ -29,7 +29,7 @@ public class Nodes {
         return new DoWhileWhen(rule);
     }
 
-    public static TryCatchFinally newTry(Branch branch) {
+    public static TryCatchFinally newTry(BranchNode branch) {
         return new TryCatchFinally(branch);
     }
 
@@ -45,7 +45,7 @@ public class Nodes {
             this.rule = rule;
         }
 
-        public IfWhenBuilder then(Branch branch) {
+        public IfWhenBuilder then(BranchNode branch) {
             return new IfWhenBuilder(rule, branch);
         }
 
@@ -57,14 +57,14 @@ public class Nodes {
 
             private Rule rule;
 
-            private Branch thenBranch;
+            private BranchNode thenBranch;
 
-            public IfWhenBuilder(Rule rule, Branch thenBranch) {
+            public IfWhenBuilder(Rule rule, BranchNode thenBranch) {
                 this.rule = rule;
                 this.thenBranch = thenBranch;
             }
 
-            public IfConditionNode otherwise(Branch branch) {
+            public IfConditionNode otherwise(BranchNode branch) {
                 return new IfConditionNode(rule, thenBranch, branch);
             }
 
@@ -88,7 +88,7 @@ public class Nodes {
             this.rule = rule;
         }
 
-        public WhileConditionNode then(Branch branch) {
+        public WhileConditionNode then(BranchNode branch) {
             return new WhileConditionNode(rule, branch);
         }
 
@@ -105,7 +105,7 @@ public class Nodes {
         }
 
         @Override
-        public WhileConditionNode then(Branch branch) {
+        public WhileConditionNode then(BranchNode branch) {
             return new DoWhileConditionNode(rule, branch);
         }
 
@@ -113,16 +113,16 @@ public class Nodes {
 
     public static class TryCatchFinally {
 
-        private Branch tryBranch;
+        private BranchNode tryBranch;
 
-        private Map<Class<? extends Throwable>, Branch> catchMap;
+        private Map<Class<? extends Throwable>, BranchNode> catchMap;
 
-        public TryCatchFinally(Branch tryBranch) {
+        public TryCatchFinally(BranchNode tryBranch) {
             this.tryBranch = tryBranch;
             this.catchMap = new HashMap<>();
         }
 
-        public TryCatchFinally catchOn(Class<? extends Throwable> expClass, Branch branch) {
+        public TryCatchFinally catchOn(Class<? extends Throwable> expClass, BranchNode branch) {
             if (expClass == null) {
                 throw new NullPointerException();
             }
@@ -134,7 +134,7 @@ public class Nodes {
             return catchOn(expClass, new DefaultBranch(nodes));
         }
 
-        public TryCatchFinallyNode doFinally(Branch branch) {
+        public TryCatchFinallyNode doFinally(BranchNode branch) {
             return new TryCatchFinallyNode(tryBranch, catchMap, branch);
         }
 

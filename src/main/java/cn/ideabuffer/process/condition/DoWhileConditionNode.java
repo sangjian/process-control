@@ -4,7 +4,7 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockWrapper;
-import cn.ideabuffer.process.branch.Branch;
+import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.rule.Rule;
 
 /**
@@ -13,7 +13,7 @@ import cn.ideabuffer.process.rule.Rule;
  */
 public class DoWhileConditionNode extends WhileConditionNode {
 
-    public DoWhileConditionNode(Rule rule, Branch branch) {
+    public DoWhileConditionNode(Rule rule, BranchNode branch) {
         super(rule, branch);
     }
 

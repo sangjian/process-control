@@ -10,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Branches {
 
-    public static Branch newDefaultBranch(@NotNull ExecutableNode... nodes) {
+    public static BranchNode newDefaultBranch(@NotNull ExecutableNode... nodes) {
         return newDefaultBranch(null, nodes);
     }
 
-    public static Branch newDefaultBranch(Rule rule, @NotNull ExecutableNode... nodes) {
+    public static BranchNode newDefaultBranch(Rule rule, @NotNull ExecutableNode... nodes) {
         return new DefaultBranch(rule, nodes);
     }
 }

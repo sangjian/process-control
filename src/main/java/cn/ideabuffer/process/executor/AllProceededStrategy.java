@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * @author sangjian.sj
  * @date 2020/02/25
  */
-public class AllProceededStrategy  implements ProceedStrategy {
+public class AllProceededStrategy implements ProceedStrategy {
 
     @Override
     public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {

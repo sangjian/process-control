@@ -100,6 +100,11 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
                 }
             }
 
+            if(node instanceof AggregatableNode) {
+                Object result = ((AggregatableNode)node).aggregate(context);
+                ((AggregatableNode)node).process(result);
+            }
+
         }
 
         if (i >= nodes.length) {

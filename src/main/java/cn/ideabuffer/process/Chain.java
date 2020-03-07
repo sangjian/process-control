@@ -1,6 +1,5 @@
 package cn.ideabuffer.process;
 
-import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.condition.IfConditionNode;
 import cn.ideabuffer.process.condition.WhileConditionNode;

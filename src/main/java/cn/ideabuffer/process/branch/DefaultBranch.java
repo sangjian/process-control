@@ -16,7 +16,7 @@ import static cn.ideabuffer.process.executor.NodeExecutors.SERIAL_EXECUTOR;
  * @author sangjian.sj
  * @date 2020/03/01
  */
-public class DefaultBranch extends AbstractExecutableNode implements Branch {
+public class DefaultBranch extends AbstractExecutableNode implements BranchNode {
 
     private List<ExecutableNode> nodes;
 

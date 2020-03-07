@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.nodes;
 
-import cn.ideabuffer.process.branch.Branch;
+import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.ParallelBranchNode;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class DefaultParallelBranchNode extends AbstractExecutableNode implements ParallelBranchNode {
 
-    private List<Branch> branches;
+    private List<BranchNode> branches;
 
     private ProceedStrategy strategy = null;
 
@@ -26,11 +26,11 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
         this(null);
     }
 
-    public DefaultParallelBranchNode(List<Branch> branches) {
+    public DefaultParallelBranchNode(List<BranchNode> branches) {
         this.branches = branches == null ? new ArrayList<>() : branches;
     }
 
-    public void setBranches(@NotNull List<Branch> branches) {
+    public void setBranches(@NotNull List<BranchNode> branches) {
         this.branches = branches;
     }
 
@@ -66,7 +66,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     }
 
     @Override
-    public ParallelBranchNode addBranch(@NotNull Branch branch) {
+    public ParallelBranchNode addBranch(@NotNull BranchNode branch) {
         this.branches.add(branch);
         return this;
     }

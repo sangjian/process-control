@@ -3,10 +3,8 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
-import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.block.Block;
-import cn.ideabuffer.process.block.BlockWrapper;
-import cn.ideabuffer.process.branch.Branch;
+import cn.ideabuffer.process.branch.BranchNode;
 
 import java.util.*;
 
@@ -16,14 +14,14 @@ import java.util.*;
  */
 public class TryCatchFinallyNode extends AbstractExecutableNode {
 
-    private Branch tryBranch;
+    private BranchNode tryBranch;
 
-    private Map<Class<? extends Throwable>, Branch> catchMap;
+    private Map<Class<? extends Throwable>, BranchNode> catchMap;
 
-    private Branch finallyBranch;
+    private BranchNode finallyBranch;
 
-    public TryCatchFinallyNode(Branch tryBranch,
-        Map<Class<? extends Throwable>, Branch> catchMap, Branch finallyBranch) {
+    public TryCatchFinallyNode(BranchNode tryBranch,
+        Map<Class<? extends Throwable>, BranchNode> catchMap, BranchNode finallyBranch) {
         this.tryBranch = tryBranch;
         this.catchMap = catchMap;
         this.finallyBranch = finallyBranch;
@@ -47,9 +45,9 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
             return tryBranch.execute(contextWrapper);
         } catch (Throwable e) {
             if(!catchMap.isEmpty()) {
-                for (Map.Entry<Class<? extends Throwable>, Branch> entry : catchMap.entrySet()) {
+                for (Map.Entry<Class<? extends Throwable>, BranchNode> entry : catchMap.entrySet()) {
                     Class<? extends Throwable> expClass = entry.getKey();
-                    Branch catchBranch = entry.getValue();
+                    BranchNode catchBranch = entry.getValue();
                     if(expClass.isAssignableFrom(e.getClass())) {
                         if(catchBranch == null) {
                             continue;
