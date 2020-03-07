@@ -51,8 +51,5 @@ public class ConditionBranchFacade implements Branch {
     public ExecutableNode parallel(ExecutorService executor) {return branch.parallel(executor);}
 
     @Override
-    public String getId() {return branch.getId();}
-
-    @Override
     public boolean enabled(Context context) {return branch.enabled(context);}
 }

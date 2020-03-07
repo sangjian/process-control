@@ -33,10 +33,6 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     public AbstractExecutableNode() {
     }
 
-    public AbstractExecutableNode(String id) {
-        super(id);
-    }
-
     public void setExecutor(ExecutorService executor) {
         this.executor = executor;
     }

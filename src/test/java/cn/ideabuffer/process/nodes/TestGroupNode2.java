@@ -7,9 +7,6 @@ import cn.ideabuffer.process.Context;
  * @date 2020/01/18
  */
 public class TestGroupNode2 extends AbstractExecutableNode {
-    public TestGroupNode2(String id) {
-        super(id);
-    }
 
     @Override
     public boolean enabled(Context context) {

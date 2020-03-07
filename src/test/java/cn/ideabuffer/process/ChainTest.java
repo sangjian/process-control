@@ -26,7 +26,7 @@ public class ChainTest {
     @Test
     public void testChainBase() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         //Chain c2 = new DefaultChain("testSubChain");
         //c2.addProcessNode(new TestNode1())
         //.addProcessNode(new TestNode2());
@@ -42,7 +42,7 @@ public class ChainTest {
     @Test
     public void testBranch() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         context.put("k", 0);
         chain
@@ -53,7 +53,7 @@ public class ChainTest {
 
     @Test
     public void testIf() throws Exception {
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         context.put("k", 1);
         TestIfRule rule = new TestIfRule();
@@ -64,7 +64,7 @@ public class ChainTest {
 
     @Test
     public void testWhile() throws Exception {
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         TestWhileRule rule = new TestWhileRule();
         chain.addWhile(Nodes.newWhile(rule)
@@ -77,7 +77,7 @@ public class ChainTest {
 
     @Test
     public void testNesting() throws Exception {
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         TestWhileRule rule = new TestWhileRule();
         chain.addWhile(Nodes.newWhile((ctx) -> {
@@ -99,7 +99,7 @@ public class ChainTest {
 
     @Test
     public void testAndRule() throws Exception {
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         chain.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestNode1()).otherwise(new TestNode2()));
         chain.execute(context);
@@ -107,7 +107,7 @@ public class ChainTest {
 
     @Test
     public void testOrRule() throws Exception {
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         chain.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1()).otherwise(new TestNode2()));
         chain.execute(context);
@@ -115,7 +115,7 @@ public class ChainTest {
 
     @Test
     public void testNotRule() throws Exception {
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         chain.addIf(Nodes.newIf(Rules.not((ctx) -> true)).then(new TestNode1()).otherwise(new TestNode2()));
         chain.execute(context);
@@ -124,7 +124,7 @@ public class ChainTest {
     @Test
     public void testSerial() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         context.put("k", 1);
         long start = System.currentTimeMillis();
@@ -134,7 +134,7 @@ public class ChainTest {
 
     @Test
     public void testBlock() {
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         context.put("k", 1);
 
@@ -142,7 +142,7 @@ public class ChainTest {
 
     @Test
     public void testTryCatchFinally() throws Exception {
-        Chain chain = new DefaultChain("testChain");
+        Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         context.put("k", 1);
         chain.addProcessNode(Nodes.newTry(new TryNode1(), new TryNode2())

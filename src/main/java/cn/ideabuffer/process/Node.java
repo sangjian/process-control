@@ -7,13 +7,6 @@ package cn.ideabuffer.process;
 public interface Node {
 
     /**
-     * 节点ID
-     *
-     * @return
-     */
-    String getId();
-
-    /**
      * 是否启用
      *
      * @param context 流程上下文

@@ -9,22 +9,7 @@ import cn.ideabuffer.process.Node;
  */
 public abstract class AbstractNode implements Node {
 
-    private String id;
-
     public AbstractNode() {
-    }
-
-    public AbstractNode(String id) {
-        this.id = id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getId() {
-        return id;
     }
 
     @Override

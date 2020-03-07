@@ -26,11 +26,6 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     }
 
     public DefaultParallelBranchNode(List<Branch> branches) {
-        this(null, branches);
-    }
-
-    public DefaultParallelBranchNode(String id, List<Branch> branches) {
-        super(id);
         this.branches = branches;
     }
 

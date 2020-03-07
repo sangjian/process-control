@@ -16,10 +16,6 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
 
     private volatile boolean running;
 
-    public DefaultChain(String id) {
-        super(id);
-    }
-
     private Chain addNode(Node node) {
         if (node == null) {
             throw new IllegalArgumentException();
