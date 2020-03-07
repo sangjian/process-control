@@ -8,6 +8,7 @@ import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.rule.Rule;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -16,19 +17,17 @@ import java.util.concurrent.ExecutorService;
  */
 public class IfConditionNode extends AbstractExecutableNode implements BranchNode {
 
-    private Rule rule;
-
     private Branch trueBranch;
 
     private Branch falseBranch;
 
     public IfConditionNode(Rule rule, Branch trueBranch) {
-        this.rule = rule;
+        super(rule);
         this.trueBranch = trueBranch;
     }
 
     public IfConditionNode(Rule rule, Branch trueBranch, Branch falseBranch) {
-        this.rule = rule;
+        super(rule);
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;
     }
@@ -48,9 +47,22 @@ public class IfConditionNode extends AbstractExecutableNode implements BranchNod
     }
 
     @Override
-    public IfConditionNode parallel(ExecutorService executor) {
+    public IfConditionNode parallel(Executor executor) {
         super.parallel(executor);
         return this;
+    }
+
+    @Override
+    protected boolean ruleCheck(Context context) {
+        return true;
+    }
+
+    @Override
+    public boolean execute(Context context) throws Exception {
+        if(rule == null) {
+            throw new RuntimeException("rule can't be null");
+        }
+        return super.execute(context);
     }
 
     @Override

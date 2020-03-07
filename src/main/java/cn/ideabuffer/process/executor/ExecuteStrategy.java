@@ -26,10 +26,9 @@ public interface ExecuteStrategy {
     boolean execute(ExecutorService executor, Context context, ExecutableNode... nodes) throws Exception;
 
     default boolean execute(ExecutorService executor, Context context, Branch branch) throws Exception {
-        if(branch == null || branch.getNodes() == null || branch.getNodes().size() == 0) {
+        if(branch == null || branch.getNodes() == null) {
             return false;
         }
-        ExecutableNode[] arr = new ExecutableNode[branch.getNodes().size()];
-        return execute(executor, context, branch.getNodes().toArray(arr));
+        return execute(executor, context, branch.getNodes().toArray(new ExecutableNode[0]));
     }
 }

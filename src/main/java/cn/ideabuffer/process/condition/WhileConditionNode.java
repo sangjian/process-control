@@ -9,6 +9,7 @@ import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.rule.Rule;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -39,15 +40,20 @@ public class WhileConditionNode extends AbstractExecutableNode implements Branch
     }
 
     @Override
-    public WhileConditionNode parallel(ExecutorService executor) {
+    public WhileConditionNode parallel(Executor executor) {
         super.parallel(executor);
         return this;
     }
 
     @Override
+    protected boolean ruleCheck(Context context) {
+        return true;
+    }
+
+    @Override
     public boolean execute(Context context) throws Exception {
         if(rule == null) {
-            throw new RuntimeException("rule cann't be null");
+            throw new RuntimeException("rule can't be null");
         }
         return super.execute(context);
     }

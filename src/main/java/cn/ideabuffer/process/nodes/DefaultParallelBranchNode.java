@@ -5,10 +5,11 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.ParallelBranchNode;
 import cn.ideabuffer.process.branch.DefaultBranch;
-import cn.ideabuffer.process.executor.ExecuteStrategies;
-import cn.ideabuffer.process.executor.ExecuteStrategy;
+import cn.ideabuffer.process.executor.NodeExecutors;
+import cn.ideabuffer.process.executor.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,40 +20,41 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     private List<Branch> branches;
 
-    private ExecuteStrategy strategy = ExecuteStrategies.PARALLELED;
+    private ProceedStrategy strategy = null;
 
     public DefaultParallelBranchNode() {
         this(null);
     }
 
     public DefaultParallelBranchNode(List<Branch> branches) {
-        this.branches = branches;
+        this.branches = branches == null ? new ArrayList<>() : branches;
     }
 
     public void setBranches(@NotNull List<Branch> branches) {
         this.branches = branches;
     }
 
-    public void setStrategy(@NotNull ExecuteStrategy strategy) {
+    public void setStrategy(@NotNull ProceedStrategy strategy) {
         this.strategy = strategy;
     }
 
     @Override
-    public ParallelBranchNode proceedWhen(@NotNull ExecuteStrategy strategy) {
+    public ParallelBranchNode proceedWhen(@NotNull ProceedStrategy strategy) {
         this.strategy = strategy;
         return this;
     }
 
     @Override
     public boolean execute(Context context) throws Exception {
+        if(branches == null) {
+            return false;
+        }
         return doExecute(context);
     }
 
     @Override
     protected boolean doExecute(Context context) throws Exception {
-        ExecutableNode[] nodes = new ExecutableNode[branches.size()];
-
-        return this.strategy.execute(getExecutor(), context, branches.toArray(nodes));
+        return NodeExecutors.PARALLEL_EXECUTOR.execute(executor, strategy, context, branches.toArray(new ExecutableNode[0]));
     }
 
     @Override

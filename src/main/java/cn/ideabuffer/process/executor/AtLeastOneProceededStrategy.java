@@ -1,50 +1,44 @@
 package cn.ideabuffer.process.executor;
 
-import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.ExecutableNode;
-
-import java.util.*;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ExecutorService;
-import java.util.stream.Stream;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author sangjian.sj
  * @date 2020/02/25
  */
-public class AtLeastOneProceededStrategy implements ExecuteStrategy {
+public class AtLeastOneProceededStrategy implements ProceedStrategy {
 
     @Override
-    public boolean execute(ExecutorService executor, Context context, ExecutableNode... nodes) throws Exception {
-        if(nodes == null || nodes.length == 0) {
+    public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {
+        if (futures == null || futures.isEmpty()) {
             return false;
         }
-        if(executor == null) {
-            throw new NullPointerException();
-        }
 
-        Set<CompletableFuture<Boolean>> futureSet = new HashSet<>();
-        for (ExecutableNode node : nodes) {
-            CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-                try {
-                    return node.execute(context);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+        // 执行结果队列
+        BlockingQueue<Boolean> queue = new LinkedBlockingQueue<>(futures.size());
+        for (CompletableFuture<Boolean> future : futures) {
+            // 执行完成回调
+            future.whenComplete((b, t) -> {
+                if (t != null) {
+                    // 有异常
+                    queue.offer(false);
+                } else {
+                    // 执行结果入队
+                    queue.offer(b);
                 }
-            }, executor);
-            futureSet.add(future);
+            });
         }
 
-        List<CompletableFuture<Boolean>> completeFutureList = new ArrayList<>();
-
-        for (int i = 0; i < nodes.length; i++) {
-            CompletableFuture<Object> future = CompletableFuture.anyOf(Stream.of(futureSet).toArray(CompletableFuture[]::new));
-
-            // TODO
+        for (int i = 0; i < queue.size(); i++) {
+            if (!queue.take()) {
+                return false;
+            }
         }
 
-
-        return false;
+        return true;
     }
 }

@@ -13,6 +13,7 @@ import cn.ideabuffer.process.nodes.whiles.TestWhileRule;
 import cn.ideabuffer.process.rule.Rules;
 import org.junit.Test;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -149,6 +150,23 @@ public class ChainTest {
             .catchOn(Exception.class, new CatchNode1(), new CatchNode2())
             .doFinally(new FinallyNode1(), new FinallyNode2()));
         chain.execute(context);
+    }
+
+    @Test
+    public void testCompletableFuture() throws InterruptedException {
+        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+            System.out.println("haha");
+            return true;
+        });
+        Thread.sleep(5000);
+        future.whenComplete((r, e) -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            System.out.println(r);
+        });
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,10 @@
 package cn.ideabuffer.process;
 
-import java.util.concurrent.ExecutorService;
+import cn.ideabuffer.process.executor.NodeExecutor;
+import cn.ideabuffer.process.handler.ExceptionHandler;
+import cn.ideabuffer.process.rule.Rule;
+
+import java.util.concurrent.Executor;
 
 /**
  * @author sangjian.sj
@@ -21,15 +25,23 @@ public interface ExecutableNode extends Node {
      */
     boolean execute(Context context) throws Exception;
 
+    ExecutableNode exceptionHandler(ExceptionHandler handler);
+
+    ExceptionHandler getExceptionHandler();
+
     /**
      * 获取当前执行的线程池
      *
      * @return
      */
-    ExecutorService getExecutor();
+    Executor getExecutor();
 
     ExecutableNode parallel();
 
-    ExecutableNode parallel(ExecutorService executor);
+    ExecutableNode parallel(Executor executor);
+
+    ExecutableNode processOn(Rule rule);
+
+    Rule getRule();
 
 }

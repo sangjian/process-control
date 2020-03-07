@@ -4,6 +4,7 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.block.BlockWrapper;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ExecutorService;
 
@@ -11,10 +12,10 @@ import java.util.concurrent.ExecutorService;
  * @author sangjian.sj
  * @date 2020/02/25
  */
-public class SerialStrategy implements ExecuteStrategy {
+public class DefaultSerialExecutor implements NodeExecutor {
 
     @Override
-    public boolean execute(ExecutorService executor, Context context, ExecutableNode... nodes) throws Exception {
+    public boolean execute(Executor executor, ProceedStrategy proceedStrategy, Context context, ExecutableNode... nodes) throws Exception {
         if(nodes == null || nodes.length == 0) {
             return false;
         }

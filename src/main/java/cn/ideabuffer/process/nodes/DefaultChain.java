@@ -1,10 +1,10 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.*;
-import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.condition.IfConditionNode;
 import cn.ideabuffer.process.condition.WhileConditionNode;
+import cn.ideabuffer.process.handler.ExceptionHandler;
 
 /**
  * @author sangjian.sj
@@ -83,8 +83,20 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
                         break;
                     }
                 } catch (Exception e) {
-                    exception = e;
-                    break;
+                    ExceptionHandler handler = this.getExceptionHandler();
+                    if(handler != null) {
+                        try {
+                            if(handler.handle(e)) {
+                                break;
+                            }
+                        } catch (Exception e2) {
+                            // do something...
+                        }
+
+                    } else {
+                        exception = e;
+                        break;
+                    }
                 }
             }
 
