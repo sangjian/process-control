@@ -2,6 +2,8 @@ package cn.ideabuffer.process;
 
 import cn.ideabuffer.process.branch.Branches;
 import cn.ideabuffer.process.nodes.*;
+import cn.ideabuffer.process.nodes.aggregate.AggregateResultProcessor;
+import cn.ideabuffer.process.nodes.aggregate.DefaultAggregatableNode;
 import cn.ideabuffer.process.nodes.ifs.TestFalseBrance;
 import cn.ideabuffer.process.nodes.ifs.TestIfRule;
 import cn.ideabuffer.process.nodes.ifs.TestTrueBrance;
@@ -13,6 +15,7 @@ import cn.ideabuffer.process.nodes.whiles.TestWhileRule;
 import cn.ideabuffer.process.rule.Rules;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -167,6 +170,17 @@ public class ChainTest {
             }
             System.out.println(r);
         });
+    }
+
+    @Test
+    public void testAggregate() {
+        //DefaultAggregatableNode<List<Integer>> node = new DefaultAggregatableNode<>();
+        //node.thenApply(new AggregateResultProcessor<String, List<Integer>>() {
+        //    @Override
+        //    public String apply(List<Integer> result) {
+        //        return null;
+        //    }
+        //})
     }
 
     public static void main(String[] args) {

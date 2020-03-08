@@ -6,6 +6,6 @@ package cn.ideabuffer.process.handler;
  */
 public interface ExceptionHandler {
 
-    boolean handle(Exception e);
+    boolean handle(Throwable t);
 
 }

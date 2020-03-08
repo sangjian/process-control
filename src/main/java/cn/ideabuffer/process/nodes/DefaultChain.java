@@ -5,6 +5,11 @@ import cn.ideabuffer.process.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.condition.IfConditionNode;
 import cn.ideabuffer.process.condition.WhileConditionNode;
 import cn.ideabuffer.process.handler.ExceptionHandler;
+import cn.ideabuffer.process.nodes.aggregate.AggregatableNode;
+import cn.ideabuffer.process.utils.ReflectionUtils;
+import org.apache.commons.lang.ClassUtils;
+
+import java.lang.reflect.Method;
 
 /**
  * @author sangjian.sj
@@ -101,8 +106,12 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
             }
 
             if(node instanceof AggregatableNode) {
-                Object result = ((AggregatableNode)node).aggregate(context);
-                ((AggregatableNode)node).process(result);
+                try {
+                    ((AggregatableNode)node).aggregate(context);
+                } catch (Exception e) {
+
+                }
+
             }
 
         }

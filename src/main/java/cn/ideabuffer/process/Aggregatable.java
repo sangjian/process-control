@@ -4,8 +4,8 @@ package cn.ideabuffer.process;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface Aggregatable<T> {
+public interface Aggregatable {
 
-    T aggregate();
+    void aggregate(Context context) throws Exception;
 
 }
