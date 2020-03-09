@@ -20,13 +20,13 @@ public class AggregateTest {
         Context context = new DefaultContext();
         DefaultAggregatableNode<List<String>> node = new DefaultAggregatableNode<>();
         node.merge(new TestMergeableNode1(), new TestMergeableNode2()).by(new ArrayListMerger<>())
-            .thenApply((result -> {
+            .thenApply(((ctx, result) -> {
                 System.out.println(result);
                 return result.size();
-            })).thenApply(result -> {
+            })).thenApply((ctx, result) -> {
                 System.out.println(result);
                 return null;
-            }).thenAccept(System.out::println);
+            }).thenAccept((ctx, result) -> System.out.println(result));
         chain.addAggregateNode(node);
         chain.execute(context);
         //Thread.sleep(10000);

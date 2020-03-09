@@ -136,7 +136,7 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
         T result = aggregator.aggregate(executor, merger, context, mergeableNodes);
         if(this.postProcessor != null) {
             //noinspection unchecked
-            this.postProcessor.fire(result);
+            this.postProcessor.fire(context, result);
         }
     }
 
@@ -156,16 +156,16 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
         }
 
         @SuppressWarnings("unchecked")
-        void fire(P result) {
+        void fire(Context context, P result) {
             Object r = result;
             if(processor != null) {
-                r = processor.apply(result);
+                r = processor.apply(context, result);
             }
             if(consumer != null) {
-                consumer.accept(result);
+                consumer.accept(context, result);
             }
             if(next != null) {
-                next.fire(r);
+                next.fire(context, r);
             }
         }
 
