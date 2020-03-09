@@ -33,7 +33,7 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
 
     private ExceptionHandler handler;
 
-    private PostLink postProcessor;
+    private PostNode postNode;
 
     public DefaultAggregatableNode() {
         this.mergeableNodes = new ArrayList<>();
@@ -118,40 +118,40 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
     }
 
     @Override
-    public <R> AggregatePostProcessor<R> thenApply(AggregateResultProcessor<R, T> processor) {
-        PostLink<R> then = new PostLink<>(processor);
-        this.postProcessor = then;
+    public <R> ResultPostProcessor<R> thenApply(ResultProcessor<R, T> processor) {
+        PostNode<R> then = new PostNode<>(processor);
+        this.postNode = then;
         return then;
     }
 
     @Override
-    public AggregatePostProcessor<Void> thenAccept(AggregateResultConsumer<T> consumer) {
-        PostLink<Void> then = new PostLink<>(consumer);
-        this.postProcessor = then;
+    public ResultPostProcessor<Void> thenAccept(ResultConsumer<T> consumer) {
+        PostNode<Void> then = new PostNode<>(consumer);
+        this.postNode = then;
         return then;
     }
 
     @Override
     public void aggregate(Context context) throws Exception {
         T result = aggregator.aggregate(executor, merger, context, mergeableNodes);
-        if(this.postProcessor != null) {
+        if(this.postNode != null) {
             //noinspection unchecked
-            this.postProcessor.fire(context, result);
+            this.postNode.fire(context, result);
         }
     }
 
-    class PostLink<P> implements AggregatePostProcessor<P> {
-        private AggregateResultProcessor processor;
+    class PostNode<P> implements ResultPostProcessor<P> {
+        private ResultProcessor processor;
 
-        private AggregateResultConsumer consumer;
+        private ResultConsumer consumer;
 
-        private PostLink next;
+        private PostNode next;
 
-        PostLink(AggregateResultProcessor processor) {
+        PostNode(ResultProcessor processor) {
             this.processor = processor;
         }
 
-        PostLink(AggregateResultConsumer consumer) {
+        PostNode(ResultConsumer consumer) {
             this.consumer = consumer;
         }
 
@@ -170,15 +170,15 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
         }
 
         @Override
-        public <R> AggregatePostProcessor<R> thenApply(AggregateResultProcessor<R, P> processor) {
-            PostLink<R> then = new PostLink<>(processor);
+        public <R> ResultPostProcessor<R> thenApply(ResultProcessor<R, P> processor) {
+            PostNode<R> then = new PostNode<>(processor);
             this.next = then;
             return then;
         }
 
         @Override
-        public AggregatePostProcessor<Void> thenAccept(AggregateResultConsumer<P> consumer) {
-            PostLink<Void> then = new PostLink<>(consumer);
+        public ResultPostProcessor<Void> thenAccept(ResultConsumer<P> consumer) {
+            PostNode<Void> then = new PostNode<>(consumer);
             this.next = then;
             return then;
         }

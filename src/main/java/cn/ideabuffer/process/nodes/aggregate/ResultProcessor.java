@@ -6,7 +6,7 @@ import cn.ideabuffer.process.Context;
  * @author sangjian.sj
  * @date 2020/03/08
  */
-public interface AggregateResultProcessor<R, T> {
+public interface ResultProcessor<R, T> {
 
     R apply(Context context, T result);
 
