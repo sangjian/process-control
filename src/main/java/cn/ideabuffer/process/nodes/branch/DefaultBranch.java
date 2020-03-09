@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.branch;
+package cn.ideabuffer.process.nodes.branch;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.nodes.ExecutableNode;

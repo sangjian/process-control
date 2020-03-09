@@ -1,6 +1,5 @@
-package cn.ideabuffer.process.branch;
+package cn.ideabuffer.process;
 
-import cn.ideabuffer.process.Node;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

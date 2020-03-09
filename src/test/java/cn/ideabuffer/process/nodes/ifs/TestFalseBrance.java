@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.nodes.ifs;
 
 import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.branch.DefaultBranch;
+import cn.ideabuffer.process.nodes.branch.DefaultBranch;
 
 /**
  * @author sangjian.sj

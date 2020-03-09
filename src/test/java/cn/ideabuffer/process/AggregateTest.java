@@ -1,6 +1,5 @@
 package cn.ideabuffer.process;
 
-import cn.ideabuffer.process.nodes.DefaultChain;
 import cn.ideabuffer.process.nodes.aggregate.DefaultAggregatableNode;
 import cn.ideabuffer.process.nodes.aggregate.TestMergeableNode1;
 import cn.ideabuffer.process.nodes.aggregate.TestMergeableNode2;

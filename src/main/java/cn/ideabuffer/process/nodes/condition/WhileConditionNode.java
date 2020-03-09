@@ -1,6 +1,6 @@
-package cn.ideabuffer.process.condition;
+package cn.ideabuffer.process.nodes.condition;
 
-import cn.ideabuffer.process.branch.BranchNode;
+import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;

@@ -1,10 +1,10 @@
 package cn.ideabuffer.process.nodes;
 
-import cn.ideabuffer.process.branch.BranchNode;
-import cn.ideabuffer.process.branch.DefaultBranch;
-import cn.ideabuffer.process.condition.DoWhileConditionNode;
-import cn.ideabuffer.process.condition.IfConditionNode;
-import cn.ideabuffer.process.condition.WhileConditionNode;
+import cn.ideabuffer.process.nodes.branch.BranchNode;
+import cn.ideabuffer.process.nodes.branch.DefaultBranch;
+import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
+import cn.ideabuffer.process.nodes.condition.IfConditionNode;
+import cn.ideabuffer.process.nodes.condition.WhileConditionNode;
 import cn.ideabuffer.process.rule.Rule;
 
 import java.util.HashMap;

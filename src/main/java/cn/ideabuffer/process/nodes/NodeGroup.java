@@ -3,7 +3,7 @@ package cn.ideabuffer.process.nodes;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.block.Block;
-import cn.ideabuffer.process.branch.DefaultBranch;
+import cn.ideabuffer.process.nodes.branch.DefaultBranch;
 
 /**
  * @author sangjian.sj
