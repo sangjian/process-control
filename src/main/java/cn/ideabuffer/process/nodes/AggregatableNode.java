@@ -1,7 +1,10 @@
-package cn.ideabuffer.process.nodes.aggregate;
+package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.*;
 import cn.ideabuffer.process.handler.ExceptionHandler;
+import cn.ideabuffer.process.nodes.aggregate.AggregatePostProcessor;
+import cn.ideabuffer.process.nodes.aggregate.Aggregator;
+import cn.ideabuffer.process.nodes.merger.Merger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;

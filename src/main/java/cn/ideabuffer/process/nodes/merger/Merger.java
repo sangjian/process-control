@@ -1,4 +1,4 @@
-package cn.ideabuffer.process;
+package cn.ideabuffer.process.nodes.merger;
 
 import java.util.Collection;
 

@@ -52,7 +52,7 @@ public class ChainTest {
         chain
             .addProcessNode(Branches.newDefaultBranch(new TestNode1(), new TestNode2()).parallel(executorService));
         chain.execute(context);
-        Thread.sleep(10000);
+        //Thread.sleep(10000);
     }
 
     @Test

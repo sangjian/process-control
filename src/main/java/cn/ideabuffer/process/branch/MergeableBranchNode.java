@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.branch;
 
-import cn.ideabuffer.process.MergeableNode;
+import cn.ideabuffer.process.nodes.MergeableNode;
 import cn.ideabuffer.process.Node;
 import org.jetbrains.annotations.NotNull;
 

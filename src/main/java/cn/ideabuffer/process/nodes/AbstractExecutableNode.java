@@ -1,7 +1,6 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
 import org.slf4j.Logger;

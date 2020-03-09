@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.branch;
 
-import cn.ideabuffer.process.ExecutableNode;
 import cn.ideabuffer.process.Node;
 import org.jetbrains.annotations.NotNull;
 

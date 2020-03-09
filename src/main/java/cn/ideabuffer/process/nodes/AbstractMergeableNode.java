@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.nodes;
 
-import cn.ideabuffer.process.MergeableNode;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
 

@@ -5,11 +5,6 @@ import cn.ideabuffer.process.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.condition.IfConditionNode;
 import cn.ideabuffer.process.condition.WhileConditionNode;
 import cn.ideabuffer.process.handler.ExceptionHandler;
-import cn.ideabuffer.process.nodes.aggregate.AggregatableNode;
-import cn.ideabuffer.process.utils.ReflectionUtils;
-import org.apache.commons.lang.ClassUtils;
-
-import java.lang.reflect.Method;
 
 /**
  * @author sangjian.sj
@@ -61,6 +56,11 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
     }
 
     @Override
+    public <T> Chain addAggregateNode(AggregatableNode<T> node) {
+        return addNode(node);
+    }
+
+    @Override
     public boolean doExecute(Context context) throws Exception {
 
         if (context == null) {
@@ -88,7 +88,8 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
                         break;
                     }
                 } catch (Exception e) {
-                    ExceptionHandler handler = this.getExceptionHandler();
+                    logger.error("execute error, node:{}", node, e);
+                    ExceptionHandler handler = ((ExecutableNode)node).getExceptionHandler();
                     if(handler != null) {
                         try {
                             if(handler.handle(e)) {
@@ -109,6 +110,21 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
                 try {
                     ((AggregatableNode)node).aggregate(context);
                 } catch (Exception e) {
+                    logger.error("aggregate error, node:{}", node, e);
+                    ExceptionHandler handler = ((AggregatableNode)node).getExceptionHandler();
+                    if(handler != null) {
+                        try {
+                            if(handler.handle(e)) {
+                                break;
+                            }
+                        } catch (Exception e2) {
+                            // do something...
+                        }
+
+                    } else {
+                        exception = e;
+                        break;
+                    }
 
                 }
 

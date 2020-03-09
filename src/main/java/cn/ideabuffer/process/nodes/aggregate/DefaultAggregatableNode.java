@@ -1,15 +1,19 @@
 package cn.ideabuffer.process.nodes.aggregate;
 
 import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.MergeableNode;
-import cn.ideabuffer.process.Merger;
+import cn.ideabuffer.process.nodes.AggregatableNode;
+import cn.ideabuffer.process.nodes.MergeableNode;
+import cn.ideabuffer.process.nodes.merger.Merger;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.AbstractNode;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
+
+import static cn.ideabuffer.process.nodes.aggregate.Aggregators.SERIAL;
 
 /**
  * @author sangjian.sj
@@ -21,7 +25,7 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
 
     protected Executor executor;
 
-    private Aggregator aggregator;
+    private Aggregator aggregator = SERIAL;
 
     private List<MergeableNode<T>> mergeableNodes;
 
@@ -29,13 +33,10 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
 
     private ExceptionHandler handler;
 
-    private AggregateResultProcessor processor;
-
-    private AggregateResultConsumer consumer;
-
     private PostLink postProcessor;
 
     public DefaultAggregatableNode() {
+        this.mergeableNodes = new ArrayList<>();
     }
 
     public DefaultAggregatableNode(List<MergeableNode<T>> mergeableNodes) {
@@ -50,8 +51,20 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
         this.executor = executor;
     }
 
+    public void setAggregator(Aggregator aggregator) {
+        this.aggregator = aggregator;
+    }
+
     public void setMergeableNodes(List<MergeableNode<T>> mergeableNodes) {
         this.mergeableNodes = mergeableNodes;
+    }
+
+    public void setMerger(Merger<T> merger) {
+        this.merger = merger;
+    }
+
+    public void setHandler(ExceptionHandler handler) {
+        this.handler = handler;
     }
 
     @Override
@@ -123,7 +136,7 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
         T result = aggregator.aggregate(executor, merger, context, mergeableNodes);
         if(this.postProcessor != null) {
             //noinspection unchecked
-            this.postProcessor.processNext(result);
+            this.postProcessor.fire(result);
         }
     }
 
@@ -143,7 +156,7 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
         }
 
         @SuppressWarnings("unchecked")
-        void processNext(P result) {
+        void fire(P result) {
             Object r = result;
             if(processor != null) {
                 r = processor.apply(result);
@@ -152,7 +165,7 @@ public class DefaultAggregatableNode<T> extends AbstractNode implements Aggregat
                 consumer.accept(result);
             }
             if(next != null) {
-                next.processNext(r);
+                next.fire(r);
             }
         }
 

@@ -11,6 +11,7 @@ public class TestNode1 extends AbstractExecutableNode {
     @Override
     protected boolean doExecute(Context context) throws Exception {
         logger.info("in testNode1");
+        Thread.sleep(1000);
         return false;
     }
 }

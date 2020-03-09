@@ -3,7 +3,9 @@ package cn.ideabuffer.process;
 import cn.ideabuffer.process.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.condition.IfConditionNode;
 import cn.ideabuffer.process.condition.WhileConditionNode;
+import cn.ideabuffer.process.nodes.ExecutableNode;
 import cn.ideabuffer.process.nodes.NodeGroup;
+import cn.ideabuffer.process.nodes.AggregatableNode;
 
 /**
  * @author sangjian.sj
@@ -45,5 +47,13 @@ public interface Chain extends ExecutableNode {
      * @return
      */
     Chain addGroup(NodeGroup group);
+
+    /**
+     * 增加聚合节点
+     * @param node 聚合节点
+     * @param <T> 返回值类型
+     * @return
+     */
+    <T> Chain addAggregateNode(AggregatableNode<T> node);
 
 }

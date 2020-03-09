@@ -1,4 +1,4 @@
-package cn.ideabuffer.process;
+package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.branch.BranchNode;
 import cn.ideabuffer.process.executor.ProceedStrategy;

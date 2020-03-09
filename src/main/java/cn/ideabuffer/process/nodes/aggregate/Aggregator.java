@@ -1,8 +1,8 @@
 package cn.ideabuffer.process.nodes.aggregate;
 
 import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.MergeableNode;
-import cn.ideabuffer.process.Merger;
+import cn.ideabuffer.process.nodes.MergeableNode;
+import cn.ideabuffer.process.nodes.merger.Merger;
 
 import java.util.List;
 import java.util.concurrent.Executor;
