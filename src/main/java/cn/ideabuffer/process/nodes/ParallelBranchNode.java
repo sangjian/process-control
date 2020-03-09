@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.nodes;
 
-import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.executor.ProceedStrategy;
+import cn.ideabuffer.process.nodes.branch.BranchNode;
 import org.jetbrains.annotations.NotNull;
 
 /**

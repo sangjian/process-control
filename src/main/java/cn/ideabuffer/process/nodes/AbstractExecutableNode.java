@@ -6,7 +6,7 @@ import cn.ideabuffer.process.rule.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executor;
 
 /**
  * @author sangjian.sj

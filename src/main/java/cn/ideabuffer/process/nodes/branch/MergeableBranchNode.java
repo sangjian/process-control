@@ -1,8 +1,8 @@
 package cn.ideabuffer.process.nodes.branch;
 
 import cn.ideabuffer.process.Branch;
-import cn.ideabuffer.process.nodes.MergeableNode;
 import cn.ideabuffer.process.Node;
+import cn.ideabuffer.process.nodes.MergeableNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.nodes.merger;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author sangjian.sj

@@ -1,11 +1,11 @@
 package cn.ideabuffer.process.nodes.aggregate;
 
 import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.handler.ExceptionHandler;
+import cn.ideabuffer.process.nodes.AbstractNode;
 import cn.ideabuffer.process.nodes.AggregatableNode;
 import cn.ideabuffer.process.nodes.MergeableNode;
 import cn.ideabuffer.process.nodes.merger.Merger;
-import cn.ideabuffer.process.handler.ExceptionHandler;
-import cn.ideabuffer.process.nodes.AbstractNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

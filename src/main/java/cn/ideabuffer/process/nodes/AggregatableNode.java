@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.nodes;
 
-import cn.ideabuffer.process.*;
+import cn.ideabuffer.process.Aggregatable;
+import cn.ideabuffer.process.Node;
+import cn.ideabuffer.process.Parallelizable;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.aggregate.AggregatePostProcessor;
 import cn.ideabuffer.process.nodes.aggregate.Aggregator;
