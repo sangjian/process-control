@@ -71,7 +71,20 @@ public class ParallelAggregator implements Aggregator {
 
         @Override
         public V get() {
-            return node.invoke(context);
+            try {
+                return node.invoke(context);
+            } catch (Exception e) {
+                if(node.getExceptionHandler() != null) {
+                    try {
+                        node.getExceptionHandler().handle(e);
+                    } catch (Exception ex) {
+                        logger.error("handle exception error, node:{}", node, ex);
+                    }
+                } else {
+                    throw new RuntimeException(e);
+                }
+            }
+            return null;
         }
     }
 }

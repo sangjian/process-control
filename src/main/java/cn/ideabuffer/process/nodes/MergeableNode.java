@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.nodes;
 
-import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.Matchable;
 import cn.ideabuffer.process.Mergeable;
 import cn.ideabuffer.process.Node;
@@ -12,9 +11,6 @@ import cn.ideabuffer.process.rule.Rule;
  * @date 2020/03/07
  */
 public interface MergeableNode<T> extends Node, Mergeable<T>, Matchable {
-
-    @Override
-    T invoke(Context context);
 
     MergeableNode<T> exceptionHandler(ExceptionHandler handler);
 
