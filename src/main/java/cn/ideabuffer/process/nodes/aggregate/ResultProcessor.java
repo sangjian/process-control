@@ -6,8 +6,8 @@ import cn.ideabuffer.process.Context;
  * @author sangjian.sj
  * @date 2020/03/08
  */
-public interface ResultProcessor<R, T> {
+public interface ResultProcessor<R, P> {
 
-    R apply(Context context, T result);
+    R apply(Context context, P result);
 
 }

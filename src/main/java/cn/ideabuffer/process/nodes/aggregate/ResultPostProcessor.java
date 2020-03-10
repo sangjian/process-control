@@ -4,10 +4,10 @@ package cn.ideabuffer.process.nodes.aggregate;
  * @author sangjian.sj
  * @date 2020/03/08
  */
-public interface ResultPostProcessor<T> {
+public interface ResultPostProcessor<P> {
 
-    <R> ResultPostProcessor<R> thenApply(ResultProcessor<R, T> processor);
+    <R> ResultPostProcessor<R> thenApply(ResultProcessor<R, P> processor);
 
-    ResultPostProcessor<Void> thenAccept(ResultConsumer<T> consumer);
+    ResultPostProcessor<Void> thenAccept(ResultConsumer<P> consumer);
 
 }

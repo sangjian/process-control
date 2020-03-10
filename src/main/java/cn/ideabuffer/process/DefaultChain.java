@@ -109,30 +109,6 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
                 }
             }
 
-            if(node instanceof AggregatableNode) {
-                try {
-                    ((AggregatableNode)node).aggregate(context);
-                } catch (Exception e) {
-                    logger.error("aggregate error, node:{}", node, e);
-                    ExceptionHandler handler = ((AggregatableNode)node).getExceptionHandler();
-                    if(handler != null) {
-                        try {
-                            if(handler.handle(e)) {
-                                break;
-                            }
-                        } catch (Exception e2) {
-                            // do something...
-                        }
-
-                    } else {
-                        exception = e;
-                        break;
-                    }
-
-                }
-
-            }
-
         }
 
         if (i >= nodes.length) {

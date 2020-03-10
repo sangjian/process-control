@@ -171,7 +171,7 @@ public class ChainTest {
 
     @Test
     public void testAggregate() {
-        //DefaultAggregatableNode<List<Integer>> node = new DefaultAggregatableNode<>();
+        //DefaultAggregateNode<List<Integer>> node = new DefaultAggregateNode<>();
         //node.thenApply(new ResultProcessor<String, List<Integer>>() {
         //    @Override
         //    public String apply(List<Integer> result) {
