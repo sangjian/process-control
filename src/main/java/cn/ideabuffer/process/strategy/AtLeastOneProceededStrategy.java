@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.executor;
+package cn.ideabuffer.process.strategy;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;

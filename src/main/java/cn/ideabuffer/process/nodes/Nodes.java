@@ -16,6 +16,14 @@ import java.util.Map;
  */
 public class Nodes {
 
+    public static NodeGroup newGroup() {
+        return new NodeGroup();
+    }
+
+    public static ParallelBranchNode newParallelBranchNode() {
+        return new DefaultParallelBranchNode();
+    }
+
     public static IfWhen newIf(Rule rule) {
         return new IfWhen(rule);
     }

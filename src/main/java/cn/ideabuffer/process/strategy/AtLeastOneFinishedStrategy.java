@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.executor;
+package cn.ideabuffer.process.strategy;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture;
  * @author sangjian.sj
  * @date 2020/02/25
  */
-public class AllProceededStrategy implements ProceedStrategy {
+public class AtLeastOneFinishedStrategy implements ProceedStrategy {
 
     @Override
     public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {
@@ -15,11 +15,8 @@ public class AllProceededStrategy implements ProceedStrategy {
             return false;
         }
 
-        for (CompletableFuture<Boolean> future : futures) {
-            if(future.get()) {
-                return true;
-            }
-        }
+        CompletableFuture.anyOf(futures.toArray(new CompletableFuture[0])).get();
+
         return false;
     }
 }

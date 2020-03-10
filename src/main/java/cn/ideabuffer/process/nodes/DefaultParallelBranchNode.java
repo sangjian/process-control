@@ -2,13 +2,16 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.executor.NodeExecutors;
-import cn.ideabuffer.process.executor.ProceedStrategy;
+import cn.ideabuffer.process.strategy.ProceedStrategies;
+import cn.ideabuffer.process.strategy.ProceedStrategy;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.DefaultBranch;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static cn.ideabuffer.process.executor.NodeExecutors.PARALLEL_EXECUTOR;
 
 /**
  * @author sangjian.sj
@@ -18,7 +21,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     private List<BranchNode> branches;
 
-    private ProceedStrategy strategy = null;
+    private ProceedStrategy strategy = ProceedStrategies.AT_LEAST_ONE_FINISHED;
 
     public DefaultParallelBranchNode() {
         this(null);
@@ -52,7 +55,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     @Override
     protected boolean doExecute(Context context) throws Exception {
-        return NodeExecutors.PARALLEL_EXECUTOR.execute(executor, strategy, context, branches.toArray(new ExecutableNode[0]));
+        return PARALLEL_EXECUTOR.execute(executor, strategy, context, branches.toArray(new ExecutableNode[0]));
     }
 
     @Override
