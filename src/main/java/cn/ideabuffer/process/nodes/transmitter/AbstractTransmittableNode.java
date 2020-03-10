@@ -1,12 +1,9 @@
-package cn.ideabuffer.process.nodes.transmission;
+package cn.ideabuffer.process.nodes.transmitter;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.nodes.TransmittableNode;
-import cn.ideabuffer.process.nodes.aggregate.ResultConsumer;
-import cn.ideabuffer.process.nodes.aggregate.ResultPostProcessor;
-import cn.ideabuffer.process.nodes.aggregate.ResultProcessor;
 import cn.ideabuffer.process.rule.Rule;
 
 import java.util.concurrent.Executor;
@@ -46,14 +43,14 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
     }
 
     @Override
-    public <V> ResultPostProcessor<V> thenApply(ResultProcessor<V, R> processor) {
+    public <V> ResultStream<V> thenApply(ResultProcessor<V, R> processor) {
         TransmittableProcessor<V> then = new TransmittableProcessor<>(processor);
         this.processor = then;
         return then;
     }
 
     @Override
-    public ResultPostProcessor<Void> thenAccept(ResultConsumer<R> consumer) {
+    public ResultStream<Void> thenAccept(ResultConsumer<R> consumer) {
         TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer);
         this.processor = then;
         return then;

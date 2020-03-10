@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.nodes.aggregate;
+package cn.ideabuffer.process.nodes.transmitter;
 
 import cn.ideabuffer.process.Context;
 

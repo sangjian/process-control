@@ -5,7 +5,7 @@ import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.AggregatableNode;
 import cn.ideabuffer.process.nodes.MergeableNode;
 import cn.ideabuffer.process.nodes.merger.Merger;
-import cn.ideabuffer.process.nodes.transmission.AbstractTransmittableNode;
+import cn.ideabuffer.process.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ import static cn.ideabuffer.process.nodes.aggregate.Aggregators.SERIAL;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public class DefaultAggregateNode<R> extends AbstractTransmittableNode<R> implements AggregatableNode<R> {
+public class DefaultAggregatableNode<R> extends AbstractTransmittableNode<R> implements AggregatableNode<R> {
 
     private Aggregator aggregator = SERIAL;
 
@@ -28,19 +28,19 @@ public class DefaultAggregateNode<R> extends AbstractTransmittableNode<R> implem
 
     private Merger<R> merger;
 
-    public DefaultAggregateNode() {
+    public DefaultAggregatableNode() {
         this(null, null, null);
     }
 
-    public DefaultAggregateNode(Aggregator aggregator) {
+    public DefaultAggregatableNode(Aggregator aggregator) {
         this(aggregator, null, null);
     }
 
-    public DefaultAggregateNode(List<MergeableNode<R>> mergeableNodes) {
+    public DefaultAggregatableNode(List<MergeableNode<R>> mergeableNodes) {
         this(null, mergeableNodes, null);
     }
 
-    public DefaultAggregateNode(Aggregator aggregator,
+    public DefaultAggregatableNode(Aggregator aggregator,
         List<MergeableNode<R>> mergeableNodes, Merger<R> merger) {
         if(aggregator != null) {
             this.aggregator = aggregator;

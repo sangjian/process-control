@@ -1,15 +1,12 @@
-package cn.ideabuffer.process.nodes.transmission;
+package cn.ideabuffer.process.nodes.transmitter;
 
 import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.nodes.aggregate.ResultConsumer;
-import cn.ideabuffer.process.nodes.aggregate.ResultPostProcessor;
-import cn.ideabuffer.process.nodes.aggregate.ResultProcessor;
 
 /**
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public class TransmittableProcessor<P> implements ResultPostProcessor<P> {
+public class TransmittableProcessor<P> implements ResultStream<P> {
 
     private ResultProcessor processor;
 
@@ -33,7 +30,7 @@ public class TransmittableProcessor<P> implements ResultPostProcessor<P> {
     }
 
     @Override
-    public ResultPostProcessor<Void> thenAccept(ResultConsumer<P> consumer) {
+    public ResultStream<Void> thenAccept(ResultConsumer<P> consumer) {
         TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer);
         this.next = then;
         return then;

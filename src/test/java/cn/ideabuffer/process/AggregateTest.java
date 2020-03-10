@@ -1,6 +1,6 @@
 package cn.ideabuffer.process;
 
-import cn.ideabuffer.process.nodes.aggregate.DefaultAggregateNode;
+import cn.ideabuffer.process.nodes.aggregate.DefaultAggregatableNode;
 import cn.ideabuffer.process.nodes.aggregate.TestMergeableNode1;
 import cn.ideabuffer.process.nodes.aggregate.TestMergeableNode2;
 import cn.ideabuffer.process.nodes.merger.ArrayListMerger;
@@ -18,7 +18,7 @@ public class AggregateTest {
     public void testPostProcessor() throws Exception {
         Chain chain = new DefaultChain();
         Context context = new DefaultContext();
-        DefaultAggregateNode<List<String>> node = new DefaultAggregateNode<>();
+        DefaultAggregatableNode<List<String>> node = new DefaultAggregatableNode<>();
         node.merge(new TestMergeableNode1(), new TestMergeableNode2()).by(new ArrayListMerger<>())
             .thenApply(((ctx, result) -> {
                 System.out.println(result);

@@ -1,10 +1,7 @@
 package cn.ideabuffer.process.nodes;
 
-import cn.ideabuffer.process.Executable;
-import cn.ideabuffer.process.Matchable;
-import cn.ideabuffer.process.Node;
 import cn.ideabuffer.process.handler.ExceptionHandler;
-import cn.ideabuffer.process.nodes.aggregate.ResultPostProcessor;
+import cn.ideabuffer.process.nodes.transmitter.ResultStream;
 import cn.ideabuffer.process.rule.Rule;
 
 import java.util.concurrent.Executor;
@@ -13,7 +10,7 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public interface TransmittableNode<R> extends ExecutableNode, ResultPostProcessor<R> {
+public interface TransmittableNode<R> extends ExecutableNode, ResultStream<R> {
     @Override
     ExecutableNode parallel();
 

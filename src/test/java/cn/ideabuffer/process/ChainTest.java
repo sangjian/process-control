@@ -47,7 +47,7 @@ public class ChainTest {
         Context context = new DefaultContext();
         context.put("k", 0);
         chain
-            .addProcessNode(Branches.newDefaultBranch(new TestNode1(), new TestNode2()).parallel(executorService));
+            .addProcessNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
         chain.execute(context);
         Thread.sleep(10000);
     }
@@ -171,7 +171,7 @@ public class ChainTest {
 
     @Test
     public void testAggregate() {
-        //DefaultAggregateNode<List<Integer>> node = new DefaultAggregateNode<>();
+        //DefaultAggregatableNode<List<Integer>> node = new DefaultAggregatableNode<>();
         //node.thenApply(new ResultProcessor<String, List<Integer>>() {
         //    @Override
         //    public String apply(List<Integer> result) {
