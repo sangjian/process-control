@@ -95,20 +95,28 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
             return false;
         }
         preExecute(context);
-        if(parallel && executor == null) {
-            DEFAULT_POOL.execute(new NodeTask(context));
-        } else if(executor != null) {
-            executor.execute(new NodeTask(context));
-        } else {
-            try {
-                return doExecute(context);
-            } catch (Exception e) {
-                if(handler != null) {
-                    return handler.handle(e);
-                }
-            }
+        Executor e = null;
 
+        if(parallel && executor == null) {
+            e = DEFAULT_POOL;
+        } else if(executor != null) {
+            e = executor;
         }
+
+        Runnable task = () -> {
+            try {
+                doExecute(context);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        };
+
+        if(e != null) {
+            e.execute(task);
+        } else {
+            task.run();
+        }
+
         return false;
     }
 
@@ -128,22 +136,5 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     @Override
     public Executor getExecutor() {
         return executor;
-    }
-
-    class NodeTask implements Runnable{
-        Context context;
-
-        NodeTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public void run() {
-            try {
-                doExecute(context);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 }

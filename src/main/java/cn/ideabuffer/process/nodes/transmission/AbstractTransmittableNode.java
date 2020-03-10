@@ -70,7 +70,18 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
             e = executor;
         }
 
-        TransmittableNodeTask task = new TransmittableNodeTask(context);
+
+        Runnable task = () -> {
+            try {
+                R result = doInvoke(context);
+                if(processor != null) {
+                    //noinspection unchecked
+                    processor.fire(context, result);
+                }
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        };
 
         if(e != null) {
             e.execute(task);
@@ -78,27 +89,6 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
             task.run();
         }
         return false;
-    }
-
-    class TransmittableNodeTask implements Runnable{
-        private Context context;
-
-        TransmittableNodeTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public void run() {
-            try {
-                R result = doInvoke(context);
-                if(processor != null) {
-                    //noinspection unchecked
-                    processor.fire(context, result);
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     @Override
