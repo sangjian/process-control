@@ -14,34 +14,17 @@ import java.util.concurrent.Executor;
  */
 public abstract class AbstractExecutableNode extends AbstractNode implements ExecutableNode {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    protected boolean parallel = false;
-
-    protected Rule rule;
-
-    protected Executor executor;
-
-    private ExceptionHandler handler;
-
     protected static final Executor DEFAULT_POOL = new ThreadPerTaskExecutor();
-
-    static final class ThreadPerTaskExecutor implements Executor {
-
-        @Override
-        public void execute(Runnable r) {
-            new Thread(r).start();
-        }
-    }
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected boolean parallel = false;
+    protected Rule rule;
+    protected Executor executor;
+    private ExceptionHandler handler;
 
     public AbstractExecutableNode() {
     }
 
     public AbstractExecutableNode(Rule rule) {
-        this.rule = rule;
-    }
-
-    public void setRule(Rule rule) {
         this.rule = rule;
     }
 
@@ -51,10 +34,6 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
 
     public void setHandler(ExceptionHandler handler) {
         this.handler = handler;
-    }
-
-    public void setExecutor(Executor executor) {
-        this.executor = executor;
     }
 
     @Override
@@ -81,6 +60,10 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
         return this.rule;
     }
 
+    public void setRule(Rule rule) {
+        this.rule = rule;
+    }
+
     protected boolean ruleCheck(Context context) {
         return rule == null || rule.match(context);
     }
@@ -91,15 +74,15 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
 
     @Override
     public boolean execute(Context context) throws Exception {
-        if(!ruleCheck(context)) {
+        if (!ruleCheck(context)) {
             return false;
         }
         preExecute(context);
         Executor e = null;
 
-        if(parallel && executor == null) {
+        if (parallel && executor == null) {
             e = DEFAULT_POOL;
-        } else if(executor != null) {
+        } else if (executor != null) {
             e = executor;
         }
 
@@ -111,7 +94,7 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
             }
         };
 
-        if(e != null) {
+        if (e != null) {
             e.execute(task);
         } else {
             task.run();
@@ -136,5 +119,17 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     @Override
     public Executor getExecutor() {
         return executor;
+    }
+
+    public void setExecutor(Executor executor) {
+        this.executor = executor;
+    }
+
+    static final class ThreadPerTaskExecutor implements Executor {
+
+        @Override
+        public void execute(Runnable r) {
+            new Thread(r).start();
+        }
     }
 }

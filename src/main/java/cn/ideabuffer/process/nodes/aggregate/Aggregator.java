@@ -13,6 +13,7 @@ import java.util.concurrent.Executor;
  */
 public interface Aggregator {
 
-    <T> T aggregate(Executor executor, Merger<T> merger, Context context, List<MergeableNode<T>> nodes) throws Exception;
+    <T> T aggregate(Executor executor, Merger<T> merger, Context context, List<MergeableNode<T>> nodes)
+        throws Exception;
 
 }

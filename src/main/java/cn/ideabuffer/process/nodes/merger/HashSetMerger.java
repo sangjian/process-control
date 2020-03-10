@@ -12,7 +12,7 @@ public class HashSetMerger<T> implements SetMerger<T> {
 
     @Override
     public HashSet<T> merge(Set<T>... results) {
-        if(results == null) {
+        if (results == null) {
             return new HashSet<>();
         }
         return null;
@@ -20,7 +20,7 @@ public class HashSetMerger<T> implements SetMerger<T> {
 
     @Override
     public HashSet<T> merge(Collection<Set<T>> results) {
-        if(results == null) {
+        if (results == null) {
             return new HashSet<>();
         }
         HashSet<T> hashSet = new HashSet<>();

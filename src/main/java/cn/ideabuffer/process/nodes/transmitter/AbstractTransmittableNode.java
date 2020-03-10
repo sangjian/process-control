@@ -14,9 +14,8 @@ import java.util.concurrent.Executor;
  */
 public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNode implements TransmittableNode<R> {
 
-    private TransmittableProcessor processor;
-
     protected Executor executor;
+    private TransmittableProcessor processor;
 
     @Override
     public TransmittableNode<R> exceptionHandler(ExceptionHandler handler) {
@@ -61,17 +60,16 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
 
         preExecute(context);
         Executor e = null;
-        if(parallel && executor == null) {
+        if (parallel && executor == null) {
             e = DEFAULT_POOL;
-        } else if(executor != null) {
+        } else if (executor != null) {
             e = executor;
         }
-
 
         Runnable task = () -> {
             try {
                 R result = doInvoke(context);
-                if(processor != null) {
+                if (processor != null) {
                     //noinspection unchecked
                     processor.fire(context, result);
                 }
@@ -80,7 +78,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
             }
         };
 
-        if(e != null) {
+        if (e != null) {
             e.execute(task);
         } else {
             task.run();

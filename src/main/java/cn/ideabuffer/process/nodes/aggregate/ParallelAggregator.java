@@ -23,8 +23,9 @@ public class ParallelAggregator implements Aggregator {
     private static final Logger logger = LoggerFactory.getLogger(ParallelAggregator.class);
 
     @Override
-    public <T> T aggregate(Executor executor, Merger<T> merger, Context context, List<MergeableNode<T>> nodes) throws Exception {
-        if(nodes == null || nodes.isEmpty()) {
+    public <T> T aggregate(Executor executor, Merger<T> merger, Context context, List<MergeableNode<T>> nodes)
+        throws Exception {
+        if (nodes == null || nodes.isEmpty()) {
             return null;
         }
 
@@ -39,7 +40,7 @@ public class ParallelAggregator implements Aggregator {
                 future = CompletableFuture.supplyAsync(supplier, executor);
             }
             future.exceptionally(throwable -> {
-                if(node.getExceptionHandler() != null) {
+                if (node.getExceptionHandler() != null) {
                     try {
                         node.getExceptionHandler().handle(throwable);
                     } catch (Exception e) {

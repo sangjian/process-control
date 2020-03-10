@@ -25,7 +25,7 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
         this.tryBranch = tryBranch;
         this.catchMap = catchMap;
         this.finallyBranch = finallyBranch;
-        if(this.catchMap == null) {
+        if (this.catchMap == null) {
             this.catchMap = new HashMap<>(4, 1);
         }
     }
@@ -33,35 +33,35 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
     @Override
     public boolean doExecute(Context context) throws Exception {
 
-        if(catchMap.isEmpty() && finallyBranch == null) {
+        if (catchMap.isEmpty() && finallyBranch == null) {
             throw new RuntimeException("'catch' or 'finally' expected");
         }
         try {
-            if(tryBranch == null || tryBranch.getNodes().isEmpty()) {
+            if (tryBranch == null || tryBranch.getNodes().isEmpty()) {
                 return false;
             }
             Block tryBlock = new Block(context.getBlock());
             ContextWrapper contextWrapper = new ContextWrapper(context, tryBlock);
             return tryBranch.execute(contextWrapper);
         } catch (Throwable e) {
-            if(!catchMap.isEmpty()) {
+            if (!catchMap.isEmpty()) {
                 for (Map.Entry<Class<? extends Throwable>, BranchNode> entry : catchMap.entrySet()) {
                     Class<? extends Throwable> expClass = entry.getKey();
                     BranchNode catchBranch = entry.getValue();
-                    if(expClass.isAssignableFrom(e.getClass())) {
-                        if(catchBranch == null) {
+                    if (expClass.isAssignableFrom(e.getClass())) {
+                        if (catchBranch == null) {
                             continue;
                         }
                         Block catchBlock = new Block(context.getBlock());
                         ContextWrapper contextWrapper = new ContextWrapper(context, catchBlock);
-                        if(catchBranch.execute(contextWrapper)) {
+                        if (catchBranch.execute(contextWrapper)) {
                             return true;
                         }
                     }
                 }
             }
         } finally {
-            if(finallyBranch != null) {
+            if (finallyBranch != null) {
                 Block finallyBlock = new Block(context.getBlock());
                 ContextWrapper contextWrapper = new ContextWrapper(context, finallyBlock);
                 finallyBranch.execute(contextWrapper);

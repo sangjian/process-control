@@ -14,5 +14,4 @@ public class ProceedStrategies {
 
     public static final ProceedStrategy ALL_FINISHED = new AllFinishedStrategy();
 
-
 }

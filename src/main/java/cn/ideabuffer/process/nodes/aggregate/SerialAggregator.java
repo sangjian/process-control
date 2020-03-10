@@ -16,7 +16,7 @@ public class SerialAggregator implements Aggregator {
     @Override
     public <T> T aggregate(Executor executor, Merger<T> merger, Context context, List<MergeableNode<T>> nodes)
         throws Exception {
-        if(nodes == null || nodes.isEmpty()) {
+        if (nodes == null || nodes.isEmpty()) {
             return null;
         }
         List<T> results = new LinkedList<>();

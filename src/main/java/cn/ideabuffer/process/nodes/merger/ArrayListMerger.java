@@ -14,7 +14,7 @@ public class ArrayListMerger<T> implements ListMerger<T> {
 
     @Override
     public ArrayList<T> merge(List<T>... results) {
-        if(results == null) {
+        if (results == null) {
             return new ArrayList<>();
         }
         return merge(Arrays.stream(results).collect(Collectors.toList()));
@@ -22,7 +22,7 @@ public class ArrayListMerger<T> implements ListMerger<T> {
 
     @Override
     public ArrayList<T> merge(Collection<List<T>> results) {
-        if(results == null) {
+        if (results == null) {
             return new ArrayList<>();
         }
         ArrayList<T> list = new ArrayList<>();

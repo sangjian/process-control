@@ -30,7 +30,7 @@ public class DefaultBranch extends AbstractExecutableNode implements BranchNode 
 
     public DefaultBranch(List<ExecutableNode> nodes) {
         this.nodes = new ArrayList<>();
-        if(nodes != null) {
+        if (nodes != null) {
             this.nodes.addAll(nodes);
         }
     }
@@ -38,7 +38,7 @@ public class DefaultBranch extends AbstractExecutableNode implements BranchNode 
     public DefaultBranch(Rule rule, List<ExecutableNode> nodes) {
         super(rule);
         this.nodes = new ArrayList<>();
-        if(nodes != null) {
+        if (nodes != null) {
             this.nodes.addAll(nodes);
         }
     }
@@ -46,18 +46,14 @@ public class DefaultBranch extends AbstractExecutableNode implements BranchNode 
     public DefaultBranch(Rule rule, ExecutableNode... nodes) {
         super(rule);
         this.nodes = new ArrayList<>();
-        if(nodes != null && nodes.length > 0) {
+        if (nodes != null && nodes.length > 0) {
             this.nodes.addAll(Arrays.asList(nodes));
         }
     }
 
-    public void setNodes(List<ExecutableNode> nodes) {
-        this.nodes = nodes;
-    }
-
     @Override
     public DefaultBranch addNodes(@NotNull ExecutableNode... nodes) {
-        if(nodes.length > 0) {
+        if (nodes.length > 0) {
             this.nodes.addAll(Arrays.asList(nodes));
         }
         return this;
@@ -66,6 +62,10 @@ public class DefaultBranch extends AbstractExecutableNode implements BranchNode 
     @Override
     public List<ExecutableNode> getNodes() {
         return nodes;
+    }
+
+    public void setNodes(List<ExecutableNode> nodes) {
+        this.nodes = nodes;
     }
 
     @Override

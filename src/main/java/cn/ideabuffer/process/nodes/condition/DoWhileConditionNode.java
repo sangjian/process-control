@@ -19,7 +19,7 @@ public class DoWhileConditionNode extends WhileConditionNode {
 
     @Override
     public boolean doExecute(Context context) throws Exception {
-        if(branch == null) {
+        if (branch == null) {
             return false;
         }
 
@@ -27,13 +27,13 @@ public class DoWhileConditionNode extends WhileConditionNode {
         BlockWrapper blockWrapper = new BlockWrapper(doWhileBlock);
         ContextWrapper doWhileContext = new ContextWrapper(context, doWhileBlock);
         while (true) {
-            if(branch.execute(doWhileContext)) {
+            if (branch.execute(doWhileContext)) {
                 return true;
             }
             if (blockWrapper.hasBroken()) {
                 break;
             }
-            if(!rule.match(context)) {
+            if (!rule.match(context)) {
                 break;
             }
             blockWrapper.resetBreak();

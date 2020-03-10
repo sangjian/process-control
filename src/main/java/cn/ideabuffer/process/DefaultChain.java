@@ -84,7 +84,7 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
 
             if (node instanceof ExecutableNode) {
                 try {
-                    if(((ExecutableNode)node).execute(context)) {
+                    if (((ExecutableNode)node).execute(context)) {
                         stop = true;
                     }
                     if (stop) {
@@ -93,9 +93,9 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
                 } catch (Exception e) {
                     logger.error("execute error, node:{}", node, e);
                     ExceptionHandler handler = ((ExecutableNode)node).getExceptionHandler();
-                    if(handler != null) {
+                    if (handler != null) {
                         try {
-                            if(handler.handle(e)) {
+                            if (handler.handle(e)) {
                                 break;
                             }
                         } catch (Exception e2) {

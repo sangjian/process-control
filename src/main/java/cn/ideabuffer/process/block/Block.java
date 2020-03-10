@@ -34,7 +34,7 @@ public class Block extends ConcurrentHashMap<Object, Object> {
 
     public <V> V get(Object key, Class<V> valueType) {
         Object value = get(key);
-        if(value == null) {
+        if (value == null) {
             return null;
         }
         //noinspection unchecked
@@ -43,7 +43,7 @@ public class Block extends ConcurrentHashMap<Object, Object> {
 
     public <V> V get(Object key, V defaultValue) {
         Object value = get(key);
-        if(value == null) {
+        if (value == null) {
             return defaultValue;
         }
         //noinspection unchecked
@@ -51,37 +51,37 @@ public class Block extends ConcurrentHashMap<Object, Object> {
     }
 
     public boolean allowBreak() {
-        if(breakable) {
+        if (breakable) {
             return true;
         }
-        if(parent != null) {
+        if (parent != null) {
             return parent.allowBreak();
         }
         return false;
     }
 
     public boolean allowContinue() {
-        if(continuable) {
+        if (continuable) {
             return true;
         }
-        if(parent != null) {
+        if (parent != null) {
             return parent.allowContinue();
         }
         return false;
     }
 
     public void doBreak() {
-        if(breakable) {
+        if (breakable) {
             hasBroken = true;
             return;
         }
-        if(!allowBreak()) {
+        if (!allowBreak()) {
             throw new IllegalStateException();
         }
         Block p = parent;
-        while(p != null) {
+        while (p != null) {
             p.hasBroken = true;
-            if(p.breakable) {
+            if (p.breakable) {
                 break;
             }
             p = p.parent;
@@ -89,17 +89,17 @@ public class Block extends ConcurrentHashMap<Object, Object> {
     }
 
     public void doContinue() {
-        if(continuable) {
+        if (continuable) {
             this.hasContinued = true;
             return;
         }
-        if(!allowContinue()) {
+        if (!allowContinue()) {
             throw new IllegalStateException();
         }
         Block p = parent;
-        while(p != null) {
+        while (p != null) {
             p.hasContinued = true;
-            if(p.continuable) {
+            if (p.continuable) {
                 break;
             }
             p = p.parent;

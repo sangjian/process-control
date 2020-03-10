@@ -17,7 +17,7 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
     }
 
     public DefaultContext(Block block) {
-        if(block == null) {
+        if (block == null) {
             throw new NullPointerException();
         }
         this.block = block;
@@ -31,7 +31,7 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
     @Override
     public <V> V get(Object key, Class<V> valueType) {
         Object value = get(key);
-        if(value == null) {
+        if (value == null) {
             return null;
         }
         //noinspection unchecked
@@ -42,7 +42,7 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
     public <K, V> V get(K key, V defaultValue) {
         //noinspection unchecked
         V value = (V)get(key);
-        if(value != null) {
+        if (value != null) {
             return value;
         }
         return defaultValue;

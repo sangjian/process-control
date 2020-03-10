@@ -14,6 +14,7 @@ public interface BranchNode extends ExecutableNode, Branch<ExecutableNode> {
 
     /**
      * 添加节点
+     *
      * @param nodes
      * @return
      */
@@ -22,6 +23,7 @@ public interface BranchNode extends ExecutableNode, Branch<ExecutableNode> {
 
     /**
      * 获取分支下的所有节点
+     *
      * @return 节点列表
      */
     @Override

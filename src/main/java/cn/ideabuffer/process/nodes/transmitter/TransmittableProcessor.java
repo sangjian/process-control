@@ -39,13 +39,13 @@ public class TransmittableProcessor<P> implements ResultStream<P> {
     @SuppressWarnings("unchecked")
     public void fire(Context context, P value) {
         Object r = value;
-        if(processor != null) {
+        if (processor != null) {
             r = processor.apply(context, value);
         }
-        if(consumer != null) {
+        if (consumer != null) {
             consumer.accept(context, value);
         }
-        if(next != null) {
+        if (next != null) {
             next.fire(context, r);
         }
     }

@@ -1,11 +1,10 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.executor.NodeExecutors;
-import cn.ideabuffer.process.strategy.ProceedStrategies;
-import cn.ideabuffer.process.strategy.ProceedStrategy;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.DefaultBranch;
+import cn.ideabuffer.process.strategy.ProceedStrategies;
+import cn.ideabuffer.process.strategy.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     @Override
     public boolean execute(Context context) throws Exception {
-        if(branches == null) {
+        if (branches == null) {
             return false;
         }
         return doExecute(context);
@@ -60,7 +59,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     @Override
     public ParallelBranchNode addBranch(@NotNull ExecutableNode... nodes) {
-        if(nodes.length > 0) {
+        if (nodes.length > 0) {
             branches.add(new DefaultBranch(nodes));
         }
         return this;

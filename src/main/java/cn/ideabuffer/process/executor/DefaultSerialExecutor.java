@@ -12,15 +12,15 @@ public class DefaultSerialExecutor implements SerialExecutor {
 
     @Override
     public boolean execute(Context context, ExecutableNode... nodes) throws Exception {
-        if(nodes == null || nodes.length == 0) {
+        if (nodes == null || nodes.length == 0) {
             return false;
         }
         BlockWrapper blockWrapper = new BlockWrapper(context.getBlock());
         for (ExecutableNode node : nodes) {
-            if(node.execute(context)) {
+            if (node.execute(context)) {
                 return true;
             }
-            if(blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
+            if (blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
                 break;
             }
         }

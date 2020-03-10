@@ -14,6 +14,7 @@ public interface Branch<T extends Node> {
 
     /**
      * 添加节点
+     *
      * @param nodes
      * @return
      */
@@ -21,6 +22,7 @@ public interface Branch<T extends Node> {
 
     /**
      * 获取分支下的所有节点
+     *
      * @return 节点列表
      */
     List<T> getNodes();

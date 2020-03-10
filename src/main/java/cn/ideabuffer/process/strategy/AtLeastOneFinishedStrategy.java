@@ -11,7 +11,7 @@ public class AtLeastOneFinishedStrategy implements ProceedStrategy {
 
     @Override
     public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {
-        if(futures == null || futures.isEmpty()) {
+        if (futures == null || futures.isEmpty()) {
             return false;
         }
 

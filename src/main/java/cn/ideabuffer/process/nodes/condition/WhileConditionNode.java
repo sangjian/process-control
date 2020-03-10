@@ -29,8 +29,6 @@ public class WhileConditionNode extends AbstractExecutableNode {
         this.branch = branch;
     }
 
-
-
     @Override
     public WhileConditionNode parallel() {
         super.parallel();
@@ -50,7 +48,7 @@ public class WhileConditionNode extends AbstractExecutableNode {
 
     @Override
     public boolean execute(Context context) throws Exception {
-        if(rule == null) {
+        if (rule == null) {
             throw new RuntimeException("rule can't be null");
         }
         return super.execute(context);
@@ -58,7 +56,7 @@ public class WhileConditionNode extends AbstractExecutableNode {
 
     @Override
     protected boolean doExecute(Context context) throws Exception {
-        if(branch == null) {
+        if (branch == null) {
             return false;
         }
 
@@ -72,7 +70,7 @@ public class WhileConditionNode extends AbstractExecutableNode {
             if (!rule.match(whileContext)) {
                 break;
             }
-            if(branch.execute(whileContext)) {
+            if (branch.execute(whileContext)) {
                 return true;
             }
             if (blockWrapper.hasBroken()) {

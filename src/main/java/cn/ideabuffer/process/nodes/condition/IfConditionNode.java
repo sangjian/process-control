@@ -57,7 +57,7 @@ public class IfConditionNode extends AbstractExecutableNode {
 
     @Override
     public boolean execute(Context context) throws Exception {
-        if(rule == null) {
+        if (rule == null) {
             throw new RuntimeException("rule can't be null");
         }
         return super.execute(context);
@@ -69,7 +69,7 @@ public class IfConditionNode extends AbstractExecutableNode {
         Block ifBlock = new Block(context.getBlock());
         ContextWrapper contextWrapper = new ContextWrapper(context, ifBlock);
         BranchNode branch = rule.match(contextWrapper) ? trueBranch : falseBranch;
-        if(branch == null ) {
+        if (branch == null) {
             return false;
         }
         return branch.execute(contextWrapper);

@@ -17,7 +17,7 @@ public class Or implements Rule {
     @Override
     public boolean match(Context context) {
         for (Rule rule : rules) {
-            if(rule.match(context)) {
+            if (rule.match(context)) {
                 return true;
             }
         }

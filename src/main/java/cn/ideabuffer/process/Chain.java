@@ -15,6 +15,7 @@ public interface Chain extends ExecutableNode {
 
     /**
      * 增加执行节点
+     *
      * @param node 可执行节点
      * @return
      */
@@ -22,6 +23,7 @@ public interface Chain extends ExecutableNode {
 
     /**
      * 增加if节点
+     *
      * @param node 条件节点
      * @return
      */
@@ -29,6 +31,7 @@ public interface Chain extends ExecutableNode {
 
     /**
      * 增加while节点
+     *
      * @param node 条件节点
      * @return
      */
@@ -36,6 +39,7 @@ public interface Chain extends ExecutableNode {
 
     /**
      * 增加dowhile节点
+     *
      * @param node 条件节点
      * @return
      */
@@ -43,6 +47,7 @@ public interface Chain extends ExecutableNode {
 
     /**
      * 增加节点组
+     *
      * @param group 节点组
      * @return
      */
@@ -50,8 +55,9 @@ public interface Chain extends ExecutableNode {
 
     /**
      * 增加聚合节点
+     *
      * @param node 聚合节点
-     * @param <T> 返回值类型
+     * @param <T>  返回值类型
      * @return
      */
     <T> Chain addAggregateNode(AggregatableNode<T> node);

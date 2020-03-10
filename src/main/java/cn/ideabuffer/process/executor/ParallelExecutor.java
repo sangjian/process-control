@@ -12,5 +12,6 @@ import java.util.concurrent.Executor;
  */
 public interface ParallelExecutor {
 
-    boolean execute(Executor executor, ProceedStrategy proceedStrategy, Context context, ExecutableNode... nodes) throws Exception;
+    boolean execute(Executor executor, ProceedStrategy proceedStrategy, Context context, ExecutableNode... nodes)
+        throws Exception;
 }
