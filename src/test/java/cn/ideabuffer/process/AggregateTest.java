@@ -2,12 +2,13 @@ package cn.ideabuffer.process;
 
 import cn.ideabuffer.process.nodes.AggregatableNode;
 import cn.ideabuffer.process.nodes.Nodes;
-import cn.ideabuffer.process.nodes.aggregate.TestMergeableNode1;
-import cn.ideabuffer.process.nodes.aggregate.TestMergeableNode2;
-import cn.ideabuffer.process.nodes.merger.ArrayListMerger;
+import cn.ideabuffer.process.nodes.aggregate.*;
+import cn.ideabuffer.process.nodes.merger.*;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -16,7 +17,7 @@ import java.util.List;
 public class AggregateTest {
 
     @Test
-    public void testPostProcessor() throws Exception {
+    public void testAggregateList() throws Exception {
         Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         AggregatableNode<List<String>> node = Nodes.newAggregatableNode();
@@ -28,6 +29,81 @@ public class AggregateTest {
             System.out.println(result);
             return null;
         }).thenAccept((ctx, result) -> System.out.println(result));
+        chain.addAggregateNode(node);
+        chain.execute(context);
+        //Thread.sleep(10000);
+    }
+
+    @Test
+    public void testIntSum() throws Exception {
+        Chain chain = new DefaultChain();
+        Context context = new DefaultContext();
+        AggregatableNode<Integer> node = Nodes.newAggregatableNode();
+        node.merge(new IntMergeableNode1(), new IntMergeableNode2()).by(new IntSumMerger())
+            .thenApply(((ctx, result) -> {
+                System.out.println(result);
+                return result;
+            }));
+        chain.addAggregateNode(node);
+        chain.execute(context);
+        //Thread.sleep(10000);
+    }
+
+    @Test
+    public void testIntAvg() throws Exception {
+        Chain chain = new DefaultChain();
+        Context context = new DefaultContext();
+        AggregatableNode<Integer> node = Nodes.newAggregatableNode();
+        node.merge(new IntMergeableNode1(), new IntMergeableNode2()).by(new IntAvgMerger())
+            .thenApply(((ctx, result) -> {
+                System.out.println(result);
+                return result;
+            }));
+        chain.addAggregateNode(node);
+        chain.execute(context);
+        //Thread.sleep(10000);
+    }
+
+    @Test
+    public void testDoubleSum() throws Exception {
+        Chain chain = new DefaultChain();
+        Context context = new DefaultContext();
+        AggregatableNode<Double> node = Nodes.newAggregatableNode();
+        node.merge(new DoubleMergeableNode1(), new DoubleMergeableNode2()).by(new DoubleSumMerger())
+            .thenApply(((ctx, result) -> {
+                System.out.println(result);
+                return result;
+            }));
+        chain.addAggregateNode(node);
+        chain.execute(context);
+        //Thread.sleep(10000);
+    }
+
+    @Test
+    public void testDoubleAvg() throws Exception {
+        Chain chain = new DefaultChain();
+        Context context = new DefaultContext();
+        AggregatableNode<Double> node = Nodes.newAggregatableNode();
+        node.merge(new DoubleMergeableNode1(), new DoubleMergeableNode2()).by(new DoubleAvgMerger())
+            .thenApply(((ctx, result) -> {
+                System.out.println(result);
+                return result;
+            }));
+        chain.addAggregateNode(node);
+        chain.execute(context);
+        //Thread.sleep(10000);
+    }
+
+    @Test
+    public void testIntArray() throws Exception {
+        Chain chain = new DefaultChain();
+        Context context = new DefaultContext();
+        AggregatableNode<int[]> node = Nodes.newAggregatableNode();
+        node.merge(new IntArrayMergeableNode1(), new IntArrayMergeableNode2()).by(new IntArrayMerger())
+            .thenApply(((ctx, result) -> {
+                Arrays.stream(result).forEach(System.out::println);
+                return result;
+            }));
         chain.addAggregateNode(node);
         chain.execute(context);
         //Thread.sleep(10000);
