@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.nodes;
 
+import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
 
@@ -34,4 +35,20 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
     public Rule getRule() {
         return rule;
     }
+
+    @Override
+    public T invoke(Context context) throws Exception {
+        try {
+            return doInvoke(context);
+        } catch (Exception e) {
+            if(exceptionHandler != null) {
+                exceptionHandler.handle(e);
+            } else {
+                throw e;
+            }
+        }
+        return null;
+    }
+
+    protected abstract T doInvoke(Context context) throws Exception;
 }

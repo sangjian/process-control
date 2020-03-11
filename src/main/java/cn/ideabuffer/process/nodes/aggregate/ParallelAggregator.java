@@ -39,18 +39,7 @@ public class ParallelAggregator implements Aggregator {
             } else {
                 future = CompletableFuture.supplyAsync(supplier, executor);
             }
-            future.exceptionally(throwable -> {
-                if (node.getExceptionHandler() != null) {
-                    try {
-                        node.getExceptionHandler().handle(throwable);
-                    } catch (Exception e) {
-                        // do nothing...
-                    }
-                } else {
-                    logger.error("node invoke error, node:{}", node, throwable);
-                }
-                return null;
-            }).thenAccept(queue::offer);
+            future.thenAccept(queue::offer);
             return future;
         }).toArray(CompletableFuture[]::new)).join();
         queue.drainTo(results);
@@ -74,17 +63,9 @@ public class ParallelAggregator implements Aggregator {
             try {
                 return node.invoke(context);
             } catch (Exception e) {
-                if(node.getExceptionHandler() != null) {
-                    try {
-                        node.getExceptionHandler().handle(e);
-                    } catch (Exception ex) {
-                        logger.error("handle exception error, node:{}", node, ex);
-                    }
-                } else {
-                    throw new RuntimeException(e);
-                }
+                logger.error("InvokeSupplier invoke error, node:{}", node, e);
+                throw new RuntimeException(e);
             }
-            return null;
         }
     }
 }

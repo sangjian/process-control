@@ -17,7 +17,7 @@ public class TestMergeableNode1 extends AbstractMergeableNode<List<String>> {
     private static final Logger logger = LoggerFactory.getLogger(TestMergeableNode1.class);
 
     @Override
-    public List<String> invoke(Context context) {
+    protected List<String> doInvoke(Context context) {
         logger.info("in TestMergeableNode1");
         List<String> list = new ArrayList<>();
         list.add("test1");

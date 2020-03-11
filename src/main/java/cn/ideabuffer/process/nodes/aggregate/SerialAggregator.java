@@ -25,21 +25,9 @@ public class SerialAggregator implements Aggregator {
             return null;
         }
         List<T> results = new LinkedList<>();
-        nodes.forEach(node -> {
-            try {
-                results.add(node.invoke(context));
-            } catch (Exception e) {
-                if(node.getExceptionHandler() != null) {
-                    try {
-                        node.getExceptionHandler().handle(e);
-                    } catch (Exception ex) {
-                        logger.error("handle exception error, node:{}", node, ex);
-                    }
-                } else {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+        for (MergeableNode<T> node : nodes) {
+            results.add(node.invoke(context));
+        }
         return merger.merge(results);
     }
 }

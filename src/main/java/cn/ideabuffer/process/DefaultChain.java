@@ -91,21 +91,8 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
                         break;
                     }
                 } catch (Exception e) {
-                    logger.error("execute error, node:{}", node, e);
-                    ExceptionHandler handler = ((ExecutableNode)node).getExceptionHandler();
-                    if (handler != null) {
-                        try {
-                            if (handler.handle(e)) {
-                                break;
-                            }
-                        } catch (Exception e2) {
-                            // do something...
-                        }
-
-                    } else {
-                        exception = e;
-                        break;
-                    }
+                    exception = e;
+                    break;
                 }
             }
 

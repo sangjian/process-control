@@ -90,7 +90,12 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
             try {
                 doExecute(context);
             } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                if(handler != null) {
+                    handler.handle(ex);
+                } else {
+                    logger.error("execute error, node:{}", this, ex);
+                    throw new RuntimeException(ex);
+                }
             }
         };
 
