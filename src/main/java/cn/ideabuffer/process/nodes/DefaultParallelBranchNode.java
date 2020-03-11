@@ -1,14 +1,17 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.DefaultBranch;
+import cn.ideabuffer.process.rule.Rule;
 import cn.ideabuffer.process.strategy.ProceedStrategies;
 import cn.ideabuffer.process.strategy.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import static cn.ideabuffer.process.executor.NodeExecutors.PARALLEL_EXECUTOR;
 
@@ -23,10 +26,33 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     private ProceedStrategy strategy = ProceedStrategies.AT_LEAST_ONE_FINISHED;
 
     public DefaultParallelBranchNode() {
-        this(null);
+        this(false);
+    }
+
+    public DefaultParallelBranchNode(boolean parallel) {
+        this(parallel, null);
+    }
+
+    public DefaultParallelBranchNode(Rule rule) {
+        this(false, rule, null, null);
+    }
+
+    public DefaultParallelBranchNode(boolean parallel, Executor executor) {
+        this(parallel, null, executor, null);
     }
 
     public DefaultParallelBranchNode(List<BranchNode> branches) {
+        this(false, null, null, null);
+    }
+
+    public DefaultParallelBranchNode(boolean parallel, Rule rule,
+        Executor executor, ExceptionHandler handler) {
+        this(parallel, rule, executor, handler, null);
+    }
+
+    public DefaultParallelBranchNode(boolean parallel, Rule rule,
+        Executor executor, ExceptionHandler handler, List<BranchNode> branches) {
+        super(parallel, rule, executor, handler);
         this.branches = branches == null ? new ArrayList<>() : branches;
     }
 

@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.nodes;
 
+import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.aggregate.DefaultAggregatableNode;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.DefaultBranch;
@@ -7,9 +8,12 @@ import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.nodes.condition.WhileConditionNode;
 import cn.ideabuffer.process.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * @author sangjian.sj
@@ -23,6 +27,27 @@ public class Nodes {
 
     public static ParallelBranchNode newParallelBranchNode() {
         return new DefaultParallelBranchNode();
+    }
+
+    public static ParallelBranchNode newParallelBranchNode(List<BranchNode> branches) {
+        return new DefaultParallelBranchNode(branches);
+    }
+
+    public static ParallelBranchNode newParallelBranchNode(boolean parallel) {
+        return new DefaultParallelBranchNode(parallel);
+    }
+
+    public static ParallelBranchNode newParallelBranchNode(@NotNull Executor executor) {
+        return new DefaultParallelBranchNode(true, executor);
+    }
+
+    public static ParallelBranchNode newParallelBranchNode(@NotNull Executor executor, Rule rule) {
+        return new DefaultParallelBranchNode(true, rule, executor, null);
+    }
+
+    public static ParallelBranchNode newParallelBranchNode(@NotNull Executor executor, Rule rule,
+        ExceptionHandler handler) {
+        return new DefaultParallelBranchNode(true, rule, executor, handler);
     }
 
     public static <R> AggregatableNode<R> newAggregatableNode() {

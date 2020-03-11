@@ -23,10 +23,27 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     private ExceptionHandler handler;
 
     public AbstractExecutableNode() {
+        this(false);
+    }
+
+    public AbstractExecutableNode(boolean parallel) {
+        this(parallel, null);
     }
 
     public AbstractExecutableNode(Rule rule) {
+        this(false, rule, null, null);
+    }
+
+    public AbstractExecutableNode(boolean parallel, Executor executor) {
+        this(parallel, null, executor, null);
+    }
+
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor,
+        ExceptionHandler handler) {
+        this.parallel = parallel;
         this.rule = rule;
+        this.executor = executor;
+        this.handler = handler;
     }
 
     public void setParallel(boolean parallel) {
