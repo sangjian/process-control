@@ -18,7 +18,7 @@ public interface BranchNode extends ExecutableNode, Branch<ExecutableNode> {
      * 添加节点
      *
      * @param nodes 可执行节点
-     * @return
+     * @return 当前分支节点
      */
     @Override
     BranchNode addNodes(@NotNull ExecutableNode... nodes);
