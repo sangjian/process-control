@@ -17,7 +17,7 @@ public class HashMapMerger<K, V> implements MapMerger<K, V> {
         if (results == null) {
             return null;
         }
-        return merge(Arrays.stream(results).collect(Collectors.toSet()));
+        return merge(Arrays.stream(results).collect(Collectors.toList()));
     }
 
     @Override

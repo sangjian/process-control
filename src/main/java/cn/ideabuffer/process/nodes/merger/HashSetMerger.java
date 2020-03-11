@@ -1,8 +1,10 @@
 package cn.ideabuffer.process.nodes.merger;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -15,7 +17,7 @@ public class HashSetMerger<T> implements SetMerger<T> {
         if (results == null) {
             return new HashSet<>();
         }
-        return null;
+        return merge(Arrays.stream(results).collect(Collectors.toList()));
     }
 
     @Override
