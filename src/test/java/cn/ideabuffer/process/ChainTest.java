@@ -1,7 +1,10 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.nodes.Nodes;
+import cn.ideabuffer.process.nodes.TestBreakNode;
+import cn.ideabuffer.process.nodes.TestNode1;
+import cn.ideabuffer.process.nodes.TestNode2;
 import cn.ideabuffer.process.nodes.branch.Branches;
-import cn.ideabuffer.process.nodes.*;
 import cn.ideabuffer.process.nodes.ifs.TestFalseBrance;
 import cn.ideabuffer.process.nodes.ifs.TestIfRule;
 import cn.ideabuffer.process.nodes.ifs.TestTrueBrance;
@@ -23,6 +26,21 @@ import java.util.concurrent.Executors;
  */
 public class ChainTest {
 
+    public static void main(String[] args) {
+
+        for (int i = 0; i < 100; i++) {
+            if (i < 101) {
+                if (i % 2 == 0) {
+                    if (i == 2) {
+                        break;
+                    }
+                    System.out.println("after i == 16 break, i = " + i);
+                }
+                System.out.println("in i < 101");
+            }
+        }
+        System.out.println("outside");
+    }
 
     @Test
     public void testChainBase() throws Exception {
@@ -86,14 +104,14 @@ public class ChainTest {
             return true;
         }).then(
             Nodes.newWhile(rule)
-            .then(
-                new TestWhileNode1(),
-                new TestWhileNode2(),
-                Nodes.newIf(rule).then(
-                    Nodes.newIf((ctx) -> true).then(new TestBreakNode()).end(),
-                    new TestNode1())
-                    .end(),
-                new TestWhileNode3())));
+                .then(
+                    new TestWhileNode1(),
+                    new TestWhileNode2(),
+                    Nodes.newIf(rule).then(
+                        Nodes.newIf((ctx) -> true).then(new TestBreakNode()).end(),
+                        new TestNode1())
+                        .end(),
+                    new TestWhileNode3())));
         chain.execute(context);
         Thread.sleep(10000);
     }
@@ -102,7 +120,8 @@ public class ChainTest {
     public void testAndRule() throws Exception {
         Chain chain = new DefaultChain();
         Context context = new DefaultContext();
-        chain.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestNode1()).otherwise(new TestNode2()));
+        chain.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestNode1())
+            .otherwise(new TestNode2()));
         chain.execute(context);
     }
 
@@ -110,7 +129,8 @@ public class ChainTest {
     public void testOrRule() throws Exception {
         Chain chain = new DefaultChain();
         Context context = new DefaultContext();
-        chain.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1()).otherwise(new TestNode2()));
+        chain.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1())
+            .otherwise(new TestNode2()));
         chain.execute(context);
     }
 
@@ -178,22 +198,6 @@ public class ChainTest {
         //        return null;
         //    }
         //})
-    }
-
-    public static void main(String[] args) {
-
-        for (int i = 0; i < 100; i++) {
-            if(i < 101) {
-                if (i % 2 == 0) {
-                    if (i == 2) {
-                        break;
-                    }
-                    System.out.println("after i == 16 break, i = " + i);
-                }
-                System.out.println("in i < 101");
-            }
-        }
-        System.out.println("outside");
     }
 
 }

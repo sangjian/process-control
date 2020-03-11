@@ -1,8 +1,8 @@
 package cn.ideabuffer.process.nodes.whiles;
 
+import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
-import cn.ideabuffer.process.Context;
 
 /**
  * @author sangjian.sj
@@ -14,7 +14,7 @@ public class TestWhileNode1 extends AbstractExecutableNode {
         Block block = context.getBlock();
         int k = block.get("k", 0);
         block.put("k", ++k);
-        if(k == 4 && block.allowContinue()) {
+        if (k == 4 && block.allowContinue()) {
             block.put("k", 1);
             block.doContinue();
         }

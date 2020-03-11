@@ -75,7 +75,7 @@ public class TransmittableProcessor<P> implements ResultStream<P> {
     public void fire(Context context, P value) {
         Object r = value;
         Executor e = executor == null ? DEFAULT_POOL : executor;
-        if(parallel) {
+        if (parallel) {
             if (processor != null) {
                 e.execute(() -> processor.apply(context, value));
             }

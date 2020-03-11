@@ -41,7 +41,7 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
         try {
             return doInvoke(context);
         } catch (Exception e) {
-            if(exceptionHandler != null) {
+            if (exceptionHandler != null) {
                 exceptionHandler.handle(e);
             } else {
                 throw e;

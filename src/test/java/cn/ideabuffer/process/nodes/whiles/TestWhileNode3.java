@@ -14,7 +14,7 @@ public class TestWhileNode3 extends AbstractExecutableNode {
         Block block = context.getBlock();
         int k = block.get("k", 0);
         block.put("k", ++k);
-        if(k == 4 && block.allowContinue()) {
+        if (k == 4 && block.allowContinue()) {
             block.put("k", 1);
             block.doContinue();
         }

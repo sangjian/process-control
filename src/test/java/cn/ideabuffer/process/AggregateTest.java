@@ -2,7 +2,6 @@ package cn.ideabuffer.process;
 
 import cn.ideabuffer.process.nodes.AggregatableNode;
 import cn.ideabuffer.process.nodes.Nodes;
-import cn.ideabuffer.process.nodes.aggregate.DefaultAggregatableNode;
 import cn.ideabuffer.process.nodes.aggregate.TestMergeableNode1;
 import cn.ideabuffer.process.nodes.aggregate.TestMergeableNode2;
 import cn.ideabuffer.process.nodes.merger.ArrayListMerger;
@@ -26,9 +25,9 @@ public class AggregateTest {
                 System.out.println(result);
                 return result.size();
             })).thenApply((ctx, result) -> {
-                System.out.println(result);
-                return null;
-            }).thenAccept((ctx, result) -> System.out.println(result));
+            System.out.println(result);
+            return null;
+        }).thenAccept((ctx, result) -> System.out.println(result));
         chain.addAggregateNode(node);
         chain.execute(context);
         //Thread.sleep(10000);

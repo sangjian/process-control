@@ -16,7 +16,6 @@ import static cn.ideabuffer.process.executor.NodeExecutors.DEFAULT_POOL;
  */
 public abstract class AbstractExecutableNode extends AbstractNode implements ExecutableNode {
 
-
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected boolean parallel = false;
     protected Rule rule;
@@ -92,7 +91,7 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
             try {
                 doExecute(context);
             } catch (Exception ex) {
-                if(handler != null) {
+                if (handler != null) {
                     handler.handle(ex);
                 } else {
                     logger.error("execute error, node:{}", this, ex);

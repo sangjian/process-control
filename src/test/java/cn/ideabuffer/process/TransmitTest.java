@@ -10,7 +10,7 @@ import org.junit.Test;
 public class TransmitTest {
 
     @Test
-    public void testTransmitNode () throws Exception {
+    public void testTransmitNode() throws Exception {
         Chain chain = new DefaultChain();
         Context context = new DefaultContext();
         TestTransmittableNode node = new TestTransmittableNode();
