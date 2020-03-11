@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.rule;
 
 import cn.ideabuffer.process.Context;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -10,7 +11,7 @@ public class Not implements Rule {
 
     private Rule rule;
 
-    public Not(Rule rule) {
+    public Not(@NotNull Rule rule) {
         this.rule = rule;
     }
 

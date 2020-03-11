@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.rule;
 
 import cn.ideabuffer.process.Context;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -10,7 +11,7 @@ public class Or implements Rule {
 
     private Rule[] rules;
 
-    public Or(Rule... rules) {
+    public Or(@NotNull Rule... rules) {
         this.rules = rules;
     }
 
