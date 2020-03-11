@@ -1,11 +1,19 @@
 package cn.ideabuffer.process.handler;
 
 /**
+ * 异常处理器
+ *
  * @author sangjian.sj
  * @date 2020/03/07
  */
 public interface ExceptionHandler {
 
-    boolean handle(Throwable t);
+    /**
+     * 处理异常
+     *
+     * @param t 异常对象
+     * @return
+     */
+    void handle(Throwable t);
 
 }

@@ -14,10 +14,6 @@ import java.util.concurrent.Executor;
  */
 public interface ExecutableNode extends Node, Executable, Parallelizable, Matchable {
 
-    boolean CONTINUE_PROCESSING = false;
-
-    boolean PROCESSING_COMPLETE = true;
-
     @Override
     ExecutableNode processOn(Rule rule);
 

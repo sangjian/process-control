@@ -1,6 +1,8 @@
 package cn.ideabuffer.process;
 
 /**
+ * 通用节点
+ *
  * @author sangjian.sj
  * @date 2020/01/18
  */

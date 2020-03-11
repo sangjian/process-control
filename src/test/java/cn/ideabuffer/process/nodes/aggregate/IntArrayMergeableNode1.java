@@ -11,6 +11,6 @@ public class IntArrayMergeableNode1 extends AbstractMergeableNode<int[]> {
 
     @Override
     protected int[] doInvoke(Context context) throws Exception {
-        return new int[]{1, 2, 6};
+        return new int[] {1, 2, 6};
     }
 }

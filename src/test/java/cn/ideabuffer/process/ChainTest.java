@@ -45,61 +45,61 @@ public class ChainTest {
     @Test
     public void testChainBase() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        Chain chain = new DefaultChain();
-        //Chain c2 = new DefaultChain("testSubChain");
+        ProcessInstance instance = new DefaultProcessInstance();
+        //ProcessInstance c2 = new DefaultProcessInstance("testSubChain");
         //c2.addProcessNode(new TestNode1())
         //.addProcessNode(new TestNode2());
         Context context = new DefaultContext();
         context.put("k", 0);
-        chain
+        instance
             .addProcessNode(new TestNode1())
             .addProcessNode(new TestNode2());
-        chain.execute(context);
+        instance.execute(context);
 
     }
 
     @Test
     public void testBranch() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
         context.put("k", 0);
-        chain
+        instance
             .addProcessNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
-        chain.execute(context);
+        instance.execute(context);
         Thread.sleep(10000);
     }
 
     @Test
     public void testIf() throws Exception {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
         context.put("k", 1);
         TestIfRule rule = new TestIfRule();
-        chain.addIf(Nodes.newIf(rule).then(new TestTrueBrance())
+        instance.addIf(Nodes.newIf(rule).then(new TestTrueBrance())
             .otherwise(new TestFalseBrance()));
-        chain.execute(context);
+        instance.execute(context);
     }
 
     @Test
     public void testWhile() throws Exception {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
         TestWhileRule rule = new TestWhileRule();
-        chain.addWhile(Nodes.newWhile(rule)
+        instance.addWhile(Nodes.newWhile(rule)
             .then(new TestWhileNode1(), new TestWhileNode2(),
                 new TestWhileNode3())
             .parallel());
-        chain.execute(context);
+        instance.execute(context);
         Thread.sleep(10000);
     }
 
     @Test
     public void testNesting() throws Exception {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
         TestWhileRule rule = new TestWhileRule();
-        chain.addWhile(Nodes.newWhile((ctx) -> {
+        instance.addWhile(Nodes.newWhile((ctx) -> {
             System.out.println("in while --");
             return true;
         }).then(
@@ -112,50 +112,50 @@ public class ChainTest {
                         new TestNode1())
                         .end(),
                     new TestWhileNode3())));
-        chain.execute(context);
+        instance.execute(context);
         Thread.sleep(10000);
     }
 
     @Test
     public void testAndRule() throws Exception {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
-        chain.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestNode1())
+        instance.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestNode1())
             .otherwise(new TestNode2()));
-        chain.execute(context);
+        instance.execute(context);
     }
 
     @Test
     public void testOrRule() throws Exception {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
-        chain.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1())
+        instance.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1())
             .otherwise(new TestNode2()));
-        chain.execute(context);
+        instance.execute(context);
     }
 
     @Test
     public void testNotRule() throws Exception {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
-        chain.addIf(Nodes.newIf(Rules.not((ctx) -> true)).then(new TestNode1()).otherwise(new TestNode2()));
-        chain.execute(context);
+        instance.addIf(Nodes.newIf(Rules.not((ctx) -> true)).then(new TestNode1()).otherwise(new TestNode2()));
+        instance.execute(context);
     }
 
     @Test
     public void testSerial() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
         context.put("k", 1);
         long start = System.currentTimeMillis();
-        chain.execute(context);
+        instance.execute(context);
         System.out.println("cost:" + (System.currentTimeMillis() - start) / 1000);
     }
 
     @Test
     public void testBlock() {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
         context.put("k", 1);
 
@@ -163,13 +163,13 @@ public class ChainTest {
 
     @Test
     public void testTryCatchFinally() throws Exception {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
         context.put("k", 1);
-        chain.addProcessNode(Nodes.newTry(new TryNode1(), new TryNode2())
+        instance.addProcessNode(Nodes.newTry(new TryNode1(), new TryNode2())
             .catchOn(Exception.class, new CatchNode1(), new CatchNode2())
             .doFinally(new FinallyNode1(), new FinallyNode2()));
-        chain.execute(context);
+        instance.execute(context);
     }
 
     @Test

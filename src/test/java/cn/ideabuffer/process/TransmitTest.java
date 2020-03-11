@@ -11,7 +11,7 @@ public class TransmitTest {
 
     @Test
     public void testTransmitNode() throws Exception {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
         TestTransmittableNode node = new TestTransmittableNode();
         node.thenApply((ctx, r) -> {
@@ -21,8 +21,8 @@ public class TransmitTest {
             System.out.println(r);
             return r.length();
         }).thenAccept((ctx, r) -> System.out.println(r));
-        chain.addProcessNode(node);
-        chain.execute(context);
+        instance.addProcessNode(node);
+        instance.execute(context);
     }
 
 }

@@ -7,18 +7,19 @@ import cn.ideabuffer.process.nodes.NodeGroup;
 import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.nodes.condition.WhileConditionNode;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class DefaultChain extends AbstractExecutableNode implements Chain {
+public class DefaultProcessInstance extends AbstractExecutableNode implements ProcessInstance {
 
     private Node[] nodes = new Node[0];
 
     private volatile boolean running;
 
-    private Chain addNode(Node node) {
+    private ProcessInstance addNode(Node node) {
         if (node == null) {
             throw new IllegalArgumentException();
         }
@@ -33,32 +34,32 @@ public class DefaultChain extends AbstractExecutableNode implements Chain {
     }
 
     @Override
-    public Chain addProcessNode(ExecutableNode node) {
+    public ProcessInstance addProcessNode(@NotNull ExecutableNode node) {
         return addNode(node);
     }
 
     @Override
-    public Chain addIf(IfConditionNode node) {
+    public ProcessInstance addIf(@NotNull IfConditionNode node) {
         return addNode(node);
     }
 
     @Override
-    public Chain addWhile(WhileConditionNode node) {
+    public ProcessInstance addWhile(@NotNull WhileConditionNode node) {
         return addNode(node);
     }
 
     @Override
-    public Chain addDoWhile(DoWhileConditionNode node) {
+    public ProcessInstance addDoWhile(@NotNull DoWhileConditionNode node) {
         return addNode(node);
     }
 
     @Override
-    public Chain addGroup(NodeGroup group) {
+    public ProcessInstance addGroup(@NotNull NodeGroup group) {
         return addNode(group);
     }
 
     @Override
-    public <T> Chain addAggregateNode(AggregatableNode<T> node) {
+    public <T> ProcessInstance addAggregateNode(@NotNull AggregatableNode<T> node) {
         return addNode(node);
     }
 

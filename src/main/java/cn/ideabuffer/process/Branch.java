@@ -15,7 +15,7 @@ public interface Branch<T extends Node> {
     /**
      * 添加节点
      *
-     * @param nodes
+     * @param nodes 节点数组
      * @return
      */
     Branch addNodes(@NotNull T... nodes);

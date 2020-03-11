@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 /**
+ * 可聚合结果的节点
+ *
  * @author sangjian.sj
  * @date 2020/03/07
  */

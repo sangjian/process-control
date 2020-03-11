@@ -7,6 +7,8 @@ import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
 
 /**
+ * 可合并结果的节点
+ *
  * @author sangjian.sj
  * @date 2020/03/07
  */

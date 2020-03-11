@@ -1,10 +1,15 @@
 package cn.ideabuffer.process.block;
 
+import cn.ideabuffer.process.Context;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 用于表示一组节点所在的范围，通过Context获取，同一block内，数据可共享，但不会影响当前context
+ *
  * @author sangjian.sj
  * @date 2020/02/22
+ * @see Context#getBlock()
  */
 public class Block extends ConcurrentHashMap<Object, Object> {
 

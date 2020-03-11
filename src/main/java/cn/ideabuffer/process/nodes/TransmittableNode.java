@@ -7,15 +7,18 @@ import cn.ideabuffer.process.rule.Rule;
 import java.util.concurrent.Executor;
 
 /**
+ * 可传递结果的节点
+ *
  * @author sangjian.sj
  * @date 2020/03/10
  */
 public interface TransmittableNode<R> extends ExecutableNode, ResultStream<R> {
-    @Override
-    ExecutableNode parallel();
 
     @Override
-    ExecutableNode parallel(Executor executor);
+    TransmittableNode<R> parallel();
+
+    @Override
+    TransmittableNode<R> parallel(Executor executor);
 
     @Override
     TransmittableNode<R> exceptionHandler(ExceptionHandler handler);

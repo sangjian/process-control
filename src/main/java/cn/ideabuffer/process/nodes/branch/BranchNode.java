@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
+ * 分支节点
+ *
  * @author sangjian.sj
  * @date 2020/03/01
  */
@@ -15,7 +17,7 @@ public interface BranchNode extends ExecutableNode, Branch<ExecutableNode> {
     /**
      * 添加节点
      *
-     * @param nodes
+     * @param nodes 可执行节点
      * @return
      */
     @Override

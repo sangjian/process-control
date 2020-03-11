@@ -15,11 +15,11 @@ public class ParallelTest {
 
     @Test
     public void testParallelNode() throws Exception {
-        Chain chain = new DefaultChain();
+        ProcessInstance instance = new DefaultProcessInstance();
         ParallelBranchNode node = Nodes.newParallelBranchNode();
-        chain.addProcessNode(node.addBranch(new TestParallelNode1()).addBranch(new TestParallelNode2())
+        instance.addProcessNode(node.addBranch(new TestParallelNode1()).addBranch(new TestParallelNode2())
             .proceedWhen(ProceedStrategies.ALL_PROCEEDED));
-        chain.execute(null);
+        instance.execute(null);
     }
 
 }

@@ -1,13 +1,26 @@
 package cn.ideabuffer.process.executor;
 
 import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.Executable;
 import cn.ideabuffer.process.nodes.ExecutableNode;
 
 /**
+ * 串行执行器
+ *
  * @author sangjian.sj
  * @date 2020/02/25
  */
 public interface SerialExecutor {
 
+    /**
+     * 执行节点
+     *
+     * @param context 流程上下文
+     * @param nodes   可执行节点列表
+     * @return <li>false: 继续执行整个实例的下游节点</li><li>true: 不再执行整个实例的下游节点</li>
+     * @throws Exception
+     * @see Executable#CONTINUE_PROCESSING
+     * @see Executable#PROCESSING_COMPLETE
+     */
     boolean execute(Context context, ExecutableNode... nodes) throws Exception;
 }
