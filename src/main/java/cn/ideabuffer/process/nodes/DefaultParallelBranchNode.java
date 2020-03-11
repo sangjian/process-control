@@ -42,7 +42,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     }
 
     public DefaultParallelBranchNode(List<BranchNode> branches) {
-        this(false, null, null, null);
+        this(false, null, null, null, branches);
     }
 
     public DefaultParallelBranchNode(boolean parallel, Rule rule,
