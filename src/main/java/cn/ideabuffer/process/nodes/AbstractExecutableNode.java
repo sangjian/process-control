@@ -8,13 +8,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executor;
 
+import static cn.ideabuffer.process.executor.NodeExecutors.DEFAULT_POOL;
+
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
 public abstract class AbstractExecutableNode extends AbstractNode implements ExecutableNode {
 
-    protected static final Executor DEFAULT_POOL = new ThreadPerTaskExecutor();
+
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected boolean parallel = false;
     protected Rule rule;
@@ -130,11 +132,4 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
         this.executor = executor;
     }
 
-    static final class ThreadPerTaskExecutor implements Executor {
-
-        @Override
-        public void execute(Runnable r) {
-            new Thread(r).start();
-        }
-    }
 }

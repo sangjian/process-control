@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.nodes;
 
+import cn.ideabuffer.process.nodes.aggregate.DefaultAggregatableNode;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.DefaultBranch;
 import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
@@ -22,6 +23,10 @@ public class Nodes {
 
     public static ParallelBranchNode newParallelBranchNode() {
         return new DefaultParallelBranchNode();
+    }
+
+    public static <R> AggregatableNode<R> newAggregatableNode() {
+        return new DefaultAggregatableNode<>();
     }
 
     public static IfWhen newIf(Rule rule) {
@@ -48,7 +53,7 @@ public class Nodes {
 
         private Rule rule;
 
-        public IfWhen(Rule rule) {
+        IfWhen(Rule rule) {
             this.rule = rule;
         }
 
@@ -66,7 +71,7 @@ public class Nodes {
 
             private BranchNode thenBranch;
 
-            public IfWhenBuilder(Rule rule, BranchNode thenBranch) {
+            IfWhenBuilder(Rule rule, BranchNode thenBranch) {
                 this.rule = rule;
                 this.thenBranch = thenBranch;
             }
@@ -91,7 +96,7 @@ public class Nodes {
 
         protected Rule rule;
 
-        public WhileWhen(Rule rule) {
+        WhileWhen(Rule rule) {
             this.rule = rule;
         }
 
@@ -107,7 +112,7 @@ public class Nodes {
 
     public static class DoWhileWhen extends WhileWhen {
 
-        public DoWhileWhen(Rule rule) {
+        DoWhileWhen(Rule rule) {
             super(rule);
         }
 
@@ -124,7 +129,7 @@ public class Nodes {
 
         private Map<Class<? extends Throwable>, BranchNode> catchMap;
 
-        public TryCatchFinally(BranchNode tryBranch) {
+        TryCatchFinally(BranchNode tryBranch) {
             this.tryBranch = tryBranch;
             this.catchMap = new HashMap<>();
         }

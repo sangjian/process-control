@@ -5,8 +5,11 @@ import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.nodes.TransmittableNode;
 import cn.ideabuffer.process.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
+
+import static cn.ideabuffer.process.executor.NodeExecutors.DEFAULT_POOL;
 
 /**
  * @author sangjian.sj
@@ -42,15 +45,29 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
     }
 
     @Override
-    public <V> ResultStream<V> thenApply(ResultProcessor<V, R> processor) {
+    public <V> ResultStream<V> thenApply(@NotNull ResultProcessor<V, R> processor) {
         TransmittableProcessor<V> then = new TransmittableProcessor<>(processor);
         this.processor = then;
         return then;
     }
 
     @Override
-    public ResultStream<Void> thenAccept(ResultConsumer<R> consumer) {
+    public <V> ResultStream<V> thenApplyAsync(@NotNull ResultProcessor<V, R> processor) {
+        TransmittableProcessor<V> then = new TransmittableProcessor<>(processor, true, executor);
+        this.processor = then;
+        return then;
+    }
+
+    @Override
+    public ResultStream<Void> thenAccept(@NotNull ResultConsumer<R> consumer) {
         TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer);
+        this.processor = then;
+        return then;
+    }
+
+    @Override
+    public ResultStream<Void> thenAcceptAsync(@NotNull ResultConsumer<R> consumer) {
+        TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer, true, executor);
         this.processor = then;
         return then;
     }
