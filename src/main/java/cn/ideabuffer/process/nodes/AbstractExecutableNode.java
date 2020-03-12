@@ -96,13 +96,6 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
             return false;
         }
         preExecute(context);
-        Executor e = null;
-
-        if (parallel && executor == null) {
-            e = DEFAULT_POOL;
-        } else if (executor != null) {
-            e = executor;
-        }
 
         Runnable task = () -> {
             try {
@@ -117,7 +110,8 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
             }
         };
 
-        if (e != null) {
+        if (parallel) {
+            Executor e = executor == null ? DEFAULT_POOL : executor;
             e.execute(task);
         } else {
             task.run();
