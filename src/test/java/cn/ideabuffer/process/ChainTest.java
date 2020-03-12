@@ -26,22 +26,6 @@ import java.util.concurrent.Executors;
  */
 public class ChainTest {
 
-    public static void main(String[] args) {
-
-        for (int i = 0; i < 100; i++) {
-            if (i < 101) {
-                if (i % 2 == 0) {
-                    if (i == 2) {
-                        break;
-                    }
-                    System.out.println("after i == 16 break, i = " + i);
-                }
-                System.out.println("in i < 101");
-            }
-        }
-        System.out.println("outside");
-    }
-
     @Test
     public void testChainBase() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
