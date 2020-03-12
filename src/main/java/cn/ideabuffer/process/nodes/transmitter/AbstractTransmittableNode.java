@@ -76,12 +76,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
     public boolean execute(Context context) throws Exception {
 
         preExecute(context);
-        Executor e = null;
-        if (parallel && executor == null) {
-            e = DEFAULT_POOL;
-        } else if (executor != null) {
-            e = executor;
-        }
+        Executor e = executor == null ? DEFAULT_POOL : executor;
 
         Runnable task = () -> {
             try {
@@ -95,7 +90,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
             }
         };
 
-        if (e != null) {
+        if (parallel) {
             e.execute(task);
         } else {
             task.run();

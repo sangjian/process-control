@@ -19,8 +19,6 @@ public interface AggregatableNode<R> extends TransmittableNode<R>, Parallelizabl
 
     AggregatableNode<R> merge(@NotNull MergeableNode<R>... nodes);
 
-    AggregatableNode<R> by(@NotNull Merger<R> merger);
-
     @Override
     AggregatableNode<R> parallel();
 
@@ -30,11 +28,9 @@ public interface AggregatableNode<R> extends TransmittableNode<R>, Parallelizabl
     @Override
     AggregatableNode<R> processOn(Rule rule);
 
-    AggregatableNode<R> aggregator(@NotNull Aggregator aggregator);
+    AggregatableNode<R> aggregator(@NotNull Aggregator<R> aggregator);
 
-    Aggregator getAggregator();
-
-    Merger<R> getMerger();
+    Aggregator<R> getAggregator();
 
     List<MergeableNode<R>> getMergeableNodes();
 }

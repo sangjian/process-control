@@ -14,39 +14,33 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import static cn.ideabuffer.process.nodes.aggregate.Aggregators.SERIAL;
-
 /**
  * @author sangjian.sj
  * @date 2020/03/10
  */
 public class DefaultAggregatableNode<R> extends AbstractTransmittableNode<R> implements AggregatableNode<R> {
 
-    private Aggregator aggregator = SERIAL;
+    private Aggregator<R> aggregator;
 
     private List<MergeableNode<R>> mergeableNodes;
 
-    private Merger<R> merger;
-
     public DefaultAggregatableNode() {
-        this(null, null, null);
+        this(null, null);
     }
 
     public DefaultAggregatableNode(Aggregator aggregator) {
-        this(aggregator, null, null);
+        this(aggregator, null);
     }
 
     public DefaultAggregatableNode(List<MergeableNode<R>> mergeableNodes) {
-        this(null, mergeableNodes, null);
+        this(null, mergeableNodes);
     }
 
-    public DefaultAggregatableNode(Aggregator aggregator,
-        List<MergeableNode<R>> mergeableNodes, Merger<R> merger) {
+    public DefaultAggregatableNode(Aggregator aggregator, List<MergeableNode<R>> mergeableNodes) {
         if (aggregator != null) {
             this.aggregator = aggregator;
         }
         this.mergeableNodes = mergeableNodes == null ? new ArrayList<>() : mergeableNodes;
-        this.merger = merger;
     }
 
     @Override
@@ -80,25 +74,14 @@ public class DefaultAggregatableNode<R> extends AbstractTransmittableNode<R> imp
     }
 
     @Override
-    public AggregatableNode<R> by(@NotNull Merger<R> merger) {
-        this.merger = merger;
-        return this;
-    }
-
-    @Override
-    public AggregatableNode<R> aggregator(@NotNull Aggregator aggregator) {
+    public AggregatableNode<R> aggregator(@NotNull Aggregator<R> aggregator) {
         this.aggregator = aggregator;
         return this;
     }
 
     @Override
-    public Aggregator getAggregator() {
+    public Aggregator<R> getAggregator() {
         return aggregator;
-    }
-
-    @Override
-    public Merger<R> getMerger() {
-        return merger;
     }
 
     @Override
@@ -108,6 +91,6 @@ public class DefaultAggregatableNode<R> extends AbstractTransmittableNode<R> imp
 
     @Override
     protected R doInvoke(Context context) throws Exception {
-        return aggregator.aggregate(executor, merger, context, getMergeableNodes());
+        return aggregator.aggregate(context, getMergeableNodes());
     }
 }

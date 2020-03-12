@@ -3,6 +3,7 @@ package cn.ideabuffer.process.nodes.aggregate;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.nodes.MergeableNode;
 import cn.ideabuffer.process.nodes.merger.Merger;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,22 +19,30 @@ import java.util.function.Supplier;
  * @author sangjian.sj
  * @date 2020/03/08
  */
-public class ParallelAggregator implements Aggregator {
+public class ParallelAggregator<R> implements Aggregator<R> {
 
     private static final Logger logger = LoggerFactory.getLogger(ParallelAggregator.class);
 
+    private Executor executor;
+    private Merger<R> merger;
+
+    public ParallelAggregator(@NotNull Executor executor, @NotNull Merger<R> merger) {
+        this.executor = executor;
+        this.merger = merger;
+    }
+
     @Override
-    public <T> T aggregate(Executor executor, Merger<T> merger, Context context, List<MergeableNode<T>> nodes)
+    public R aggregate(Context context, List<MergeableNode<R>> nodes)
         throws Exception {
         if (nodes == null || nodes.isEmpty()) {
             return null;
         }
 
-        BlockingQueue<T> queue = new LinkedBlockingQueue<>(nodes.size());
-        List<T> results = new LinkedList<>();
+        BlockingQueue<R> queue = new LinkedBlockingQueue<>(nodes.size());
+        List<R> results = new LinkedList<>();
         CompletableFuture.allOf(nodes.stream().map(node -> {
-            Supplier<T> supplier = new InvokeSupplier<>(node, context);
-            CompletableFuture<T> future;
+            Supplier<R> supplier = new InvokeSupplier<>(node, context);
+            CompletableFuture<R> future;
             if (executor == null) {
                 future = CompletableFuture.supplyAsync(supplier);
             } else {

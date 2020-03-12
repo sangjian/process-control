@@ -172,16 +172,4 @@ public class ChainTest {
             System.out.println(r);
         });
     }
-
-    @Test
-    public void testAggregate() {
-        //DefaultAggregatableNode<List<Integer>> node = new DefaultAggregatableNode<>();
-        //node.thenApply(new ResultProcessor<String, List<Integer>>() {
-        //    @Override
-        //    public String apply(List<Integer> result) {
-        //        return null;
-        //    }
-        //})
-    }
-
 }
