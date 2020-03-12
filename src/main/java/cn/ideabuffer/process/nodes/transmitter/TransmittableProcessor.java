@@ -71,26 +71,24 @@ public class TransmittableProcessor<P> implements ResultStream<P> {
         return then;
     }
 
-    @SuppressWarnings("unchecked")
     public void fire(Context context, P value) {
-        Object r = value;
         Executor e = executor == null ? DEFAULT_POOL : executor;
         if (parallel) {
-            if (processor != null) {
-                e.execute(() -> processor.apply(context, value));
-            }
-            if (consumer != null) {
-                e.execute(() -> consumer.accept(context, value));
-            }
+            e.execute(() -> doFire(context, value));
         } else {
-            if (processor != null) {
-                r = processor.apply(context, value);
-            }
-            if (consumer != null) {
-                consumer.accept(context, value);
-            }
+            doFire(context, value);
         }
+    }
 
+    @SuppressWarnings("unchecked")
+    private void doFire(Context context, P value) {
+        Object r = value;
+        if (processor != null) {
+            r = processor.apply(context, value);
+        }
+        if (consumer != null) {
+            consumer.accept(context, value);
+        }
         if (next != null) {
             next.fire(context, r);
         }
