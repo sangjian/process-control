@@ -73,7 +73,7 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
         running = true;
         Exception exception = null;
 
-        boolean stop = false;
+        boolean complete = false;
         int i;
         for (i = 0; i < nodes.length; i++) {
             Node node = nodes[i];
@@ -85,9 +85,9 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
             if (node instanceof ExecutableNode) {
                 try {
                     if (((ExecutableNode)node).execute(context)) {
-                        stop = true;
+                        complete = true;
                     }
-                    if (stop) {
+                    if (complete) {
                         break;
                     }
                 } catch (Exception e) {
@@ -120,7 +120,7 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
             throw exception;
         }
 
-        return stop;
+        return complete;
     }
 
     @Override
