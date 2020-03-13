@@ -60,9 +60,8 @@ public interface ProcessInstance extends ExecutableNode {
      * 增加聚合节点
      *
      * @param node 聚合节点
-     * @param <T>  返回值类型
      * @return 当前实例
      */
-    <T> ProcessInstance addAggregateNode(@NotNull AggregatableNode<T> node);
+    ProcessInstance addAggregateNode(@NotNull AggregatableNode node);
 
 }

@@ -59,7 +59,7 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
     }
 
     @Override
-    public <T> ProcessInstance addAggregateNode(@NotNull AggregatableNode<T> node) {
+    public ProcessInstance addAggregateNode(@NotNull AggregatableNode node) {
         return addNode(node);
     }
 
