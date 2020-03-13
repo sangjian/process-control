@@ -65,9 +65,9 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
 
     @Override
     public boolean doExecute(Context context) throws Exception {
-
-        if (context == null) {
-            context = new DefaultContext();
+        Context current = new DefaultContext();
+        if (context != null) {
+            current.putAll(context);
         }
 
         running = true;
@@ -78,13 +78,13 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
         for (i = 0; i < nodes.length; i++) {
             Node node = nodes[i];
 
-            if (!node.enabled(context)) {
+            if (!node.enabled(current)) {
                 continue;
             }
 
             if (node instanceof ExecutableNode) {
                 try {
-                    if (((ExecutableNode)node).execute(context)) {
+                    if (((ExecutableNode)node).execute(current)) {
                         complete = true;
                     }
                     if (complete) {
@@ -106,7 +106,7 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
             Node node = nodes[i];
             if (node instanceof PostProcessor) {
                 try {
-                    boolean result = ((PostProcessor)node).postProcess(context, exception);
+                    boolean result = ((PostProcessor)node).postProcess(current, exception);
                     if (result) {
                         processed = true;
                     }

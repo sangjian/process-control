@@ -10,7 +10,7 @@ public class TestNode2 extends AbstractExecutableNode {
 
     @Override
     protected boolean doExecute(Context context) throws Exception {
-        logger.info("in testNode2");
+        logger.info("in testNode2, k:{}", context.get("k"));
         Thread.sleep(1000);
         return false;
     }

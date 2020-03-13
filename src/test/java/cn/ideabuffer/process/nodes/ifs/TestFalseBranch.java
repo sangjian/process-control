@@ -11,9 +11,11 @@ public class TestFalseBranch extends DefaultBranch {
 
     @Override
     public boolean execute(Context context) throws Exception {
-        logger.info("in false branch");
+        logger.info("in false branch, k:{}", context.get("k"));
+        context.put("k",11);
+        logger.info("in false branch, k:{}", context.get("k"));
         super.execute(context);
-        return true;
+        return false;
     }
 
 }
