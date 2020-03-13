@@ -5,9 +5,9 @@ import cn.ideabuffer.process.nodes.TestBreakNode;
 import cn.ideabuffer.process.nodes.TestNode1;
 import cn.ideabuffer.process.nodes.TestNode2;
 import cn.ideabuffer.process.nodes.branch.Branches;
-import cn.ideabuffer.process.nodes.ifs.TestFalseBrance;
+import cn.ideabuffer.process.nodes.ifs.TestFalseBranch;
 import cn.ideabuffer.process.nodes.ifs.TestIfRule;
-import cn.ideabuffer.process.nodes.ifs.TestTrueBrance;
+import cn.ideabuffer.process.nodes.ifs.TestTrueBranch;
 import cn.ideabuffer.process.nodes.trycatch.*;
 import cn.ideabuffer.process.nodes.whiles.TestWhileNode1;
 import cn.ideabuffer.process.nodes.whiles.TestWhileNode2;
@@ -60,8 +60,8 @@ public class ChainTest {
         Context context = new DefaultContext();
         context.put("k", 1);
         TestIfRule rule = new TestIfRule();
-        instance.addIf(Nodes.newIf(rule).then(new TestTrueBrance())
-            .otherwise(new TestFalseBrance()));
+        instance.addIf(Nodes.newIf(rule).then(new TestTrueBranch())
+            .otherwise(new TestFalseBranch()));
         instance.execute(context);
     }
 
@@ -171,5 +171,20 @@ public class ChainTest {
             }
             System.out.println(r);
         });
+    }
+
+    @Test
+    public void testSubChain() throws Exception {
+        ProcessInstance subInstance = new DefaultProcessInstance();
+        Context context = new DefaultContext();
+        context.put("k", 1);
+        TestIfRule rule = new TestIfRule();
+        subInstance.addIf(Nodes.newIf(rule).then(new TestTrueBranch())
+            .otherwise(new TestFalseBranch()));
+
+        ProcessInstance mainInstance = new DefaultProcessInstance();
+        mainInstance.addProcessNode(new TestNode1()).addProcessNode(subInstance).addProcessNode(new TestNode2());
+
+        mainInstance.execute(context);
     }
 }

@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.Executable;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
 import org.slf4j.Logger;
@@ -97,29 +98,45 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
         }
         preExecute(context);
 
-        Runnable task = () -> {
-            try {
-                doExecute(context);
-            } catch (Exception ex) {
-                if (handler != null) {
-                    handler.handle(ex);
-                } else {
-                    logger.error("execute error, node:{}", this, ex);
-                    throw new RuntimeException(ex);
-                }
-            }
-        };
-
         if (parallel) {
             Executor e = executor == null ? DEFAULT_POOL : executor;
-            e.execute(task);
-        } else {
-            task.run();
+            e.execute(() -> {
+                try {
+                    doExecute(context);
+                } catch (Exception ex) {
+                    if (handler != null) {
+                        handler.handle(ex);
+                    } else {
+                        logger.error("execute error, node:{}", this, ex);
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+            return false;
+        }
+
+        try {
+            return doExecute(context);
+        } catch (Exception e) {
+            if (handler != null) {
+                handler.handle(e);
+            } else {
+                throw e;
+            }
         }
 
         return false;
     }
 
+    /**
+     * 子类实现具体执行逻辑
+     *
+     * @param context 当前流程上下文
+     * @return <li>false: 继续执行整个实例的下游节点</li><li>true: 不再执行整个实例的下游节点</li>
+     * @throws Exception
+     * @see Executable#CONTINUE_PROCESSING
+     * @see Executable#PROCESSING_COMPLETE
+     */
     protected abstract boolean doExecute(Context context) throws Exception;
 
     @Override

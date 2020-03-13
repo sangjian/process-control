@@ -7,10 +7,13 @@ import cn.ideabuffer.process.nodes.branch.DefaultBranch;
  * @author sangjian.sj
  * @date 2020/03/05
  */
-public class TestTrueBrance extends DefaultBranch {
+public class TestFalseBranch extends DefaultBranch {
+
     @Override
     public boolean execute(Context context) throws Exception {
-        System.out.println("in true branch");
-        return super.execute(context);
+        logger.info("in false branch");
+        super.execute(context);
+        return true;
     }
+
 }
