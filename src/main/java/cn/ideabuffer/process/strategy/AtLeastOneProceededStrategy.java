@@ -14,7 +14,7 @@ public class AtLeastOneProceededStrategy implements ProceedStrategy {
     @Override
     public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {
         if (futures == null || futures.isEmpty()) {
-            return false;
+            return true;
         }
 
         // 执行结果队列
@@ -34,10 +34,10 @@ public class AtLeastOneProceededStrategy implements ProceedStrategy {
 
         for (int i = 0; i < queue.size(); i++) {
             if (!queue.take()) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }

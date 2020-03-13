@@ -43,6 +43,6 @@ public class DefaultParallelExecutor implements ParallelExecutor {
             }
         }).collect(Collectors.toList());
 
-        return proceedStrategy.proceed(futures);
+        return !proceedStrategy.proceed(futures);
     }
 }

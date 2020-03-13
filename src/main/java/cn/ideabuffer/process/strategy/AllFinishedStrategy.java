@@ -12,9 +12,9 @@ public class AllFinishedStrategy implements ProceedStrategy {
     @Override
     public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {
         if (futures == null || futures.isEmpty()) {
-            return false;
+            return true;
         }
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
-        return false;
+        return true;
     }
 }

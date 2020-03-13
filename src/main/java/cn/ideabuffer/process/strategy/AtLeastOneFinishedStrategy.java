@@ -12,11 +12,10 @@ public class AtLeastOneFinishedStrategy implements ProceedStrategy {
     @Override
     public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {
         if (futures == null || futures.isEmpty()) {
-            return false;
+            return true;
         }
 
         CompletableFuture.anyOf(futures.toArray(new CompletableFuture[0])).get();
-
-        return false;
+        return true;
     }
 }

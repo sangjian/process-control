@@ -12,14 +12,14 @@ public class AllProceededStrategy implements ProceedStrategy {
     @Override
     public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {
         if (futures == null || futures.isEmpty()) {
-            return false;
+            return true;
         }
 
         for (CompletableFuture<Boolean> future : futures) {
             if (future.get()) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }

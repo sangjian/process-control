@@ -3,25 +3,118 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="33.5" y="0.0">cn.ideabuffer.process.Node</node>
-    <node x="0.0" y="79.0">cn.ideabuffer.process.ExecutableNode</node>
-    <node x="32.5" y="158.0">cn.ideabuffer.process.Chain</node>
+    <node x="577.5546875" y="0.0">cn.ideabuffer.process.Mergeable</node>
+    <node x="438.25" y="168.0">cn.ideabuffer.process.ProcessInstance</node>
+    <node x="347.6796875" y="89.0">cn.ideabuffer.process.nodes.ExecutableNode</node>
+    <node x="708.5546875" y="0.0">cn.ideabuffer.process.Node</node>
+    <node x="684.125" y="168.0">cn.ideabuffer.process.nodes.branch.BranchNode</node>
+    <node x="731.875" y="89.0">cn.ideabuffer.process.Branch</node>
+    <node x="0.0" y="0.0">cn.ideabuffer.process.Parallelizable</node>
+    <node x="42.0" y="89.0">cn.ideabuffer.process.nodes.transmitter.ResultStream</node>
+    <node x="8.125" y="247.0">cn.ideabuffer.process.nodes.AggregatableNode</node>
+    <node x="562.875" y="89.0">cn.ideabuffer.process.nodes.MergeableNode</node>
+    <node x="446.5546875" y="0.0">cn.ideabuffer.process.Matchable</node>
+    <node x="65.25" y="168.0">cn.ideabuffer.process.nodes.TransmittableNode</node>
+    <node x="311.5546875" y="0.0">cn.ideabuffer.process.Executable</node>
+    <node x="250.25" y="168.0">cn.ideabuffer.process.nodes.ParallelBranchNode</node>
   </nodes>
   <notes />
   <edges>
-    <edge source="cn.ideabuffer.process.Chain" target="cn.ideabuffer.process.ExecutableNode">
-      <point x="0.0" y="-14.5" />
+    <edge source="cn.ideabuffer.process.nodes.ExecutableNode" target="cn.ideabuffer.process.Executable">
+      <point x="-18.5" y="-14.5" />
+      <point x="403.1796875" y="59.0" />
+      <point x="369.0546875" y="59.0" />
       <point x="0.0" y="14.5" />
     </edge>
-    <edge source="cn.ideabuffer.process.ExecutableNode" target="cn.ideabuffer.process.Node">
+    <edge source="cn.ideabuffer.process.ProcessInstance" target="cn.ideabuffer.process.nodes.ExecutableNode">
       <point x="0.0" y="-14.5" />
+      <point x="512.75" y="148.0" />
+      <point x="440.1796875" y="148.0" />
+      <point x="18.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.AggregatableNode" target="cn.ideabuffer.process.Parallelizable">
+      <point x="-40.75" y="-14.5" />
+      <point x="48.875" y="222.0" />
+      <point x="31.5" y="222.0" />
+      <point x="-31.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.Branch" target="cn.ideabuffer.process.Node">
+      <point x="0.0" y="-14.5" />
+      <point x="777.875" y="69.0" />
+      <point x="776.0546875" y="69.0" />
+      <point x="27.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.TransmittableNode" target="cn.ideabuffer.process.nodes.transmitter.ResultStream">
+      <point x="-41.25" y="-14.5" />
       <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.MergeableNode" target="cn.ideabuffer.process.Mergeable">
+      <point x="0.0" y="-14.5" />
+      <point x="634.875" y="49.0" />
+      <point x="633.0546875" y="49.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.ExecutableNode" target="cn.ideabuffer.process.Matchable">
+      <point x="18.5" y="-14.5" />
+      <point x="440.1796875" y="49.0" />
+      <point x="474.3046875" y="49.0" />
+      <point x="-27.75" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.AggregatableNode" target="cn.ideabuffer.process.nodes.TransmittableNode">
+      <point x="40.75" y="-14.5" />
+      <point x="130.375" y="222.0" />
+      <point x="147.75" y="222.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.ExecutableNode" target="cn.ideabuffer.process.Parallelizable">
+      <point x="-55.5" y="-14.5" />
+      <point x="366.1796875" y="69.0" />
+      <point x="94.5" y="69.0" />
+      <point x="31.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.branch.BranchNode" target="cn.ideabuffer.process.Branch">
+      <point x="31.25" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.ExecutableNode" target="cn.ideabuffer.process.Node">
+      <point x="55.5" y="-14.5" />
+      <point x="477.1796875" y="59.0" />
+      <point x="722.0546875" y="59.0" />
+      <point x="-27.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.MergeableNode" target="cn.ideabuffer.process.Node">
+      <point x="48.0" y="-14.5" />
+      <point x="682.875" y="69.0" />
+      <point x="749.0546875" y="69.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.ParallelBranchNode" target="cn.ideabuffer.process.nodes.ExecutableNode">
+      <point x="0.0" y="-14.5" />
+      <point x="334.25" y="148.0" />
+      <point x="403.1796875" y="148.0" />
+      <point x="-18.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.branch.BranchNode" target="cn.ideabuffer.process.nodes.ExecutableNode">
+      <point x="-31.25" y="-14.5" />
+      <point x="715.375" y="138.0" />
+      <point x="477.1796875" y="138.0" />
+      <point x="55.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.MergeableNode" target="cn.ideabuffer.process.Matchable">
+      <point x="-48.0" y="-14.5" />
+      <point x="586.875" y="49.0" />
+      <point x="529.8046875" y="49.0" />
+      <point x="27.75" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.nodes.TransmittableNode" target="cn.ideabuffer.process.nodes.ExecutableNode">
+      <point x="41.25" y="-14.5" />
+      <point x="189.0" y="138.0" />
+      <point x="366.1796875" y="138.0" />
+      <point x="-55.5" y="14.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.893467336683417" x="194.45219347581553" y="289.0" />
-  <SelectedNodes>
-    <node>cn.ideabuffer.process.Node</node>
-  </SelectedNodes>
+  <settings layout="Hierarchic Group" zoom="1.0" x="412.0" y="175.0" />
+  <SelectedNodes />
   <Categories />
   <SCOPE>All</SCOPE>
   <VISIBILITY>private</VISIBILITY>
