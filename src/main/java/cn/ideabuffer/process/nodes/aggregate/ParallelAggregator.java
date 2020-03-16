@@ -32,8 +32,7 @@ public class ParallelAggregator<R> implements Aggregator<R> {
     }
 
     @Override
-    public R aggregate(Context context, List<MergeableNode<R>> nodes)
-        throws Exception {
+    public R aggregate(Context context, List<MergeableNode<R>> nodes) throws Exception {
         if (nodes == null || nodes.isEmpty()) {
             return null;
         }
@@ -48,7 +47,11 @@ public class ParallelAggregator<R> implements Aggregator<R> {
             } else {
                 future = CompletableFuture.supplyAsync(supplier, executor);
             }
-            future.thenAccept(queue::offer);
+            future.thenAccept(r -> {
+                if (r != null) {
+                    queue.offer(r);
+                }
+            });
             return future;
         }).toArray(CompletableFuture[]::new)).join();
         queue.drainTo(results);
