@@ -91,41 +91,66 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
 
     }
 
+    protected void postExecute(Context context) {
+
+    }
+
+    protected void whenComplete(Context context, Exception e) {
+
+    }
+
     @Override
     public boolean execute(Context context) throws Exception {
         if (!ruleCheck(context)) {
             return false;
         }
-        preExecute(context);
 
         if (parallel) {
-            Executor e = executor == null ? DEFAULT_POOL : executor;
-            e.execute(() -> {
-                try {
-                    doExecute(context);
-                } catch (Exception ex) {
-                    if (handler != null) {
-                        handler.handle(ex);
-                    } else {
-                        logger.error("execute error, node:{}", this, ex);
-                        throw new RuntimeException(ex);
-                    }
-                }
-            });
+            doParallelExecute(context);
             return false;
         }
 
+        Exception exp = null;
+
+        preExecute(context);
         try {
-            return doExecute(context);
+            boolean result = doExecute(context);
+            postExecute(context);
+            return result;
         } catch (Exception e) {
             if (handler != null) {
                 handler.handle(e);
             } else {
+                exp = e;
                 throw e;
             }
+        } finally {
+            whenComplete(context, exp);
         }
 
         return false;
+    }
+
+    private void doParallelExecute(Context context) {
+        Executor e = executor == null ? DEFAULT_POOL : executor;
+        e.execute(() -> {
+            Exception exp = null;
+            preExecute(context);
+            try {
+                doExecute(context);
+                postExecute(context);
+            } catch (Exception ex) {
+                if (handler != null) {
+                    handler.handle(ex);
+                } else {
+                    logger.error("doParallelExecute error, node:{}", this, ex);
+                    exp = ex;
+                    throw new RuntimeException(ex);
+                }
+            } finally {
+                whenComplete(context, exp);
+            }
+        });
     }
 
     /**

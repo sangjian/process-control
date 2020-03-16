@@ -75,10 +75,11 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
     @Override
     public boolean execute(Context context) throws Exception {
 
-        preExecute(context);
         Executor e = executor == null ? DEFAULT_POOL : executor;
 
         Runnable task = () -> {
+            preExecute(context);
+            Exception exp = null;
             try {
                 R result = doInvoke(context);
                 if (processor != null) {
@@ -86,7 +87,15 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
                     processor.fire(context, result);
                 }
             } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                ExceptionHandler handler = getExceptionHandler();
+                if(handler != null) {
+                    handler.handle(ex);
+                } else {
+                    exp = ex;
+                    throw new RuntimeException(ex);
+                }
+            } finally {
+                whenComplete(context, exp);
             }
         };
 
