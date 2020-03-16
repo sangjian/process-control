@@ -4,7 +4,6 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.AggregatableNode;
 import cn.ideabuffer.process.nodes.MergeableNode;
-import cn.ideabuffer.process.nodes.merger.Merger;
 import cn.ideabuffer.process.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.rule.Rule;
 import org.jetbrains.annotations.NotNull;

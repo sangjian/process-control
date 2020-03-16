@@ -2,7 +2,6 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Parallelizable;
 import cn.ideabuffer.process.nodes.aggregate.Aggregator;
-import cn.ideabuffer.process.nodes.merger.Merger;
 import cn.ideabuffer.process.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 

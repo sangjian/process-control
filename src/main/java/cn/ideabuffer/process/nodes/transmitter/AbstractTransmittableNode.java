@@ -88,7 +88,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
                 }
             } catch (Exception ex) {
                 ExceptionHandler handler = getExceptionHandler();
-                if(handler != null) {
+                if (handler != null) {
                     handler.handle(ex);
                 } else {
                     exp = ex;
