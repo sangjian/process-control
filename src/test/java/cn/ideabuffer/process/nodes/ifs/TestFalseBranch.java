@@ -1,13 +1,13 @@
 package cn.ideabuffer.process.nodes.ifs;
 
 import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.nodes.branch.DefaultBranch;
+import cn.ideabuffer.process.nodes.branch.DefaultBranchNode;
 
 /**
  * @author sangjian.sj
  * @date 2020/03/05
  */
-public class TestFalseBranch extends DefaultBranch {
+public class TestFalseBranch extends DefaultBranchNode {
 
     @Override
     public boolean execute(Context context) throws Exception {

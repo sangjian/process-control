@@ -27,19 +27,14 @@ import java.util.concurrent.Executors;
 public class ChainTest {
 
     @Test
-    public void testChainBase() throws Exception {
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
+    public void testInstance() throws Exception {
         ProcessInstance instance = new DefaultProcessInstance();
-        //ProcessInstance c2 = new DefaultProcessInstance("testSubChain");
-        //c2.addProcessNode(new TestNode1())
-        //.addProcessNode(new TestNode2());
         Context context = new DefaultContext();
         context.put("k", 0);
         instance
             .addProcessNode(new TestNode1())
             .addProcessNode(new TestNode2());
         instance.execute(context);
-
     }
 
     @Test
@@ -49,7 +44,7 @@ public class ChainTest {
         Context context = new DefaultContext();
         context.put("k", 0);
         instance
-            .addProcessNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
+            .addBranchNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
         instance.execute(context);
         Thread.sleep(10000);
     }

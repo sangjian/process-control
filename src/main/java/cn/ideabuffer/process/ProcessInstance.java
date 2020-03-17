@@ -3,6 +3,7 @@ package cn.ideabuffer.process;
 import cn.ideabuffer.process.nodes.AggregatableNode;
 import cn.ideabuffer.process.nodes.ExecutableNode;
 import cn.ideabuffer.process.nodes.NodeGroup;
+import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.nodes.condition.WhileConditionNode;
@@ -63,5 +64,13 @@ public interface ProcessInstance extends ExecutableNode {
      * @return 当前实例
      */
     ProcessInstance addAggregateNode(@NotNull AggregatableNode node);
+
+    /**
+     * 增加分支节点
+     *
+     * @param node 分支节点
+     * @return
+     */
+    ProcessInstance addBranchNode(@NotNull BranchNode node);
 
 }

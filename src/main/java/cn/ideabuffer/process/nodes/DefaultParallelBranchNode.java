@@ -3,7 +3,7 @@ package cn.ideabuffer.process.nodes;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
-import cn.ideabuffer.process.nodes.branch.DefaultBranch;
+import cn.ideabuffer.process.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.rule.Rule;
 import cn.ideabuffer.process.strategy.ProceedStrategies;
 import cn.ideabuffer.process.strategy.ProceedStrategy;
@@ -86,7 +86,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     @Override
     public ParallelBranchNode addBranch(@NotNull ExecutableNode... nodes) {
         if (nodes.length > 0) {
-            branches.add(new DefaultBranch(nodes));
+            branches.add(new DefaultBranchNode(nodes));
         }
         return this;
     }

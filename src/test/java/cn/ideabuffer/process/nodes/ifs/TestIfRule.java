@@ -11,6 +11,7 @@ public class TestIfRule implements Rule {
 
     @Override
     public boolean match(Context context) {
-        return false;
+        int k = context.get("k", 5);
+        return k < 5;
     }
 }

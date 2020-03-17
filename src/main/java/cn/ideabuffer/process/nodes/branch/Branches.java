@@ -15,6 +15,6 @@ public class Branches {
     }
 
     public static BranchNode newBranch(Rule rule, @NotNull ExecutableNode... nodes) {
-        return new DefaultBranch(rule, nodes);
+        return new DefaultBranchNode(rule, nodes);
     }
 }

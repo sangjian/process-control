@@ -3,7 +3,7 @@ package cn.ideabuffer.process.nodes;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.aggregate.DefaultAggregatableNode;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
-import cn.ideabuffer.process.nodes.branch.DefaultBranch;
+import cn.ideabuffer.process.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.nodes.condition.WhileConditionNode;
@@ -71,7 +71,7 @@ public class Nodes {
     }
 
     public static TryCatchFinally newTry(ExecutableNode... nodes) {
-        return new TryCatchFinally(new DefaultBranch(nodes));
+        return new TryCatchFinally(new DefaultBranchNode(nodes));
     }
 
     public static class IfWhen {
@@ -87,7 +87,7 @@ public class Nodes {
         }
 
         public IfWhenBuilder then(ExecutableNode... nodes) {
-            return then(new DefaultBranch(nodes));
+            return then(new DefaultBranchNode(nodes));
         }
 
         public class IfWhenBuilder {
@@ -106,7 +106,7 @@ public class Nodes {
             }
 
             public IfConditionNode otherwise(ExecutableNode... nodes) {
-                return otherwise(new DefaultBranch(nodes));
+                return otherwise(new DefaultBranchNode(nodes));
             }
 
             public IfConditionNode end() {
@@ -130,7 +130,7 @@ public class Nodes {
         }
 
         public WhileConditionNode then(ExecutableNode... nodes) {
-            return then(new DefaultBranch(nodes));
+            return then(new DefaultBranchNode(nodes));
         }
 
     }
@@ -168,7 +168,7 @@ public class Nodes {
         }
 
         public TryCatchFinally catchOn(Class<? extends Throwable> expClass, ExecutableNode... nodes) {
-            return catchOn(expClass, new DefaultBranch(nodes));
+            return catchOn(expClass, new DefaultBranchNode(nodes));
         }
 
         public TryCatchFinallyNode doFinally(BranchNode branch) {
@@ -176,7 +176,7 @@ public class Nodes {
         }
 
         public TryCatchFinallyNode doFinally(ExecutableNode... nodes) {
-            return doFinally(new DefaultBranch(nodes));
+            return doFinally(new DefaultBranchNode(nodes));
         }
     }
 }

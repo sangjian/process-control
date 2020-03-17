@@ -4,6 +4,7 @@ import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.nodes.AggregatableNode;
 import cn.ideabuffer.process.nodes.ExecutableNode;
 import cn.ideabuffer.process.nodes.NodeGroup;
+import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.nodes.condition.WhileConditionNode;
@@ -60,6 +61,11 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
 
     @Override
     public ProcessInstance addAggregateNode(@NotNull AggregatableNode node) {
+        return addNode(node);
+    }
+
+    @Override
+    public ProcessInstance addBranchNode(@NotNull BranchNode node) {
         return addNode(node);
     }
 
