@@ -16,12 +16,10 @@ import java.util.concurrent.Executor;
  */
 public class WhileConditionNode extends AbstractExecutableNode {
 
-    protected Rule rule;
-
     protected BranchNode branch;
 
     public WhileConditionNode(Rule rule, BranchNode branch) {
-        this.rule = rule;
+        super.rule = rule;
         this.branch = branch;
     }
 

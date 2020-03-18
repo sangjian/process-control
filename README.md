@@ -1,4 +1,5 @@
 ![build](https://github.com/sangjian/process-control/workflows/build/badge.svg)
+![sonar-scan](https://github.com/sangjian/process-control/workflows/sonar-scan/badge.svg)
 
 ## 简介
 
