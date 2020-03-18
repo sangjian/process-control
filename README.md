@@ -1,4 +1,4 @@
-![build](https://github.com/sangjian/process-control/workflows/Java%20CI%20with%20Maven/badge.svg)
+![build](https://github.com/sangjian/process-control/workflows/build/badge.svg)
 
 ## 简介
 
