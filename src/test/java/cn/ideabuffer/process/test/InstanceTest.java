@@ -5,6 +5,7 @@ import cn.ideabuffer.process.DefaultContext;
 import cn.ideabuffer.process.DefaultProcessInstance;
 import cn.ideabuffer.process.ProcessInstance;
 import cn.ideabuffer.process.nodes.Nodes;
+import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.Branches;
 import cn.ideabuffer.process.test.nodes.*;
 import cn.ideabuffer.process.rule.Rules;
@@ -23,7 +24,7 @@ import java.util.concurrent.Executors;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class ChainTest {
+public class InstanceTest {
 
     @Test
     public void testInstance() throws Exception {
@@ -53,9 +54,10 @@ public class ChainTest {
         ProcessInstance instance = new DefaultProcessInstance();
         Context context = new DefaultContext();
         context.put("k", 1);
-        TestIfRule rule = new TestIfRule();
-        instance.addIf(Nodes.newIf(rule).then(new TestTrueBranch())
-            .otherwise(new TestFalseBranch()));
+        BranchNode trueBranch = Branches.newBranch(new TestNode1());
+        BranchNode falseBranch = Branches.newBranch(new TestNode1());
+        instance.addIf(Nodes.newIf(ctx -> ctx.get("k", 0) < 5).then(trueBranch)
+            .otherwise(falseBranch));
         instance.execute(context);
     }
 
@@ -66,10 +68,8 @@ public class ChainTest {
         TestWhileRule rule = new TestWhileRule();
         instance.addWhile(Nodes.newWhile(rule)
             .then(new TestWhileNode1(), new TestWhileNode2(),
-                new TestWhileNode3())
-            .parallel());
+                new TestWhileNode3()));
         instance.execute(context);
-        Thread.sleep(10000);
     }
 
     @Test
