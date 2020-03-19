@@ -62,19 +62,19 @@ public class WhileConditionNode extends AbstractExecutableNode {
         Block whileBlock = new Block(true, true, context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
         ContextWrapper whileContext = new ContextWrapper(context, whileBlock);
+        if (!getRule().match(whileContext)) {
+            return false;
+        }
         while (true) {
-            blockWrapper.resetBreak();
-            blockWrapper.resetContinue();
-
-            if (!getRule().match(whileContext)) {
-                break;
-            }
             if (branch.execute(whileContext)) {
                 return true;
             }
             if (blockWrapper.hasBroken()) {
                 break;
             }
+
+            blockWrapper.resetBreak();
+            blockWrapper.resetContinue();
         }
 
         return false;
