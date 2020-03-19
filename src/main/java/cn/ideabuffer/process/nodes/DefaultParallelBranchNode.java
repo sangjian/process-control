@@ -80,7 +80,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     @Override
     protected boolean doExecute(Context context) throws Exception {
-        return PARALLEL_EXECUTOR.execute(executor, strategy, context, branches.toArray(new ExecutableNode[0]));
+        return PARALLEL_EXECUTOR.execute(getExecutor(), strategy, context, branches.toArray(new ExecutableNode[0]));
     }
 
     @Override

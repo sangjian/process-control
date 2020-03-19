@@ -8,6 +8,10 @@ import java.util.concurrent.Executor;
  */
 public class NodeExecutors {
 
+    private NodeExecutors() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 默认串行执行器
      */

@@ -6,6 +6,10 @@ package cn.ideabuffer.process.strategy;
  */
 public class ProceedStrategies {
 
+    private ProceedStrategies() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static final ProceedStrategy AT_LEAST_ONE_PROCEEDED = new AtLeastOneProceededStrategy();
 
     public static final ProceedStrategy AT_LEAST_ONE_FINISHED = new AtLeastOneFinishedStrategy();

@@ -6,6 +6,7 @@ import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -13,7 +14,7 @@ import cn.ideabuffer.process.rule.Rule;
  */
 public class DoWhileConditionNode extends WhileConditionNode {
 
-    public DoWhileConditionNode(Rule rule, BranchNode branch) {
+    public DoWhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
         super(rule, branch);
     }
 
@@ -33,7 +34,7 @@ public class DoWhileConditionNode extends WhileConditionNode {
             if (blockWrapper.hasBroken()) {
                 break;
             }
-            if (!rule.match(context)) {
+            if (!getRule().match(context)) {
                 break;
             }
             blockWrapper.resetBreak();

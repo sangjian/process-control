@@ -19,8 +19,8 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected boolean parallel = false;
-    protected Rule rule;
-    protected Executor executor;
+    private Rule rule;
+    private Executor executor;
     private ExceptionHandler handler;
 
     public AbstractExecutableNode() {

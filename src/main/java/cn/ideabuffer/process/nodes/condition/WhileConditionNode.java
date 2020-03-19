@@ -7,6 +7,7 @@ import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
 
@@ -18,8 +19,8 @@ public class WhileConditionNode extends AbstractExecutableNode {
 
     protected BranchNode branch;
 
-    public WhileConditionNode(Rule rule, BranchNode branch) {
-        super.rule = rule;
+    public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
+        super(rule);
         this.branch = branch;
     }
 
@@ -46,8 +47,8 @@ public class WhileConditionNode extends AbstractExecutableNode {
 
     @Override
     public boolean execute(Context context) throws Exception {
-        if (rule == null) {
-            throw new RuntimeException("rule can't be null");
+        if (getRule() == null) {
+            throw new NullPointerException("rule can't be null");
         }
         return super.execute(context);
     }
@@ -65,7 +66,7 @@ public class WhileConditionNode extends AbstractExecutableNode {
             blockWrapper.resetBreak();
             blockWrapper.resetContinue();
 
-            if (!rule.match(whileContext)) {
+            if (!getRule().match(whileContext)) {
                 break;
             }
             if (branch.execute(whileContext)) {

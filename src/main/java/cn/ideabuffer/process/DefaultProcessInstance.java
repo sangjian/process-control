@@ -107,12 +107,21 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
         if (i >= nodes.length) {
             i--;
         }
+
+        if (exception != null && !postProcess(i, current, exception)) {
+            throw exception;
+        }
+
+        return complete;
+    }
+
+    private boolean postProcess(int i, Context context, Exception exception) {
         boolean processed = false;
         for (; i >= 0; i--) {
             Node node = nodes[i];
             if (node instanceof PostProcessor) {
                 try {
-                    boolean result = ((PostProcessor)node).postProcess(current, exception);
+                    boolean result = ((PostProcessor)node).postProcess(context, exception);
                     if (result) {
                         processed = true;
                     }
@@ -121,12 +130,7 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
                 }
             }
         }
-
-        if (exception != null && !processed) {
-            throw exception;
-        }
-
-        return complete;
+        return processed;
     }
 
     @Override

@@ -4,8 +4,6 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.nodes.MergeableNode;
 import cn.ideabuffer.process.nodes.merger.Merger;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,8 +13,6 @@ import java.util.List;
  * @date 2020/03/09
  */
 public class SerialAggregator<R> implements Aggregator<R> {
-
-    private static final Logger logger = LoggerFactory.getLogger(SerialAggregator.class);
 
     private Merger<R> merger;
 

@@ -21,6 +21,10 @@ import java.util.concurrent.Executor;
  */
 public class Nodes {
 
+    private Nodes() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static NodeGroup newGroup() {
         return new NodeGroup();
     }
@@ -152,14 +156,14 @@ public class Nodes {
 
         private BranchNode tryBranch;
 
-        private Map<Class<? extends Throwable>, BranchNode> catchMap;
+        private Map<Class<? extends Exception>, BranchNode> catchMap;
 
         TryCatchFinally(BranchNode tryBranch) {
             this.tryBranch = tryBranch;
             this.catchMap = new HashMap<>();
         }
 
-        public TryCatchFinally catchOn(Class<? extends Throwable> expClass, BranchNode branch) {
+        public TryCatchFinally catchOn(Class<? extends Exception> expClass, BranchNode branch) {
             if (expClass == null) {
                 throw new NullPointerException();
             }

@@ -17,7 +17,6 @@ import static cn.ideabuffer.process.executor.NodeExecutors.DEFAULT_POOL;
  */
 public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNode implements TransmittableNode<R> {
 
-    protected Executor executor;
     private TransmittableProcessor processor;
 
     @Override
@@ -53,7 +52,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
 
     @Override
     public <V> ResultStream<V> thenApplyAsync(@NotNull ResultProcessor<V, R> processor) {
-        TransmittableProcessor<V> then = new TransmittableProcessor<>(processor, true, executor);
+        TransmittableProcessor<V> then = new TransmittableProcessor<>(processor, true, getExecutor());
         this.processor = then;
         return then;
     }
@@ -67,7 +66,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
 
     @Override
     public ResultStream<Void> thenAcceptAsync(@NotNull ResultConsumer<R> consumer) {
-        TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer, true, executor);
+        TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer, true, getExecutor());
         this.processor = then;
         return then;
     }
@@ -75,7 +74,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
     @Override
     public boolean execute(Context context) throws Exception {
 
-        Executor e = executor == null ? DEFAULT_POOL : executor;
+        Executor e = getExecutor() == null ? DEFAULT_POOL : getExecutor();
 
         Runnable task = () -> {
             preExecute(context);

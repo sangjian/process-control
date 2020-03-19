@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Branches {
 
+    private Branches() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static BranchNode newBranch(@NotNull ExecutableNode... nodes) {
         return newBranch(null, nodes);
     }

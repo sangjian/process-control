@@ -16,12 +16,12 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
 
     private BranchNode tryBranch;
 
-    private Map<Class<? extends Throwable>, BranchNode> catchMap;
+    private Map<Class<? extends Exception>, BranchNode> catchMap;
 
     private BranchNode finallyBranch;
 
     public TryCatchFinallyNode(BranchNode tryBranch,
-        Map<Class<? extends Throwable>, BranchNode> catchMap, BranchNode finallyBranch) {
+        Map<Class<? extends Exception>, BranchNode> catchMap, BranchNode finallyBranch) {
         this.tryBranch = tryBranch;
         this.catchMap = catchMap;
         this.finallyBranch = finallyBranch;
@@ -30,44 +30,62 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
         }
     }
 
-    @Override
-    public boolean doExecute(Context context) throws Exception {
-
+    private void preCheck() {
         if (catchMap.isEmpty() && finallyBranch == null) {
             throw new RuntimeException("'catch' or 'finally' expected");
         }
+    }
+
+    @Override
+    public boolean doExecute(Context context) throws Exception {
+
+        preCheck();
+
         try {
-            if (tryBranch == null || tryBranch.getNodes().isEmpty()) {
+            if (tryBranch == null) {
                 return false;
             }
             Block tryBlock = new Block(context.getBlock());
             ContextWrapper contextWrapper = new ContextWrapper(context, tryBlock);
             return tryBranch.execute(contextWrapper);
-        } catch (Throwable e) {
-            if (!catchMap.isEmpty()) {
-                for (Map.Entry<Class<? extends Throwable>, BranchNode> entry : catchMap.entrySet()) {
-                    Class<? extends Throwable> expClass = entry.getKey();
-                    BranchNode catchBranch = entry.getValue();
-                    if (expClass.isAssignableFrom(e.getClass())) {
-                        if (catchBranch == null) {
-                            continue;
-                        }
-                        Block catchBlock = new Block(context.getBlock());
-                        ContextWrapper contextWrapper = new ContextWrapper(context, catchBlock);
-                        if (catchBranch.execute(contextWrapper)) {
-                            return true;
-                        }
-                    }
-                }
+        } catch (Exception e) {
+            if (runCatchBranch(context, e)) {
+                return true;
             }
         } finally {
-            if (finallyBranch != null) {
-                Block finallyBlock = new Block(context.getBlock());
-                ContextWrapper contextWrapper = new ContextWrapper(context, finallyBlock);
-                finallyBranch.execute(contextWrapper);
-            }
+            runFinallyBranch(context);
         }
 
         return false;
+    }
+
+    private boolean runCatchBranch(Context context, Exception e) throws Exception {
+        if (catchMap.isEmpty()) {
+            return false;
+        }
+        for (Map.Entry<Class<? extends Exception>, BranchNode> entry : catchMap.entrySet()) {
+            Class<? extends Exception> expClass = entry.getKey();
+            BranchNode catchBranch = entry.getValue();
+            if (expClass.isAssignableFrom(e.getClass())) {
+                if (catchBranch == null) {
+                    continue;
+                }
+                Block catchBlock = new Block(context.getBlock());
+                ContextWrapper contextWrapper = new ContextWrapper(context, catchBlock);
+                if (catchBranch.execute(contextWrapper)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void runFinallyBranch(Context context) throws Exception {
+        if (finallyBranch == null) {
+            return;
+        }
+        Block finallyBlock = new Block(context.getBlock());
+        ContextWrapper contextWrapper = new ContextWrapper(context, finallyBlock);
+        finallyBranch.execute(contextWrapper);
     }
 }

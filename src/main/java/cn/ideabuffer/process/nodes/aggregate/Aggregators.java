@@ -11,6 +11,10 @@ import java.util.concurrent.Executor;
  */
 public class Aggregators {
 
+    private Aggregators() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static <R> Aggregator<R> newParallelAggregator(@NotNull Executor executor, @NotNull Merger<R> merger) {
         return new ParallelAggregator<>(executor, merger);
     }
