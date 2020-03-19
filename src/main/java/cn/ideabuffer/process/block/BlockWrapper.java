@@ -29,4 +29,10 @@ public class BlockWrapper extends Block {
 
     @Override
     public void resetContinue() {block.resetContinue();}
+
+    @Override
+    public boolean equals(Object o) {return block.equals(o);}
+
+    @Override
+    public int hashCode() {return block.hashCode();}
 }

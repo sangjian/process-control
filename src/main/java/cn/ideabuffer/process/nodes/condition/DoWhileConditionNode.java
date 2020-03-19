@@ -31,10 +31,7 @@ public class DoWhileConditionNode extends WhileConditionNode {
             if (branch.execute(doWhileContext)) {
                 return true;
             }
-            if (blockWrapper.hasBroken()) {
-                break;
-            }
-            if (!getRule().match(context)) {
+            if (blockWrapper.hasBroken() || !getRule().match(context)) {
                 break;
             }
             blockWrapper.resetBreak();

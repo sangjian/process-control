@@ -33,7 +33,7 @@ public class AtLeastOneProceededStrategy implements ProceedStrategy {
         }
 
         for (int i = 0; i < queue.size(); i++) {
-            if (!queue.take()) {
+            if (!Boolean.TRUE.equals(queue.take())) {
                 return true;
             }
         }

@@ -2,6 +2,7 @@ package cn.ideabuffer.process.block;
 
 import cn.ideabuffer.process.Context;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -133,5 +134,24 @@ public class Block extends ConcurrentHashMap<Object, Object> {
 
     void resetContinue() {
         this.hasContinued = false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        if (!super.equals(o)) { return false; }
+        Block block = (Block)o;
+        return breakable == block.breakable &&
+            continuable == block.continuable &&
+            hasBroken == block.hasBroken &&
+            hasContinued == block.hasContinued &&
+            Objects.equals(parent, block.parent);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), breakable, continuable, hasBroken, hasContinued, parent);
     }
 }

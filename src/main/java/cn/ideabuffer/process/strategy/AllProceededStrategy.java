@@ -16,7 +16,7 @@ public class AllProceededStrategy implements ProceedStrategy {
         }
 
         for (CompletableFuture<Boolean> future : futures) {
-            if (future.get()) {
+            if (Boolean.TRUE.equals(future.get())) {
                 return false;
             }
         }

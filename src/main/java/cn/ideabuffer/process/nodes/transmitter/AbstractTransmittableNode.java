@@ -98,7 +98,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
             }
         };
 
-        if (parallel) {
+        if (isParallel()) {
             e.execute(task);
         } else {
             task.run();

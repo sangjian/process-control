@@ -8,7 +8,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Rules {
 
-
+    private Rules() {
+        throw new IllegalStateException("Utility class");
+    }
 
     @NotNull
     public static Rule and(@NotNull Rule... rules) {

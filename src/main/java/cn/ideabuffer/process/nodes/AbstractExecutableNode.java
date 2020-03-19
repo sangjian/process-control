@@ -18,7 +18,7 @@ import static cn.ideabuffer.process.executor.NodeExecutors.DEFAULT_POOL;
 public abstract class AbstractExecutableNode extends AbstractNode implements ExecutableNode {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected boolean parallel = false;
+    private boolean parallel = false;
     private Rule rule;
     private Executor executor;
     private ExceptionHandler handler;
@@ -47,12 +47,16 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
         this.handler = handler;
     }
 
-    public void setParallel(boolean parallel) {
-        this.parallel = parallel;
-    }
-
     public void setHandler(ExceptionHandler handler) {
         this.handler = handler;
+    }
+
+    public boolean isParallel() {
+        return parallel;
+    }
+
+    public void setParallel(boolean parallel) {
+        this.parallel = parallel;
     }
 
     @Override

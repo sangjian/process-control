@@ -2,6 +2,7 @@ package cn.ideabuffer.process;
 
 import cn.ideabuffer.process.block.Block;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -46,5 +47,20 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
             return value;
         }
         return defaultValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        if (!super.equals(o)) { return false; }
+        DefaultContext that = (DefaultContext)o;
+        return Objects.equals(block, that.block);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), block);
     }
 }
