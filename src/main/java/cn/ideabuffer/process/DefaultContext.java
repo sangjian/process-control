@@ -13,6 +13,8 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
 
     private Block block;
 
+    private Object result;
+
     public DefaultContext() {
         this(new Block());
     }
@@ -30,7 +32,7 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
     }
 
     @Override
-    public <V> V get(Object key, Class<V> valueType) {
+    public <V> V getValue(Object key) {
         Object value = get(key);
         if (value == null) {
             return null;
@@ -41,12 +43,26 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
 
     @Override
     public <V> V get(Object key, V defaultValue) {
-        //noinspection unchecked
-        V value = (V)get(key);
-        if (value != null) {
-            return value;
+        Object value = get(key);
+        if(value == null) {
+            return defaultValue;
         }
-        return defaultValue;
+        //noinspection unchecked
+        return (V)value;
+    }
+
+    @Override
+    public void setResult(Object result) {
+        this.result = result;
+    }
+
+    @Override
+    public <V> V getResult() {
+        if(result == null) {
+            return null;
+        }
+        //noinspection unchecked
+        return (V)result;
     }
 
     @Override

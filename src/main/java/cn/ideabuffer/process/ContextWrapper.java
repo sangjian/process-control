@@ -32,14 +32,20 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public <V> V get(Object key, Class<V> valueType) {
-        return context.get(key, valueType);
+    public <V> V getValue(Object key) {
+        return context.getValue(key);
     }
 
     @Override
     public <V> V get(Object key, V defaultValue) {
         return context.get(key, defaultValue);
     }
+
+    @Override
+    public void setResult(Object result) {context.setResult(result);}
+
+    @Override
+    public <V> V getResult() {return context.getResult();}
 
     @Override
     public int size() {return context.size();}

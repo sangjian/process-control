@@ -10,6 +10,6 @@ import java.util.concurrent.CompletableFuture;
 public class SubmittedStrategy implements ProceedStrategy {
     @Override
     public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {
-        return false;
+        return true;
     }
 }
