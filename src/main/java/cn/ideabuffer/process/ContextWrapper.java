@@ -42,10 +42,10 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public void setResult(Object result) {context.setResult(result);}
+    public <V> V getResult() {return context.getResult();}
 
     @Override
-    public <V> V getResult() {return context.getResult();}
+    public void setResult(Object result) {context.setResult(result);}
 
     @Override
     public int size() {return context.size();}

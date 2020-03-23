@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.nodes;
 
-import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.Node;
 
 /**
@@ -13,7 +12,7 @@ public abstract class AbstractNode implements Node {
     }
 
     @Override
-    public boolean enabled(Context context) {
+    public boolean enabled() {
         return true;
     }
 }

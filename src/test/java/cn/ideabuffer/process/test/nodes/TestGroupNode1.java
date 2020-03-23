@@ -10,7 +10,7 @@ import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 public class TestGroupNode1 extends AbstractExecutableNode {
 
     @Override
-    public boolean enabled(Context context) {
+    public boolean enabled() {
         return true;
     }
 

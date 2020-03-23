@@ -22,8 +22,8 @@ public interface Context extends Map<Object, Object> {
     /**
      * 获取指定类型的值
      *
-     * @param key       key
-     * @param <V>       返回值类型
+     * @param key key
+     * @param <V> 返回值类型
      * @return
      */
     <V> V getValue(Object key);
@@ -38,8 +38,8 @@ public interface Context extends Map<Object, Object> {
      */
     <V> V get(Object key, V defaultValue);
 
-    void setResult(Object result);
-
     <V> V getResult();
+
+    void setResult(Object result);
 
 }
