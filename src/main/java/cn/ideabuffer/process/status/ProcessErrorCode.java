@@ -7,11 +7,9 @@ import java.io.Serializable;
  * @date 2020/03/24
  */
 public class ProcessErrorCode implements Serializable {
-    private static final long serialVersionUID = -4794736288978072418L;
-
     public static final ProcessErrorCode SYSTEM_ERROR = new ProcessErrorCode("system_error", "系统错误");
     public static final ProcessErrorCode PARAMS_ERROR = new ProcessErrorCode("params_error", "参数错误");
-
+    private static final long serialVersionUID = -4794736288978072418L;
     private String code;
     private String message;
 
@@ -27,20 +25,20 @@ public class ProcessErrorCode implements Serializable {
         this.code = String.valueOf(code);
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public String getCode() {
         return code;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override

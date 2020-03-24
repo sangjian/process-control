@@ -10,8 +10,35 @@ import java.io.Serializable;
  */
 public class ProcessStatus implements Serializable {
 
-    private static final long serialVersionUID = 8817242079278554141L;
+    public static final ProcessStatus PROCEED = new InnerProcessStatus() {
 
+        private static final long serialVersionUID = 6455037301247603534L;
+
+        @Override
+        public boolean isProceed() {
+            return true;
+        }
+
+        @Override
+        public boolean isComplete() {
+            return false;
+        }
+    };
+    public static final ProcessStatus COMPLETE = new InnerProcessStatus() {
+
+        private static final long serialVersionUID = -2356048364637594820L;
+
+        @Override
+        public boolean isProceed() {
+            return false;
+        }
+
+        @Override
+        public boolean isComplete() {
+            return true;
+        }
+    };
+    private static final long serialVersionUID = 8817242079278554141L;
     private boolean proceed;
     private ProcessErrorCode errorCode;
 
@@ -44,8 +71,6 @@ public class ProcessStatus implements Serializable {
     }
 
     /**
-     *
-     *
      * @param errorCode
      * @return
      */
@@ -85,16 +110,16 @@ public class ProcessStatus implements Serializable {
         return !isProceed();
     }
 
-    public void setErrorCode(ProcessErrorCode errorCode) {
-        this.errorCode = errorCode;
-    }
-
     public void setErrorCode(String code, String message) {
         setErrorCode(new ProcessErrorCode(code, message));
     }
 
     public ProcessErrorCode getErrorCode() {
         return errorCode;
+    }
+
+    public void setErrorCode(ProcessErrorCode errorCode) {
+        this.errorCode = errorCode;
     }
 
     public String getCode() {
@@ -127,11 +152,6 @@ public class ProcessStatus implements Serializable {
         }
 
         @Override
-        public void setErrorCode(ProcessErrorCode errorCode) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
         public void setErrorCode(String code, String message) {
             throw new UnsupportedOperationException();
         }
@@ -139,6 +159,11 @@ public class ProcessStatus implements Serializable {
         @Override
         public ProcessErrorCode getErrorCode() {
             return null;
+        }
+
+        @Override
+        public void setErrorCode(ProcessErrorCode errorCode) {
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -151,34 +176,4 @@ public class ProcessStatus implements Serializable {
             return null;
         }
     }
-
-    public static final ProcessStatus PROCEED = new InnerProcessStatus(){
-
-        private static final long serialVersionUID = 6455037301247603534L;
-
-        @Override
-        public boolean isProceed() {
-            return true;
-        }
-
-        @Override
-        public boolean isComplete() {
-            return false;
-        }
-    };
-
-    public static final ProcessStatus COMPLETE = new InnerProcessStatus(){
-
-        private static final long serialVersionUID = -2356048364637594820L;
-
-        @Override
-        public boolean isProceed() {
-            return false;
-        }
-
-        @Override
-        public boolean isComplete() {
-            return true;
-        }
-    };
 }

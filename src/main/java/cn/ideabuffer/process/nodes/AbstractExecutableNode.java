@@ -1,7 +1,6 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.Executable;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
 import cn.ideabuffer.process.status.ProcessStatus;
@@ -162,10 +161,9 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
      * 子类实现具体执行逻辑
      *
      * @param context 当前流程上下文
-     * @return <li>false: 继续执行整个实例的下游节点</li><li>true: 不再执行整个实例的下游节点</li>
+     * @return 状态
      * @throws Exception
-     * @see Executable#CONTINUE_PROCESSING
-     * @see Executable#PROCESSING_COMPLETE
+     * @see ProcessStatus
      */
     protected abstract ProcessStatus doExecute(Context context) throws Exception;
 

@@ -73,7 +73,7 @@ public interface ProcessDefine<R> {
     ProcessDefine<R> addBranchNode(@NotNull BranchNode node);
 
     ProcessDefine<R> addBaseNode(@NotNull BaseNode<R> node);
-    
+
     Node[] getNodes();
 
     BaseNode<R> getBaseNode();

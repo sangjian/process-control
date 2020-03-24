@@ -1,14 +1,10 @@
 package cn.ideabuffer.process;
 
-import cn.ideabuffer.process.nodes.*;
-import cn.ideabuffer.process.nodes.branch.BranchNode;
-import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
-import cn.ideabuffer.process.nodes.condition.IfConditionNode;
-import cn.ideabuffer.process.nodes.condition.WhileConditionNode;
+import cn.ideabuffer.process.nodes.AbstractExecutableNode;
+import cn.ideabuffer.process.nodes.BaseNode;
+import cn.ideabuffer.process.nodes.ExecutableNode;
 import cn.ideabuffer.process.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 /**
  * @author sangjian.sj
@@ -61,8 +57,12 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
 
         if (i >= nodes.length) {
             BaseNode<R> baseNode = define.getBaseNode();
-            if(baseNode != null) {
-                result = define.getBaseNode().invoke(current);
+            if (baseNode != null) {
+                try {
+                    result = define.getBaseNode().invoke(current);
+                } catch (Exception e) {
+                    exception = e;
+                }
             }
             i--;
         }

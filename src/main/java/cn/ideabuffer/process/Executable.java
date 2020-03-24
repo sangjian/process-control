@@ -14,23 +14,12 @@ import java.util.concurrent.Executor;
 public interface Executable {
 
     /**
-     * 表示流程为完成，将继续执行整个实例的下游节点
-     */
-    boolean CONTINUE_PROCESSING = false;
-
-    /**
-     * 表示流程已完成，不再执行整个实例的下游节点
-     */
-    boolean PROCESSING_COMPLETE = true;
-
-    /**
      * 根据上下文执行当前节点
      *
      * @param context 流程上下文
-     * @return <li>false: 继续执行整个实例的下游节点</li><li>true: 不再执行整个实例的下游节点</li>
+     * @return 状态
      * @throws Exception
-     * @see Executable#CONTINUE_PROCESSING
-     * @see Executable#PROCESSING_COMPLETE
+     * @see ProcessStatus
      */
     ProcessStatus execute(Context context) throws Exception;
 
