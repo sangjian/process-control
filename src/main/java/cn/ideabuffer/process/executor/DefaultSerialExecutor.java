@@ -3,6 +3,7 @@ package cn.ideabuffer.process.executor;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.nodes.ExecutableNode;
+import cn.ideabuffer.process.status.ProcessStatus;
 
 /**
  * @author sangjian.sj
@@ -11,19 +12,20 @@ import cn.ideabuffer.process.nodes.ExecutableNode;
 public class DefaultSerialExecutor implements SerialExecutor {
 
     @Override
-    public boolean execute(Context context, ExecutableNode... nodes) throws Exception {
+    public ProcessStatus execute(Context context, ExecutableNode... nodes) throws Exception {
         if (nodes == null || nodes.length == 0) {
-            return false;
+            return ProcessStatus.PROCEED;
         }
         BlockWrapper blockWrapper = new BlockWrapper(context.getBlock());
         for (ExecutableNode node : nodes) {
-            if (node.execute(context)) {
-                return true;
+            ProcessStatus status = node.execute(context);
+            if (ProcessStatus.isComplete(status)) {
+                return status;
             }
             if (blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
                 break;
             }
         }
-        return false;
+        return ProcessStatus.PROCEED;
     }
 }

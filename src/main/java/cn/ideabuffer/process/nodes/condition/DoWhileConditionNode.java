@@ -6,6 +6,7 @@ import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.rule.Rule;
+import cn.ideabuffer.process.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,17 +20,18 @@ public class DoWhileConditionNode extends WhileConditionNode {
     }
 
     @Override
-    public boolean doExecute(Context context) throws Exception {
+    public ProcessStatus doExecute(Context context) throws Exception {
         if (branch == null) {
-            return false;
+            return ProcessStatus.PROCEED;
         }
 
         Block doWhileBlock = new Block(true, true, context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(doWhileBlock);
         ContextWrapper doWhileContext = new ContextWrapper(context, doWhileBlock);
         while (true) {
-            if (branch.execute(doWhileContext)) {
-                return true;
+            ProcessStatus status = branch.execute(doWhileContext);
+            if (ProcessStatus.isComplete(status)) {
+                return status;
             }
             if (blockWrapper.hasBroken() || !getRule().match(context)) {
                 break;
@@ -38,6 +40,6 @@ public class DoWhileConditionNode extends WhileConditionNode {
             blockWrapper.resetContinue();
         }
 
-        return false;
+        return ProcessStatus.PROCEED;
     }
 }

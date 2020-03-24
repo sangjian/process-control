@@ -3,6 +3,7 @@ package cn.ideabuffer.process.test.nodes.whiles;
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
+import cn.ideabuffer.process.status.ProcessStatus;
 
 /**
  * @author sangjian.sj
@@ -10,7 +11,7 @@ import cn.ideabuffer.process.nodes.AbstractExecutableNode;
  */
 public class TestWhileNode3 extends AbstractExecutableNode {
     @Override
-    public boolean doExecute(Context context) throws Exception {
+    public ProcessStatus doExecute(Context context) throws Exception {
         Block block = context.getBlock();
         int k = block.get("k", 0);
         block.put("k", ++k);
@@ -20,6 +21,6 @@ public class TestWhileNode3 extends AbstractExecutableNode {
         }
         logger.info("k = " + k);
         Thread.sleep(1000);
-        return false;
+        return ProcessStatus.PROCEED;
     }
 }

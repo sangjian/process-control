@@ -1,6 +1,7 @@
 package cn.ideabuffer.process;
 
 import cn.ideabuffer.process.handler.ExceptionHandler;
+import cn.ideabuffer.process.status.ProcessStatus;
 
 import java.util.concurrent.Executor;
 
@@ -31,7 +32,7 @@ public interface Executable {
      * @see Executable#CONTINUE_PROCESSING
      * @see Executable#PROCESSING_COMPLETE
      */
-    boolean execute(Context context) throws Exception;
+    ProcessStatus execute(Context context) throws Exception;
 
     /**
      * 设置异常处理器

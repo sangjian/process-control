@@ -1,82 +1,37 @@
 package cn.ideabuffer.process;
 
-import cn.ideabuffer.process.nodes.AbstractExecutableNode;
-import cn.ideabuffer.process.nodes.AggregatableNode;
-import cn.ideabuffer.process.nodes.ExecutableNode;
-import cn.ideabuffer.process.nodes.NodeGroup;
+import cn.ideabuffer.process.nodes.*;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.nodes.condition.WhileConditionNode;
+import cn.ideabuffer.process.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class DefaultProcessInstance extends AbstractExecutableNode implements ProcessInstance {
+public class DefaultProcessInstance<R> extends AbstractExecutableNode implements ProcessInstance<R> {
 
-    private Node[] nodes = new Node[0];
+    private ProcessDefine<R> define;
 
-    private volatile boolean running;
+    private R result = null;
 
-    private ProcessInstance addNode(Node node) {
-        if (node == null) {
-            throw new IllegalArgumentException();
-        }
-        if (running) {
-            throw new IllegalStateException();
-        }
-        Node[] newArr = new Node[nodes.length + 1];
-        System.arraycopy(nodes, 0, newArr, 0, nodes.length);
-        newArr[nodes.length] = node;
-        nodes = newArr;
-        return this;
+    public DefaultProcessInstance(@NotNull ProcessDefine<R> define) {
+        this.define = define;
     }
 
     @Override
-    public ProcessInstance addProcessNode(@NotNull ExecutableNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessInstance addIf(@NotNull IfConditionNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessInstance addWhile(@NotNull WhileConditionNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessInstance addDoWhile(@NotNull DoWhileConditionNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessInstance addGroup(@NotNull NodeGroup group) {
-        return addNode(group);
-    }
-
-    @Override
-    public ProcessInstance addAggregateNode(@NotNull AggregatableNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessInstance addBranchNode(@NotNull BranchNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public boolean doExecute(Context context) throws Exception {
+    public ProcessStatus doExecute(Context context) throws Exception {
         Context current = context == null ? new DefaultContext() : context;
 
-        running = true;
         Exception exception = null;
 
-        boolean complete = false;
+        Node[] nodes = define.getNodes();
+        ProcessStatus status = ProcessStatus.PROCEED;
         int i;
         for (i = 0; i < nodes.length; i++) {
             Node node = nodes[i];
@@ -92,10 +47,8 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
                         ctx = new DefaultContext();
                         ctx.putAll(current);
                     }
-                    if (((ExecutableNode)node).execute(ctx)) {
-                        complete = true;
-                    }
-                    if (complete) {
+                    status = ((ExecutableNode)node).execute(ctx);
+                    if (ProcessStatus.isComplete(status)) {
                         break;
                     }
                 } catch (Exception e) {
@@ -107,6 +60,10 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
         }
 
         if (i >= nodes.length) {
+            BaseNode<R> baseNode = define.getBaseNode();
+            if(baseNode != null) {
+                result = define.getBaseNode().invoke(current);
+            }
             i--;
         }
 
@@ -114,11 +71,12 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
             throw exception;
         }
 
-        return complete;
+        return status;
     }
 
     private boolean postProcess(int i, Context context, Exception exception) {
         boolean processed = false;
+        Node[] nodes = define.getNodes();
         for (; i >= 0; i--) {
             Node node = nodes[i];
             if (!node.enabled()) {
@@ -143,4 +101,13 @@ public class DefaultProcessInstance extends AbstractExecutableNode implements Pr
         return true;
     }
 
+    @Override
+    public ProcessDefine<R> getProcessDefine() {
+        return define;
+    }
+
+    @Override
+    public R getResult() {
+        return result;
+    }
 }

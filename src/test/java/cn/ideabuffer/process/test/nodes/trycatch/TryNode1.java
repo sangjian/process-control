@@ -2,6 +2,7 @@ package cn.ideabuffer.process.test.nodes.trycatch;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
+import cn.ideabuffer.process.status.ProcessStatus;
 
 /**
  * @author sangjian.sj
@@ -10,8 +11,8 @@ import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 public class TryNode1 extends AbstractExecutableNode {
 
     @Override
-    public boolean doExecute(Context context) throws Exception {
+    public ProcessStatus doExecute(Context context) throws Exception {
         System.out.println("in TryNode1");
-        return false;
+        return ProcessStatus.PROCEED;
     }
 }

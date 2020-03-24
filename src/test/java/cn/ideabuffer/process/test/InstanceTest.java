@@ -1,12 +1,10 @@
 package cn.ideabuffer.process.test;
 
-import cn.ideabuffer.process.Context;
-import cn.ideabuffer.process.DefaultContext;
-import cn.ideabuffer.process.DefaultProcessInstance;
-import cn.ideabuffer.process.ProcessInstance;
+import cn.ideabuffer.process.*;
 import cn.ideabuffer.process.nodes.Nodes;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.Branches;
+import cn.ideabuffer.process.status.ProcessStatus;
 import cn.ideabuffer.process.test.nodes.*;
 import cn.ideabuffer.process.rule.Rules;
 import cn.ideabuffer.process.test.nodes.TestNode1;
@@ -28,56 +26,63 @@ public class InstanceTest {
 
     @Test
     public void testInstance() throws Exception {
-        ProcessInstance instance = new DefaultProcessInstance();
-        Context context = new DefaultContext();
-        context.put("k", 0);
-        instance
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        define
             .addProcessNode(new TestNode1())
             .addProcessNode(new TestNode2());
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        Context context = new DefaultContext();
+        context.put("k", 0);
+
         instance.execute(context);
     }
 
     @Test
     public void testBranch() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        ProcessInstance instance = new DefaultProcessInstance();
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        define
+            .addBranchNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
         Context context = new DefaultContext();
         context.put("k", 0);
-        instance
-            .addBranchNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
+
         instance.execute(context);
         Thread.sleep(10000);
     }
 
     @Test
     public void testIf() throws Exception {
-        ProcessInstance instance = new DefaultProcessInstance();
-        Context context = new DefaultContext();
-        context.put("k", 1);
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
         BranchNode trueBranch = Branches.newBranch(new TestNode1());
         BranchNode falseBranch = Branches.newBranch(new TestNode1());
-        instance.addIf(Nodes.newIf(ctx -> ctx.get("k", 0) < 5).then(trueBranch)
+        define.addIf(Nodes.newIf(ctx -> ctx.get("k", 0) < 5).then(trueBranch)
             .otherwise(falseBranch));
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        Context context = new DefaultContext();
+        context.put("k", 1);
+
         instance.execute(context);
     }
 
     @Test
     public void testWhile() throws Exception {
-        ProcessInstance instance = new DefaultProcessInstance();
-        Context context = new DefaultContext();
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
         TestWhileRule rule = new TestWhileRule();
-        instance.addWhile(Nodes.newWhile(rule)
+        define.addWhile(Nodes.newWhile(rule)
             .then(new TestWhileNode1(), new TestWhileNode2(),
                 new TestWhileNode3()));
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        Context context = new DefaultContext();
+
         instance.execute(context);
     }
 
     @Test
     public void testNesting() throws Exception {
-        ProcessInstance instance = new DefaultProcessInstance();
-        Context context = new DefaultContext();
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
         TestWhileRule rule = new TestWhileRule();
-        instance.addWhile(Nodes.newWhile((ctx) -> {
+        define.addWhile(Nodes.newWhile((ctx) -> {
             System.out.println("in while --");
             return true;
         }).then(
@@ -90,40 +95,51 @@ public class InstanceTest {
                         new TestNode1())
                         .end(),
                     new TestWhileNode3())));
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        Context context = new DefaultContext();
+
         instance.execute(context);
         Thread.sleep(10000);
     }
 
     @Test
     public void testAndRule() throws Exception {
-        ProcessInstance instance = new DefaultProcessInstance();
-        Context context = new DefaultContext();
-        instance.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestNode1())
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        define.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestNode1())
             .otherwise(new TestNode2()));
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        Context context = new DefaultContext();
+
         instance.execute(context);
     }
 
     @Test
     public void testOrRule() throws Exception {
-        ProcessInstance instance = new DefaultProcessInstance();
-        Context context = new DefaultContext();
-        instance.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1())
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        define.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1())
             .otherwise(new TestNode2()));
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        Context context = new DefaultContext();
+
         instance.execute(context);
     }
 
     @Test
     public void testNotRule() throws Exception {
-        ProcessInstance instance = new DefaultProcessInstance();
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        define.addIf(Nodes.newIf(Rules.not((ctx) -> true)).then(new TestNode1()).otherwise(new TestNode2()));
+
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
         Context context = new DefaultContext();
-        instance.addIf(Nodes.newIf(Rules.not((ctx) -> true)).then(new TestNode1()).otherwise(new TestNode2()));
+
         instance.execute(context);
     }
 
     @Test
     public void testSerial() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        ProcessInstance instance = new DefaultProcessInstance();
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
         Context context = new DefaultContext();
         context.put("k", 1);
         long start = System.currentTimeMillis();
@@ -132,21 +148,16 @@ public class InstanceTest {
     }
 
     @Test
-    public void testBlock() {
-        ProcessInstance instance = new DefaultProcessInstance();
-        Context context = new DefaultContext();
-        context.put("k", 1);
-
-    }
-
-    @Test
     public void testTryCatchFinally() throws Exception {
-        ProcessInstance instance = new DefaultProcessInstance();
-        Context context = new DefaultContext();
-        context.put("k", 1);
-        instance.addProcessNode(Nodes.newTry(new TryNode1(), new TryNode2())
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        define.addProcessNode(Nodes.newTry(new TryNode1(), new TryNode2())
             .catchOn(Exception.class, new CatchNode1(), new CatchNode2())
             .doFinally(new FinallyNode1(), new FinallyNode2()));
+
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        Context context = new DefaultContext();
+        context.put("k", 1);
+
         instance.execute(context);
     }
 
@@ -169,15 +180,23 @@ public class InstanceTest {
 
     @Test
     public void testSubChain() throws Exception {
-        ProcessInstance subInstance = new DefaultProcessInstance();
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
+
+        ProcessDefine<String> subDefine = new DefaultProcessDefine<>();
+        TestIfRule rule = new TestIfRule();
+        subDefine.addIf(Nodes.newIf(rule).then(new TestTrueBranch())
+            .otherwise(new TestFalseBranch()));
+        ProcessInstance<String> subInstance = new DefaultProcessInstance<>(subDefine);
+
+        define.addProcessNode(new TestNode1()).addProcessNode(subInstance).addProcessNode(new TestNode2());
+
         Context context = new DefaultContext();
         context.put("k", 1);
-        TestIfRule rule = new TestIfRule();
-        subInstance.addIf(Nodes.newIf(rule).then(new TestTrueBranch())
-            .otherwise(new TestFalseBranch()));
 
-        ProcessInstance mainInstance = new DefaultProcessInstance();
-        mainInstance.addProcessNode(new TestNode1()).addProcessNode(subInstance).addProcessNode(new TestNode2());
+
+
+        ProcessInstance<String> mainInstance = new DefaultProcessInstance<>(define);
+
 
         mainInstance.execute(context);
     }

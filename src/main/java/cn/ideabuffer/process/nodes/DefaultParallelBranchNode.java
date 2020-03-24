@@ -5,6 +5,7 @@ import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.rule.Rule;
+import cn.ideabuffer.process.status.ProcessStatus;
 import cn.ideabuffer.process.strategy.ProceedStrategies;
 import cn.ideabuffer.process.strategy.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
@@ -71,15 +72,15 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public ProcessStatus execute(Context context) throws Exception {
         if (branches == null) {
-            return false;
+            return ProcessStatus.PROCEED;
         }
         return doExecute(context);
     }
 
     @Override
-    protected boolean doExecute(Context context) throws Exception {
+    protected ProcessStatus doExecute(Context context) throws Exception {
         return PARALLEL_EXECUTOR.execute(getExecutor(), strategy, context, branches.toArray(new ExecutableNode[0]));
     }
 

@@ -2,6 +2,7 @@ package cn.ideabuffer.process.test.nodes;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
+import cn.ideabuffer.process.status.ProcessStatus;
 
 /**
  * @author sangjian.sj
@@ -15,10 +16,10 @@ public class TestGroupNode2 extends AbstractExecutableNode {
     }
 
     @Override
-    public boolean doExecute(Context context) throws Exception {
+    public ProcessStatus doExecute(Context context) throws Exception {
         Thread.sleep(3000);
         System.out.println(Thread.currentThread().getName() + "in testGroupNode2");
-        return false;
+        return ProcessStatus.PROCEED;
     }
 
 }

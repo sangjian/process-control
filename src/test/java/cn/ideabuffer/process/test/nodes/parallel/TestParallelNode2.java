@@ -2,6 +2,7 @@ package cn.ideabuffer.process.test.nodes.parallel;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
+import cn.ideabuffer.process.status.ProcessStatus;
 
 /**
  * @author sangjian.sj
@@ -10,9 +11,9 @@ import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 public class TestParallelNode2 extends AbstractExecutableNode {
 
     @Override
-    protected boolean doExecute(Context context) throws Exception {
+    protected ProcessStatus doExecute(Context context) throws Exception {
         logger.info("in TestParallelNode2");
         Thread.sleep(10000);
-        return false;
+        return ProcessStatus.PROCEED;
     }
 }

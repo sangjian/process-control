@@ -5,6 +5,7 @@ import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.nodes.TransmittableNode;
 import cn.ideabuffer.process.rule.Rule;
+import cn.ideabuffer.process.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
@@ -72,7 +73,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public ProcessStatus execute(Context context) throws Exception {
 
         Executor e = getExecutor() == null ? DEFAULT_POOL : getExecutor();
 
@@ -103,12 +104,12 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
         } else {
             task.run();
         }
-        return false;
+        return ProcessStatus.PROCEED;
     }
 
     @Override
-    protected final boolean doExecute(Context context) throws Exception {
-        return false;
+    protected final ProcessStatus doExecute(Context context) throws Exception {
+        return ProcessStatus.PROCEED;
     }
 
     protected abstract R doInvoke(Context context) throws Exception;

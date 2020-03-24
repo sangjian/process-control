@@ -4,6 +4,7 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
+import cn.ideabuffer.process.status.ProcessStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,31 +38,32 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
     }
 
     @Override
-    public boolean doExecute(Context context) throws Exception {
+    public ProcessStatus doExecute(Context context) throws Exception {
 
         preCheck();
 
         try {
             if (tryBranch == null) {
-                return false;
+                return ProcessStatus.PROCEED;
             }
             Block tryBlock = new Block(context.getBlock());
             ContextWrapper contextWrapper = new ContextWrapper(context, tryBlock);
             return tryBranch.execute(contextWrapper);
         } catch (Exception e) {
-            if (runCatchBranch(context, e)) {
-                return true;
+            ProcessStatus status = runCatchBranch(context, e);
+            if (ProcessStatus.isComplete(status)) {
+                return status;
             }
         } finally {
             runFinallyBranch(context);
         }
 
-        return false;
+        return ProcessStatus.PROCEED;
     }
 
-    private boolean runCatchBranch(Context context, Exception e) throws Exception {
+    private ProcessStatus runCatchBranch(Context context, Exception e) throws Exception {
         if (catchMap.isEmpty()) {
-            return false;
+            return ProcessStatus.PROCEED;
         }
         for (Map.Entry<Class<? extends Exception>, BranchNode> entry : catchMap.entrySet()) {
             Class<? extends Exception> expClass = entry.getKey();
@@ -72,12 +74,13 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
                 }
                 Block catchBlock = new Block(context.getBlock());
                 ContextWrapper contextWrapper = new ContextWrapper(context, catchBlock);
-                if (catchBranch.execute(contextWrapper)) {
-                    return true;
+                ProcessStatus status = catchBranch.execute(contextWrapper);
+                if (ProcessStatus.isComplete(status)) {
+                    return status;
                 }
             }
         }
-        return false;
+        return ProcessStatus.PROCEED;
     }
 
     private void runFinallyBranch(Context context) throws Exception {

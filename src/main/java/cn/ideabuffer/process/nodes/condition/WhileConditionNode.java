@@ -7,6 +7,7 @@ import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.rule.Rule;
+import cn.ideabuffer.process.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
@@ -46,7 +47,7 @@ public class WhileConditionNode extends AbstractExecutableNode {
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public ProcessStatus execute(Context context) throws Exception {
         if (getRule() == null) {
             throw new NullPointerException("rule can't be null");
         }
@@ -54,20 +55,21 @@ public class WhileConditionNode extends AbstractExecutableNode {
     }
 
     @Override
-    protected boolean doExecute(Context context) throws Exception {
+    protected ProcessStatus doExecute(Context context) throws Exception {
         if (branch == null) {
-            return false;
+            return ProcessStatus.PROCEED;
         }
 
         Block whileBlock = new Block(true, true, context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
         ContextWrapper whileContext = new ContextWrapper(context, whileBlock);
         if (!getRule().match(whileContext)) {
-            return false;
+            return ProcessStatus.PROCEED;
         }
         while (true) {
-            if (branch.execute(whileContext)) {
-                return true;
+            ProcessStatus status = branch.execute(whileContext);
+            if (ProcessStatus.isComplete(status)) {
+                return status;
             }
             if (blockWrapper.hasBroken()) {
                 break;
@@ -77,6 +79,6 @@ public class WhileConditionNode extends AbstractExecutableNode {
             blockWrapper.resetContinue();
         }
 
-        return false;
+        return ProcessStatus.PROCEED;
     }
 }

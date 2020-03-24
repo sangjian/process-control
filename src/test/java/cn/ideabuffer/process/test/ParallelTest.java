@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.test;
 
+import cn.ideabuffer.process.DefaultProcessDefine;
 import cn.ideabuffer.process.DefaultProcessInstance;
+import cn.ideabuffer.process.ProcessDefine;
 import cn.ideabuffer.process.ProcessInstance;
 import cn.ideabuffer.process.nodes.Nodes;
 import cn.ideabuffer.process.nodes.ParallelBranchNode;
@@ -17,10 +19,12 @@ public class ParallelTest {
 
     @Test
     public void testParallelNode() throws Exception {
-        ProcessInstance instance = new DefaultProcessInstance();
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
         ParallelBranchNode node = Nodes.newParallelBranchNode();
-        instance.addProcessNode(node.addBranch(new TestParallelNode1()).addBranch(new TestParallelNode2())
+        define.addProcessNode(node.addBranch(new TestParallelNode1()).addBranch(new TestParallelNode2())
             .proceedWhen(ProceedStrategies.ALL_PROCEEDED));
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+
         instance.execute(null);
     }
 

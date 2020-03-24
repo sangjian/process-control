@@ -6,6 +6,7 @@ import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.rule.Rule;
+import cn.ideabuffer.process.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
@@ -57,7 +58,7 @@ public class IfConditionNode extends AbstractExecutableNode {
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public ProcessStatus execute(Context context) throws Exception {
         if (getRule() == null) {
             throw new NullPointerException("rule can't be null");
         }
@@ -65,13 +66,13 @@ public class IfConditionNode extends AbstractExecutableNode {
     }
 
     @Override
-    protected boolean doExecute(Context context) throws Exception {
+    protected ProcessStatus doExecute(Context context) throws Exception {
 
         Block ifBlock = new Block(context.getBlock());
         ContextWrapper contextWrapper = new ContextWrapper(context, ifBlock);
         BranchNode branch = getRule().match(contextWrapper) ? trueBranch : falseBranch;
         if (branch == null) {
-            return false;
+            return ProcessStatus.PROCEED;
         }
         return branch.execute(contextWrapper);
     }

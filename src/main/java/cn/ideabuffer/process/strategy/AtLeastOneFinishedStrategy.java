@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.strategy;
 
+import cn.ideabuffer.process.status.ProcessStatus;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -10,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 public class AtLeastOneFinishedStrategy implements ProceedStrategy {
 
     @Override
-    public boolean proceed(List<CompletableFuture<Boolean>> futures) throws Exception {
+    public boolean proceed(List<CompletableFuture<ProcessStatus>> futures) throws Exception {
         if (futures == null || futures.isEmpty()) {
             return true;
         }

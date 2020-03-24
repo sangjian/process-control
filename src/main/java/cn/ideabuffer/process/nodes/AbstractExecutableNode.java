@@ -4,6 +4,7 @@ import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.Executable;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
+import cn.ideabuffer.process.status.ProcessStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,23 +105,23 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     }
 
     @Override
-    public boolean execute(Context context) throws Exception {
+    public ProcessStatus execute(Context context) throws Exception {
         if (!ruleCheck(context)) {
-            return false;
+            return ProcessStatus.PROCEED;
         }
 
         if (parallel) {
             doParallelExecute(context);
-            return false;
+            return ProcessStatus.PROCEED;
         }
 
         Exception exp = null;
 
         preExecute(context);
         try {
-            boolean result = doExecute(context);
+            ProcessStatus status = doExecute(context);
             postExecute(context);
-            return result;
+            return status;
         } catch (Exception e) {
             if (handler != null) {
                 handler.handle(e);
@@ -132,7 +133,7 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
             whenComplete(context, exp);
         }
 
-        return false;
+        return ProcessStatus.PROCEED;
     }
 
     private void doParallelExecute(Context context) {
@@ -166,7 +167,7 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
      * @see Executable#CONTINUE_PROCESSING
      * @see Executable#PROCESSING_COMPLETE
      */
-    protected abstract boolean doExecute(Context context) throws Exception;
+    protected abstract ProcessStatus doExecute(Context context) throws Exception;
 
     @Override
     public ExecutableNode exceptionHandler(ExceptionHandler handler) {

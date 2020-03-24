@@ -5,6 +5,7 @@ import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.nodes.ExecutableNode;
 import cn.ideabuffer.process.rule.Rule;
+import cn.ideabuffer.process.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class DefaultBranchNode extends AbstractExecutableNode implements BranchN
     }
 
     @Override
-    protected boolean doExecute(Context context) throws Exception {
+    protected ProcessStatus doExecute(Context context) throws Exception {
         return SERIAL_EXECUTOR.execute(context, this.nodes.toArray(new ExecutableNode[0]));
     }
 }
