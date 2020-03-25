@@ -14,13 +14,13 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class DefaultProcessDefine<R> implements ProcessDefine<R> {
+public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private Node[] nodes = new Node[0];
 
     private BaseNode<R> baseNode;
 
-    private ProcessDefine<R> addNode(Node node) {
+    private ProcessDefinition<R> addNode(Node node) {
         if (node == null) {
             throw new IllegalArgumentException();
         }
@@ -32,42 +32,42 @@ public class DefaultProcessDefine<R> implements ProcessDefine<R> {
     }
 
     @Override
-    public ProcessDefine<R> addProcessNode(@NotNull ExecutableNode node) {
+    public ProcessDefinition<R> addProcessNode(@NotNull ExecutableNode node) {
         return addNode(node);
     }
 
     @Override
-    public ProcessDefine<R> addIf(@NotNull IfConditionNode node) {
+    public ProcessDefinition<R> addIf(@NotNull IfConditionNode node) {
         return addNode(node);
     }
 
     @Override
-    public ProcessDefine<R> addWhile(@NotNull WhileConditionNode node) {
+    public ProcessDefinition<R> addWhile(@NotNull WhileConditionNode node) {
         return addNode(node);
     }
 
     @Override
-    public ProcessDefine<R> addDoWhile(@NotNull DoWhileConditionNode node) {
+    public ProcessDefinition<R> addDoWhile(@NotNull DoWhileConditionNode node) {
         return addNode(node);
     }
 
     @Override
-    public ProcessDefine<R> addGroup(@NotNull NodeGroup group) {
+    public ProcessDefinition<R> addGroup(@NotNull NodeGroup group) {
         return addNode(group);
     }
 
     @Override
-    public ProcessDefine<R> addAggregateNode(@NotNull AggregatableNode node) {
+    public ProcessDefinition<R> addAggregateNode(@NotNull AggregatableNode node) {
         return addNode(node);
     }
 
     @Override
-    public ProcessDefine<R> addBranchNode(@NotNull BranchNode node) {
+    public ProcessDefinition<R> addBranchNode(@NotNull BranchNode node) {
         return addNode(node);
     }
 
     @Override
-    public ProcessDefine<R> addBaseNode(@NotNull BaseNode<R> node) {
+    public ProcessDefinition<R> addBaseNode(@NotNull BaseNode<R> node) {
         this.baseNode = node;
         return this;
     }

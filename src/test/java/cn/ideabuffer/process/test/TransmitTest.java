@@ -12,7 +12,7 @@ public class TransmitTest {
 
     @Test
     public void testTransmitNode() throws Exception {
-        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         TestTransmittableNode node = new TestTransmittableNode();
         node.thenApply((ctx, r) -> {
             System.out.println(r);
@@ -21,8 +21,8 @@ public class TransmitTest {
             System.out.println(r);
             return r.length();
         }).thenAccept((ctx, r) -> System.out.println(r));
-        define.addProcessNode(node);
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        definition.addProcessNode(node);
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = new DefaultContext();
 
         instance.execute(context);

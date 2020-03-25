@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/03/24
  */
-public interface ProcessDefine<R> {
+public interface ProcessDefinition<R> {
 
     /**
      * 增加执行节点
@@ -22,7 +22,7 @@ public interface ProcessDefine<R> {
      * @param node 可执行节点
      * @return 当前实例
      */
-    ProcessDefine<R> addProcessNode(@NotNull ExecutableNode node);
+    ProcessDefinition<R> addProcessNode(@NotNull ExecutableNode node);
 
     /**
      * 增加if节点
@@ -30,7 +30,7 @@ public interface ProcessDefine<R> {
      * @param node 条件节点
      * @return 当前实例
      */
-    ProcessDefine<R> addIf(@NotNull IfConditionNode node);
+    ProcessDefinition<R> addIf(@NotNull IfConditionNode node);
 
     /**
      * 增加while节点
@@ -38,7 +38,7 @@ public interface ProcessDefine<R> {
      * @param node 条件节点
      * @return 当前实例
      */
-    ProcessDefine<R> addWhile(@NotNull WhileConditionNode node);
+    ProcessDefinition<R> addWhile(@NotNull WhileConditionNode node);
 
     /**
      * 增加dowhile节点
@@ -46,7 +46,7 @@ public interface ProcessDefine<R> {
      * @param node 条件节点
      * @return 当前实例
      */
-    ProcessDefine<R> addDoWhile(@NotNull DoWhileConditionNode node);
+    ProcessDefinition<R> addDoWhile(@NotNull DoWhileConditionNode node);
 
     /**
      * 增加节点组
@@ -54,7 +54,7 @@ public interface ProcessDefine<R> {
      * @param group 节点组
      * @return 当前实例
      */
-    ProcessDefine<R> addGroup(@NotNull NodeGroup group);
+    ProcessDefinition<R> addGroup(@NotNull NodeGroup group);
 
     /**
      * 增加聚合节点
@@ -62,7 +62,7 @@ public interface ProcessDefine<R> {
      * @param node 聚合节点
      * @return 当前实例
      */
-    ProcessDefine<R> addAggregateNode(@NotNull AggregatableNode node);
+    ProcessDefinition<R> addAggregateNode(@NotNull AggregatableNode node);
 
     /**
      * 增加分支节点
@@ -70,7 +70,7 @@ public interface ProcessDefine<R> {
      * @param node 分支节点
      * @return
      */
-    ProcessDefine<R> addBranchNode(@NotNull BranchNode node);
+    ProcessDefinition<R> addBranchNode(@NotNull BranchNode node);
 
     /**
      * 增加基础节点
@@ -78,7 +78,7 @@ public interface ProcessDefine<R> {
      * @return
      * @see BaseNode
      */
-    ProcessDefine<R> addBaseNode(@NotNull BaseNode<R> node);
+    ProcessDefinition<R> addBaseNode(@NotNull BaseNode<R> node);
 
     /**
      * 获取所有节点

@@ -6,7 +6,6 @@ import cn.ideabuffer.process.nodes.ExecutableNode;
 import cn.ideabuffer.process.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,12 +16,12 @@ import java.util.stream.Collectors;
  */
 public class DefaultProcessInstance<R> extends AbstractExecutableNode implements ProcessInstance<R> {
 
-    private ProcessDefine<R> define;
+    private ProcessDefinition<R> definition;
 
     private R result = null;
 
-    public DefaultProcessInstance(@NotNull ProcessDefine<R> define) {
-        this.define = define;
+    public DefaultProcessInstance(@NotNull ProcessDefinition<R> definition) {
+        this.definition = definition;
     }
 
     @Override
@@ -31,7 +30,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
 
         Exception exception = null;
 
-        Node[] nodes = define.getNodes();
+        Node[] nodes = definition.getNodes();
         ProcessStatus status = ProcessStatus.PROCEED;
         int i = 0;
         for (; i < nodes.length; i++) {
@@ -60,10 +59,10 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
 
         }
         if (i >= nodes.length) {
-            BaseNode<R> baseNode = define.getBaseNode();
+            BaseNode<R> baseNode = definition.getBaseNode();
             if (baseNode != null && baseNode.enabled()) {
                 try {
-                    result = define.getBaseNode().invoke(current);
+                    result = definition.getBaseNode().invoke(current);
                 } catch (Exception e) {
                     exception = e;
                 }
@@ -72,7 +71,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
         }
 
         List<Node> postNodeList = Arrays.stream(nodes).collect(Collectors.toList()).subList(0, ++i);
-        boolean baseProcessed = postProcess(define.getBaseNode(), context, exception);
+        boolean baseProcessed = postProcess(definition.getBaseNode(), context, exception);
         boolean chainProcessed = postProcess(postNodeList, current, exception);
 
         if(exception == null) {
@@ -119,8 +118,8 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
     }
 
     @Override
-    public ProcessDefine<R> getProcessDefine() {
-        return define;
+    public ProcessDefinition<R> getProcessDefinition() {
+        return definition;
     }
 
     @Override

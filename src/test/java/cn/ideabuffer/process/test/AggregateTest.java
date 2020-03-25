@@ -25,7 +25,7 @@ public class AggregateTest {
 
     @Test
     public void testAggregateList() throws Exception {
-        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
 
         AggregatableNode<List<String>> node = Nodes.newAggregatableNode();
         Executor executor = Executors.newFixedThreadPool(3);
@@ -39,9 +39,9 @@ public class AggregateTest {
             logger.info("result:{}", result);
             return null;
         }).thenAccept((ctx, result) -> logger.info("result:{}", result));
-        define.addAggregateNode(node);
+        definition.addAggregateNode(node);
 
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = new DefaultContext();
 
         instance.execute(context);
@@ -50,7 +50,7 @@ public class AggregateTest {
 
     @Test
     public void testIntSum() throws Exception {
-        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AggregatableNode<Integer> node = Nodes.newAggregatableNode();
         node.aggregator(Aggregators.newSerialAggregator(new IntSumMerger())).merge(new IntMergeableNode1(),
             new IntMergeableNode2())
@@ -58,9 +58,9 @@ public class AggregateTest {
                 System.out.println(result);
                 return result;
             }));
-        define.addAggregateNode(node);
+        definition.addAggregateNode(node);
 
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = new DefaultContext();
 
         instance.execute(context);
@@ -69,7 +69,7 @@ public class AggregateTest {
 
     @Test
     public void testIntAvg() throws Exception {
-        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AggregatableNode<Integer> node = Nodes.newAggregatableNode();
         node.aggregator(Aggregators.newSerialAggregator(new IntAvgMerger())).merge(new IntMergeableNode1(),
             new IntMergeableNode2())
@@ -77,9 +77,9 @@ public class AggregateTest {
                 System.out.println(result);
                 return result;
             }));
-        define.addAggregateNode(node);
+        definition.addAggregateNode(node);
 
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = new DefaultContext();
 
         instance.execute(context);
@@ -88,7 +88,7 @@ public class AggregateTest {
 
     @Test
     public void testDoubleSum() throws Exception {
-        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AggregatableNode<Double> node = Nodes.newAggregatableNode();
         node.aggregator(Aggregators.newSerialAggregator(new DoubleSumMerger())).merge(new DoubleMergeableNode1(),
             new DoubleMergeableNode2())
@@ -96,8 +96,8 @@ public class AggregateTest {
                 System.out.println(result);
                 return result;
             }));
-        define.addAggregateNode(node);
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        definition.addAggregateNode(node);
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = new DefaultContext();
 
         instance.execute(context);
@@ -106,7 +106,7 @@ public class AggregateTest {
 
     @Test
     public void testDoubleAvg() throws Exception {
-        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AggregatableNode<Double> node = Nodes.newAggregatableNode();
         node.aggregator(Aggregators.newSerialAggregator(new DoubleAvgMerger())).merge(new DoubleMergeableNode1(),
             new DoubleMergeableNode2())
@@ -114,8 +114,8 @@ public class AggregateTest {
                 System.out.println(result);
                 return result;
             }));
-        define.addAggregateNode(node);
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        definition.addAggregateNode(node);
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = new DefaultContext();
 
         instance.execute(context);
@@ -124,7 +124,7 @@ public class AggregateTest {
 
     @Test
     public void testIntArray() throws Exception {
-        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AggregatableNode<int[]> node = Nodes.newAggregatableNode();
         node.aggregator(Aggregators.newSerialAggregator(new IntArrayMerger())).merge(new IntArrayMergeableNode1(),
             new IntArrayMergeableNode2())
@@ -132,8 +132,8 @@ public class AggregateTest {
                 Arrays.stream(result).forEach(System.out::println);
                 return result;
             }));
-        define.addAggregateNode(node);
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        definition.addAggregateNode(node);
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = new DefaultContext();
 
         instance.execute(context);
