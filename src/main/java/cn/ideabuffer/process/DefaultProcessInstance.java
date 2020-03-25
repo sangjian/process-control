@@ -6,6 +6,11 @@ import cn.ideabuffer.process.nodes.ExecutableNode;
 import cn.ideabuffer.process.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author sangjian.sj
  * @date 2020/01/18
@@ -28,8 +33,8 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
 
         Node[] nodes = define.getNodes();
         ProcessStatus status = ProcessStatus.PROCEED;
-        int i;
-        for (i = 0; i < nodes.length; i++) {
+        int i = 0;
+        for (; i < nodes.length; i++) {
             Node node = nodes[i];
 
             if (!node.enabled()) {
@@ -54,10 +59,9 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
             }
 
         }
-
         if (i >= nodes.length) {
             BaseNode<R> baseNode = define.getBaseNode();
-            if (baseNode != null) {
+            if (baseNode != null && baseNode.enabled()) {
                 try {
                     result = define.getBaseNode().invoke(current);
                 } catch (Exception e) {
@@ -67,30 +71,43 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
             i--;
         }
 
-        if (exception != null && !postProcess(i, current, exception)) {
+        List<Node> postNodeList = Arrays.stream(nodes).collect(Collectors.toList()).subList(0, ++i);
+        boolean baseProcessed = postProcess(define.getBaseNode(), context, exception);
+        boolean chainProcessed = postProcess(postNodeList, current, exception);
+
+        if(exception == null) {
+            return status;
+        }
+        if (baseProcessed || chainProcessed) {
             throw exception;
         }
 
         return status;
     }
 
-    private boolean postProcess(int i, Context context, Exception exception) {
-        boolean processed = false;
-        Node[] nodes = define.getNodes();
-        for (; i >= 0; i--) {
-            Node node = nodes[i];
+    private boolean postProcess(Node node, Context context, Exception exception) {
+        if(node == null) {
+            return false;
+        }
+        try {
             if (!node.enabled()) {
-                continue;
+                return false;
             }
             if (node instanceof PostProcessor) {
-                try {
-                    boolean result = ((PostProcessor)node).postProcess(context, exception);
-                    if (result) {
-                        processed = true;
-                    }
-                } catch (Exception e) {
-                    // do something...
-                }
+                return ((PostProcessor)node).postProcess(context, exception);
+            }
+
+        } catch (Exception e) {
+            // do something...
+        }
+        return false;
+    }
+
+    private boolean postProcess(List<Node> nodes, Context context, Exception exception) {
+        boolean processed = false;
+        for (int i = nodes.size() - 1; i >= 0; i--) {
+            if(postProcess(nodes.get(i), context, exception)) {
+                processed = true;
             }
         }
         return processed;

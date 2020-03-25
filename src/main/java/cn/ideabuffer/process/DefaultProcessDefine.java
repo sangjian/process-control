@@ -20,14 +20,9 @@ public class DefaultProcessDefine<R> implements ProcessDefine<R> {
 
     private BaseNode<R> baseNode;
 
-    private volatile boolean running;
-
     private ProcessDefine<R> addNode(Node node) {
         if (node == null) {
             throw new IllegalArgumentException();
-        }
-        if (running) {
-            throw new IllegalStateException();
         }
         Node[] newArr = new Node[nodes.length + 1];
         System.arraycopy(nodes, 0, newArr, 0, nodes.length);
@@ -77,6 +72,15 @@ public class DefaultProcessDefine<R> implements ProcessDefine<R> {
         return this;
     }
 
+    public void setNodes(@NotNull Node[] nodes) {
+        this.nodes = nodes;
+    }
+
+    public void setBaseNode(BaseNode<R> baseNode) {
+        this.baseNode = baseNode;
+    }
+
+    @NotNull
     @Override
     public Node[] getNodes() {
         return nodes;

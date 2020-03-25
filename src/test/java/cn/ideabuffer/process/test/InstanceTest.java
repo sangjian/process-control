@@ -38,6 +38,21 @@ public class InstanceTest {
     }
 
     @Test
+    public void testInstanceResult() throws Exception {
+        ProcessDefine<String> define = new DefaultProcessDefine<>();
+        define
+            .addProcessNode(new TestNode1())
+            .addProcessNode(new TestNode2())
+            .addBaseNode(new TestBaseNode());
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(define);
+        Context context = new DefaultContext();
+        context.put("k", 0);
+
+        instance.execute(context);
+        System.out.println(instance.getResult());
+    }
+
+    @Test
     public void testBranch() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         ProcessDefine<String> define = new DefaultProcessDefine<>();

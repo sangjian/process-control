@@ -38,8 +38,4 @@ public interface Context extends Map<Object, Object> {
      */
     <V> V get(Object key, V defaultValue);
 
-    <V> V getResult();
-
-    void setResult(Object result);
-
 }

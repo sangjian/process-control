@@ -8,9 +8,6 @@ import cn.ideabuffer.process.Node;
  */
 public abstract class AbstractNode implements Node {
 
-    public AbstractNode() {
-    }
-
     @Override
     public boolean enabled() {
         return true;

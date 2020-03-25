@@ -49,8 +49,8 @@ public class ProcessStatus implements Serializable {
         this.proceed = proceed;
     }
 
-    public ProcessStatus(boolean proceed, ProcessErrorCode errorCode) {
-        this.proceed = proceed;
+    public ProcessStatus(ProcessErrorCode errorCode) {
+        this.proceed = false;
         this.errorCode = errorCode;
     }
 
@@ -75,7 +75,7 @@ public class ProcessStatus implements Serializable {
      * @return
      */
     public static ProcessStatus completeWithError(ProcessErrorCode errorCode) {
-        return new ProcessStatus(false, errorCode);
+        return new ProcessStatus(errorCode);
     }
 
     /**
@@ -140,16 +140,6 @@ public class ProcessStatus implements Serializable {
 
     private static class InnerProcessStatus extends ProcessStatus {
         private static final long serialVersionUID = -9004945559952984969L;
-
-        @Override
-        public boolean isProceed() {
-            return false;
-        }
-
-        @Override
-        public boolean isComplete() {
-            return false;
-        }
 
         @Override
         public void setErrorCode(String code, String message) {

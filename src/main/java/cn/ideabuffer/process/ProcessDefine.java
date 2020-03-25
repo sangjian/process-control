@@ -72,9 +72,24 @@ public interface ProcessDefine<R> {
      */
     ProcessDefine<R> addBranchNode(@NotNull BranchNode node);
 
+    /**
+     * 增加基础节点
+     * @param node
+     * @return
+     * @see BaseNode
+     */
     ProcessDefine<R> addBaseNode(@NotNull BaseNode<R> node);
 
+    /**
+     * 获取所有节点
+     * @return
+     */
+    @NotNull
     Node[] getNodes();
 
+    /**
+     * 获取基础节点
+     * @return
+     */
     BaseNode<R> getBaseNode();
 }
