@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultContext extends ConcurrentHashMap<Object, Object> implements Context {
 
+    private static final long serialVersionUID = -6148096437439097786L;
     private Block block;
 
     public DefaultContext() {

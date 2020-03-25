@@ -77,7 +77,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
         if(exception == null) {
             return status;
         }
-        if (baseProcessed || chainProcessed) {
+        if (!baseProcessed && !chainProcessed) {
             throw exception;
         }
 

@@ -20,20 +20,26 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private BaseNode<R> baseNode;
 
-    private ProcessDefinition<R> addNode(Node node) {
-        if (node == null) {
+    private ProcessDefinition<R> addNode(Node... nodes) {
+        if (nodes == null) {
             throw new IllegalArgumentException();
         }
-        Node[] newArr = new Node[nodes.length + 1];
-        System.arraycopy(nodes, 0, newArr, 0, nodes.length);
-        newArr[nodes.length] = node;
-        nodes = newArr;
+        if(nodes.length == 0) {
+            return this;
+        }
+        int oldLen = this.nodes.length;
+        int newLen = this.nodes.length + nodes.length;
+        Node[] newArr = new Node[newLen];
+        System.arraycopy(this.nodes, 0, newArr, 0, this.nodes.length);
+        System.arraycopy(nodes, 0, newArr, oldLen, nodes.length);
+
+        this.nodes = newArr;
         return this;
     }
 
     @Override
-    public ProcessDefinition<R> addProcessNode(@NotNull ExecutableNode node) {
-        return addNode(node);
+    public ProcessDefinition<R> addProcessNode(@NotNull ExecutableNode... nodes) {
+        return addNode(nodes);
     }
 
     @Override
