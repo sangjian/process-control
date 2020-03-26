@@ -13,9 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultContext implements Context {
 
-    private static final long serialVersionUID = -6148096437439097786L;
     private Block block;
-
     private Map<ContextKey<?>, Object> params;
 
     public DefaultContext() {
@@ -37,12 +35,27 @@ public class DefaultContext implements Context {
     }
 
     @Override
-    public <V> void put(ContextKey<V> key, V value) {
-        params.put(key, value);
+    public <V> V put(@NotNull ContextKey<V> key, V value) {
+        Object v = params.put(key, value);
+        if(v == null) {
+            return null;
+        }
+        //noinspection unchecked
+        return (V)v;
     }
 
     @Override
-    public <V> V get(ContextKey<V> key) {
+    public <V> V putIfAbsent(@NotNull ContextKey<V> key, V value) {
+        Object v = params.putIfAbsent(key, value);
+        if (v == null) {
+            return null;
+        }
+        //noinspection unchecked
+        return (V)v;
+    }
+
+    @Override
+    public <V> V get(@NotNull ContextKey<V> key) {
         Object value = params.get(key);
         if (value == null) {
             return null;
@@ -52,7 +65,7 @@ public class DefaultContext implements Context {
     }
 
     @Override
-    public <V> V get(ContextKey<V> key, V defaultValue) {
+    public <V> V get(@NotNull ContextKey<V> key, V defaultValue) {
         V value = get(key);
         if (value == null) {
             return defaultValue;

@@ -20,7 +20,9 @@ public interface Context {
      */
     Block getBlock();
 
-    <V> void put(ContextKey<V> key, V value);
+    <V> V put(@NotNull ContextKey<V> key, V value);
+
+    <V> V putIfAbsent(@NotNull ContextKey<V> key, V value);
 
     /**
      * 获取指定类型的值
@@ -29,7 +31,7 @@ public interface Context {
      * @param <V> 返回值类型
      * @return
      */
-    <V> V get(ContextKey<V> key);
+    <V> V get(@NotNull ContextKey<V> key);
 
     /**
      * 获取指定key的值，如果为null，则取默认值
@@ -39,7 +41,7 @@ public interface Context {
      * @param <V>          返回值类型
      * @return
      */
-    <V> V get(ContextKey<V> key, V defaultValue);
+    <V> V get(@NotNull ContextKey<V> key, V defaultValue);
 
     Map<ContextKey<?>, Object> getParams();
 

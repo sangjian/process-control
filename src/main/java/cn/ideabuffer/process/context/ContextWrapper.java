@@ -26,13 +26,16 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public <V> void put(ContextKey<V> key, V value) {context.put(key, value);}
+    public <V> V put(@NotNull ContextKey<V> key, V value) {return context.put(key, value);}
 
     @Override
-    public <V> V get(ContextKey<V> key) {return context.get(key);}
+    public <V> V putIfAbsent(@NotNull ContextKey<V> key, V value) {return context.putIfAbsent(key, value);}
 
     @Override
-    public <V> V get(ContextKey<V> key, V defaultValue) {return context.get(key, defaultValue);}
+    public <V> V get(@NotNull ContextKey<V> key) {return context.get(key);}
+
+    @Override
+    public <V> V get(@NotNull ContextKey<V> key, V defaultValue) {return context.get(key, defaultValue);}
 
     @Override
     public Map<ContextKey<?>, Object> getParams() {return context.getParams();}

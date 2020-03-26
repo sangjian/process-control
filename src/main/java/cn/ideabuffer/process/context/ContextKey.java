@@ -19,6 +19,14 @@ public class ContextKey<V> {
         this.valueType = valueType;
     }
 
+    public Object getKey() {
+        return key;
+    }
+
+    public Class<V> getValueType() {
+        return valueType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
