@@ -26,19 +26,19 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public <V> V put(@NotNull ContextKey<V> key, V value) {return context.put(key, value);}
+    public <V> V put(@NotNull Key<V> key, V value) {return context.put(key, value);}
 
     @Override
-    public <V> V putIfAbsent(@NotNull ContextKey<V> key, V value) {return context.putIfAbsent(key, value);}
+    public <V> V putIfAbsent(@NotNull Key<V> key, V value) {return context.putIfAbsent(key, value);}
 
     @Override
-    public <V> V get(@NotNull ContextKey<V> key) {return context.get(key);}
+    public <V> V get(@NotNull Key<V> key) {return context.get(key);}
 
     @Override
-    public <V> V get(@NotNull ContextKey<V> key, V defaultValue) {return context.get(key, defaultValue);}
+    public <V> V get(@NotNull Key<V> key, V defaultValue) {return context.get(key, defaultValue);}
 
     @Override
-    public Map<ContextKey<?>, Object> getParams() {return context.getParams();}
+    public Map<Key<?>, Object> getParams() {return context.getParams();}
 
     @Override
     public int size() {return context.size();}
@@ -47,17 +47,17 @@ public class ContextWrapper implements Context {
     public boolean isEmpty() {return context.isEmpty();}
 
     @Override
-    public <V> boolean containsKey(ContextKey<V> key) {return context.containsKey(key);}
+    public <V> boolean containsKey(Key<V> key) {return context.containsKey(key);}
 
     @Override
     public boolean containsValue(Object value) {return context.containsValue(value);}
 
     @Override
-    public <V> V remove(ContextKey<V> key) {return context.remove(key);}
+    public <V> V remove(Key<V> key) {return context.remove(key);}
 
     @Override
     public void putAll(
-        @NotNull Map<? extends ContextKey<?>, ?> params) {context.putAll(params);}
+        @NotNull Map<? extends Key<?>, ?> params) {context.putAll(params);}
 
     @Override
     public void clear() {context.clear();}

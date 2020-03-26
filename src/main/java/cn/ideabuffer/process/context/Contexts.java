@@ -15,8 +15,8 @@ public class Contexts {
         return new DefaultContext();
     }
 
-    public static <V> ContextKey<V> newKey(@NotNull Object key, @NotNull Class<V> valueType) {
-        return new ContextKey<>(key, valueType);
+    public static <V> Key<V> newKey(@NotNull Object key, @NotNull Class<V> valueType) {
+        return new Key<>(key, valueType);
     }
 
     public static Context clone(@NotNull Context context) {
@@ -27,7 +27,7 @@ public class Contexts {
         return new DefaultContext(context.getBlock(), context.getParams());
     }
 
-    public static Context of(@NotNull Map<ContextKey<?>, Object> map) {
+    public static Context of(@NotNull Map<Key<?>, Object> map) {
         return new DefaultContext(null, map);
     }
 
@@ -35,7 +35,7 @@ public class Contexts {
         return new DefaultContext(block);
     }
 
-    public static Context of(@NotNull Block block, @NotNull Map<ContextKey<?>, Object> map) {
+    public static Context of(@NotNull Block block, @NotNull Map<Key<?>, Object> map) {
         return new DefaultContext(block, map);
     }
 

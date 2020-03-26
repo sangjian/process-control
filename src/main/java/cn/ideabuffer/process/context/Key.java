@@ -8,13 +8,13 @@ import java.util.Objects;
  * @author sangjian.sj
  * @date 2020/03/26
  */
-public class ContextKey<V> {
+public class Key<V> {
 
     private Object key;
 
     private Class<V> valueType;
 
-    public ContextKey(@NotNull Object key, Class<V> valueType) {
+    public Key(@NotNull Object key, Class<V> valueType) {
         this.key = key;
         this.valueType = valueType;
     }
@@ -31,7 +31,7 @@ public class ContextKey<V> {
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
-        ContextKey<?> that = (ContextKey<?>)o;
+        Key<?> that = (Key<?>)o;
         return Objects.equals(key, that.key) &&
             Objects.equals(valueType, that.valueType);
     }

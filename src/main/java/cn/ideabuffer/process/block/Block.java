@@ -1,9 +1,9 @@
 package cn.ideabuffer.process.block;
 
 import cn.ideabuffer.process.context.Context;
+import cn.ideabuffer.process.context.ParameterImpl;
 
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 用于表示一组节点所在的范围，通过Context获取，同一block内，数据可共享，与当前context数据隔离
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2020/02/22
  * @see Context#getBlock()
  */
-public class Block extends ConcurrentHashMap<Object, Object> {
+public class Block extends ParameterImpl {
 
     private boolean breakable;
 
@@ -36,24 +36,6 @@ public class Block extends ConcurrentHashMap<Object, Object> {
         this.breakable = breakable;
         this.continuable = continuable;
         this.parent = parent;
-    }
-
-    public <V> V get(Object key, Class<V> valueType) {
-        Object value = get(key);
-        if (value == null) {
-            return null;
-        }
-        //noinspection unchecked
-        return (V)value;
-    }
-
-    public <V> V get(Object key, V defaultValue) {
-        Object value = get(key);
-        if (value == null) {
-            return defaultValue;
-        }
-        //noinspection unchecked
-        return (V)value;
     }
 
     public boolean allowBreak() {

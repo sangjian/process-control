@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.test.nodes;
 
 import cn.ideabuffer.process.context.Context;
+import cn.ideabuffer.process.context.Contexts;
+import cn.ideabuffer.process.context.Key;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.status.ProcessStatus;
 
@@ -12,7 +14,8 @@ public class TestBreakNode extends AbstractExecutableNode {
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         if (context.getBlock().allowBreak()) {
-            logger.info("start break, k = " + context.getBlock().get("k"));
+            Key<Integer> key = Contexts.newKey("k", int.class);
+            logger.info("start break, k = " + context.getBlock().get(key));
             context.getBlock().doBreak();
         }
         return ProcessStatus.PROCEED;
