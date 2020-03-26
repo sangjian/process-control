@@ -75,7 +75,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
         boolean baseProcessed = postProcess(definition.getBaseNode(), context, exception);
         boolean chainProcessed = postProcess(postNodeList, current, exception);
 
-        if(exception == null) {
+        if (exception == null) {
             return status;
         }
         if (!baseProcessed && !chainProcessed) {
@@ -86,7 +86,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
     }
 
     private boolean postProcess(Node node, Context context, Exception exception) {
-        if(node == null) {
+        if (node == null) {
             return false;
         }
         try {
@@ -106,7 +106,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
     private boolean postProcess(List<Node> nodes, Context context, Exception exception) {
         boolean processed = false;
         for (int i = nodes.size() - 1; i >= 0; i--) {
-            if(postProcess(nodes.get(i), context, exception)) {
+            if (postProcess(nodes.get(i), context, exception)) {
                 processed = true;
             }
         }

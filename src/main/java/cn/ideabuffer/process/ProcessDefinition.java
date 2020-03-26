@@ -74,6 +74,7 @@ public interface ProcessDefinition<R> {
 
     /**
      * 增加基础节点
+     *
      * @param node
      * @return
      * @see BaseNode
@@ -82,6 +83,7 @@ public interface ProcessDefinition<R> {
 
     /**
      * 获取所有节点
+     *
      * @return
      */
     @NotNull
@@ -89,6 +91,7 @@ public interface ProcessDefinition<R> {
 
     /**
      * 获取基础节点
+     *
      * @return
      */
     BaseNode<R> getBaseNode();

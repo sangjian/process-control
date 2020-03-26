@@ -21,7 +21,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     private BaseNode<R> baseNode;
 
     private ProcessDefinition<R> addNode(@NotNull Node... nodes) {
-        if(nodes.length == 0) {
+        if (nodes.length == 0) {
             return this;
         }
         int oldLen = this.nodes.length;
@@ -75,22 +75,22 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         return this;
     }
 
-    public void setNodes(@NotNull Node[] nodes) {
-        this.nodes = nodes;
-    }
-
-    public void setBaseNode(BaseNode<R> baseNode) {
-        this.baseNode = baseNode;
-    }
-
     @NotNull
     @Override
     public Node[] getNodes() {
         return nodes;
     }
 
+    public void setNodes(@NotNull Node[] nodes) {
+        this.nodes = nodes;
+    }
+
     @Override
     public BaseNode<R> getBaseNode() {
         return baseNode;
+    }
+
+    public void setBaseNode(BaseNode<R> baseNode) {
+        this.baseNode = baseNode;
     }
 }
