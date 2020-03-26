@@ -2,6 +2,7 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
+import cn.ideabuffer.process.Contexts;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.status.ProcessStatus;
@@ -15,7 +16,7 @@ public class NodeGroup extends DefaultBranchNode {
     @Override
     public ProcessStatus execute(Context context) throws Exception {
         Block block = new Block(context.getBlock());
-        ContextWrapper contextWrapper = new ContextWrapper(context, block);
+        ContextWrapper contextWrapper = Contexts.wrap(context, block);
         return super.execute(contextWrapper);
     }
 

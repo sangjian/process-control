@@ -2,6 +2,7 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
+import cn.ideabuffer.process.Contexts;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.status.ProcessStatus;
@@ -47,7 +48,7 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
                 return ProcessStatus.PROCEED;
             }
             Block tryBlock = new Block(context.getBlock());
-            ContextWrapper contextWrapper = new ContextWrapper(context, tryBlock);
+            ContextWrapper contextWrapper = Contexts.wrap(context, tryBlock);
             return tryBranch.execute(contextWrapper);
         } catch (Exception e) {
             ProcessStatus status = runCatchBranch(context, e);
@@ -73,7 +74,7 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
                     continue;
                 }
                 Block catchBlock = new Block(context.getBlock());
-                ContextWrapper contextWrapper = new ContextWrapper(context, catchBlock);
+                ContextWrapper contextWrapper = Contexts.wrap(context, catchBlock);
                 ProcessStatus status = catchBranch.execute(contextWrapper);
                 if (ProcessStatus.isComplete(status)) {
                     return status;
@@ -88,7 +89,7 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
             return;
         }
         Block finallyBlock = new Block(context.getBlock());
-        ContextWrapper contextWrapper = new ContextWrapper(context, finallyBlock);
+        ContextWrapper contextWrapper = Contexts.wrap(context, finallyBlock);
         finallyBranch.execute(contextWrapper);
     }
 }

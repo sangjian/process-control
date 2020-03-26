@@ -26,7 +26,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
 
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
-        Context current = context == null ? new DefaultContext() : context;
+        Context current = context == null ? Contexts.newContext() : context;
 
         Exception exception = null;
 
@@ -44,8 +44,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
                 try {
                     Context ctx = current;
                     if (node instanceof ProcessInstance) {
-                        ctx = new DefaultContext();
-                        ctx.putAll(current);
+                        ctx = Contexts.clone(current);
                     }
                     status = ((ExecutableNode)node).execute(ctx);
                     if (ProcessStatus.isComplete(status)) {

@@ -2,6 +2,7 @@ package cn.ideabuffer.process;
 
 import cn.ideabuffer.process.block.Block;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,14 +16,22 @@ public class DefaultContext extends ConcurrentHashMap<Object, Object> implements
     private Block block;
 
     public DefaultContext() {
-        this(new Block());
+        this(null, null);
+    }
+
+    public DefaultContext(Map<?, ?> map) {
+        this(null, map);
     }
 
     public DefaultContext(Block block) {
-        if (block == null) {
-            throw new NullPointerException();
+        this(block, null);
+    }
+
+    public DefaultContext(Block block, Map<?, ?> map) {
+        this.block = block == null ? new Block() : block;
+        if(map != null) {
+            this.putAll(map);
         }
-        this.block = block;
     }
 
     @Override

@@ -23,7 +23,7 @@ public class TransmitTest {
         }).thenAccept((ctx, r) -> System.out.println(r));
         definition.addProcessNode(node);
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
     }

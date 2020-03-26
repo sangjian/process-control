@@ -42,7 +42,7 @@ public class AggregateTest {
         definition.addAggregateNode(node);
 
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
         //Thread.sleep(10000);
@@ -61,7 +61,7 @@ public class AggregateTest {
         definition.addAggregateNode(node);
 
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
         //Thread.sleep(10000);
@@ -80,7 +80,7 @@ public class AggregateTest {
         definition.addAggregateNode(node);
 
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
         //Thread.sleep(10000);
@@ -98,7 +98,7 @@ public class AggregateTest {
             }));
         definition.addAggregateNode(node);
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
         //Thread.sleep(10000);
@@ -116,7 +116,7 @@ public class AggregateTest {
             }));
         definition.addAggregateNode(node);
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
         //Thread.sleep(10000);
@@ -134,7 +134,7 @@ public class AggregateTest {
             }));
         definition.addAggregateNode(node);
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
         //Thread.sleep(10000);

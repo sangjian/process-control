@@ -21,7 +21,7 @@ public class BlockTest {
         definition.addProcessNode(new TestBlockNode1(), new TestBlockNode2());
 
         ProcessInstance<Void> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
         context.put("k", 50);
         instance.execute(context);
         logger.info("after execute, k:{}", context.get("k"));

@@ -2,6 +2,7 @@ package cn.ideabuffer.process.nodes.condition;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
+import cn.ideabuffer.process.Contexts;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
@@ -27,7 +28,7 @@ public class DoWhileConditionNode extends WhileConditionNode {
 
         Block doWhileBlock = new Block(true, true, context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(doWhileBlock);
-        ContextWrapper doWhileContext = new ContextWrapper(context, doWhileBlock);
+        ContextWrapper doWhileContext = Contexts.wrap(context, doWhileBlock);
         while (true) {
             ProcessStatus status = branch.execute(doWhileContext);
             if (ProcessStatus.isComplete(status)) {

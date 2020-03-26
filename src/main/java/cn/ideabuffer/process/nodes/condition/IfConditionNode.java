@@ -2,6 +2,7 @@ package cn.ideabuffer.process.nodes.condition;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
+import cn.ideabuffer.process.Contexts;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
@@ -69,7 +70,7 @@ public class IfConditionNode extends AbstractExecutableNode {
     protected ProcessStatus doExecute(Context context) throws Exception {
 
         Block ifBlock = new Block(context.getBlock());
-        ContextWrapper contextWrapper = new ContextWrapper(context, ifBlock);
+        ContextWrapper contextWrapper = Contexts.wrap(context, ifBlock);
         BranchNode branch = getRule().match(contextWrapper) ? trueBranch : falseBranch;
         if (branch == null) {
             return ProcessStatus.PROCEED;

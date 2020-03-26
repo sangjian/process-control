@@ -30,7 +30,7 @@ public class InstanceTest {
             .addProcessNode(new TestNode1())
             .addProcessNode(new TestNode2());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
         context.put("k", 0);
 
         instance.execute(context);
@@ -44,7 +44,7 @@ public class InstanceTest {
             .addProcessNode(new TestNode2())
             .addBaseNode(new TestBaseNode());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
         context.put("k", 0);
 
         instance.execute(context);
@@ -58,7 +58,7 @@ public class InstanceTest {
         definition
             .addBranchNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
         context.put("k", 0);
 
         instance.execute(context);
@@ -73,7 +73,7 @@ public class InstanceTest {
         definition.addIf(Nodes.newIf(ctx -> ctx.get("k", 0) < 5).then(trueBranch)
             .otherwise(falseBranch));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
         context.put("k", 1);
 
         instance.execute(context);
@@ -87,7 +87,7 @@ public class InstanceTest {
             .then(new TestWhileNode1(), new TestWhileNode2(),
                 new TestWhileNode3()));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
     }
@@ -110,7 +110,7 @@ public class InstanceTest {
                         .end(),
                     new TestWhileNode3())));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
         Thread.sleep(10000);
@@ -122,7 +122,7 @@ public class InstanceTest {
         definition.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestNode1())
             .otherwise(new TestNode2()));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
     }
@@ -133,7 +133,7 @@ public class InstanceTest {
         definition.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1())
             .otherwise(new TestNode2()));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
     }
@@ -144,7 +144,7 @@ public class InstanceTest {
         definition.addIf(Nodes.newIf(Rules.not((ctx) -> true)).then(new TestNode1()).otherwise(new TestNode2()));
 
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
 
         instance.execute(context);
     }
@@ -154,7 +154,7 @@ public class InstanceTest {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
         context.put("k", 1);
         long start = System.currentTimeMillis();
         instance.execute(context);
@@ -169,7 +169,7 @@ public class InstanceTest {
             .doFinally(new FinallyNode1(), new FinallyNode2()));
 
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
         context.put("k", 1);
 
         instance.execute(context);
@@ -204,7 +204,7 @@ public class InstanceTest {
 
         definition.addProcessNode(new TestNode1()).addProcessNode(subInstance).addProcessNode(new TestNode2());
 
-        Context context = new DefaultContext();
+        Context context = Contexts.newContext();
         context.put("k", 1);
 
 

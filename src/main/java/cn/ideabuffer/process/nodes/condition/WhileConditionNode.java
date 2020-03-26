@@ -2,6 +2,7 @@ package cn.ideabuffer.process.nodes.condition;
 
 import cn.ideabuffer.process.Context;
 import cn.ideabuffer.process.ContextWrapper;
+import cn.ideabuffer.process.Contexts;
 import cn.ideabuffer.process.block.Block;
 import cn.ideabuffer.process.block.BlockWrapper;
 import cn.ideabuffer.process.nodes.AbstractExecutableNode;
@@ -62,7 +63,7 @@ public class WhileConditionNode extends AbstractExecutableNode {
 
         Block whileBlock = new Block(true, true, context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
-        ContextWrapper whileContext = new ContextWrapper(context, whileBlock);
+        ContextWrapper whileContext = Contexts.wrap(context, whileBlock);
         if (!getRule().match(whileContext)) {
             return ProcessStatus.PROCEED;
         }
