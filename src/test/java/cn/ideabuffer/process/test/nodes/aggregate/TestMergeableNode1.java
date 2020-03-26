@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.test.nodes.aggregate;
 
-import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.context.Context;
 import cn.ideabuffer.process.nodes.AbstractMergeableNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

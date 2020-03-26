@@ -1,4 +1,4 @@
-package cn.ideabuffer.process;
+package cn.ideabuffer.process.context;
 
 import cn.ideabuffer.process.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -15,23 +15,27 @@ public class Contexts {
         return new DefaultContext();
     }
 
+    public static <V> ContextKey<V> newKey(@NotNull Object key, @NotNull Class<V> valueType) {
+        return new ContextKey<>(key, valueType);
+    }
+
     public static Context clone(@NotNull Context context) {
-        return new DefaultContext(context);
+        return new DefaultContext(null, context.getParams());
     }
 
     public static Context cloneWithBlock(@NotNull Context context) {
-        return new DefaultContext(context.getBlock(), context);
+        return new DefaultContext(context.getBlock(), context.getParams());
     }
 
-    public static Context of(@NotNull Map<?, ?> map) {
-        return new DefaultContext(map);
+    public static Context of(@NotNull Map<ContextKey<?>, Object> map) {
+        return new DefaultContext(null, map);
     }
 
     public static Context of(@NotNull Block block) {
         return new DefaultContext(block);
     }
 
-    public static Context of(@NotNull Block block, @NotNull Map<?, ?> map) {
+    public static Context of(@NotNull Block block, @NotNull Map<ContextKey<?>, Object> map) {
         return new DefaultContext(block, map);
     }
 

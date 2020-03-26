@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.nodes.transmitter;
 
-import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.context.Context;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;

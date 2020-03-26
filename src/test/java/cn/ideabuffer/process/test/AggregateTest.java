@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.test;
 
 import cn.ideabuffer.process.*;
+import cn.ideabuffer.process.context.Context;
+import cn.ideabuffer.process.context.Contexts;
 import cn.ideabuffer.process.nodes.AggregatableNode;
 import cn.ideabuffer.process.nodes.Nodes;
 import cn.ideabuffer.process.nodes.aggregate.Aggregators;

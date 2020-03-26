@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.nodes.aggregate;
 
-import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.context.Context;
 import cn.ideabuffer.process.nodes.MergeableNode;
 import cn.ideabuffer.process.nodes.merger.Merger;
 import org.jetbrains.annotations.NotNull;

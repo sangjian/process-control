@@ -1,6 +1,9 @@
 package cn.ideabuffer.process.test;
 
 import cn.ideabuffer.process.*;
+import cn.ideabuffer.process.context.Context;
+import cn.ideabuffer.process.context.ContextKey;
+import cn.ideabuffer.process.context.Contexts;
 import cn.ideabuffer.process.nodes.Nodes;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.Branches;
@@ -31,8 +34,10 @@ public class InstanceTest {
             .addProcessNode(new TestNode2());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
-        context.put("k", 0);
+        ContextKey<Integer> key = Contexts.newKey("k", int.class);
+        context.put(key, 0);
 
+        int s = context.get(key);
         instance.execute(context);
     }
 
@@ -45,7 +50,8 @@ public class InstanceTest {
             .addBaseNode(new TestBaseNode());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
-        context.put("k", 0);
+        ContextKey<Integer> key = Contexts.newKey("k", int.class);
+        context.put(key, 0);
 
         instance.execute(context);
         System.out.println(instance.getResult());
@@ -59,7 +65,8 @@ public class InstanceTest {
             .addBranchNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
-        context.put("k", 0);
+        ContextKey<Integer> key = Contexts.newKey("k", int.class);
+        context.put(key, 0);
 
         instance.execute(context);
         Thread.sleep(10000);
@@ -70,11 +77,12 @@ public class InstanceTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         BranchNode trueBranch = Branches.newBranch(new TestNode1());
         BranchNode falseBranch = Branches.newBranch(new TestNode1());
-        definition.addIf(Nodes.newIf(ctx -> ctx.get("k", 0) < 5).then(trueBranch)
+        ContextKey<Integer> key = Contexts.newKey("k", int.class);
+        definition.addIf(Nodes.newIf(ctx -> ctx.get(key, 0) < 5).then(trueBranch)
             .otherwise(falseBranch));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
-        context.put("k", 1);
+        context.put(key, 1);
 
         instance.execute(context);
     }
@@ -155,7 +163,8 @@ public class InstanceTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
-        context.put("k", 1);
+        ContextKey<Integer> key = Contexts.newKey("k", int.class);
+        context.put(key, 1);
         long start = System.currentTimeMillis();
         instance.execute(context);
         System.out.println("cost:" + (System.currentTimeMillis() - start) / 1000);
@@ -170,7 +179,8 @@ public class InstanceTest {
 
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
-        context.put("k", 1);
+        ContextKey<Integer> key = Contexts.newKey("k", int.class);
+        context.put(key, 1);
 
         instance.execute(context);
     }
@@ -205,7 +215,8 @@ public class InstanceTest {
         definition.addProcessNode(new TestNode1()).addProcessNode(subInstance).addProcessNode(new TestNode2());
 
         Context context = Contexts.newContext();
-        context.put("k", 1);
+        ContextKey<Integer> key = Contexts.newKey("k", int.class);
+        context.put(key, 1);
 
 
 

@@ -1,6 +1,9 @@
 package cn.ideabuffer.process.test;
 
 import cn.ideabuffer.process.*;
+import cn.ideabuffer.process.context.Context;
+import cn.ideabuffer.process.context.ContextKey;
+import cn.ideabuffer.process.context.Contexts;
 import cn.ideabuffer.process.test.nodes.TestBlockNode1;
 import cn.ideabuffer.process.test.nodes.TestBlockNode2;
 import org.junit.Test;
@@ -22,8 +25,9 @@ public class BlockTest {
 
         ProcessInstance<Void> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
-        context.put("k", 50);
+        ContextKey<Integer> key = Contexts.newKey("k", int.class);
+        context.put(key, 50);
         instance.execute(context);
-        logger.info("after execute, k:{}", context.get("k"));
+        logger.info("after execute, k:{}", context.get(key));
     }
 }

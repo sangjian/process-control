@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.test.nodes.ifs;
 
-import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.context.Context;
+import cn.ideabuffer.process.context.Contexts;
+import cn.ideabuffer.process.context.ContextKey;
 import cn.ideabuffer.process.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.status.ProcessStatus;
 
@@ -12,9 +14,10 @@ public class TestFalseBranch extends DefaultBranchNode {
 
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-        logger.info("in false branch, k:{}", context.get("k"));
-        context.put("k",11);
-        logger.info("in false branch, k:{}", context.get("k"));
+        ContextKey<Integer> key = Contexts.newKey("k", int.class);
+        logger.info("in false branch, k:{}", context.get(key));
+        context.put(key,11);
+        logger.info("in false branch, k:{}", context.get(key));
         super.execute(context);
         return ProcessStatus.PROCEED;
     }

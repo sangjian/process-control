@@ -1,5 +1,7 @@
 package cn.ideabuffer.process;
 
+import cn.ideabuffer.process.context.Context;
+
 /**
  * 可合并结果接口
  *

@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.nodes.transmitter;
 
-import cn.ideabuffer.process.Context;
+import cn.ideabuffer.process.context.Context;
 
 /**
  * @author sangjian.sj
