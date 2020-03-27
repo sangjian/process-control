@@ -27,7 +27,7 @@ public class DefaultAggregatableNode<R> extends AbstractTransmittableNode<R> imp
         this(null, null);
     }
 
-    public DefaultAggregatableNode(Aggregator aggregator) {
+    public DefaultAggregatableNode(Aggregator<R> aggregator) {
         this(aggregator, null);
     }
 
@@ -35,7 +35,7 @@ public class DefaultAggregatableNode<R> extends AbstractTransmittableNode<R> imp
         this(null, mergeableNodes);
     }
 
-    public DefaultAggregatableNode(Aggregator aggregator, List<MergeableNode<R>> mergeableNodes) {
+    public DefaultAggregatableNode(Aggregator<R> aggregator, List<MergeableNode<R>> mergeableNodes) {
         if (aggregator != null) {
             this.aggregator = aggregator;
         }
