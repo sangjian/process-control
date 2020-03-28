@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  */
 public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ParallelDistributeAggregator.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Executor executor;
     private Class<R> resultClass;

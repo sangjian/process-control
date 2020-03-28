@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.nodes.aggregate;
 
-import cn.ideabuffer.process.context.Context;
 import cn.ideabuffer.process.nodes.DistributeMergeableNode;
 
 import java.util.List;
@@ -11,6 +10,4 @@ import java.util.List;
  */
 public interface DistributeAggregator<R> extends Aggregator<List<DistributeMergeableNode<?, R>>, R> {
 
-    @Override
-    R aggregate(Context context, List<DistributeMergeableNode<?, R>> mergeableNodes) throws Exception;
 }
