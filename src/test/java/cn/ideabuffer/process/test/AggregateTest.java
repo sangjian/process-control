@@ -1,13 +1,19 @@
 package cn.ideabuffer.process.test;
 
-import cn.ideabuffer.process.*;
+import cn.ideabuffer.process.DefaultProcessDefinition;
+import cn.ideabuffer.process.DefaultProcessInstance;
+import cn.ideabuffer.process.ProcessDefinition;
+import cn.ideabuffer.process.ProcessInstance;
 import cn.ideabuffer.process.context.Context;
 import cn.ideabuffer.process.context.Contexts;
-import cn.ideabuffer.process.nodes.AggregatableNode;
+import cn.ideabuffer.process.nodes.DistributeAggregatableNode;
 import cn.ideabuffer.process.nodes.Nodes;
+import cn.ideabuffer.process.nodes.UnitAggregatableNode;
 import cn.ideabuffer.process.nodes.aggregate.Aggregators;
-import cn.ideabuffer.process.test.nodes.aggregate.*;
+import cn.ideabuffer.process.nodes.aggregate.DefaultDistributeAggregatableNode;
+import cn.ideabuffer.process.nodes.aggregate.DistributeAggregator;
 import cn.ideabuffer.process.nodes.merger.*;
+import cn.ideabuffer.process.test.nodes.aggregate.*;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +35,10 @@ public class AggregateTest {
     public void testAggregateList() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
 
-        AggregatableNode<List<String>> node = Nodes.newAggregatableNode();
+        UnitAggregatableNode<List<String>> node = Nodes.newUnitAggregatableNode();
         Executor executor = Executors.newFixedThreadPool(3);
 
-        node.aggregator(Aggregators.newParallelAggregator(executor, new ArrayListMerger<>())).merge(
+        node.aggregator(Aggregators.newParallelUnitAggregator(executor, new ArrayListMerger<>())).aggregate(
             new TestMergeableNode1(), new TestMergeableNode2())
             .thenApply(((ctx, result) -> {
                 logger.info("result:{}", result);
@@ -53,8 +59,8 @@ public class AggregateTest {
     @Test
     public void testIntSum() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        AggregatableNode<Integer> node = Nodes.newAggregatableNode();
-        node.aggregator(Aggregators.newSerialAggregator(new IntSumMerger())).merge(new IntMergeableNode1(),
+        UnitAggregatableNode<Integer> node = Nodes.newUnitAggregatableNode();
+        node.aggregator(Aggregators.newSerialUnitAggregator(new IntSumMerger())).aggregate(new IntMergeableNode1(),
             new IntMergeableNode2())
             .thenApply(((ctx, result) -> {
                 System.out.println(result);
@@ -72,8 +78,8 @@ public class AggregateTest {
     @Test
     public void testIntAvg() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        AggregatableNode<Integer> node = Nodes.newAggregatableNode();
-        node.aggregator(Aggregators.newSerialAggregator(new IntAvgMerger())).merge(new IntMergeableNode1(),
+        UnitAggregatableNode<Integer> node = Nodes.newUnitAggregatableNode();
+        node.aggregator(Aggregators.newSerialUnitAggregator(new IntAvgMerger())).aggregate(new IntMergeableNode1(),
             new IntMergeableNode2())
             .thenApply(((ctx, result) -> {
                 System.out.println(result);
@@ -91,8 +97,9 @@ public class AggregateTest {
     @Test
     public void testDoubleSum() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        AggregatableNode<Double> node = Nodes.newAggregatableNode();
-        node.aggregator(Aggregators.newSerialAggregator(new DoubleSumMerger())).merge(new DoubleMergeableNode1(),
+        UnitAggregatableNode<Double> node = Nodes.newUnitAggregatableNode();
+        node.aggregator(Aggregators.newSerialUnitAggregator(new DoubleSumMerger())).aggregate(
+            new DoubleMergeableNode1(),
             new DoubleMergeableNode2())
             .thenApply(((ctx, result) -> {
                 System.out.println(result);
@@ -109,8 +116,9 @@ public class AggregateTest {
     @Test
     public void testDoubleAvg() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        AggregatableNode<Double> node = Nodes.newAggregatableNode();
-        node.aggregator(Aggregators.newSerialAggregator(new DoubleAvgMerger())).merge(new DoubleMergeableNode1(),
+        UnitAggregatableNode<Double> node = Nodes.newUnitAggregatableNode();
+        node.aggregator(Aggregators.newSerialUnitAggregator(new DoubleAvgMerger())).aggregate(
+            new DoubleMergeableNode1(),
             new DoubleMergeableNode2())
             .thenApply(((ctx, result) -> {
                 System.out.println(result);
@@ -127,8 +135,9 @@ public class AggregateTest {
     @Test
     public void testIntArray() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        AggregatableNode<int[]> node = Nodes.newAggregatableNode();
-        node.aggregator(Aggregators.newSerialAggregator(new IntArrayMerger())).merge(new IntArrayMergeableNode1(),
+        UnitAggregatableNode<int[]> node = Nodes.newUnitAggregatableNode();
+        node.aggregator(Aggregators.newSerialUnitAggregator(new IntArrayMerger())).aggregate(
+            new IntArrayMergeableNode1(),
             new IntArrayMergeableNode2())
             .thenApply(((ctx, result) -> {
                 Arrays.stream(result).forEach(System.out::println);
@@ -140,6 +149,26 @@ public class AggregateTest {
 
         instance.execute(context);
         //Thread.sleep(10000);
+    }
+
+    @Test
+    public void testDistributeAggregate() throws Exception {
+        Executor executor = Executors.newFixedThreadPool(3);
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        DistributeAggregator<Person> aggregator = Aggregators.newParallelDistributeAggregator(executor, Person.class);
+        DistributeAggregatableNode<Person> node = new DefaultDistributeAggregatableNode<>(aggregator);
+        node.aggregate(new TestDistributeMergeNode1(), new TestDistributeMergeNode2())
+            .thenApply((ctx, result) -> {
+                logger.info("age is : {}", result.getAge());
+                return result.getName();
+            })
+            .thenApply((ctx, result) -> {
+                logger.info("name is : {}", result);
+                return result;
+            });
+        definition.addAggregateNode(node);
+        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        instance.execute(null);
     }
 
 }

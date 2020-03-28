@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.nodes.aggregate;
 
-import cn.ideabuffer.process.nodes.merger.Merger;
+import cn.ideabuffer.process.nodes.merger.UnitMerger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
@@ -15,12 +15,18 @@ public class Aggregators {
         throw new IllegalStateException("Utility class");
     }
 
-    public static <R> Aggregator<R> newParallelAggregator(@NotNull Executor executor, @NotNull Merger<R> merger) {
-        return new ParallelAggregator<>(executor, merger);
+    public static <R> UnitAggregator<R> newParallelUnitAggregator(@NotNull Executor executor,
+        @NotNull UnitMerger<R> merger) {
+        return new ParallelUnitAggregator<>(executor, merger);
     }
 
-    public static <R> Aggregator<R> newSerialAggregator(@NotNull Merger<R> merger) {
-        return new SerialAggregator<>(merger);
+    public static <R> UnitAggregator<R> newSerialUnitAggregator(@NotNull UnitMerger<R> merger) {
+        return new SerialUnitAggregator<>(merger);
+    }
+
+    public static <R> DistributeAggregator<R> newParallelDistributeAggregator(@NotNull Executor executor,
+        @NotNull Class<R> resultClass) {
+        return new ParallelDistributeAggregator<>(executor, resultClass);
     }
 
 }

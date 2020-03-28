@@ -1,6 +1,9 @@
 package cn.ideabuffer.process.test;
 
-import cn.ideabuffer.process.*;
+import cn.ideabuffer.process.DefaultProcessDefinition;
+import cn.ideabuffer.process.DefaultProcessInstance;
+import cn.ideabuffer.process.ProcessDefinition;
+import cn.ideabuffer.process.ProcessInstance;
 import cn.ideabuffer.process.context.Context;
 import cn.ideabuffer.process.context.Contexts;
 import cn.ideabuffer.process.test.nodes.transmitter.TestTransmittableNode;

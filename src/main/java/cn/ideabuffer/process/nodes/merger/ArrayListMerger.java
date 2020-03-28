@@ -1,24 +1,14 @@
 package cn.ideabuffer.process.nodes.merger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
  * @date 2020/03/09
  */
 public class ArrayListMerger<T> implements ListMerger<T> {
-
-    @Override
-    public ArrayList<T> merge(List<T>... results) {
-        if (results == null) {
-            return new ArrayList<>();
-        }
-        return merge(Arrays.stream(results).collect(Collectors.toList()));
-    }
 
     @Override
     public ArrayList<T> merge(Collection<List<T>> results) {

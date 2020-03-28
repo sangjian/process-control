@@ -14,22 +14,26 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface AggregatableNode<R> extends TransmittableNode<R>, Parallelizable {
 
-    AggregatableNode<R> merge(@NotNull MergeableNode<R>... nodes);
+/**
+ * 可聚合结果的节点
+ *
+ * @param <N> 合并节点类型
+ * @param <R> 聚合结果类型
+ */
+public interface AggregatableNode<N extends MergeableNode<?>, R> extends TransmittableNode<R>, Parallelizable {
+
+    AggregatableNode<N, R> aggregate(@NotNull N... nodes);
 
     @Override
-    AggregatableNode<R> parallel();
+    AggregatableNode<N, R> parallel();
 
     @Override
-    AggregatableNode<R> parallel(Executor executor);
+    AggregatableNode<N, R> parallel(Executor executor);
 
     @Override
-    AggregatableNode<R> processOn(Rule rule);
+    AggregatableNode<N, R> processOn(Rule rule);
 
-    AggregatableNode<R> aggregator(@NotNull Aggregator<R> aggregator);
+    Aggregator<List<N>, R> getAggregator();
 
-    Aggregator<R> getAggregator();
-
-    List<MergeableNode<R>> getMergeableNodes();
 }

@@ -1,19 +1,28 @@
 package cn.ideabuffer.process.test;
 
-import cn.ideabuffer.process.*;
+import cn.ideabuffer.process.DefaultProcessDefinition;
+import cn.ideabuffer.process.DefaultProcessInstance;
+import cn.ideabuffer.process.ProcessDefinition;
+import cn.ideabuffer.process.ProcessInstance;
 import cn.ideabuffer.process.context.Context;
-import cn.ideabuffer.process.context.Key;
 import cn.ideabuffer.process.context.Contexts;
+import cn.ideabuffer.process.context.Key;
 import cn.ideabuffer.process.nodes.Nodes;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.Branches;
-import cn.ideabuffer.process.test.nodes.*;
 import cn.ideabuffer.process.rule.Rules;
+import cn.ideabuffer.process.test.nodes.TestBaseNode;
+import cn.ideabuffer.process.test.nodes.TestBreakNode;
 import cn.ideabuffer.process.test.nodes.TestNode1;
 import cn.ideabuffer.process.test.nodes.TestNode2;
-import cn.ideabuffer.process.test.nodes.ifs.*;
-import cn.ideabuffer.process.test.nodes.whiles.*;
+import cn.ideabuffer.process.test.nodes.ifs.TestFalseBranch;
+import cn.ideabuffer.process.test.nodes.ifs.TestIfRule;
+import cn.ideabuffer.process.test.nodes.ifs.TestTrueBranch;
 import cn.ideabuffer.process.test.nodes.trycatch.*;
+import cn.ideabuffer.process.test.nodes.whiles.TestWhileNode1;
+import cn.ideabuffer.process.test.nodes.whiles.TestWhileNode2;
+import cn.ideabuffer.process.test.nodes.whiles.TestWhileNode3;
+import cn.ideabuffer.process.test.nodes.whiles.TestWhileRule;
 import org.junit.Test;
 
 import java.util.concurrent.CompletableFuture;
@@ -218,10 +227,7 @@ public class InstanceTest {
         Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 1);
 
-
-
         ProcessInstance<String> mainInstance = new DefaultProcessInstance<>(definition);
-
 
         mainInstance.execute(context);
     }

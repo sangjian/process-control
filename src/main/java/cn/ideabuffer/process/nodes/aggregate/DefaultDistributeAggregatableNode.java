@@ -2,8 +2,8 @@ package cn.ideabuffer.process.nodes.aggregate;
 
 import cn.ideabuffer.process.context.Context;
 import cn.ideabuffer.process.handler.ExceptionHandler;
-import cn.ideabuffer.process.nodes.AggregatableNode;
-import cn.ideabuffer.process.nodes.MergeableNode;
+import cn.ideabuffer.process.nodes.DistributeAggregatableNode;
+import cn.ideabuffer.process.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.rule.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -17,74 +17,74 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public class DefaultAggregatableNode<R> extends AbstractTransmittableNode<R> implements AggregatableNode<R> {
+public class DefaultDistributeAggregatableNode<R> extends AbstractTransmittableNode<R> implements
+    DistributeAggregatableNode<R> {
 
-    private Aggregator<R> aggregator;
+    private DistributeAggregator<R> aggregator;
 
-    private List<MergeableNode<R>> mergeableNodes;
+    private List<DistributeMergeableNode<?, R>> mergeableNodes;
 
-    public DefaultAggregatableNode() {
+    public DefaultDistributeAggregatableNode() {
         this(null, null);
     }
 
-    public DefaultAggregatableNode(Aggregator<R> aggregator) {
+    public DefaultDistributeAggregatableNode(DistributeAggregator<R> aggregator) {
         this(aggregator, null);
     }
 
-    public DefaultAggregatableNode(List<MergeableNode<R>> mergeableNodes) {
+    public DefaultDistributeAggregatableNode(List<DistributeMergeableNode<?, R>> mergeableNodes) {
         this(null, mergeableNodes);
     }
 
-    public DefaultAggregatableNode(Aggregator<R> aggregator, List<MergeableNode<R>> mergeableNodes) {
-        if (aggregator != null) {
-            this.aggregator = aggregator;
-        }
+    public DefaultDistributeAggregatableNode(DistributeAggregator<R> aggregator,
+        List<DistributeMergeableNode<?, R>> mergeableNodes) {
+        this.aggregator = aggregator;
         this.mergeableNodes = mergeableNodes == null ? new ArrayList<>() : mergeableNodes;
     }
 
     @Override
-    public AggregatableNode<R> exceptionHandler(ExceptionHandler handler) {
+    public DistributeAggregatableNode<R> exceptionHandler(ExceptionHandler handler) {
         super.exceptionHandler(handler);
         return this;
     }
 
     @Override
-    public AggregatableNode<R> parallel() {
+    public DistributeAggregatableNode<R> parallel() {
         super.parallel();
         return this;
     }
 
     @Override
-    public AggregatableNode<R> parallel(Executor executor) {
+    public DistributeAggregatableNode<R> parallel(Executor executor) {
         super.parallel(executor);
         return this;
     }
 
     @Override
-    public AggregatableNode<R> processOn(Rule rule) {
+    public DistributeAggregatableNode<R> processOn(Rule rule) {
         super.processOn(rule);
         return this;
     }
 
     @Override
-    public AggregatableNode<R> merge(@NotNull MergeableNode<R>... nodes) {
+    public DistributeAggregatableNode<R> aggregate(@NotNull DistributeMergeableNode<?, R>... nodes) {
         this.mergeableNodes.addAll(Arrays.asList(nodes));
         return this;
     }
 
     @Override
-    public AggregatableNode<R> aggregator(@NotNull Aggregator<R> aggregator) {
+    public DistributeAggregatableNode<R> aggregator(@NotNull DistributeAggregator<R> aggregator) {
         this.aggregator = aggregator;
         return this;
     }
 
     @Override
-    public Aggregator<R> getAggregator() {
+    public DistributeAggregator<R> getAggregator() {
         return aggregator;
     }
 
     @Override
-    public List<MergeableNode<R>> getMergeableNodes() {
+    public List<DistributeMergeableNode<?, R>> getMergeableNodes() {
         return mergeableNodes;
     }
 

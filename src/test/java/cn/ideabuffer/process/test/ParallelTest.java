@@ -6,9 +6,9 @@ import cn.ideabuffer.process.ProcessDefinition;
 import cn.ideabuffer.process.ProcessInstance;
 import cn.ideabuffer.process.nodes.Nodes;
 import cn.ideabuffer.process.nodes.ParallelBranchNode;
+import cn.ideabuffer.process.strategy.ProceedStrategies;
 import cn.ideabuffer.process.test.nodes.parallel.TestParallelNode1;
 import cn.ideabuffer.process.test.nodes.parallel.TestParallelNode2;
-import cn.ideabuffer.process.strategy.ProceedStrategies;
 import org.junit.Test;
 
 /**

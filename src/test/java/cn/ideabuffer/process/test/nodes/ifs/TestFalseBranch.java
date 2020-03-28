@@ -16,7 +16,7 @@ public class TestFalseBranch extends DefaultBranchNode {
     public ProcessStatus execute(Context context) throws Exception {
         Key<Integer> key = Contexts.newKey("k", int.class);
         logger.info("in false branch, k:{}", context.get(key));
-        context.put(key,11);
+        context.put(key, 11);
         logger.info("in false branch, k:{}", context.get(key));
         super.execute(context);
         return ProcessStatus.PROCEED;

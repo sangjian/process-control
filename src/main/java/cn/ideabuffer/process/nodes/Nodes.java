@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.handler.ExceptionHandler;
-import cn.ideabuffer.process.nodes.aggregate.DefaultAggregatableNode;
+import cn.ideabuffer.process.nodes.aggregate.DefaultUnitAggregatableNode;
 import cn.ideabuffer.process.nodes.branch.BranchNode;
 import cn.ideabuffer.process.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.nodes.condition.DoWhileConditionNode;
@@ -54,8 +54,8 @@ public class Nodes {
         return new DefaultParallelBranchNode(true, rule, executor, handler);
     }
 
-    public static <R> AggregatableNode<R> newAggregatableNode() {
-        return new DefaultAggregatableNode<>();
+    public static <R> UnitAggregatableNode<R> newUnitAggregatableNode() {
+        return new DefaultUnitAggregatableNode<>();
     }
 
     public static IfWhen newIf(Rule rule) {

@@ -2,7 +2,7 @@ package cn.ideabuffer.process.nodes.aggregate;
 
 import cn.ideabuffer.process.context.Context;
 import cn.ideabuffer.process.nodes.MergeableNode;
-import cn.ideabuffer.process.nodes.merger.Merger;
+import cn.ideabuffer.process.nodes.merger.UnitMerger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -12,11 +12,11 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/03/09
  */
-public class SerialAggregator<R> implements Aggregator<R> {
+public class SerialUnitAggregator<R> implements UnitAggregator<R> {
 
-    private Merger<R> merger;
+    private UnitMerger<R> merger;
 
-    public SerialAggregator(@NotNull Merger<R> merger) {
+    public SerialUnitAggregator(@NotNull UnitMerger<R> merger) {
         this.merger = merger;
     }
 

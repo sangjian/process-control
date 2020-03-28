@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.nodes.merger;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -10,15 +9,7 @@ import java.util.stream.Collectors;
  * @author sangjian.sj
  * @date 2020/03/11
  */
-public class DoubleArrayMerger implements Merger<double[]> {
-
-    @Override
-    public double[] merge(double[]... results) {
-        if (results == null) {
-            return new double[0];
-        }
-        return merge(Arrays.stream(results).collect(Collectors.toList()));
-    }
+public class DoubleArrayMerger implements UnitMerger<double[]> {
 
     @Override
     public double[] merge(Collection<double[]> results) {

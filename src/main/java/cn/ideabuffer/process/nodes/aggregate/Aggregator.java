@@ -11,7 +11,7 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/03/08
  */
-public interface Aggregator<R> {
+public interface Aggregator<P extends List<? extends MergeableNode<?>>, R> {
 
     /**
      * 对可聚合的节点进行结果聚合，并返回聚合后的结果
@@ -21,6 +21,6 @@ public interface Aggregator<R> {
      * @return
      * @throws Exception
      */
-    R aggregate(Context context, List<MergeableNode<R>> nodes) throws Exception;
+    R aggregate(Context context, P nodes) throws Exception;
 
 }

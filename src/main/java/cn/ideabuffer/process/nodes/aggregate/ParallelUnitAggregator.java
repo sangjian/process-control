@@ -2,7 +2,7 @@ package cn.ideabuffer.process.nodes.aggregate;
 
 import cn.ideabuffer.process.context.Context;
 import cn.ideabuffer.process.nodes.MergeableNode;
-import cn.ideabuffer.process.nodes.merger.Merger;
+import cn.ideabuffer.process.nodes.merger.UnitMerger;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +19,14 @@ import java.util.function.Supplier;
  * @author sangjian.sj
  * @date 2020/03/08
  */
-public class ParallelAggregator<R> implements Aggregator<R> {
+public class ParallelUnitAggregator<R> implements UnitAggregator<R> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ParallelAggregator.class);
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Executor executor;
-    private Merger<R> merger;
+    private UnitMerger<R> merger;
 
-    public ParallelAggregator(@NotNull Executor executor, @NotNull Merger<R> merger) {
+    public ParallelUnitAggregator(@NotNull Executor executor, @NotNull UnitMerger<R> merger) {
         this.executor = executor;
         this.merger = merger;
     }
@@ -59,7 +59,7 @@ public class ParallelAggregator<R> implements Aggregator<R> {
         return merger.merge(results);
     }
 
-    class InvokeSupplier<V> implements Supplier<V> {
+    private class InvokeSupplier<V> implements Supplier<V> {
 
         private MergeableNode<V> node;
 

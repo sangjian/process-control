@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.nodes.merger;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -10,15 +9,7 @@ import java.util.stream.Collectors;
  * @author sangjian.sj
  * @date 2020/03/11
  */
-public class CharArrayMerger implements Merger<long[]> {
-
-    @Override
-    public long[] merge(long[]... results) {
-        if (results == null) {
-            return new long[0];
-        }
-        return merge(Arrays.stream(results).collect(Collectors.toList()));
-    }
+public class CharArrayMerger implements UnitMerger<long[]> {
 
     @Override
     public long[] merge(Collection<long[]> results) {
