@@ -19,7 +19,7 @@ public interface ProcessDefinition<R> {
     /**
      * 增加执行节点
      *
-     * @param node 可执行节点
+     * @param nodes 可执行节点
      * @return 当前实例
      */
     ProcessDefinition<R> addProcessNode(@NotNull ExecutableNode... nodes);

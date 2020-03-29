@@ -1,5 +1,7 @@
 package cn.ideabuffer.process;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 分布式合并结果接口
  *
@@ -8,6 +10,6 @@ package cn.ideabuffer.process;
  */
 public interface DistributeMergeable<T, R> extends Mergeable<T> {
 
-    R merge(T t, R r);
+    R merge(T t, @NotNull R r);
 
 }

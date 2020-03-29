@@ -14,6 +14,7 @@ public interface Merger<P, R> {
 
     /**
      * 结果合并
+     *
      * @param results 待合并的结果集合
      * @return 合并结果
      */

@@ -20,8 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * @author sangjian.sj
@@ -45,7 +44,7 @@ public class AggregateTest {
                 return result.size();
             })).thenApplyAsync((ctx, result) -> {
             logger.info("result:{}", result);
-            return null;
+            return result;
         }).thenAccept((ctx, result) -> logger.info("result:{}", result));
         definition.addAggregateNode(node);
 
@@ -169,6 +168,18 @@ public class AggregateTest {
         definition.addAggregateNode(node);
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         instance.execute(null);
+    }
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException, TimeoutException {
+        logger.info("ehhehehe");
+        Future<String> future = new FutureTask<>(() -> {
+            logger.info("in thread:{}", Thread.currentThread().getName());
+            Thread.sleep(5000);
+            logger.info("in thread:{}", Thread.currentThread().getName());
+            return "hello";
+        });
+        ((FutureTask<String>)future).run();
+        logger.info(future.get(3, TimeUnit.SECONDS));
     }
 
 }

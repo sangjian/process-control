@@ -1,8 +1,10 @@
 package cn.ideabuffer.process.nodes.aggregate;
 
+import cn.ideabuffer.process.nodes.MergeableNode;
 import cn.ideabuffer.process.nodes.merger.UnitMerger;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 /**
@@ -27,6 +29,10 @@ public class Aggregators {
     public static <R> DistributeAggregator<R> newParallelDistributeAggregator(@NotNull Executor executor,
         @NotNull Class<R> resultClass) {
         return new ParallelDistributeAggregator<>(executor, resultClass);
+    }
+
+    public static long getMaxTimeout(@NotNull List<? extends MergeableNode<?>> nodes) {
+        return nodes.stream().mapToLong(MergeableNode::getTimeout).max().orElse(0);
     }
 
 }

@@ -2,6 +2,9 @@ package cn.ideabuffer.process.nodes;
 
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author sangjian.sj
@@ -22,4 +25,9 @@ public abstract class AbstractDistributeMergeableNode<T, R> extends AbstractMerg
         return this;
     }
 
+    @Override
+    public DistributeMergeableNode<T, R> timeout(long timeout, @NotNull TimeUnit unit) {
+        super.timeout(timeout, unit);
+        return this;
+    }
 }

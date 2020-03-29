@@ -19,7 +19,7 @@ public interface Aggregator<M extends List<? extends MergeableNode<?>>, R> {
      * 对可聚合的节点进行结果聚合，并返回聚合后的结果
      *
      * @param context 流程上下文
-     * @param nodes 可合并节点
+     * @param nodes   可合并节点
      * @return 聚合结果
      * @throws Exception
      */

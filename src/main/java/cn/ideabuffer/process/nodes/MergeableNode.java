@@ -5,6 +5,9 @@ import cn.ideabuffer.process.Mergeable;
 import cn.ideabuffer.process.Node;
 import cn.ideabuffer.process.handler.ExceptionHandler;
 import cn.ideabuffer.process.rule.Rule;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 可合并结果的节点
@@ -20,4 +23,8 @@ public interface MergeableNode<T> extends Node, Mergeable<T>, Matchable {
 
     @Override
     MergeableNode<T> processOn(Rule rule);
+
+    MergeableNode<T> timeout(long timeout, @NotNull TimeUnit unit);
+
+    long getTimeout();
 }
