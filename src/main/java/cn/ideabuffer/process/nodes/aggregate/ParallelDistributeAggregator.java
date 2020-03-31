@@ -52,7 +52,7 @@ public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> 
                 MergerNode<?, R> m = new MergerNode(node, v, result);
                 mergerNodes.offer(m);
             });
-            if(node.getTimeout() > 0) {
+            if (node.getTimeout() > 0) {
                 timeouts.add(f);
             } else {
                 normals.add(f);

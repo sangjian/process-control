@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.nodes.aggregate;
 
 import cn.ideabuffer.process.nodes.MergeableNode;
+import cn.ideabuffer.process.nodes.merger.Merger;
 import cn.ideabuffer.process.nodes.merger.UnitMerger;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,9 +18,18 @@ public class Aggregators {
         throw new IllegalStateException("Utility class");
     }
 
+    public static <I, O> GenericAggregator<I, O> newParallelGenericAggregator(@NotNull Executor executor,
+        @NotNull Merger<I, O> merger) {
+        return new ParallelGenericAggregator<>(executor, merger);
+    }
+
     public static <R> UnitAggregator<R> newParallelUnitAggregator(@NotNull Executor executor,
         @NotNull UnitMerger<R> merger) {
         return new ParallelUnitAggregator<>(executor, merger);
+    }
+
+    public static <I, O> GenericAggregator<I, O> newSerialGenericAggregator(@NotNull Merger<I, O> merger) {
+        return new SerialGenericAggregator<>(merger);
     }
 
     public static <R> UnitAggregator<R> newSerialUnitAggregator(@NotNull UnitMerger<R> merger) {
