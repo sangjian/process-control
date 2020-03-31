@@ -76,7 +76,7 @@ public class ParameterImpl implements Parameter {
     }
 
     @Override
-    public <V> boolean containsKey(Key<V> key) {
+    public boolean containsKey(Key<?> key) {
         return params.containsKey(key);
     }
 
@@ -87,7 +87,12 @@ public class ParameterImpl implements Parameter {
 
     @Override
     public <V> V remove(Key<V> key) {
-        return null;
+        Object v = params.remove(key);
+        if (v == null) {
+            return null;
+        }
+        //noinspection unchecked
+        return (V)v;
     }
 
     @Override

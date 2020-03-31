@@ -39,7 +39,7 @@ public interface Parameter {
 
     boolean isEmpty();
 
-    <V> boolean containsKey(Key<V> key);
+    boolean containsKey(Key<?> key);
 
     boolean containsValue(Object value);
 

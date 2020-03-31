@@ -47,7 +47,7 @@ public class ContextWrapper implements Context {
     public boolean isEmpty() {return context.isEmpty();}
 
     @Override
-    public <V> boolean containsKey(Key<V> key) {return context.containsKey(key);}
+    public boolean containsKey(Key<?> key) {return context.containsKey(key);}
 
     @Override
     public boolean containsValue(Object value) {return context.containsValue(value);}
