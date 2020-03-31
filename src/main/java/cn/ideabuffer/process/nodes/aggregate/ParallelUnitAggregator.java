@@ -36,33 +36,29 @@ public class ParallelUnitAggregator<R> implements UnitAggregator<R> {
 
         // 用于保存节点执行结果
         BlockingQueue<R> resultQueue = new LinkedBlockingQueue<>(nodes.size());
+        List<CompletableFuture<R>> timeouts = new LinkedList<>();
+        List<CompletableFuture<R>> normals = new LinkedList<>();
         // 保存节点执行结果，在所有节点执行完毕后，由resultQueue获取
         List<R> results = new LinkedList<>();
         // 节点如果有设置了超时时间，则获取最大的超时时间
         long maxTimeout = Aggregators.getMaxTimeout(nodes);
-        // 获取有超时控制的节点
-        CompletableFuture[] timeouts = nodes.stream().filter(n -> n.getTimeout() > 0).map(node -> {
-            CompletableFuture<R> f = getFuture(context, node);
-            f.thenAccept(r -> {
-                if (r != null) {
-                    resultQueue.offer(r);
-                }
-            });
-            return f;
-        }).toArray(CompletableFuture[]::new);
-        // 获取没有超时控制的节点
-        CompletableFuture[] normals = nodes.stream().filter(n -> n.getTimeout() <= 0).map(node -> {
-            CompletableFuture<R> f = getFuture(context, node);
-            f.thenAccept(r -> {
-                if (r != null) {
-                    resultQueue.offer(r);
-                }
-            });
-            return f;
-        }).toArray(CompletableFuture[]::new);
 
-        CompletableFuture<Void> allTimeouts = CompletableFuture.allOf(timeouts);
-        CompletableFuture<Void> allNormals = CompletableFuture.allOf(normals);
+        nodes.forEach(node -> {
+            CompletableFuture<R> f = getFuture(context, node);
+            f.thenAccept(r -> {
+                if (r != null) {
+                    resultQueue.offer(r);
+                }
+            });
+            if(node.getTimeout() > 0) {
+                timeouts.add(f);
+            } else {
+                normals.add(f);
+            }
+        });
+
+        CompletableFuture<Void> allTimeouts = CompletableFuture.allOf(timeouts.toArray(new CompletableFuture[0]));
+        CompletableFuture<Void> allNormals = CompletableFuture.allOf(normals.toArray(new CompletableFuture[0]));
         try {
             // 如果有超时控制，则等待最大的超时时间
             if (maxTimeout > 0) {
