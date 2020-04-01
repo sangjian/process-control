@@ -58,6 +58,7 @@ public class IfConditionNode extends AbstractExecutableNode {
         return true;
     }
 
+    @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
         if (getRule() == null) {

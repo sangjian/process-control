@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
 
@@ -22,6 +23,7 @@ public interface Executable {
      * @throws Exception
      * @see ProcessStatus
      */
+    @NotNull
     ProcessStatus execute(Context context) throws Exception;
 
     /**

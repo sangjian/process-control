@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.block.BlockWrapper;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -11,6 +12,7 @@ import cn.ideabuffer.process.core.nodes.ExecutableNode;
  */
 public class DefaultSerialExecutor implements SerialExecutor {
 
+    @NotNull
     @Override
     public ProcessStatus execute(Context context, ExecutableNode... nodes) throws Exception {
         if (nodes == null || nodes.length == 0) {

@@ -6,12 +6,14 @@ import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/20
  */
 public class TestWhileContinueNode3 extends AbstractExecutableNode {
+    @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
         Block block = context.getBlock();

@@ -47,6 +47,7 @@ public class WhileConditionNode extends AbstractExecutableNode {
         return true;
     }
 
+    @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
         if (getRule() == null) {
@@ -55,6 +56,7 @@ public class WhileConditionNode extends AbstractExecutableNode {
         return super.execute(context);
     }
 
+    @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         if (branch == null) {

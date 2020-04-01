@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.test.nodes;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -15,6 +16,7 @@ public class TestGroupNode2 extends AbstractExecutableNode {
         return true;
     }
 
+    @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
         Thread.sleep(3000);

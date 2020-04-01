@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,17 +28,15 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
         this.tryBranch = tryBranch;
         this.catchMap = catchMap;
         this.finallyBranch = finallyBranch;
-        if (this.catchMap == null) {
-            this.catchMap = new HashMap<>(4, 1);
-        }
     }
 
     private void preCheck() {
-        if (catchMap.isEmpty() && finallyBranch == null) {
+        if (catchMap == null && finallyBranch == null) {
             throw new RuntimeException("'catch' or 'finally' expected");
         }
     }
 
+    @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
 
@@ -63,7 +62,7 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
     }
 
     private ProcessStatus runCatchBranch(Context context, Exception e) throws Exception {
-        if (catchMap.isEmpty()) {
+        if (catchMap == null || catchMap.isEmpty()) {
             return ProcessStatus.PROCEED;
         }
         for (Map.Entry<Class<? extends Exception>, BranchNode> entry : catchMap.entrySet()) {

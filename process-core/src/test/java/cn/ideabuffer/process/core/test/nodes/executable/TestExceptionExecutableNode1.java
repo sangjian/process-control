@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.test.nodes;
+package cn.ideabuffer.process.core.test.nodes.executable;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -9,16 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
- * @date 2020/03/05
+ * @date 2020/04/01
  */
-public class TestNode1 extends AbstractExecutableNode {
+public class TestExceptionExecutableNode1 extends AbstractExecutableNode {
 
     @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         Key<Integer> key = Contexts.newKey("k", int.class);
-        logger.info("in testNode1, k:{}", context.get(key));
-        Thread.sleep(1000);
-        return ProcessStatus.PROCEED;
+        logger.info("in TestExceptionExecutableNode1, k:{}", context.get(key));
+        context.put(key, 5);
+        throw new RuntimeException("test exception!");
     }
 }

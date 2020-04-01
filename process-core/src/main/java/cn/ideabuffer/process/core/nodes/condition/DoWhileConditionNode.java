@@ -20,6 +20,7 @@ public class DoWhileConditionNode extends WhileConditionNode {
         super(rule, branch);
     }
 
+    @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
         if (branch == null) {

@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.nodes;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -13,7 +14,7 @@ public abstract class AbstractBaseNode<R> extends AbstractNode implements BaseNo
     private ExceptionHandler handler;
 
     @Override
-    public R invoke(Context context, ProcessStatus status) {
+    public R invoke(Context context, @NotNull ProcessStatus status) {
         try {
             return doInvoke(context, status);
         } catch (Exception e) {
@@ -24,7 +25,7 @@ public abstract class AbstractBaseNode<R> extends AbstractNode implements BaseNo
         return null;
     }
 
-    protected abstract R doInvoke(Context context, ProcessStatus status);
+    protected abstract R doInvoke(Context context, @NotNull ProcessStatus status);
 
     @Override
     public BaseNode<R> exceptionHandler(ExceptionHandler handler) {

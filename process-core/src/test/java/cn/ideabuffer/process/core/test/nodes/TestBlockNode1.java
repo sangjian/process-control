@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -13,6 +14,7 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
  */
 public class TestBlockNode1 extends AbstractExecutableNode {
 
+    @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         // 获取当前Block

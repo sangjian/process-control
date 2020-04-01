@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.test.nodes;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AbstractBaseNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -11,7 +12,7 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 public class TestBaseNode extends AbstractBaseNode<String> {
 
     @Override
-    protected String doInvoke(Context context, ProcessStatus status) {
+    protected String doInvoke(Context context, @NotNull ProcessStatus status) {
         return "TestBaseNode";
     }
 }

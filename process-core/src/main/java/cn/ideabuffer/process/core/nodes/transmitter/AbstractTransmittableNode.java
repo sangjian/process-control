@@ -72,6 +72,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
         return then;
     }
 
+    @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
 

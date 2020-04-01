@@ -26,6 +26,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
         this.definition = definition;
     }
 
+    @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
         Context current = context == null ? Contexts.newContext() : context;

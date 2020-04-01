@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.executor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 串行执行器
@@ -20,5 +21,6 @@ public interface SerialExecutor {
      * @return
      * @throws Exception
      */
+    @NotNull
     ProcessStatus execute(Context context, ExecutableNode... nodes) throws Exception;
 }

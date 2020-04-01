@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,6 +103,7 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
 
     }
 
+    @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
         if (!ruleCheck(context)) {
@@ -164,6 +166,7 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
      * @throws Exception
      * @see ProcessStatus
      */
+    @NotNull
     protected abstract ProcessStatus doExecute(Context context) throws Exception;
 
     @Override

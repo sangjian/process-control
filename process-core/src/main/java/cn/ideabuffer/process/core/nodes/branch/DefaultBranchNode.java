@@ -94,6 +94,7 @@ public class DefaultBranchNode extends AbstractExecutableNode implements BranchN
         return this;
     }
 
+    @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         return NodeExecutors.SERIAL_EXECUTOR.execute(context, this.nodes.toArray(new ExecutableNode[0]));

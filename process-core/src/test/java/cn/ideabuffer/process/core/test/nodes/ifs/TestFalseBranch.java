@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -12,6 +13,7 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
  */
 public class TestFalseBranch extends DefaultBranchNode {
 
+    @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
         Key<Integer> key = Contexts.newKey("k", int.class);

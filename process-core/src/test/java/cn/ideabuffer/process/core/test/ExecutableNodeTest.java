@@ -9,6 +9,7 @@ import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.test.nodes.executable.TestExceptionExecutableNode1;
 import cn.ideabuffer.process.core.test.nodes.executable.TestExecutableNode1;
 import cn.ideabuffer.process.core.test.nodes.executable.TestExecutableNode2;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class ExecutableNodeTest {
         Rule rule = (ctx) -> true;
         Executor executor = Executors.newFixedThreadPool(2);
         ExceptionHandler handler = (t) -> logger.error("execute error!", t);
-        TestExecutableNode1 node1 = new TestExecutableNode1();
+        TestExceptionExecutableNode1 node1 = new TestExceptionExecutableNode1();
         // 设置规则
         node1.processOn(rule)
             // 设置异常处理器
