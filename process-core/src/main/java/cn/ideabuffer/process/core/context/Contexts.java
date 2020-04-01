@@ -11,6 +11,10 @@ import java.util.Map;
  */
 public class Contexts {
 
+    private Contexts() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Context newContext() {
         return new DefaultContext();
     }

@@ -36,6 +36,9 @@ public class Block extends ParameterImpl {
         this.breakable = breakable;
         this.continuable = continuable;
         this.parent = parent;
+        if(parent != null) {
+            this.putAll(parent.getParams());
+        }
     }
 
     public boolean allowBreak() {

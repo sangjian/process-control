@@ -36,8 +36,9 @@ public class InstanceTest {
     public void testInstanceResult() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         definition
-            .addProcessNode(new TestNode1())
-            .addProcessNode(new TestNode2())
+            // 注册执行节点
+            .addProcessNode(new TestNode1(), new TestNode2())
+            // 注册基础节点
             .addBaseNode(new TestBaseNode());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
@@ -45,6 +46,7 @@ public class InstanceTest {
         context.put(key, 0);
 
         instance.execute(context);
+        // 输出执行结果
         System.out.println(instance.getResult());
     }
 
