@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.nodes;
 import cn.ideabuffer.process.core.Node;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 
 /**
  * 基础节点，在整个流程最后执行，用于计算结果并返回
@@ -18,7 +19,7 @@ public interface BaseNode<R> extends Node {
      * @param context
      * @return
      */
-    R invoke(Context context);
+    R invoke(Context context, ProcessStatus status);
 
     /**
      * 设置异常处理器

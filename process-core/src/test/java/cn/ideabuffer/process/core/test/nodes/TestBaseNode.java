@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.test.nodes;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AbstractBaseNode;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 
 /**
  * @author sangjian.sj
@@ -10,7 +11,7 @@ import cn.ideabuffer.process.core.nodes.AbstractBaseNode;
 public class TestBaseNode extends AbstractBaseNode<String> {
 
     @Override
-    protected String doInvoke(Context context) {
+    protected String doInvoke(Context context, ProcessStatus status) {
         return "TestBaseNode";
     }
 }
