@@ -1,6 +1,5 @@
-package cn.ideabuffer.process.core.test.nodes;
+package cn.ideabuffer.process.core.test.nodes.rule;
 
-import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
@@ -9,20 +8,15 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 
 /**
  * @author sangjian.sj
- * @date 2020/03/05
+ * @date 2020/04/01
  */
-public class TestBlockNode2 extends AbstractExecutableNode {
+public class TestRuleNode1 extends AbstractExecutableNode {
 
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
-        // 获取当前Block
-        Block block = context.getBlock();
         Key<Integer> key = Contexts.newKey("k", int.class);
-        int k = block.get(key, 0);
-        logger.info("before put, k in Block: {}", k);
-        // 设置当前Block的变量k
-        block.put(key, 200);
-        logger.info("after put, k in Block: {}", block.get(key));
+        logger.info("in TestRuleNode1, k:{}", context.get(key));
+        Thread.sleep(1000);
         return ProcessStatus.PROCEED;
     }
 }

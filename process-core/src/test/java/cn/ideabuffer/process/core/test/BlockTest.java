@@ -28,6 +28,6 @@ public class BlockTest {
         Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 50);
         instance.execute(context);
-        logger.info("after execute, k:{}", context.get(key));
+        logger.info("after execute, k in Context:{}", context.get(key));
     }
 }

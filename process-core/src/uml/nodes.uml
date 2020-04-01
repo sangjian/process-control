@@ -3,277 +3,91 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="644.9421296296291" y="218.0">cn.ideabuffer.process.ProcessInstance</node>
-    <node x="1533.4678240740736" y="109.0">cn.ideabuffer.process.nodes.AbstractNode</node>
-    <node x="1526.5666666666666" y="218.0">cn.ideabuffer.process.nodes.AbstractExecutableNode</node>
-    <node x="2007.9678240740739" y="218.0">cn.ideabuffer.process.nodes.branch.BranchNode</node>
-    <node x="2055.717824074074" y="109.0">cn.ideabuffer.process.Branch</node>
-    <node x="500.22430555555536" y="0.0">cn.ideabuffer.process.Parallelizable</node>
-    <node x="1943.7178240740736" y="307.0">cn.ideabuffer.process.nodes.branch.DefaultBranchNode</node>
-    <node x="585.2965277777778" y="307.0">cn.ideabuffer.process.nodes.AggregatableNode</node>
-    <node x="213.375" y="218.0">cn.ideabuffer.process.nodes.MergeableNode</node>
-    <node x="1968.2178240740736" y="386.0">cn.ideabuffer.process.nodes.NodeGroup</node>
-    <node x="914.7178240740736" y="307.0">cn.ideabuffer.process.nodes.transmitter.AbstractTransmittableNode</node>
-    <node x="531.5465277777778" y="386.0">cn.ideabuffer.process.nodes.UnitAggregatableNode</node>
-    <node x="845.4678240740736" y="218.0">cn.ideabuffer.process.nodes.TransmittableNode</node>
-    <node x="1136.192129629629" y="0.0">cn.ideabuffer.process.Executable</node>
-    <node x="1121.7178240740736" y="218.0">cn.ideabuffer.process.nodes.ParallelBranchNode</node>
-    <node x="57.750000000000114" y="109.0">cn.ideabuffer.process.Mergeable</node>
-    <node x="1101.192129629629" y="109.0">cn.ideabuffer.process.nodes.ExecutableNode</node>
-    <node x="34.5" y="307.0">cn.ideabuffer.process.nodes.DistributeMergeableNode</node>
-    <node x="1559.9678240740736" y="0.0">cn.ideabuffer.process.Node</node>
-    <node x="1152.7178240740736" y="307.0">cn.ideabuffer.process.nodes.DefaultParallelBranchNode</node>
-    <node x="2152.967824074074" y="218.0">cn.ideabuffer.process.nodes.AbstractBaseNode</node>
-    <node x="1748.7178240740736" y="307.0">cn.ideabuffer.process.nodes.TryCatchFinallyNode</node>
-    <node x="1384.7178240740736" y="307.0">cn.ideabuffer.process.nodes.condition.IfConditionNode</node>
-    <node x="113.69212962962911" y="386.0">cn.ideabuffer.process.nodes.AbstractDistributeMergeableNode</node>
-    <node x="2220.467824074074" y="109.0">cn.ideabuffer.process.nodes.BaseNode</node>
-    <node x="1553.7178240740736" y="307.0">cn.ideabuffer.process.nodes.condition.WhileConditionNode</node>
-    <node x="231.5" y="0.0">cn.ideabuffer.process.Matchable</node>
-    <node x="0.0" y="218.0">cn.ideabuffer.process.DistributeMergeable</node>
-    <node x="0.0" y="460.0">cn.ideabuffer.process.PostProcessor</node>
-    <node x="740.5465277777778" y="386.0">cn.ideabuffer.process.nodes.DistributeAggregatableNode</node>
-    <node x="291.2465277777778" y="307.0">cn.ideabuffer.process.nodes.AbstractMergeableNode</node>
-    <node x="1545.2178240740736" y="386.0">cn.ideabuffer.process.nodes.condition.DoWhileConditionNode</node>
+    <node x="263.75" y="158.0">cn.ideabuffer.process.core.nodes.TransmittableNode</node>
+    <node x="98.0" y="316.0">cn.ideabuffer.process.core.nodes.UnitAggregatableNode</node>
+    <node x="527.75" y="79.0">cn.ideabuffer.process.core.nodes.ExecutableNode</node>
+    <node x="66.0" y="158.0">cn.ideabuffer.process.core.nodes.MergeableNode</node>
+    <node x="307.0" y="316.0">cn.ideabuffer.process.core.nodes.DistributeAggregatableNode</node>
+    <node x="317.625" y="0.0">cn.ideabuffer.process.core.Node</node>
+    <node x="224.0" y="237.0">cn.ideabuffer.process.core.nodes.AggregatableNode</node>
+    <node x="309.5096153846154" y="79.0">cn.ideabuffer.process.core.nodes.BaseNode</node>
+    <node x="448.75" y="158.0">cn.ideabuffer.process.core.ProcessInstance</node>
+    <node x="0.0" y="237.0">cn.ideabuffer.process.core.nodes.DistributeMergeableNode</node>
+    <node x="762.75" y="158.0">cn.ideabuffer.process.core.nodes.ParallelBranchNode</node>
+    <node x="617.75" y="158.0">cn.ideabuffer.process.core.nodes.branch.BranchNode</node>
   </nodes>
   <notes />
   <edges>
-    <edge source="cn.ideabuffer.process.nodes.ExecutableNode" target="cn.ideabuffer.process.Executable">
-      <point x="18.5" y="-14.5" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.transmitter.AbstractTransmittableNode" target="cn.ideabuffer.process.nodes.AbstractExecutableNode">
-      <point x="54.5" y="-14.5" />
-      <point x="1078.2178240740736" y="267.0" />
-      <point x="1543.3166666666666" y="267.0" />
-      <point x="-83.75" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.transmitter.AbstractTransmittableNode" target="cn.ideabuffer.process.nodes.TransmittableNode">
-      <point x="-54.5" y="-14.5" />
-      <point x="41.25" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AggregatableNode" target="cn.ideabuffer.process.Parallelizable">
+    <edge source="cn.ideabuffer.process.core.nodes.DistributeMergeableNode" target="cn.ideabuffer.process.core.nodes.MergeableNode">
       <point x="0.0" y="-14.5" />
-      <point x="666.7965277777778" y="267.0" />
-      <point x="634.4421296296291" y="267.0" />
-      <point x="634.4421296296291" y="69.0" />
-      <point x="531.7243055555554" y="69.0" />
-      <point x="-31.5" y="14.5" />
+      <point x="-36.0" y="14.5" />
     </edge>
-    <edge source="cn.ideabuffer.process.nodes.DistributeMergeableNode" target="cn.ideabuffer.process.DistributeMergeable">
-      <point x="-51.0" y="-14.5" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AbstractMergeableNode" target="cn.ideabuffer.process.nodes.MergeableNode">
-      <point x="-49.25" y="-14.5" />
-      <point x="340.4965277777778" y="287.0" />
-      <point x="285.375" y="287.0" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.MergeableNode" target="cn.ideabuffer.process.Mergeable">
-      <point x="-48.0" y="-14.5" />
-      <point x="237.375" y="198.0" />
-      <point x="141.0000000000001" y="198.0" />
-      <point x="27.75" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.ExecutableNode" target="cn.ideabuffer.process.Matchable">
-      <point x="-55.5" y="-14.5" />
-      <point x="1119.692129629629" y="59.0" />
-      <point x="314.75" y="59.0" />
-      <point x="27.75" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.DistributeMergeableNode" target="cn.ideabuffer.process.nodes.MergeableNode">
-      <point x="51.0" y="-14.5" />
-      <point x="187.5" y="287.0" />
-      <point x="237.375" y="287.0" />
-      <point x="-48.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AggregatableNode" target="cn.ideabuffer.process.nodes.TransmittableNode">
-      <point x="54.33333333333337" y="-14.5" />
-      <point x="721.1298611111113" y="287.0" />
-      <point x="886.7178240740736" y="287.0" />
-      <point x="-41.25" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AbstractBaseNode" target="cn.ideabuffer.process.nodes.BaseNode">
-      <point x="41.0" y="-14.5" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.DefaultParallelBranchNode" target="cn.ideabuffer.process.nodes.ParallelBranchNode">
-      <point x="-53.0" y="-14.5" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AbstractMergeableNode" target="cn.ideabuffer.process.nodes.AbstractNode">
-      <point x="49.25" y="-14.5" />
-      <point x="438.9965277777778" y="277.0" />
-      <point x="804.4421296296291" y="277.0" />
-      <point x="804.4421296296291" y="198.0" />
-      <point x="1555.801157407407" y="198.0" />
-      <point x="-44.66666666666674" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AbstractExecutableNode" target="cn.ideabuffer.process.nodes.ExecutableNode">
-      <point x="-50.25" y="-14.5" />
-      <point x="1576.8166666666666" y="178.0" />
-      <point x="1204.792129629629" y="178.0" />
-      <point x="29.59999999999991" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AbstractDistributeMergeableNode" target="cn.ideabuffer.process.nodes.DistributeMergeableNode">
-      <point x="-64.25" y="-14.5" />
-      <point x="177.9421296296291" y="361.0" />
-      <point x="136.5" y="361.0" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.condition.WhileConditionNode" target="cn.ideabuffer.process.nodes.AbstractExecutableNode">
+    <edge source="cn.ideabuffer.process.core.nodes.UnitAggregatableNode" target="cn.ideabuffer.process.core.nodes.AggregatableNode">
       <point x="0.0" y="-14.5" />
-      <point x="1641.2178240740736" y="287.0" />
-      <point x="1643.8166666666666" y="287.0" />
-      <point x="16.75" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.MergeableNode" target="cn.ideabuffer.process.Node">
-      <point x="48.0" y="-14.5" />
-      <point x="333.375" y="198.0" />
-      <point x="509.8171296296291" y="198.0" />
-      <point x="509.8171296296291" y="79.0" />
-      <point x="1568.0678240740735" y="79.0" />
-      <point x="-32.40000000000009" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.ExecutableNode" target="cn.ideabuffer.process.Node">
-      <point x="55.5" y="-14.5" />
-      <point x="1230.692129629629" y="89.0" />
-      <point x="1584.2678240740736" y="89.0" />
-      <point x="-16.200000000000045" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.branch.DefaultBranchNode" target="cn.ideabuffer.process.nodes.branch.BranchNode">
-      <point x="42.25000000000023" y="-14.5" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.branch.BranchNode" target="cn.ideabuffer.process.nodes.ExecutableNode">
-      <point x="-31.25" y="-14.5" />
-      <point x="2039.2178240740739" y="168.0" />
-      <point x="1234.3921296296292" y="168.0" />
-      <point x="59.200000000000045" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.BaseNode" target="cn.ideabuffer.process.Node">
-      <point x="0.0" y="-14.5" />
-      <point x="2275.967824074074" y="79.0" />
-      <point x="1632.8678240740737" y="79.0" />
-      <point x="32.40000000000009" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.MergeableNode" target="cn.ideabuffer.process.Matchable">
-      <point x="0.0" y="-14.5" />
-      <point x="285.375" y="198.0" />
-      <point x="259.25" y="198.0" />
-      <point x="-27.75" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.condition.IfConditionNode" target="cn.ideabuffer.process.nodes.AbstractExecutableNode">
-      <point x="0.0" y="-14.5" />
-      <point x="1459.2178240740736" y="287.0" />
-      <point x="1610.3166666666666" y="287.0" />
-      <point x="-16.75" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AbstractBaseNode" target="cn.ideabuffer.process.nodes.AbstractNode">
-      <point x="-41.0" y="-14.5" />
-      <point x="2193.967824074074" y="158.0" />
-      <point x="1645.1344907407404" y="158.0" />
-      <point x="44.66666666666674" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.TryCatchFinallyNode" target="cn.ideabuffer.process.nodes.AbstractExecutableNode">
-      <point x="0.0" y="-14.5" />
-      <point x="1836.2178240740736" y="287.0" />
-      <point x="1677.3166666666666" y="287.0" />
-      <point x="50.25" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AbstractNode" target="cn.ideabuffer.process.Node">
-      <point x="0.0" y="-14.5" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.ProcessInstance" target="cn.ideabuffer.process.nodes.ExecutableNode">
-      <point x="0.0" y="-14.5" />
-      <point x="719.4421296296291" y="178.0" />
-      <point x="1115.992129629629" y="178.0" />
-      <point x="-59.200000000000045" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.Branch" target="cn.ideabuffer.process.Node">
-      <point x="0.0" y="-14.5" />
-      <point x="2101.717824074074" y="89.0" />
-      <point x="1616.6678240740737" y="89.0" />
-      <point x="16.200000000000045" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.UnitAggregatableNode" target="cn.ideabuffer.process.nodes.AggregatableNode">
-      <point x="0.0" y="-14.5" />
+      <point x="192.5" y="291.0" />
+      <point x="264.75" y="291.0" />
       <point x="-40.75" y="14.5" />
     </edge>
-    <edge source="cn.ideabuffer.process.nodes.DistributeAggregatableNode" target="cn.ideabuffer.process.nodes.AggregatableNode">
+    <edge source="cn.ideabuffer.process.core.nodes.ParallelBranchNode" target="cn.ideabuffer.process.core.nodes.ExecutableNode">
       <point x="0.0" y="-14.5" />
-      <point x="852.0465277777778" y="361.0" />
-      <point x="707.5465277777778" y="361.0" />
+      <point x="846.75" y="128.0" />
+      <point x="657.25" y="128.0" />
+      <point x="55.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.core.nodes.AggregatableNode" target="cn.ideabuffer.process.core.nodes.TransmittableNode">
+      <point x="40.75" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.core.nodes.BaseNode" target="cn.ideabuffer.process.core.Node">
+      <point x="0.0" y="-14.5" />
+      <point x="365.0096153846154" y="54.0" />
+      <point x="358.125" y="54.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.core.ProcessInstance" target="cn.ideabuffer.process.core.nodes.ExecutableNode">
+      <point x="0.0" y="-14.5" />
+      <point x="523.25" y="138.0" />
+      <point x="583.25" y="138.0" />
+      <point x="-18.5" y="14.5" />
+    </edge>
+    <edge source="cn.ideabuffer.process.core.nodes.DistributeAggregatableNode" target="cn.ideabuffer.process.core.nodes.AggregatableNode">
+      <point x="0.0" y="-14.5" />
+      <point x="418.5" y="291.0" />
+      <point x="346.25" y="291.0" />
       <point x="40.75" y="14.5" />
     </edge>
-    <edge source="cn.ideabuffer.process.nodes.NodeGroup" target="cn.ideabuffer.process.nodes.branch.DefaultBranchNode">
+    <edge source="cn.ideabuffer.process.core.nodes.branch.BranchNode" target="cn.ideabuffer.process.core.nodes.ExecutableNode">
       <point x="0.0" y="-14.5" />
-      <point x="0.0" y="14.5" />
+      <point x="680.25" y="138.0" />
+      <point x="620.25" y="138.0" />
+      <point x="18.5" y="14.5" />
     </edge>
-    <edge source="cn.ideabuffer.process.nodes.ExecutableNode" target="cn.ideabuffer.process.Parallelizable">
-      <point x="-18.5" y="-14.5" />
-      <point x="1156.692129629629" y="49.0" />
-      <point x="594.7243055555554" y="49.0" />
-      <point x="31.5" y="14.5" />
+    <edge source="cn.ideabuffer.process.core.nodes.AggregatableNode" target="cn.ideabuffer.process.core.nodes.MergeableNode">
+      <point x="-40.75" y="-14.5" />
+      <point x="264.75" y="212.0" />
+      <point x="174.0" y="212.0" />
+      <point x="36.0" y="14.5" />
     </edge>
-    <edge source="cn.ideabuffer.process.nodes.branch.DefaultBranchNode" target="cn.ideabuffer.process.nodes.AbstractExecutableNode">
-      <point x="-42.24999999999977" y="-14.5" />
-      <point x="1985.9678240740739" y="277.0" />
-      <point x="1710.8166666666666" y="277.0" />
-      <point x="83.75" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.DistributeMergeable" target="cn.ideabuffer.process.Mergeable">
+    <edge source="cn.ideabuffer.process.core.nodes.TransmittableNode" target="cn.ideabuffer.process.core.nodes.ExecutableNode">
       <point x="0.0" y="-14.5" />
-      <point x="-27.75" y="14.5" />
+      <point x="346.25" y="128.0" />
+      <point x="546.25" y="128.0" />
+      <point x="-55.5" y="14.5" />
     </edge>
-    <edge source="cn.ideabuffer.process.nodes.AbstractExecutableNode" target="cn.ideabuffer.process.nodes.AbstractNode">
-      <point x="50.25" y="-14.5" />
-      <point x="1677.3166666666666" y="198.0" />
-      <point x="1600.4678240740736" y="198.0" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.branch.BranchNode" target="cn.ideabuffer.process.Branch">
-      <point x="31.25" y="-14.5" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.AggregatableNode" target="cn.ideabuffer.process.nodes.MergeableNode">
-      <point x="-54.33333333333337" y="-14.5" />
-      <point x="612.4631944444445" y="267.0" />
-      <point x="333.375" y="267.0" />
-      <point x="48.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.condition.DoWhileConditionNode" target="cn.ideabuffer.process.nodes.condition.WhileConditionNode">
+    <edge source="cn.ideabuffer.process.core.nodes.MergeableNode" target="cn.ideabuffer.process.core.Node">
       <point x="0.0" y="-14.5" />
-      <point x="0.0" y="14.5" />
+      <point x="138.0" y="54.0" />
+      <point x="331.125" y="54.0" />
+      <point x="-27.0" y="14.5" />
     </edge>
-    <edge source="cn.ideabuffer.process.nodes.AbstractDistributeMergeableNode" target="cn.ideabuffer.process.nodes.AbstractMergeableNode">
-      <point x="64.25" y="-14.5" />
-      <point x="306.4421296296291" y="361.0" />
-      <point x="389.7465277777778" y="361.0" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.ParallelBranchNode" target="cn.ideabuffer.process.nodes.ExecutableNode">
+    <edge source="cn.ideabuffer.process.core.nodes.ExecutableNode" target="cn.ideabuffer.process.core.Node">
       <point x="0.0" y="-14.5" />
-      <point x="1205.7178240740736" y="188.0" />
-      <point x="1175.192129629629" y="188.0" />
-      <point x="0.0" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.TransmittableNode" target="cn.ideabuffer.process.nodes.ExecutableNode">
-      <point x="0.0" y="-14.5" />
-      <point x="927.9678240740736" y="188.0" />
-      <point x="1145.5921296296292" y="188.0" />
-      <point x="-29.59999999999991" y="14.5" />
-    </edge>
-    <edge source="cn.ideabuffer.process.nodes.DefaultParallelBranchNode" target="cn.ideabuffer.process.nodes.AbstractExecutableNode">
-      <point x="53.0" y="-14.5" />
-      <point x="1311.7178240740736" y="277.0" />
-      <point x="1576.8166666666666" y="277.0" />
-      <point x="-50.25" y="14.5" />
+      <point x="601.75" y="54.0" />
+      <point x="385.125" y="54.0" />
+      <point x="27.0" y="14.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.5986290962546855" x="836.7818029459911" y="133.99427399299373" />
+  <settings layout="Hierarchic Group" zoom="1.0" x="381.0" y="218.0" />
   <SelectedNodes />
   <Categories />
   <SCOPE>All</SCOPE>

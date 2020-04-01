@@ -15,12 +15,14 @@ public class TestBlockNode1 extends AbstractExecutableNode {
 
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
+        // 获取当前Block
         Block block = context.getBlock();
         Key<Integer> key = Contexts.newKey("k", int.class);
         int k = block.get(key, 0);
-        logger.info("before put, k = {}", k);
+        logger.info("before put, k in Block: {}", k);
+        // 设置当前Block的变量k
         block.put(key, 100);
-        logger.info("after put, k = {}", block.get(key));
+        logger.info("after put, k in Block: {}", block.get(key));
         return ProcessStatus.PROCEED;
     }
 }

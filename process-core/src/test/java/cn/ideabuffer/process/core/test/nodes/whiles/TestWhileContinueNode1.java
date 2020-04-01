@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.test.nodes;
+package cn.ideabuffer.process.core.test.nodes.whiles;
 
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.context.Context;
@@ -9,20 +9,21 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 
 /**
  * @author sangjian.sj
- * @date 2020/03/05
+ * @date 2020/01/20
  */
-public class TestBlockNode2 extends AbstractExecutableNode {
-
+public class TestWhileContinueNode1 extends AbstractExecutableNode {
     @Override
-    protected ProcessStatus doExecute(Context context) throws Exception {
-        // 获取当前Block
+    public ProcessStatus doExecute(Context context) throws Exception {
         Block block = context.getBlock();
         Key<Integer> key = Contexts.newKey("k", int.class);
         int k = block.get(key, 0);
-        logger.info("before put, k in Block: {}", k);
-        // 设置当前Block的变量k
-        block.put(key, 200);
-        logger.info("after put, k in Block: {}", block.get(key));
+        block.put(key, ++k);
+        logger.info("k = " + k);
+        if (k == 5 && block.allowContinue()) {
+            block.put(key, 1);
+            block.doContinue();
+        }
+        Thread.sleep(1000);
         return ProcessStatus.PROCEED;
     }
 }

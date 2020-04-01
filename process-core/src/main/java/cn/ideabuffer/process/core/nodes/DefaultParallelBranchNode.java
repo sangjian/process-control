@@ -72,7 +72,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-        if (branches == null) {
+        if (branches == null || !ruleCheck(context)) {
             return ProcessStatus.PROCEED;
         }
         return doExecute(context);

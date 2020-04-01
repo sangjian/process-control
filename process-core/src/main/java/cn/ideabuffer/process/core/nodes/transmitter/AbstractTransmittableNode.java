@@ -75,6 +75,10 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
     @Override
     public ProcessStatus execute(Context context) throws Exception {
 
+        if(!ruleCheck(context)) {
+            return ProcessStatus.PROCEED;
+        }
+
         Executor e = getExecutor() == null ? DEFAULT_POOL : getExecutor();
 
         Runnable task = () -> {
