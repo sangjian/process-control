@@ -60,15 +60,15 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
 
         }
         if (i >= nodes.length) {
-            BaseNode<R> baseNode = definition.getBaseNode();
-            if (baseNode != null && baseNode.enabled()) {
-                try {
-                    result = definition.getBaseNode().invoke(current);
-                } catch (Exception e) {
-                    exception = e;
-                }
-            }
             i--;
+        }
+        BaseNode<R> baseNode = definition.getBaseNode();
+        if (baseNode != null && baseNode.enabled()) {
+            try {
+                result = definition.getBaseNode().invoke(current, status);
+            } catch (Exception e) {
+                exception = e;
+            }
         }
 
         List<Node> postNodeList = Arrays.stream(nodes).collect(Collectors.toList()).subList(0, ++i);
