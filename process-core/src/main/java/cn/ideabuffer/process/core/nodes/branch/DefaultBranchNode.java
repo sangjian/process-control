@@ -1,12 +1,13 @@
 package cn.ideabuffer.process.core.nodes.branch;
 
+import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
+import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -98,5 +99,17 @@ public class DefaultBranchNode extends AbstractExecutableNode implements BranchN
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         return NodeExecutors.SERIAL_EXECUTOR.execute(context, this.nodes.toArray(new ExecutableNode[0]));
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            if (nodes != null) {
+                nodes.forEach(Lifecycle::destroy);
+            }
+        } catch (Exception e) {
+            logger.error("destroy encountered problem!", e);
+            throw e;
+        }
     }
 }

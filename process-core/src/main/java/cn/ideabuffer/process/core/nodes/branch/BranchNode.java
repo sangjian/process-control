@@ -2,8 +2,8 @@ package cn.ideabuffer.process.core.nodes.branch;
 
 import cn.ideabuffer.process.core.Branch;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
-import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

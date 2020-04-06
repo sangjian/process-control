@@ -1,15 +1,17 @@
 package cn.ideabuffer.process.core.nodes;
 
+import cn.ideabuffer.process.core.LifecycleState;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
-import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author sangjian.sj
@@ -39,8 +41,7 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
         this(parallel, null, executor, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor,
-        ExceptionHandler handler) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, ExceptionHandler handler) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
@@ -187,6 +188,25 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
 
     public void setExecutor(Executor executor) {
         this.executor = executor;
+    }
+
+    @Override
+    public void destroy() {
+        if (getState() == LifecycleState.DESTROYING || getState() == LifecycleState.DESTROYED) {
+            return;
+        }
+        try {
+            setState(LifecycleState.DESTROYING);
+            if (executor instanceof ExecutorService) {
+                if (!((ExecutorService)executor).isShutdown()) {
+                    ((ExecutorService)executor).shutdown();
+                }
+            }
+            onDestroy();
+            setState(LifecycleState.DESTROYED);
+        } catch (Throwable t) {
+            handleException(t, "destroy failed!");
+        }
     }
 
 }

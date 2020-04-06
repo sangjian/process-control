@@ -1,11 +1,11 @@
 package cn.ideabuffer.process.core.nodes.transmitter;
 
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.TransmittableNode;
 import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
@@ -76,7 +76,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
     @Override
     public ProcessStatus execute(Context context) throws Exception {
 
-        if(!ruleCheck(context)) {
+        if (!ruleCheck(context)) {
             return ProcessStatus.PROCEED;
         }
 
@@ -112,6 +112,7 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
         return ProcessStatus.PROCEED;
     }
 
+    @NotNull
     @Override
     protected final ProcessStatus doExecute(Context context) throws Exception {
         return ProcessStatus.PROCEED;

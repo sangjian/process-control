@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/03/24
  */
-public interface ProcessDefinition<R> {
+public interface ProcessDefinition<R> extends Lifecycle {
 
     /**
      * 增加执行节点
@@ -95,4 +95,6 @@ public interface ProcessDefinition<R> {
      * @return
      */
     BaseNode<R> getBaseNode();
+
+    InitializeMode getInitializeMode();
 }

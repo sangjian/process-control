@@ -6,7 +6,7 @@ package cn.ideabuffer.process.core;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public interface Node {
+public interface Node extends Lifecycle {
 
     /**
      * 是否启用

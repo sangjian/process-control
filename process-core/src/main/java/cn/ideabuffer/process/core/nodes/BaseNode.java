@@ -18,7 +18,7 @@ public interface BaseNode<R> extends Node {
      * 执行并返回结果
      *
      * @param context 流程上下文
-     * @param status 流程执行状态
+     * @param status  流程执行状态
      * @return 流程处理结果
      */
     R invoke(Context context, @NotNull ProcessStatus status);

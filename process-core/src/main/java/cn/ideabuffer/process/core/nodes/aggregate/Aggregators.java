@@ -1,8 +1,8 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
+import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.merger.Merger;
 import cn.ideabuffer.process.core.nodes.merger.UnitMerger;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

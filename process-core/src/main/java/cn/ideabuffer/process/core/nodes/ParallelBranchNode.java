@@ -1,8 +1,8 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.strategy.ProceedStrategy;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.strategy.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;

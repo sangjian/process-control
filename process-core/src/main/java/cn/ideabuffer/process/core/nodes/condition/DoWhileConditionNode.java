@@ -2,12 +2,12 @@ package cn.ideabuffer.process.core.nodes.condition;
 
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockWrapper;
+import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
-import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**

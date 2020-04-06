@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
+import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.BaseNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -29,6 +30,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
     @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
+        checkState();
         Context current = context == null ? Contexts.newContext() : context;
 
         Exception exception = null;
@@ -127,5 +129,21 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
     @Override
     public R getResult() {
         return result;
+    }
+
+    private void checkState() {
+        LifecycleState state = this.definition.getState();
+        InitializeMode mode = this.definition.getInitializeMode();
+        if (mode == InitializeMode.LAZY) {
+            try {
+                this.definition.initialize();
+            } catch (Exception e) {
+                throw new ProcessException("initialize failed", e);
+            }
+
+        }
+        if (!state.isAvailable()) {
+            throw new ProcessException(String.format("current state [%s] is not available", state));
+        }
     }
 }

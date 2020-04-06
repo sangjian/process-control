@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes;
 
+import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
@@ -8,8 +9,8 @@ import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author sangjian.sj
@@ -90,5 +91,25 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
         Block finallyBlock = new Block(context.getBlock());
         ContextWrapper contextWrapper = Contexts.wrap(context, finallyBlock);
         finallyBranch.execute(contextWrapper);
+    }
+
+    @Override
+    protected final void onDestroy() {
+        try {
+            if (tryBranch != null) {
+                tryBranch.destroy();
+            }
+            if (catchMap != null) {
+                catchMap.entrySet().stream().filter(Objects::nonNull).map(Map.Entry::getValue).filter(Objects::nonNull)
+                    .forEach(Lifecycle::destroy);
+            }
+            if (finallyBranch != null) {
+                finallyBranch.destroy();
+            }
+        } catch (Exception e) {
+            logger.error("destroy encountered problem!", e);
+            throw e;
+        }
+
     }
 }

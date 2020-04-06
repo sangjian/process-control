@@ -2,13 +2,13 @@ package cn.ideabuffer.process.core.nodes.condition;
 
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockWrapper;
+import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
-import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
@@ -83,5 +83,18 @@ public class WhileConditionNode extends AbstractExecutableNode {
         }
 
         return ProcessStatus.PROCEED;
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            if (branch != null) {
+                branch.destroy();
+            }
+        } catch (Exception e) {
+            logger.error("destroy encountered problem!", e);
+            throw e;
+        }
+
     }
 }

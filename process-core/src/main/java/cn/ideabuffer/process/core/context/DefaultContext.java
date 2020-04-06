@@ -46,7 +46,7 @@ public class DefaultContext extends ParameterImpl implements Context {
         return Objects.hash(block);
     }
 
-    private final class ContextViewBlock extends Block{
+    private final class ContextViewBlock extends Block {
         private Context context = DefaultContext.this;
 
         @Override

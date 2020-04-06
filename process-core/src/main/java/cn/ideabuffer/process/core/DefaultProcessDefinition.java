@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core;
 
+import cn.ideabuffer.process.core.exception.LifecycleException;
 import cn.ideabuffer.process.core.nodes.AggregatableNode;
 import cn.ideabuffer.process.core.nodes.BaseNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -9,6 +10,10 @@ import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 /**
  * @author sangjian.sj
@@ -16,13 +21,32 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private transient volatile LifecycleState state = LifecycleState.NEW;
+
+    private transient InitializeMode initializeMode = InitializeMode.ON_REGISTER;
+
     private Node[] nodes = new Node[0];
 
     private BaseNode<R> baseNode;
 
+    public DefaultProcessDefinition() {
+        if (initializeMode == InitializeMode.ON_REGISTER) {
+            state = LifecycleState.INITIALIZED;
+        }
+    }
+
     private ProcessDefinition<R> addNode(@NotNull Node... nodes) {
         if (nodes.length == 0) {
             return this;
+        }
+        if (initializeMode == InitializeMode.ON_REGISTER) {
+            try {
+                Arrays.stream(nodes).forEach(Lifecycle::initialize);
+            } catch (Throwable t) {
+                throw new LifecycleException("initialize failed on register", t);
+            }
         }
         int oldLen = this.nodes.length;
         int newLen = this.nodes.length + nodes.length;
@@ -92,5 +116,51 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     public void setBaseNode(BaseNode<R> baseNode) {
         this.baseNode = baseNode;
+    }
+
+    @Override
+    public void initialize() {
+        if (initializeMode != InitializeMode.ON_CALL) {
+            return;
+        }
+        if (state != LifecycleState.NEW) {
+            return;
+        }
+        synchronized (this) {
+            try {
+                state = LifecycleState.INITIALIZING;
+                Arrays.stream(nodes).forEach(Lifecycle::initialize);
+                state = LifecycleState.INITIALIZED;
+            } catch (Throwable t) {
+                throw new LifecycleException("initialize failed on call", t);
+            }
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (state == LifecycleState.DESTROYING || state == LifecycleState.DESTROYED) {
+            return;
+        }
+        synchronized (this) {
+            try {
+                state = LifecycleState.DESTROYING;
+                Arrays.stream(nodes).forEach(Lifecycle::destroy);
+                state = LifecycleState.DESTROYED;
+            } catch (Throwable t) {
+                throw new LifecycleException("destroy failed on call", t);
+            }
+        }
+
+    }
+
+    @Override
+    public @NotNull LifecycleState getState() {
+        return state;
+    }
+
+    @Override
+    public InitializeMode getInitializeMode() {
+        return initializeMode;
     }
 }

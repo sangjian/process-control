@@ -1,10 +1,11 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
+import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
-import cn.ideabuffer.process.core.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.UnitAggregatableNode;
+import cn.ideabuffer.process.core.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,5 +90,17 @@ public class DefaultUnitAggregatableNode<R> extends AbstractTransmittableNode<R>
     @Override
     protected R doInvoke(Context context) throws Exception {
         return aggregator.aggregate(context, getMergeableNodes());
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            if (mergeableNodes != null) {
+                mergeableNodes.forEach(Lifecycle::destroy);
+            }
+        } catch (Exception e) {
+            logger.error("destroy encountered problem!", e);
+            throw e;
+        }
     }
 }

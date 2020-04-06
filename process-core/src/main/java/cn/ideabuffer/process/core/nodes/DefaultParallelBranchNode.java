@@ -79,9 +79,11 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
         return doExecute(context);
     }
 
+    @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
-        return NodeExecutors.PARALLEL_EXECUTOR.execute(getExecutor(), strategy, context, branches.toArray(new ExecutableNode[0]));
+        return NodeExecutors.PARALLEL_EXECUTOR.execute(getExecutor(), strategy, context,
+            branches.toArray(new ExecutableNode[0]));
     }
 
     @Override
