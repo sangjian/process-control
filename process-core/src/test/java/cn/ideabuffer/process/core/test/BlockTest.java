@@ -21,7 +21,7 @@ public class BlockTest {
     @Test
     public void testContextBlockIsolate() throws Exception {
         ProcessDefinition<Void> definition = new DefaultProcessDefinition<>();
-        definition.addProcessNode(new TestBlockNode1(), new TestBlockNode2());
+        definition.addProcessNodes(new TestBlockNode1(), new TestBlockNode2());
 
         ProcessInstance<Void> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();

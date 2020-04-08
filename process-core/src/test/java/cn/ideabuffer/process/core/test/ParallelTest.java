@@ -21,7 +21,7 @@ public class ParallelTest {
     public void testParallelNode() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         ParallelBranchNode node = Nodes.newParallelBranchNode();
-        definition.addProcessNode(node.addBranch(new TestParallelNode1()).addBranch(new TestParallelNode2())
+        definition.addProcessNodes(node.addBranch(new TestParallelNode1()).addBranch(new TestParallelNode2())
             .proceedWhen(ProceedStrategies.ALL_PROCEEDED));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
 

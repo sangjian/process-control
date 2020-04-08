@@ -192,20 +192,25 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
 
     @Override
     public void destroy() {
-        if (getState() == LifecycleState.DESTROYING || getState() == LifecycleState.DESTROYED) {
+        if (getState() != LifecycleState.INITIALIZED) {
             return;
         }
-        try {
-            setState(LifecycleState.DESTROYING);
-            if (executor instanceof ExecutorService) {
-                if (!((ExecutorService)executor).isShutdown()) {
-                    ((ExecutorService)executor).shutdown();
-                }
+        synchronized (this) {
+            if (getState() != LifecycleState.INITIALIZED) {
+                return;
             }
-            onDestroy();
-            setState(LifecycleState.DESTROYED);
-        } catch (Throwable t) {
-            handleException(t, "destroy failed!");
+            try {
+                setState(LifecycleState.DESTROYING);
+                if (executor instanceof ExecutorService) {
+                    if (!((ExecutorService)executor).isShutdown()) {
+                        ((ExecutorService)executor).shutdown();
+                    }
+                }
+                onDestroy();
+                setState(LifecycleState.DESTROYED);
+            } catch (Throwable t) {
+                handleException(t, "destroy failed!");
+            }
         }
     }
 

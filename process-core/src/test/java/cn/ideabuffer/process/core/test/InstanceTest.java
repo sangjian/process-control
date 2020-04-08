@@ -13,7 +13,6 @@ import cn.ideabuffer.process.core.test.nodes.TestNode1;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.Branches;
-import cn.ideabuffer.process.core.rule.Rules;
 import cn.ideabuffer.process.core.test.nodes.TestNode2;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestFalseBranch;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestIfRule;
@@ -37,7 +36,7 @@ public class InstanceTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         definition
             // 注册执行节点
-            .addProcessNode(new TestNode1(), new TestNode2())
+            .addProcessNodes(new TestNode1(), new TestNode2())
             // 注册基础节点
             .addBaseNode(new TestBaseNode());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
@@ -146,7 +145,7 @@ public class InstanceTest {
     @Test
     public void testTryCatchFinally() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        definition.addProcessNode(Nodes.newTry(new TryNode1(), new TryNode2())
+        definition.addProcessNodes(Nodes.newTry(new TryNode1(), new TryNode2())
             .catchOn(Exception.class, new CatchNode1(), new CatchNode2())
             .doFinally(new FinallyNode1(), new FinallyNode2()));
 
@@ -185,7 +184,7 @@ public class InstanceTest {
             .otherwise(new TestFalseBranch()));
         ProcessInstance<String> subInstance = new DefaultProcessInstance<>(subDefine);
 
-        definition.addProcessNode(new TestNode1()).addProcessNode(subInstance).addProcessNode(new TestNode2());
+        definition.addProcessNodes(new TestNode1()).addProcessNodes(subInstance).addProcessNodes(new TestNode2());
 
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);

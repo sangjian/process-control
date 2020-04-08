@@ -31,7 +31,7 @@ public class ExecutableNodeTest {
     public void testSimpleExecutableNode() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         definition
-            .addProcessNode(new TestExecutableNode1(), new TestExecutableNode2());
+            .addProcessNodes(new TestExecutableNode1(), new TestExecutableNode2());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);
@@ -63,7 +63,7 @@ public class ExecutableNodeTest {
             // 设置并行执行，指定线程池执行
             .parallel(executor);
         definition
-            .addProcessNode(node1, node2);
+            .addProcessNodes(node1, node2);
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);

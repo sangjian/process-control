@@ -59,7 +59,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     }
 
     @Override
-    public ProcessDefinition<R> addProcessNode(@NotNull ExecutableNode... nodes) {
+    public ProcessDefinition<R> addProcessNodes(@NotNull ExecutableNode... nodes) {
         return addNode(nodes);
     }
 
@@ -120,35 +120,45 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     @Override
     public void initialize() {
-        if (initializeMode != InitializeMode.ON_CALL) {
+        if (initializeMode == InitializeMode.ON_REGISTER) {
             return;
         }
+
         if (state != LifecycleState.NEW) {
             return;
         }
+
         synchronized (this) {
+            if (state != LifecycleState.NEW) {
+                return;
+            }
             try {
                 state = LifecycleState.INITIALIZING;
                 Arrays.stream(nodes).forEach(Lifecycle::initialize);
                 state = LifecycleState.INITIALIZED;
             } catch (Throwable t) {
-                throw new LifecycleException("initialize failed on call", t);
+                logger.error("initialize failed", t);
+                throw t;
             }
         }
     }
 
     @Override
     public void destroy() {
-        if (state == LifecycleState.DESTROYING || state == LifecycleState.DESTROYED) {
+        if (state != LifecycleState.INITIALIZED) {
             return;
         }
         synchronized (this) {
+            if (state != LifecycleState.INITIALIZED) {
+                return;
+            }
             try {
                 state = LifecycleState.DESTROYING;
                 Arrays.stream(nodes).forEach(Lifecycle::destroy);
                 state = LifecycleState.DESTROYED;
             } catch (Throwable t) {
-                throw new LifecycleException("destroy failed on call", t);
+                logger.error("destroy failed", t);
+                throw t;
             }
         }
 
@@ -162,5 +172,10 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     @Override
     public InitializeMode getInitializeMode() {
         return initializeMode;
+    }
+
+    @Override
+    public ProcessInstance<R> newInstance() {
+        return new DefaultProcessInstance<>(this);
     }
 }

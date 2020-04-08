@@ -20,10 +20,13 @@ public abstract class AbstractNode implements Node {
 
     @Override
     public void destroy() {
-        if (state == LifecycleState.DESTROYING || state == LifecycleState.DESTROYED) {
+        if (state != LifecycleState.INITIALIZED) {
             return;
         }
         synchronized (this) {
+            if (state != LifecycleState.INITIALIZED) {
+                return;
+            }
             try {
                 setState(LifecycleState.DESTROYING);
                 onDestroy();
@@ -36,10 +39,13 @@ public abstract class AbstractNode implements Node {
 
     @Override
     public void initialize() {
-        if (getState() != LifecycleState.NEW) {
+        if (state != LifecycleState.NEW) {
             return;
         }
         synchronized (this) {
+            if (state != LifecycleState.NEW) {
+                return;
+            }
             try {
                 setState(LifecycleState.INITIALIZING);
                 onInitialize();

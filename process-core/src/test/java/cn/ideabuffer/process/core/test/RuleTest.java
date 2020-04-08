@@ -24,7 +24,7 @@ public class RuleTest {
     public void testRule() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         // 注册一个执行节点，并设置规则
-        definition.addProcessNode(new TestRuleNode1().processOn((ctx) -> false));
+        definition.addProcessNodes(new TestRuleNode1().processOn((ctx) -> false));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -37,7 +37,7 @@ public class RuleTest {
         Rule tRule = (ctx) -> true;
         Rule fRule = (ctx) -> false;
         // 注册一个执行节点，并设置规则
-        definition.addProcessNode(new TestRuleNode1().processOn(Rules.and(tRule, fRule)));
+        definition.addProcessNodes(new TestRuleNode1().processOn(Rules.and(tRule, fRule)));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
