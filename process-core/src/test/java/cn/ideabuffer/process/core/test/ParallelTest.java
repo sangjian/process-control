@@ -23,7 +23,7 @@ public class ParallelTest {
         ParallelBranchNode node = Nodes.newParallelBranchNode();
         definition.addProcessNodes(node.addBranch(new TestParallelNode1()).addBranch(new TestParallelNode2())
             .proceedWhen(ProceedStrategies.ALL_PROCEEDED));
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(null);
     }

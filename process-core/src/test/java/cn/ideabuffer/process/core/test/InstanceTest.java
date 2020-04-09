@@ -51,16 +51,23 @@ public class InstanceTest {
 
     @Test
     public void testBranch() throws Exception {
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        definition
+            .addBranchNode(Branches.newBranch(new TestNode1(), new TestNode2()));
+        ProcessInstance<String> instance = definition.newInstance();
+
+        instance.execute(null);
+    }
+
+    @Test
+    public void testBranchWithExecutor() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         definition
             .addBranchNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = Contexts.newContext();
-        Key<Integer> key = Contexts.newKey("k", int.class);
-        context.put(key, 0);
+        ProcessInstance<String> instance = definition.newInstance();
 
-        instance.execute(context);
+        instance.execute(null);
         Thread.sleep(10000);
     }
 

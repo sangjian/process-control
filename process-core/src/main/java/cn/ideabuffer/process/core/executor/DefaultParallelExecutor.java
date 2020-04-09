@@ -19,8 +19,9 @@ import java.util.stream.Stream;
  */
 public class DefaultParallelExecutor implements ParallelExecutor {
 
+    @NotNull
     @Override
-    public ProcessStatus execute(Executor executor, @NotNull ProceedStrategy proceedStrategy, Context context,
+    public ProcessStatus execute(Executor executor, @NotNull ProceedStrategy proceedStrategy, @NotNull Context context,
         ExecutableNode... nodes) throws Exception {
         if (nodes == null || nodes.length == 0) {
             return ProcessStatus.PROCEED;

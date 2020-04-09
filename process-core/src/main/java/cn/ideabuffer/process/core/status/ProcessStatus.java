@@ -10,40 +10,15 @@ import java.io.Serializable;
  */
 public class ProcessStatus implements Serializable {
 
-    public static final ProcessStatus PROCEED = new InnerProcessStatus() {
-
-        private static final long serialVersionUID = 6455037301247603534L;
-
-        @Override
-        public boolean isProceed() {
-            return true;
-        }
-
-        @Override
-        public boolean isComplete() {
-            return false;
-        }
+    public static final ProcessStatus PROCEED = new InnerProcessStatus(true) {
+        private static final long serialVersionUID = -246614296436859585L;
     };
-    public static final ProcessStatus COMPLETE = new InnerProcessStatus() {
-
+    public static final ProcessStatus COMPLETE = new InnerProcessStatus(false) {
         private static final long serialVersionUID = -2356048364637594820L;
-
-        @Override
-        public boolean isProceed() {
-            return false;
-        }
-
-        @Override
-        public boolean isComplete() {
-            return true;
-        }
     };
     private static final long serialVersionUID = 8817242079278554141L;
     private boolean proceed;
     private ProcessErrorCode errorCode;
-
-    public ProcessStatus() {
-    }
 
     public ProcessStatus(boolean proceed) {
         this.proceed = proceed;
@@ -141,6 +116,10 @@ public class ProcessStatus implements Serializable {
     private static class InnerProcessStatus extends ProcessStatus {
         private static final long serialVersionUID = -9004945559952984969L;
 
+        InnerProcessStatus(boolean proceed) {
+            super(proceed);
+        }
+
         @Override
         public void setErrorCode(String code, String message) {
             throw new UnsupportedOperationException();
@@ -165,5 +144,6 @@ public class ProcessStatus implements Serializable {
         public String getMessage() {
             return null;
         }
+
     }
 }

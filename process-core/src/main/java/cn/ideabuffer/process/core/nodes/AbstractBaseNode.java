@@ -25,6 +25,10 @@ public abstract class AbstractBaseNode<R> extends AbstractNode implements BaseNo
         return null;
     }
 
+    public void setHandler(ExceptionHandler handler) {
+        this.handler = handler;
+    }
+
     protected abstract R doInvoke(Context context, @NotNull ProcessStatus status);
 
     @Override

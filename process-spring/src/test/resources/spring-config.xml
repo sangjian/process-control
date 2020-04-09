@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="testNode1" class="cn.ideabuffer.process.test.spring.nodes.TestNode1" />
+    <bean id="testBaseNode" class="cn.ideabuffer.process.test.spring.nodes.TestBaseNode" />
+    <bean id="testDefinition" class="cn.ideabuffer.process.core.DefaultProcessDefinition">
+        <property name="nodes">
+            <array>
+                <ref bean="testNode1" />
+            </array>
+        </property>
+        <property name="baseNode" ref="testBaseNode" />
+    </bean>
+    <bean id="testInstance" class="cn.ideabuffer.process.core.DefaultProcessInstance">
+        <constructor-arg name="definition" ref="testDefinition"/>
+    </bean>
+</beans>

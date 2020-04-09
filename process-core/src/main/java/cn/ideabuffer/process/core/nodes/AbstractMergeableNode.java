@@ -52,6 +52,18 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
         return timeout;
     }
 
+    public void setRule(Rule rule) {
+        this.rule = rule;
+    }
+
+    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
+    }
+
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
+    }
+
     @Override
     public T invoke(Context context) throws Exception {
         try {

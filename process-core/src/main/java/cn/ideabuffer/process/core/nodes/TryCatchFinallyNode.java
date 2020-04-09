@@ -37,6 +37,19 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
         }
     }
 
+    public void setTryBranch(BranchNode tryBranch) {
+        this.tryBranch = tryBranch;
+    }
+
+    public void setCatchMap(
+        Map<Class<? extends Exception>, BranchNode> catchMap) {
+        this.catchMap = catchMap;
+    }
+
+    public void setFinallyBranch(BranchNode finallyBranch) {
+        this.finallyBranch = finallyBranch;
+    }
+
     @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {

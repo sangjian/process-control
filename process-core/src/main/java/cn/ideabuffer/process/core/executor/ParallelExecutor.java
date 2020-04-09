@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.strategy.ProceedStrategy;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
 
@@ -24,6 +25,8 @@ public interface ParallelExecutor {
      * @param nodes           可执行节点列表
      * @throws Exception
      */
-    ProcessStatus execute(Executor executor, ProceedStrategy proceedStrategy, Context context, ExecutableNode... nodes)
+    @NotNull
+    ProcessStatus execute(Executor executor, ProceedStrategy proceedStrategy, @NotNull Context context,
+        ExecutableNode... nodes)
         throws Exception;
 }
