@@ -12,15 +12,15 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/03/09
  */
-public class TestMergeableNode1 extends AbstractMergeableNode<List<String>> {
+public class TestListMergeableNode2 extends AbstractMergeableNode<List<String>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestMergeableNode1.class);
+    private static final Logger logger = LoggerFactory.getLogger(TestListMergeableNode2.class);
 
     @Override
     protected List<String> doInvoke(Context context) {
-        logger.info("in TestMergeableNode1");
+        logger.info("in TestListMergeableNode2");
         List<String> list = new ArrayList<>();
-        list.add("test1");
+        list.add("test2");
         return list;
     }
 }

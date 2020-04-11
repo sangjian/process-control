@@ -6,13 +6,12 @@ import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
-import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
-import cn.ideabuffer.process.core.nodes.Nodes;
-import cn.ideabuffer.process.core.nodes.UnitAggregatableNode;
+import cn.ideabuffer.process.core.nodes.*;
 import cn.ideabuffer.process.core.nodes.aggregate.Aggregators;
 import cn.ideabuffer.process.core.nodes.aggregate.DefaultDistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregator;
 import cn.ideabuffer.process.core.nodes.merger.*;
+import cn.ideabuffer.process.core.test.merger.TestStringListMerger;
 import cn.ideabuffer.process.core.test.nodes.aggregate.*;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -31,28 +30,48 @@ public class AggregateTest {
     private static final Logger logger = LoggerFactory.getLogger(AggregateTest.class);
 
     @Test
-    public void testAggregateList() throws Exception {
+    public void testUnitAggregateList() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
 
+        // 创建单元化聚合节点
         UnitAggregatableNode<List<String>> node = Nodes.newUnitAggregatableNode();
         Executor executor = Executors.newFixedThreadPool(3);
 
         node.aggregator(Aggregators.newParallelUnitAggregator(executor, new ArrayListMerger<>())).aggregate(
-            new TestMergeableNode1(), new TestMergeableNode2())
+            new TestListMergeableNode1(), new TestListMergeableNode2())
+            // 链式结果处理
             .thenApply(((ctx, result) -> {
                 logger.info("result:{}", result);
                 return result.size();
-            })).thenApplyAsync((ctx, result) -> {
-            logger.info("result:{}", result);
-            return result;
-        }).thenAccept((ctx, result) -> logger.info("result:{}", result));
+            })).thenAccept((ctx, result) -> logger.info("result:{}", result));
         definition.addAggregateNode(node);
 
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
         instance.execute(context);
-        //Thread.sleep(10000);
+    }
+
+    @Test
+    public void testGenericAggregateList() throws Exception {
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+
+        // 创建通用聚合节点
+        GenericAggregatableNode<String, List<String>> node = Nodes.newGenericAggregatableNode();
+        Executor executor = Executors.newFixedThreadPool(3);
+        node.aggregator(Aggregators.newParallelGenericAggregator(executor, new TestStringListMerger())).aggregate(
+            new TestStringMergeableNode1(), new TestStringMergeableNode2())
+            // 链式结果处理
+            .thenApply(((ctx, result) -> {
+                logger.info("result:{}", result);
+                return result.size();
+            })).thenAccept((ctx, result) -> logger.info("result:{}", result));
+        definition.addAggregateNode(node);
+
+        ProcessInstance<String> instance = definition.newInstance();
+        Context context = Contexts.newContext();
+
+        instance.execute(context);
     }
 
     @Test
