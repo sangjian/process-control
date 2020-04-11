@@ -13,16 +13,11 @@ public class TestDistributeMergeNode1 extends AbstractDistributeMergeableNode<In
     protected Integer doInvoke(Context context) throws Exception {
         logger.info("in TestDistributeMergeNode1 doInvoke");
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return 30;
-    }
-
-    @Override
-    public long getTimeout() {
-        return 500;
     }
 
     @Override

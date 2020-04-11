@@ -18,7 +18,7 @@ public class TestDistributeMergeNode2 extends AbstractDistributeMergeableNode<St
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return "sangjian";
+        return "Flash";
     }
 
     @Override

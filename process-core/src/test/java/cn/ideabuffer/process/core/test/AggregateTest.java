@@ -173,19 +173,19 @@ public class AggregateTest {
     public void testDistributeAggregate() throws Exception {
         Executor executor = Executors.newFixedThreadPool(3);
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        // 指定线程池和返回结果类型，创建分布式聚合器
         DistributeAggregator<Person> aggregator = Aggregators.newParallelDistributeAggregator(executor, Person.class);
+        // 创建分布式聚合节点
         DistributeAggregatableNode<Person> node = new DefaultDistributeAggregatableNode<>(aggregator);
+        // 注册分布式可合并节点，并设置结果处理器
         node.aggregate(new TestDistributeMergeNode1(), new TestDistributeMergeNode2())
             .thenApply((ctx, result) -> {
-                logger.info("age is : {}", result.getAge());
-                return result.getName();
-            })
-            .thenApply((ctx, result) -> {
-                logger.info("name is : {}", result);
+                logger.info("result: {}", result);
                 return result;
             });
+        // 注册分布式聚合节点
         definition.addAggregateNode(node);
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         instance.execute(null);
     }
 
