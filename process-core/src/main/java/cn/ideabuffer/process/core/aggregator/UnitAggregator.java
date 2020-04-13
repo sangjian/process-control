@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.nodes.aggregate;
+package cn.ideabuffer.process.core.aggregator;
 
 /**
  * @author sangjian.sj

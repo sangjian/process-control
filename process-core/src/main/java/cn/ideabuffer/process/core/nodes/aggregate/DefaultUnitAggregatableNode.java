@@ -1,8 +1,8 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
+import cn.ideabuffer.process.core.aggregator.UnitAggregator;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
-import cn.ideabuffer.process.core.nodes.UnitAggregatableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 

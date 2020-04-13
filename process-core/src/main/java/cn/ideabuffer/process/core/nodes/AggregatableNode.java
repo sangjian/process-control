@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Parallelizable;
-import cn.ideabuffer.process.core.nodes.aggregate.Aggregator;
+import cn.ideabuffer.process.core.aggregator.Aggregator;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 

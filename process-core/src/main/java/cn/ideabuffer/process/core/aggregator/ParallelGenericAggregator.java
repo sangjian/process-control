@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.nodes.aggregate;
+package cn.ideabuffer.process.core.aggregator;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.MergeableNode;

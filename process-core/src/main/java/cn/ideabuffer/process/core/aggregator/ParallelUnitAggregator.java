@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.nodes.aggregate;
+package cn.ideabuffer.process.core.aggregator;
 
 import cn.ideabuffer.process.core.nodes.merger.UnitMerger;
 import org.jetbrains.annotations.NotNull;

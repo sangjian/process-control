@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
+import cn.ideabuffer.process.core.aggregator.Aggregator;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AggregatableNode;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
