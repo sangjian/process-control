@@ -106,7 +106,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     }
 
     public void setNodes(@NotNull Node[] nodes) {
-        this.nodes = nodes;
+        addNode(nodes);
     }
 
     @Override
@@ -116,6 +116,13 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     public void setBaseNode(BaseNode<R> baseNode) {
         this.baseNode = baseNode;
+        if (initializeMode == InitializeMode.ON_REGISTER) {
+            try {
+                baseNode.initialize();
+            } catch (Throwable t) {
+                throw new LifecycleException("initialize failed on register", t);
+            }
+        }
     }
 
     @Override

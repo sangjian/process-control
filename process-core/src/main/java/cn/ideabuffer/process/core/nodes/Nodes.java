@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.nodes.aggregate.DefaultDistributeAggregatableNode;
+import cn.ideabuffer.process.core.nodes.aggregate.DefaultGenericAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.DefaultUnitAggregatableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.DefaultBranchNode;
@@ -56,6 +58,14 @@ public class Nodes {
 
     public static <R> UnitAggregatableNode<R> newUnitAggregatableNode() {
         return new DefaultUnitAggregatableNode<>();
+    }
+
+    public static <P, R> GenericAggregatableNode<P, R> newGenericAggregatableNode() {
+        return new DefaultGenericAggregatableNode<>();
+    }
+
+    public static <R> DistributeAggregatableNode<R> newDistributeAggregatableNode() {
+        return new DefaultDistributeAggregatableNode<>();
     }
 
     public static IfWhen newIf(Rule rule) {

@@ -10,11 +10,17 @@ import java.util.Objects;
  */
 public class Key<V> {
 
+    /**
+     * 参数key
+     */
     private Object key;
 
+    /**
+     * value类型
+     */
     private Class<V> valueType;
 
-    public Key(@NotNull Object key, Class<V> valueType) {
+    public Key(@NotNull Object key, @NotNull Class<V> valueType) {
         this.key = key;
         this.valueType = valueType;
     }

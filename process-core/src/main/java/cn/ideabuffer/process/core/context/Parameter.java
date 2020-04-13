@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 /**
+ * 参数接口，定义对参数的操作
+ *
  * @author sangjian.sj
  * @date 2020/03/26
  */

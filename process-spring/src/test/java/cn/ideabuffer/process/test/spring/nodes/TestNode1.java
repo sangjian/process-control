@@ -10,6 +10,15 @@ import org.jetbrains.annotations.NotNull;
  * @date 2020/04/09
  */
 public class TestNode1 extends AbstractExecutableNode {
+    @Override
+    protected void onInitialize() {
+        logger.info("onInitialize");
+    }
+
+    @Override
+    protected void onDestroy() {
+        logger.info("onDestroy");
+    }
 
     @Override
     protected @NotNull ProcessStatus doExecute(Context context) throws Exception {
