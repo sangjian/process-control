@@ -7,6 +7,7 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.test.nodes.TestBaseNode;
 import cn.ideabuffer.process.core.test.nodes.TestBreakNode;
 import cn.ideabuffer.process.core.test.nodes.TestNode1;
@@ -74,15 +75,36 @@ public class InstanceTest {
     @Test
     public void testIf() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        // 创建true分支
         BranchNode trueBranch = Branches.newBranch(new TestNode1());
+        // 创建false分支
         BranchNode falseBranch = Branches.newBranch(new TestNode1());
         Key<Integer> key = Contexts.newKey("k", int.class);
-        definition.addIf(Nodes.newIf(ctx -> ctx.get(key, 0) < 5).then(trueBranch)
+
+        // 判断条件，判断key对应的值是否小于5
+        Rule rule = ctx -> ctx.get(key, 0) < 5;
+
+        // 如果满足条件，执行true分支，否则执行false分支
+        definition.addIf(Nodes.newIf(rule).then(trueBranch)
             .otherwise(falseBranch));
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
+        // 设置key值为1
         context.put(key, 1);
 
+        instance.execute(context);
+    }
+
+    @Test
+    public void testWhile() throws Exception {
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        TestWhileRule rule = new TestWhileRule();
+        definition.addWhile(Nodes.newWhile(rule)
+            .then(new TestWhileNode1(), new TestWhileNode2()));
+        ProcessInstance<String> instance = definition.newInstance();
+        Context context = Contexts.newContext();
+        Key<Integer> key = Contexts.newKey("k", int.class);
+        context.put(key, 0);
         instance.execute(context);
     }
 

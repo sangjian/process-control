@@ -40,6 +40,9 @@ public class DoWhileConditionNode extends WhileConditionNode {
             }
             blockWrapper.resetBreak();
             blockWrapper.resetContinue();
+            if (!getRule().match(doWhileContext)) {
+                return ProcessStatus.PROCEED;
+            }
         }
 
         return ProcessStatus.PROCEED;
