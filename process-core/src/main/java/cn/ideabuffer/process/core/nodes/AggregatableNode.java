@@ -16,19 +16,23 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface AggregatableNode<N extends MergeableNode<?>, R> extends TransmittableNode<R>, Parallelizable {
+public interface AggregatableNode<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R> extends TransmittableNode<R>, Parallelizable {
 
-    AggregatableNode<N, R> aggregate(@NotNull N... nodes);
+    AggregatableNode<A, N, R> aggregate(@NotNull N... nodes);
 
-    @Override
-    AggregatableNode<N, R> parallel();
-
-    @Override
-    AggregatableNode<N, R> parallel(Executor executor);
+    AggregatableNode<A, N, R> aggregator(@NotNull A aggregator);
 
     @Override
-    AggregatableNode<N, R> processOn(Rule rule);
+    AggregatableNode<A, N, R> parallel();
 
-    Aggregator<List<N>, R> getAggregator();
+    @Override
+    AggregatableNode<A, N, R> parallel(Executor executor);
+
+    @Override
+    AggregatableNode<A, N, R> processOn(Rule rule);
+
+    A getAggregator();
+
+    List<N> getMergeableNodes();
 
 }

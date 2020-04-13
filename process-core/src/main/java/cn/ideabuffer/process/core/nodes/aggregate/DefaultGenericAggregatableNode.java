@@ -1,17 +1,11 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
-import cn.ideabuffer.process.core.Lifecycle;
-import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.GenericAggregatableNode;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
-import cn.ideabuffer.process.core.nodes.UnitAggregatableNode;
-import cn.ideabuffer.process.core.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -19,12 +13,8 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public class DefaultGenericAggregatableNode<P, R> extends AbstractTransmittableNode<R> implements
+public class DefaultGenericAggregatableNode<P, R> extends AbstractAggregatableNode<GenericAggregator<P, R>, MergeableNode<P>, R> implements
     GenericAggregatableNode<P, R> {
-
-    private GenericAggregator<P, R> aggregator;
-
-    private List<MergeableNode<P>> mergeableNodes;
 
     public DefaultGenericAggregatableNode() {
         this(null, null);
@@ -39,8 +29,7 @@ public class DefaultGenericAggregatableNode<P, R> extends AbstractTransmittableN
     }
 
     public DefaultGenericAggregatableNode(GenericAggregator<P, R> aggregator, List<MergeableNode<P>> mergeableNodes) {
-        this.aggregator = aggregator;
-        this.mergeableNodes = mergeableNodes == null ? new ArrayList<>() : mergeableNodes;
+        super(aggregator, mergeableNodes);
     }
 
     @Override
@@ -69,40 +58,13 @@ public class DefaultGenericAggregatableNode<P, R> extends AbstractTransmittableN
 
     @Override
     public GenericAggregatableNode<P, R> aggregate(@NotNull MergeableNode<P>... nodes) {
-        this.mergeableNodes.addAll(Arrays.asList(nodes));
+        super.aggregate(nodes);
         return this;
     }
 
     @Override
     public GenericAggregatableNode<P, R> aggregator(@NotNull GenericAggregator<P, R> aggregator) {
-        this.aggregator = aggregator;
+        super.aggregator(aggregator);
         return this;
-    }
-
-    @Override
-    public GenericAggregator<P, R> getAggregator() {
-        return aggregator;
-    }
-
-    @Override
-    public List<MergeableNode<P>> getMergeableNodes() {
-        return mergeableNodes;
-    }
-
-    @Override
-    protected R doInvoke(Context context) throws Exception {
-        return aggregator.aggregate(context, getMergeableNodes());
-    }
-
-    @Override
-    protected void onDestroy() {
-        try {
-            if (mergeableNodes != null) {
-                mergeableNodes.forEach(Lifecycle::destroy);
-            }
-        } catch (Exception e) {
-            logger.error("destroy encountered problem!", e);
-            throw e;
-        }
     }
 }

@@ -1,16 +1,11 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
-import cn.ideabuffer.process.core.Lifecycle;
-import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
-import cn.ideabuffer.process.core.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -18,12 +13,9 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public class DefaultDistributeAggregatableNode<R> extends AbstractTransmittableNode<R> implements
+public class DefaultDistributeAggregatableNode<R> extends AbstractAggregatableNode<DistributeAggregator<R>, DistributeMergeableNode<?, R>, R> implements
     DistributeAggregatableNode<R> {
 
-    private DistributeAggregator<R> aggregator;
-
-    private List<DistributeMergeableNode<?, R>> mergeableNodes;
 
     public DefaultDistributeAggregatableNode() {
         this(null, null);
@@ -39,8 +31,7 @@ public class DefaultDistributeAggregatableNode<R> extends AbstractTransmittableN
 
     public DefaultDistributeAggregatableNode(DistributeAggregator<R> aggregator,
         List<DistributeMergeableNode<?, R>> mergeableNodes) {
-        this.aggregator = aggregator;
-        this.mergeableNodes = mergeableNodes == null ? new ArrayList<>() : mergeableNodes;
+        super(aggregator, mergeableNodes);
     }
 
     @Override
@@ -69,40 +60,13 @@ public class DefaultDistributeAggregatableNode<R> extends AbstractTransmittableN
 
     @Override
     public DistributeAggregatableNode<R> aggregate(@NotNull DistributeMergeableNode<?, R>... nodes) {
-        this.mergeableNodes.addAll(Arrays.asList(nodes));
+        super.aggregate(nodes);
         return this;
     }
 
     @Override
     public DistributeAggregatableNode<R> aggregator(@NotNull DistributeAggregator<R> aggregator) {
-        this.aggregator = aggregator;
+        super.aggregator(aggregator);
         return this;
-    }
-
-    @Override
-    public DistributeAggregator<R> getAggregator() {
-        return aggregator;
-    }
-
-    @Override
-    public List<DistributeMergeableNode<?, R>> getMergeableNodes() {
-        return mergeableNodes;
-    }
-
-    @Override
-    protected R doInvoke(Context context) throws Exception {
-        return aggregator.aggregate(context, getMergeableNodes());
-    }
-
-    @Override
-    protected void onDestroy() {
-        try {
-            if (mergeableNodes != null) {
-                mergeableNodes.forEach(Lifecycle::destroy);
-            }
-        } catch (Exception e) {
-            logger.error("destroy encountered problem!", e);
-            throw e;
-        }
     }
 }

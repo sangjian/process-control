@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface UnitAggregatableNode<R> extends AggregatableNode<MergeableNode<R>, R> {
+public interface UnitAggregatableNode<R> extends AggregatableNode<UnitAggregator<R>, MergeableNode<R>, R> {
 
     @Override
     UnitAggregatableNode<R> aggregate(@NotNull MergeableNode<R>... nodes);
@@ -29,8 +29,7 @@ public interface UnitAggregatableNode<R> extends AggregatableNode<MergeableNode<
 
     UnitAggregatableNode<R> aggregator(@NotNull UnitAggregator<R> aggregator);
 
+    @Override
     List<MergeableNode<R>> getMergeableNodes();
 
-    @Override
-    UnitAggregator<R> getAggregator();
 }

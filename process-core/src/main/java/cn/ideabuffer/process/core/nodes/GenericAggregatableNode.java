@@ -14,7 +14,7 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface GenericAggregatableNode<P, R> extends AggregatableNode<MergeableNode<P>, R> {
+public interface GenericAggregatableNode<P, R> extends AggregatableNode<GenericAggregator<P, R>, MergeableNode<P>, R> {
 
     @Override
     GenericAggregatableNode<P, R> aggregate(@NotNull MergeableNode<P>... nodes);
@@ -28,10 +28,4 @@ public interface GenericAggregatableNode<P, R> extends AggregatableNode<Mergeabl
     @Override
     GenericAggregatableNode<P, R> processOn(Rule rule);
 
-    GenericAggregatableNode<P, R> aggregator(@NotNull GenericAggregator<P, R> aggregator);
-
-    List<MergeableNode<P>> getMergeableNodes();
-
-    @Override
-    GenericAggregator<P, R> getAggregator();
 }
