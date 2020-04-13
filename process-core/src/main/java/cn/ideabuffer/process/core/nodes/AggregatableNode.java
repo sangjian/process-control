@@ -11,6 +11,7 @@ import java.util.concurrent.Executor;
 /**
  * 可聚合结果的节点
  *
+ * @param <A> 聚合器类型
  * @param <N> 合并节点类型
  * @param <R> 聚合结果类型
  * @author sangjian.sj
