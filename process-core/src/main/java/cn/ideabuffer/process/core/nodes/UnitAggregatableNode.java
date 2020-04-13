@@ -27,6 +27,7 @@ public interface UnitAggregatableNode<R> extends AggregatableNode<UnitAggregator
     @Override
     UnitAggregatableNode<R> processOn(Rule rule);
 
+    @Override
     UnitAggregatableNode<R> aggregator(@NotNull UnitAggregator<R> aggregator);
 
     @Override
