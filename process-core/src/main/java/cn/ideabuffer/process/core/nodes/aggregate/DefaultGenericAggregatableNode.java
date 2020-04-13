@@ -13,7 +13,8 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public class DefaultGenericAggregatableNode<P, R> extends AbstractAggregatableNode<GenericAggregator<P, R>, MergeableNode<P>, R> implements
+public class DefaultGenericAggregatableNode<P, R>
+    extends AbstractAggregatableNode<GenericAggregator<P, R>, MergeableNode<P>, R> implements
     GenericAggregatableNode<P, R> {
 
     public DefaultGenericAggregatableNode() {

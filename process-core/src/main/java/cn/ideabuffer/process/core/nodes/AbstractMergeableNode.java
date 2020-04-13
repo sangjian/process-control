@@ -30,6 +30,10 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
         return exceptionHandler;
     }
 
+    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
+    }
+
     @Override
     public MergeableNode<T> processOn(Rule rule) {
         this.rule = rule;
@@ -41,6 +45,10 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
         return rule;
     }
 
+    public void setRule(Rule rule) {
+        this.rule = rule;
+    }
+
     @Override
     public MergeableNode<T> timeout(long timeout, @NotNull TimeUnit unit) {
         this.timeout = unit.toMillis(timeout);
@@ -50,14 +58,6 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
     @Override
     public long getTimeout() {
         return timeout;
-    }
-
-    public void setRule(Rule rule) {
-        this.rule = rule;
-    }
-
-    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
-        this.exceptionHandler = exceptionHandler;
     }
 
     public void setTimeout(long timeout) {

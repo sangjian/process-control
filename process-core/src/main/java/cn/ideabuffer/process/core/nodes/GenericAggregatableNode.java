@@ -1,11 +1,9 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregator;
-import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregator;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.concurrent.Executor;
 
 /**

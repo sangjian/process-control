@@ -16,7 +16,8 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface AggregatableNode<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R> extends TransmittableNode<R>, Parallelizable {
+public interface AggregatableNode<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R>
+    extends TransmittableNode<R>, Parallelizable {
 
     AggregatableNode<A, N, R> aggregate(@NotNull N... nodes);
 

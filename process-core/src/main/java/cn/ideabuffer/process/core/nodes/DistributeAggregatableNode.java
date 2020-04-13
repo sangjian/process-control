@@ -13,7 +13,8 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface DistributeAggregatableNode<R> extends AggregatableNode<DistributeAggregator<R>, DistributeMergeableNode<?, R>, R> {
+public interface DistributeAggregatableNode<R>
+    extends AggregatableNode<DistributeAggregator<R>, DistributeMergeableNode<?, R>, R> {
 
     @Override
     DistributeAggregatableNode<R> aggregate(@NotNull DistributeMergeableNode<?, R>... nodes);

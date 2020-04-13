@@ -16,7 +16,8 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/04/13
  */
-public abstract class AbstractAggregatableNode<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R> extends AbstractTransmittableNode<R> implements
+public abstract class AbstractAggregatableNode<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R>
+    extends AbstractTransmittableNode<R> implements
     AggregatableNode<A, N, R> {
 
     private A aggregator;
@@ -30,14 +31,6 @@ public abstract class AbstractAggregatableNode<A extends Aggregator<List<N>, R>,
     public AbstractAggregatableNode(A aggregator, List<N> mergeableNodes) {
         this.aggregator = aggregator;
         this.mergeableNodes = mergeableNodes == null ? new ArrayList<>() : mergeableNodes;
-    }
-
-    public void setAggregator(A aggregator) {
-        this.aggregator = aggregator;
-    }
-
-    public void setMergeableNodes(List<N> mergeableNodes) {
-        this.mergeableNodes = mergeableNodes;
     }
 
     @Override
@@ -75,9 +68,17 @@ public abstract class AbstractAggregatableNode<A extends Aggregator<List<N>, R>,
         return aggregator;
     }
 
+    public void setAggregator(A aggregator) {
+        this.aggregator = aggregator;
+    }
+
     @Override
     public List<N> getMergeableNodes() {
         return mergeableNodes;
+    }
+
+    public void setMergeableNodes(List<N> mergeableNodes) {
+        this.mergeableNodes = mergeableNodes;
     }
 
     @Override
