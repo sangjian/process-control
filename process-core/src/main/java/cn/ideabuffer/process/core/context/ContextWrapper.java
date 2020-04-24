@@ -26,6 +26,11 @@ public class ContextWrapper implements Context {
     }
 
     @Override
+    public Context cloneContext() {
+        return context.cloneContext();
+    }
+
+    @Override
     public <V> V put(@NotNull Key<V> key, V value) {return context.put(key, value);}
 
     @Override

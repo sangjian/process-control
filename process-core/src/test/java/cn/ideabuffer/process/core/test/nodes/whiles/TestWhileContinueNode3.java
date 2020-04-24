@@ -22,7 +22,7 @@ public class TestWhileContinueNode3 extends AbstractExecutableNode {
         block.put(key, ++k);
         logger.info("k = " + k);
         if (k == 5 && block.allowContinue()) {
-            block.put(key, 1);
+            block.put(key, 0);
             block.doContinue();
         }
         Thread.sleep(1000);

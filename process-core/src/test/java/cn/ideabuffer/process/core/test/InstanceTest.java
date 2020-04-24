@@ -115,7 +115,7 @@ public class InstanceTest {
         definition.addWhile(Nodes.newWhile(rule)
             .then(new TestWhileContinueNode1(), new TestWhileContinueNode2(),
                 new TestWhileContinueNode3()));
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
         instance.execute(context);
@@ -128,7 +128,7 @@ public class InstanceTest {
         definition.addWhile(Nodes.newWhile(rule)
             .then(new TestWhileBreakNode1(), new TestWhileBreakNode2(),
                 new TestWhileBreakNode3()));
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
         instance.execute(context);
@@ -211,7 +211,7 @@ public class InstanceTest {
         TestIfRule rule = new TestIfRule();
         subDefine.addIf(Nodes.newIf(rule).then(new TestTrueBranch())
             .otherwise(new TestFalseBranch()));
-        ProcessInstance<String> subInstance = new DefaultProcessInstance<>(subDefine);
+        ProcessInstance<String> subInstance = subDefine.newInstance();
 
         definition.addProcessNodes(new TestNode1()).addProcessNodes(subInstance).addProcessNodes(new TestNode2());
 
@@ -219,8 +219,14 @@ public class InstanceTest {
         Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 1);
 
-        ProcessInstance<String> mainInstance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> mainInstance = definition.newInstance();
 
         mainInstance.execute(context);
+    }
+
+    public static void main(String[] args) {
+        double d = 40;
+        Double r = d / 100;
+        System.out.println(r);
     }
 }

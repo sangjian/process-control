@@ -49,7 +49,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode implements
                 try {
                     Context ctx = current;
                     if (node instanceof ProcessInstance) {
-                        ctx = Contexts.clone(current);
+                        ctx = current.cloneContext();
                     }
                     status = ((ExecutableNode)node).execute(ctx);
                     if (ProcessStatus.isComplete(status)) {

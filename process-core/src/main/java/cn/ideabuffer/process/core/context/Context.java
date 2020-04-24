@@ -16,4 +16,6 @@ public interface Context extends Parameter {
      * @return 当前区块
      */
     Block getBlock();
+
+    Context cloneContext();
 }

@@ -33,6 +33,11 @@ public class DefaultContext extends ParameterImpl implements Context {
     }
 
     @Override
+    public Context cloneContext() {
+        return new DefaultContext(null, this.getParams());
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
