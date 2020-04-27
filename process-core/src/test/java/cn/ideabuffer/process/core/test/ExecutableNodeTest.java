@@ -8,6 +8,8 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.nodes.builder.ExecutableNodeBuilder;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.test.nodes.executable.TestExceptionExecutableNode1;
 import cn.ideabuffer.process.core.test.nodes.executable.TestExecutableNode1;
@@ -47,21 +49,23 @@ public class ExecutableNodeTest {
         Rule rule = (ctx) -> true;
         Executor executor = Executors.newFixedThreadPool(2);
         ExceptionHandler handler = (t) -> logger.error("execute error!", t);
-        TestExceptionExecutableNode1 node1 = new TestExceptionExecutableNode1();
-        // 设置规则
-        node1.processOn(rule)
+        ExecutableNode node1 = ExecutableNodeBuilder.newBuilder(new TestExceptionExecutableNode1())
+            // 设置规则
+            .processOn(rule)
             // 设置异常处理器
             .exceptionHandler(handler)
             // 设置并行执行，没有指定线程池，则会开启新线程执行
-            .parallel();
+            .parallel()
+            .build();
 
-        TestExecutableNode2 node2 = new TestExecutableNode2();
-        // 设置规则
-        node2.processOn(rule)
+        ExecutableNode node2 = ExecutableNodeBuilder.newBuilder(new TestExecutableNode2())
+            // 设置规则
+            .processOn(rule)
             // 设置异常处理器
             .exceptionHandler(handler)
             // 设置并行执行，指定线程池执行
-            .parallel(executor);
+            .parallel(executor)
+            .build();
         definition
             .addProcessNodes(node1, node2);
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);

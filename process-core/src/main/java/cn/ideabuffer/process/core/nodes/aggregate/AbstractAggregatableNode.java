@@ -5,13 +5,10 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AggregatableNode;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.transmitter.AbstractTransmittableNode;
-import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 /**
  * @author sangjian.sj
@@ -35,36 +32,6 @@ public abstract class AbstractAggregatableNode<A extends Aggregator<List<N>, R>,
     }
 
     @Override
-    public AggregatableNode<A, N, R> processOn(Rule rule) {
-        super.processOn(rule);
-        return this;
-    }
-
-    @Override
-    public AggregatableNode<A, N, R> parallel() {
-        super.parallel();
-        return this;
-    }
-
-    @Override
-    public AggregatableNode<A, N, R> parallel(Executor executor) {
-        super.parallel(executor);
-        return this;
-    }
-
-    @Override
-    public AggregatableNode<A, N, R> aggregate(@NotNull N... nodes) {
-        this.mergeableNodes.addAll(Arrays.asList(nodes));
-        return this;
-    }
-
-    @Override
-    public AggregatableNode<A, N, R> aggregator(@NotNull A aggregator) {
-        this.aggregator = aggregator;
-        return this;
-    }
-
-    @Override
     public A getAggregator() {
         return aggregator;
     }
@@ -80,6 +47,16 @@ public abstract class AbstractAggregatableNode<A extends Aggregator<List<N>, R>,
 
     public void setMergeableNodes(List<N> mergeableNodes) {
         this.mergeableNodes = mergeableNodes;
+    }
+
+    @Override
+    public void aggregate(@NotNull List<N> nodes) {
+        this.mergeableNodes = nodes;
+    }
+
+    @Override
+    public void aggregator(@NotNull A aggregator) {
+        this.aggregator = aggregator;
     }
 
     @Override

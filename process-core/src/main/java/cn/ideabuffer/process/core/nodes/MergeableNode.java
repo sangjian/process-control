@@ -4,7 +4,6 @@ import cn.ideabuffer.process.core.Matchable;
 import cn.ideabuffer.process.core.Mergeable;
 import cn.ideabuffer.process.core.Node;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
-import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
@@ -17,14 +16,11 @@ import java.util.concurrent.TimeUnit;
  */
 public interface MergeableNode<T> extends Node, Mergeable<T>, Matchable {
 
-    MergeableNode<T> exceptionHandler(ExceptionHandler handler);
+    void exceptionHandler(ExceptionHandler handler);
 
     ExceptionHandler getExceptionHandler();
 
-    @Override
-    MergeableNode<T> processOn(Rule rule);
-
-    MergeableNode<T> timeout(long timeout, @NotNull TimeUnit unit);
+    void timeout(long timeout, @NotNull TimeUnit unit);
 
     long getTimeout();
 }

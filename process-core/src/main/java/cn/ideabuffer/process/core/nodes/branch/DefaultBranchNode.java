@@ -3,7 +3,6 @@ package cn.ideabuffer.process.core.nodes.branch;
 import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 /**
  * @author sangjian.sj
@@ -55,11 +53,10 @@ public class DefaultBranchNode extends AbstractExecutableNode implements BranchN
     }
 
     @Override
-    public DefaultBranchNode addNodes(@NotNull ExecutableNode... nodes) {
+    public void addNodes(@NotNull ExecutableNode... nodes) {
         if (nodes.length > 0) {
             this.nodes.addAll(Arrays.asList(nodes));
         }
-        return this;
     }
 
     @Override
@@ -69,30 +66,6 @@ public class DefaultBranchNode extends AbstractExecutableNode implements BranchN
 
     public void setNodes(List<ExecutableNode> nodes) {
         this.nodes = nodes;
-    }
-
-    @Override
-    public BranchNode processOn(Rule rule) {
-        super.processOn(rule);
-        return this;
-    }
-
-    @Override
-    public BranchNode parallel() {
-        super.parallel();
-        return this;
-    }
-
-    @Override
-    public BranchNode parallel(Executor executor) {
-        super.parallel(executor);
-        return this;
-    }
-
-    @Override
-    public BranchNode exceptionHandler(ExceptionHandler handler) {
-        super.exceptionHandler(handler);
-        return this;
     }
 
     @NotNull

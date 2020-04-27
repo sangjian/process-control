@@ -11,8 +11,6 @@ import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.Executor;
-
 /**
  * @author sangjian.sj
  * @date 2020/01/18
@@ -28,18 +26,6 @@ public class WhileConditionNode extends AbstractExecutableNode {
 
     public void setBranch(BranchNode branch) {
         this.branch = branch;
-    }
-
-    @Override
-    public WhileConditionNode parallel() {
-        super.parallel();
-        return this;
-    }
-
-    @Override
-    public WhileConditionNode parallel(Executor executor) {
-        super.parallel(executor);
-        return this;
     }
 
     @Override

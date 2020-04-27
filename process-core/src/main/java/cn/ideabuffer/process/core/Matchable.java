@@ -16,7 +16,7 @@ public interface Matchable {
      * @param rule 规则对象
      * @return 当前对象
      */
-    Matchable processOn(Rule rule);
+    void processOn(Rule rule);
 
     /**
      * 获取规则

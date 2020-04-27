@@ -1,13 +1,9 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
-import cn.ideabuffer.process.core.rule.Rule;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 /**
  * @author sangjian.sj
@@ -34,39 +30,4 @@ public class DefaultDistributeAggregatableNode<R>
         super(aggregator, mergeableNodes);
     }
 
-    @Override
-    public DistributeAggregatableNode<R> exceptionHandler(ExceptionHandler handler) {
-        super.exceptionHandler(handler);
-        return this;
-    }
-
-    @Override
-    public DistributeAggregatableNode<R> parallel() {
-        super.parallel();
-        return this;
-    }
-
-    @Override
-    public DistributeAggregatableNode<R> parallel(Executor executor) {
-        super.parallel(executor);
-        return this;
-    }
-
-    @Override
-    public DistributeAggregatableNode<R> processOn(Rule rule) {
-        super.processOn(rule);
-        return this;
-    }
-
-    @Override
-    public DistributeAggregatableNode<R> aggregate(@NotNull DistributeMergeableNode<?, R>... nodes) {
-        super.aggregate(nodes);
-        return this;
-    }
-
-    @Override
-    public DistributeAggregatableNode<R> aggregator(@NotNull DistributeAggregator<R> aggregator) {
-        super.aggregator(aggregator);
-        return this;
-    }
 }

@@ -4,10 +4,6 @@ import cn.ideabuffer.process.core.Executable;
 import cn.ideabuffer.process.core.Matchable;
 import cn.ideabuffer.process.core.Node;
 import cn.ideabuffer.process.core.Parallelizable;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
-import cn.ideabuffer.process.core.rule.Rule;
-
-import java.util.concurrent.Executor;
 
 /**
  * @author sangjian.sj
@@ -15,15 +11,4 @@ import java.util.concurrent.Executor;
  */
 public interface ExecutableNode extends Node, Executable, Parallelizable, Matchable {
 
-    @Override
-    ExecutableNode processOn(Rule rule);
-
-    @Override
-    ExecutableNode exceptionHandler(ExceptionHandler handler);
-
-    @Override
-    ExecutableNode parallel();
-
-    @Override
-    ExecutableNode parallel(Executor executor);
 }

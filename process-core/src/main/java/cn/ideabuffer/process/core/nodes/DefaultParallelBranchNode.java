@@ -26,33 +26,21 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     private ProceedStrategy strategy = ProceedStrategies.AT_LEAST_ONE_FINISHED;
 
     public DefaultParallelBranchNode() {
-        this(false);
-    }
-
-    public DefaultParallelBranchNode(boolean parallel) {
-        this(parallel, null);
-    }
-
-    public DefaultParallelBranchNode(Rule rule) {
-        this(false, rule, null, null);
-    }
-
-    public DefaultParallelBranchNode(boolean parallel, Executor executor) {
-        this(parallel, null, executor, null);
+        this(null);
     }
 
     public DefaultParallelBranchNode(List<BranchNode> branches) {
-        this(false, null, null, null, branches);
+        this(null, null, null, branches);
     }
 
-    public DefaultParallelBranchNode(boolean parallel, Rule rule,
+    public DefaultParallelBranchNode(Rule rule,
         Executor executor, ExceptionHandler handler) {
-        this(parallel, rule, executor, handler, null);
+        this(rule, executor, handler, null);
     }
 
-    public DefaultParallelBranchNode(boolean parallel, Rule rule,
+    public DefaultParallelBranchNode(Rule rule,
         Executor executor, ExceptionHandler handler, List<BranchNode> branches) {
-        super(parallel, rule, executor, handler);
+        super(false, rule, executor, handler);
         this.branches = branches == null ? new ArrayList<>() : branches;
     }
 
@@ -65,9 +53,8 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     }
 
     @Override
-    public ParallelBranchNode proceedWhen(@NotNull ProceedStrategy strategy) {
+    public void proceedWhen(@NotNull ProceedStrategy strategy) {
         this.strategy = strategy;
-        return this;
     }
 
     @NotNull
@@ -87,16 +74,14 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
     }
 
     @Override
-    public ParallelBranchNode addBranch(@NotNull ExecutableNode... nodes) {
+    public void addBranch(@NotNull ExecutableNode... nodes) {
         if (nodes.length > 0) {
             branches.add(new DefaultBranchNode(nodes));
         }
-        return this;
     }
 
     @Override
-    public ParallelBranchNode addBranch(@NotNull BranchNode branch) {
+    public void addBranch(@NotNull BranchNode branch) {
         this.branches.add(branch);
-        return this;
     }
 }

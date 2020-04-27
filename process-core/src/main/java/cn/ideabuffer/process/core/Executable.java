@@ -33,7 +33,7 @@ public interface Executable {
      * @return 当前对象
      * @see ExceptionHandler
      */
-    Executable exceptionHandler(ExceptionHandler handler);
+    void exceptionHandler(ExceptionHandler handler);
 
     /**
      * 获取异常处理器

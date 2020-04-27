@@ -61,22 +61,19 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     }
 
     @Override
-    public ExecutableNode parallel() {
+    public void parallel() {
         this.parallel = true;
-        return this;
     }
 
     @Override
-    public ExecutableNode parallel(Executor executor) {
+    public void parallel(Executor executor) {
         this.parallel = true;
         this.executor = executor;
-        return this;
     }
 
     @Override
-    public ExecutableNode processOn(Rule rule) {
+    public void processOn(Rule rule) {
         this.rule = rule;
-        return this;
     }
 
     @Override
@@ -171,9 +168,8 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     protected abstract ProcessStatus doExecute(Context context) throws Exception;
 
     @Override
-    public ExecutableNode exceptionHandler(ExceptionHandler handler) {
+    public void exceptionHandler(ExceptionHandler handler) {
         this.handler = handler;
-        return this;
     }
 
     @Override

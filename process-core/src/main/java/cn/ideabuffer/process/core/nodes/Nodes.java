@@ -37,21 +37,17 @@ public class Nodes {
         return new DefaultParallelBranchNode(branches);
     }
 
-    public static ParallelBranchNode newParallelBranchNode(boolean parallel) {
-        return new DefaultParallelBranchNode(parallel);
-    }
-
     public static ParallelBranchNode newParallelBranchNode(@NotNull Executor executor) {
-        return new DefaultParallelBranchNode(true, executor);
+        return new DefaultParallelBranchNode(null, executor, null);
     }
 
     public static ParallelBranchNode newParallelBranchNode(@NotNull Executor executor, Rule rule) {
-        return new DefaultParallelBranchNode(true, rule, executor, null);
+        return new DefaultParallelBranchNode(rule, executor, null);
     }
 
     public static ParallelBranchNode newParallelBranchNode(@NotNull Executor executor, Rule rule,
         ExceptionHandler handler) {
-        return new DefaultParallelBranchNode(true, rule, executor, handler);
+        return new DefaultParallelBranchNode(rule, executor, handler);
     }
 
     public static <R> UnitAggregatableNode<R> newUnitAggregatableNode() {

@@ -12,17 +12,14 @@ public interface Parallelizable {
 
     /**
      * 设置为并行执行
-     *
-     * @return 当前对象
      */
-    Parallelizable parallel();
+    void parallel();
 
     /**
      * 指定线程池来并行执行
      *
      * @param executor 执行时所在的线程池
-     * @return 当前对象
      */
-    Parallelizable parallel(Executor executor);
+    void parallel(Executor executor);
 
 }

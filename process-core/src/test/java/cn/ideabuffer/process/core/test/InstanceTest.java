@@ -7,6 +7,7 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.test.nodes.TestBaseNode;
 import cn.ideabuffer.process.core.test.nodes.TestBreakNode;
@@ -64,8 +65,9 @@ public class InstanceTest {
     public void testBranchWithExecutor() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        BranchNode branchNode = BranchNodeBuilder.newBuilder().addNodes(new TestNode1(), new TestNode2()).parallel(executorService).build();
         definition
-            .addBranchNode(Branches.newBranch(new TestNode1(), new TestNode2()).parallel(executorService));
+            .addBranchNode(branchNode);
         ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(null);

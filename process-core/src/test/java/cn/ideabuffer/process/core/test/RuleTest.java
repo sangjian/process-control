@@ -7,6 +7,7 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.Nodes;
+import cn.ideabuffer.process.core.nodes.builder.ExecutableNodeBuilder;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.rule.Rules;
 import cn.ideabuffer.process.core.test.nodes.TestNode1;
@@ -24,7 +25,7 @@ public class RuleTest {
     public void testRule() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         // 注册一个执行节点，并设置规则
-        definition.addProcessNodes(new TestRuleNode1().processOn((ctx) -> false));
+        definition.addProcessNodes(ExecutableNodeBuilder.newBuilder(new TestRuleNode1()).processOn((ctx) -> false).build());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -37,7 +38,7 @@ public class RuleTest {
         Rule tRule = (ctx) -> true;
         Rule fRule = (ctx) -> false;
         // 注册一个执行节点，并设置规则
-        definition.addProcessNodes(new TestRuleNode1().processOn(Rules.and(tRule, fRule)));
+        definition.addProcessNodes(ExecutableNodeBuilder.newBuilder(new TestRuleNode1()).processOn(Rules.and(tRule, fRule)).build());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 

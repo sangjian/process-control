@@ -20,9 +20,8 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
     private long timeout;
 
     @Override
-    public MergeableNode<T> exceptionHandler(ExceptionHandler handler) {
+    public void exceptionHandler(ExceptionHandler handler) {
         this.exceptionHandler = handler;
-        return this;
     }
 
     @Override
@@ -35,9 +34,8 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
     }
 
     @Override
-    public MergeableNode<T> processOn(Rule rule) {
+    public void processOn(Rule rule) {
         this.rule = rule;
-        return this;
     }
 
     @Override
@@ -50,9 +48,8 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
     }
 
     @Override
-    public MergeableNode<T> timeout(long timeout, @NotNull TimeUnit unit) {
+    public void timeout(long timeout, @NotNull TimeUnit unit) {
         this.timeout = unit.toMillis(timeout);
-        return this;
     }
 
     @Override

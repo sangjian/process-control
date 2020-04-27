@@ -10,8 +10,6 @@ import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.Executor;
-
 /**
  * @author sangjian.sj
  * @date 2020/01/18
@@ -39,18 +37,6 @@ public class IfConditionNode extends AbstractExecutableNode {
 
     public void setFalseBranch(BranchNode falseBranch) {
         this.falseBranch = falseBranch;
-    }
-
-    @Override
-    public IfConditionNode parallel() {
-        super.parallel();
-        return this;
-    }
-
-    @Override
-    public IfConditionNode parallel(Executor executor) {
-        super.parallel(executor);
-        return this;
     }
 
     @Override

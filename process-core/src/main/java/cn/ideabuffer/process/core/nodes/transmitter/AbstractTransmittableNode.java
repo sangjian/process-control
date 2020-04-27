@@ -4,7 +4,6 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.TransmittableNode;
-import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,30 +18,6 @@ import static cn.ideabuffer.process.core.executor.NodeExecutors.DEFAULT_POOL;
 public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNode implements TransmittableNode<R> {
 
     private TransmittableProcessor processor;
-
-    @Override
-    public TransmittableNode<R> exceptionHandler(ExceptionHandler handler) {
-        super.exceptionHandler(handler);
-        return this;
-    }
-
-    @Override
-    public TransmittableNode<R> processOn(Rule rule) {
-        super.processOn(rule);
-        return this;
-    }
-
-    @Override
-    public TransmittableNode<R> parallel() {
-        super.parallel();
-        return this;
-    }
-
-    @Override
-    public TransmittableNode<R> parallel(Executor executor) {
-        super.parallel(executor);
-        return this;
-    }
 
     @Override
     public <V> ResultStream<V> thenApply(@NotNull ResultProcessor<V, R> processor) {
