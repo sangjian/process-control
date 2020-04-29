@@ -115,8 +115,8 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
 
         Exception exp = null;
 
-        preExecute(context);
         try {
+            preExecute(context);
             ProcessStatus status = doExecute(context);
             postExecute(context);
             return status;
@@ -138,8 +138,8 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
         Executor e = executor == null ? NodeExecutors.DEFAULT_POOL : executor;
         e.execute(() -> {
             Exception exp = null;
-            preExecute(context);
             try {
+                preExecute(context);
                 doExecute(context);
                 postExecute(context);
             } catch (Exception ex) {
@@ -187,7 +187,7 @@ public abstract class AbstractExecutableNode extends AbstractNode implements Exe
     }
 
     @Override
-    public void destroy() {
+    public final void destroy() {
         if (getState() != LifecycleState.INITIALIZED) {
             return;
         }

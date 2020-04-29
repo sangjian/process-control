@@ -21,7 +21,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <logback-classic.version>1.2.3</logback-classic.version>
         <process-core.version>1.0-SNAPSHOT</process-core.version>
+        <guava-retry.version>2.0.0</guava-retry.version>
         <sonar.projectKey>process-control</sonar.projectKey>
         <sonar.organization>sangjian</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -45,7 +47,12 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.2.3</version>
+                <version>${logback-classic.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.rholder</groupId>
+                <artifactId>guava-retrying</artifactId>
+                <version>${guava-retry.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.ideabuffer.process</groupId>

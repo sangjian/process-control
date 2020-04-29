@@ -7,14 +7,14 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.nodes.Nodes;
+import cn.ideabuffer.process.core.nodes.branch.BranchNode;
+import cn.ideabuffer.process.core.nodes.branch.Branches;
 import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.test.nodes.TestBaseNode;
 import cn.ideabuffer.process.core.test.nodes.TestBreakNode;
 import cn.ideabuffer.process.core.test.nodes.TestNode1;
-import cn.ideabuffer.process.core.nodes.Nodes;
-import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.nodes.branch.Branches;
 import cn.ideabuffer.process.core.test.nodes.TestNode2;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestFalseBranch;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestIfRule;
@@ -65,7 +65,8 @@ public class InstanceTest {
     public void testBranchWithExecutor() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        BranchNode branchNode = BranchNodeBuilder.newBuilder().addNodes(new TestNode1(), new TestNode2()).parallel(executorService).build();
+        BranchNode branchNode = BranchNodeBuilder.newBuilder().addNodes(new TestNode1(), new TestNode2()).parallel(
+            executorService).build();
         definition
             .addBranchNode(branchNode);
         ProcessInstance<String> instance = definition.newInstance();
