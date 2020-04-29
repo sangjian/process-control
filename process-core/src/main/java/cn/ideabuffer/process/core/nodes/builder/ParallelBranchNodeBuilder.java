@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
@@ -34,12 +34,6 @@ public class ParallelBranchNodeBuilder extends AbstractExecutableNodeBuilder<Par
     }
 
     @Override
-    public ParallelBranchNodeBuilder exceptionHandler(ExceptionHandler handler) {
-        super.exceptionHandler(handler);
-        return this;
-    }
-
-    @Override
     public ParallelBranchNodeBuilder parallel(Executor executor) {
         super.parallel(executor);
         return this;
@@ -48,6 +42,12 @@ public class ParallelBranchNodeBuilder extends AbstractExecutableNodeBuilder<Par
     @Override
     public ParallelBranchNodeBuilder processOn(Rule rule) {
         super.processOn(rule);
+        return this;
+    }
+
+    @Override
+    public ParallelBranchNodeBuilder addListeners(ProcessListener... listeners) {
+        super.addListeners(listeners);
         return this;
     }
 

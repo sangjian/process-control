@@ -16,7 +16,6 @@ public class TestGroupNode2 extends AbstractExecutableNode {
         return true;
     }
 
-    @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
         Thread.sleep(3000);

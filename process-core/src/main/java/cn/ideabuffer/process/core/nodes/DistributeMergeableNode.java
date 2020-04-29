@@ -1,9 +1,6 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.DistributeMergeable;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * 可合并结果的节点

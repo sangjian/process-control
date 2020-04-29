@@ -19,7 +19,7 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/03/01
  */
-public class DefaultParallelBranchNode extends AbstractExecutableNode implements ParallelBranchNode {
+public class DefaultParallelBranchNode extends AbstractExecutableNode<Void> implements ParallelBranchNode {
 
     private List<BranchNode> branches;
 
@@ -40,7 +40,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
 
     public DefaultParallelBranchNode(Rule rule,
         Executor executor, ExceptionHandler handler, List<BranchNode> branches) {
-        super(false, rule, executor, handler);
+        super(false, rule, executor);
         this.branches = branches == null ? new ArrayList<>() : branches;
     }
 
@@ -63,18 +63,17 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode implements
         if (branches == null || !ruleCheck(context)) {
             return ProcessStatus.PROCEED;
         }
-        return doExecute(context);
-    }
-
-    @NotNull
-    @Override
-    protected ProcessStatus doExecute(Context context) throws Exception {
         return NodeExecutors.PARALLEL_EXECUTOR.execute(getExecutor(), strategy, context,
             branches.toArray(new ExecutableNode[0]));
     }
 
     @Override
-    public void addBranch(@NotNull ExecutableNode... nodes) {
+    protected final Void doExecute(Context context) throws Exception {
+        return null;
+    }
+
+    @Override
+    public void addBranch(@NotNull ExecutableNode<?>... nodes) {
         if (nodes.length > 0) {
             branches.add(new DefaultBranchNode(nodes));
         }

@@ -60,7 +60,7 @@ public abstract class AbstractAggregatableNode<A extends Aggregator<List<N>, R>,
     }
 
     @Override
-    protected R doInvoke(Context context) throws Exception {
+    protected R doExecute(Context context) throws Exception {
         return getAggregator().aggregate(context, getMergeableNodes());
     }
 

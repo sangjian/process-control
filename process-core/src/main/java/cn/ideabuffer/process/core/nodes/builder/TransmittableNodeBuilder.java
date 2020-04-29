@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.nodes.TransmittableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -22,12 +22,6 @@ public class TransmittableNodeBuilder<R> extends AbstractExecutableNodeBuilder<T
     }
 
     @Override
-    public TransmittableNodeBuilder<R> exceptionHandler(ExceptionHandler handler) {
-        super.exceptionHandler(handler);
-        return this;
-    }
-
-    @Override
     public TransmittableNodeBuilder<R> parallel() {
         super.parallel();
         return this;
@@ -42,6 +36,12 @@ public class TransmittableNodeBuilder<R> extends AbstractExecutableNodeBuilder<T
     @Override
     public TransmittableNodeBuilder<R> processOn(Rule rule) {
         super.processOn(rule);
+        return this;
+    }
+
+    @Override
+    public TransmittableNodeBuilder<R> addListeners(ProcessListener... listeners) {
+        super.addListeners(listeners);
         return this;
     }
 

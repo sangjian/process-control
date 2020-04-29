@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.aggregator.UnitAggregator;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
@@ -34,12 +34,6 @@ public class UnitAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilde
     }
 
     @Override
-    public UnitAggregatableNodeBuilder<R> exceptionHandler(ExceptionHandler handler) {
-        super.exceptionHandler(handler);
-        return this;
-    }
-
-    @Override
     public UnitAggregatableNodeBuilder<R> parallel() {
         super.parallel();
         return this;
@@ -54,6 +48,12 @@ public class UnitAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilde
     @Override
     public UnitAggregatableNodeBuilder<R> processOn(Rule rule) {
         super.processOn(rule);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> addListeners(ProcessListener... listeners) {
+        super.addListeners(listeners);
         return this;
     }
 

@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -13,18 +13,12 @@ import java.util.concurrent.Executor;
  */
 public class ExecutableNodeBuilder extends AbstractExecutableNodeBuilder<ExecutableNode> {
 
-    ExecutableNodeBuilder(ExecutableNode node) {
+    private ExecutableNodeBuilder(ExecutableNode node) {
         super(node);
     }
 
     public static ExecutableNodeBuilder newBuilder(@NotNull ExecutableNode node) {
         return new ExecutableNodeBuilder(node);
-    }
-
-    @Override
-    public ExecutableNodeBuilder exceptionHandler(ExceptionHandler handler) {
-        super.exceptionHandler(handler);
-        return this;
     }
 
     @Override
@@ -45,4 +39,9 @@ public class ExecutableNodeBuilder extends AbstractExecutableNodeBuilder<Executa
         return this;
     }
 
+    @Override
+    public ExecutableNodeBuilder addListeners(ProcessListener... listeners) {
+        super.addListeners(listeners);
+        return this;
+    }
 }

@@ -8,6 +8,6 @@ import cn.ideabuffer.process.core.nodes.transmitter.ResultStream;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public interface TransmittableNode<R> extends ExecutableNode, ResultStream<R> {
+public interface TransmittableNode<R> extends ExecutableNode<R>, ResultStream<R> {
 
 }

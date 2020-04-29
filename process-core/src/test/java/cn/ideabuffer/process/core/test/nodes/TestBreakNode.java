@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @date 2020/03/05
  */
 public class TestBreakNode extends AbstractExecutableNode {
-    @NotNull
+
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         if (context.getBlock().allowBreak()) {

@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TestExceptionExecutableNode1 extends AbstractExecutableNode {
 
-    @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         Key<Integer> key = Contexts.newKey("k", int.class);

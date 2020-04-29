@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.Branches;
@@ -39,6 +40,12 @@ public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<BranchNode>
     @Override
     public BranchNodeBuilder processOn(Rule rule) {
         super.processOn(rule);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder addListeners(ProcessListener... listeners) {
+        super.addListeners(listeners);
         return this;
     }
 

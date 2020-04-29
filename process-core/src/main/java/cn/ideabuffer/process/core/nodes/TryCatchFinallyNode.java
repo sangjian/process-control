@@ -7,7 +7,6 @@ import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Objects;
@@ -50,7 +49,6 @@ public class TryCatchFinallyNode extends AbstractExecutableNode {
         this.finallyBranch = finallyBranch;
     }
 
-    @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
 

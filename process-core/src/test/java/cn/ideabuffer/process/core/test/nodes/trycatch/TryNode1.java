@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TryNode1 extends AbstractExecutableNode {
 
-    @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
         System.out.println("in TryNode1");

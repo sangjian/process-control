@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 
@@ -12,23 +12,18 @@ import java.util.concurrent.Executor;
  */
 public abstract class AbstractExecutableNodeBuilder<T extends ExecutableNode> implements Builder<T> {
 
-    protected ExceptionHandler handler;
-
     protected boolean parallel;
 
     protected Executor executor;
 
     protected Rule rule;
 
+    protected ProcessListener[] listeners;
+
     protected T node;
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
-    }
-
-    public Builder<T> exceptionHandler(ExceptionHandler handler) {
-        this.handler = handler;
-        return this;
     }
 
     public Builder<T> parallel() {
@@ -46,6 +41,11 @@ public abstract class AbstractExecutableNodeBuilder<T extends ExecutableNode> im
         return this;
     }
 
+    public Builder<T> addListeners(ProcessListener... listeners) {
+        this.listeners = listeners;
+        return this;
+    }
+
     @Override
     public T build() {
         if (parallel) {
@@ -55,7 +55,7 @@ public abstract class AbstractExecutableNodeBuilder<T extends ExecutableNode> im
             node.parallel(executor);
         }
         node.processOn(rule);
-        node.exceptionHandler(handler);
+        node.addListeners(listeners);
         return node;
     }
 

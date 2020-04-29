@@ -30,7 +30,7 @@ public class DoWhileConditionNode extends WhileConditionNode {
         Block doWhileBlock = new Block(true, true, context.getBlock());
         BlockWrapper blockWrapper = new BlockWrapper(doWhileBlock);
         ContextWrapper doWhileContext = Contexts.wrap(context, doWhileBlock);
-        while (true) {
+        do {
             ProcessStatus status = branch.execute(doWhileContext);
             if (ProcessStatus.isComplete(status)) {
                 return status;
@@ -40,10 +40,7 @@ public class DoWhileConditionNode extends WhileConditionNode {
             }
             blockWrapper.resetBreak();
             blockWrapper.resetContinue();
-            if (!getRule().match(doWhileContext)) {
-                return ProcessStatus.PROCEED;
-            }
-        }
+        } while (getRule().match(doWhileContext));
 
         return ProcessStatus.PROCEED;
     }

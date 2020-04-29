@@ -8,8 +8,9 @@ import cn.ideabuffer.process.core.nodes.transmitter.AbstractTransmittableNode;
  * @date 2020/03/10
  */
 public class TestTransmittableNode extends AbstractTransmittableNode<String> {
+
     @Override
-    protected String doInvoke(Context context) throws Exception {
+    protected String doExecute(Context context) throws Exception {
         return "hello";
     }
 }

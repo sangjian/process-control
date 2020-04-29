@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class IfConditionNode extends AbstractExecutableNode {
+public class IfConditionNode extends AbstractExecutableNode<ProcessStatus> {
 
     private BranchNode trueBranch;
 
@@ -53,7 +53,6 @@ public class IfConditionNode extends AbstractExecutableNode {
         return super.execute(context);
     }
 
-    @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
 

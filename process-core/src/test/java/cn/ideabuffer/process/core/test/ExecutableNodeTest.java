@@ -52,8 +52,6 @@ public class ExecutableNodeTest {
         ExecutableNode node1 = ExecutableNodeBuilder.newBuilder(new TestExceptionExecutableNode1())
             // 设置规则
             .processOn(rule)
-            // 设置异常处理器
-            .exceptionHandler(handler)
             // 设置并行执行，没有指定线程池，则会开启新线程执行
             .parallel()
             .build();
@@ -61,8 +59,6 @@ public class ExecutableNodeTest {
         ExecutableNode node2 = ExecutableNodeBuilder.newBuilder(new TestExecutableNode2())
             // 设置规则
             .processOn(rule)
-            // 设置异常处理器
-            .exceptionHandler(handler)
             // 设置并行执行，指定线程池执行
             .parallel(executor)
             .build();

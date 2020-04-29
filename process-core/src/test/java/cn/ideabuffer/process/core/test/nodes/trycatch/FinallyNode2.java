@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
  * @date 2020/02/28
  */
 public class FinallyNode2 extends AbstractExecutableNode {
-    @NotNull
     @Override
     public ProcessStatus doExecute(Context context) throws Exception {
         System.out.println("in FinallyNode2");

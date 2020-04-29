@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TestParallelNode1 extends AbstractExecutableNode {
 
-    @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         logger.info("in TestParallelNode1");

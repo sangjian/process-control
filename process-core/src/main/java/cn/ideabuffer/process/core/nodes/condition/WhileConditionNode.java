@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class WhileConditionNode extends AbstractExecutableNode {
+public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus> {
 
     protected BranchNode branch;
 
@@ -42,7 +42,6 @@ public class WhileConditionNode extends AbstractExecutableNode {
         return super.execute(context);
     }
 
-    @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         if (branch == null) {
@@ -53,10 +52,7 @@ public class WhileConditionNode extends AbstractExecutableNode {
         BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
         ContextWrapper whileContext = Contexts.wrap(context, whileBlock);
 
-        while (true) {
-            if (!getRule().match(whileContext)) {
-                return ProcessStatus.PROCEED;
-            }
+        while (getRule().match(whileContext)) {
             ProcessStatus status = branch.execute(whileContext);
             if (ProcessStatus.isComplete(status)) {
                 return status;

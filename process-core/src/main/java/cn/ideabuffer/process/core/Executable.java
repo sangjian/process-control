@@ -1,7 +1,6 @@
 package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,22 +24,6 @@ public interface Executable {
      */
     @NotNull
     ProcessStatus execute(Context context) throws Exception;
-
-    /**
-     * 设置异常处理器
-     *
-     * @param handler 异常处理器
-     * @return 当前对象
-     * @see ExceptionHandler
-     */
-    void exceptionHandler(ExceptionHandler handler);
-
-    /**
-     * 获取异常处理器
-     *
-     * @return 异常处理器对象
-     */
-    ExceptionHandler getExceptionHandler();
 
     /**
      * 获取当前执行的线程池

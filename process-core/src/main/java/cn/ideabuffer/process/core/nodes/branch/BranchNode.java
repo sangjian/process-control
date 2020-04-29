@@ -11,7 +11,7 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/03/01
  */
-public interface BranchNode extends ExecutableNode, Branch<ExecutableNode> {
+public interface BranchNode extends ExecutableNode<Void>, Branch<ExecutableNode<?>> {
 
     /**
      * 获取分支下的所有节点
@@ -19,6 +19,6 @@ public interface BranchNode extends ExecutableNode, Branch<ExecutableNode> {
      * @return 节点列表
      */
     @Override
-    List<ExecutableNode> getNodes();
+    List<ExecutableNode<?>> getNodes();
 
 }

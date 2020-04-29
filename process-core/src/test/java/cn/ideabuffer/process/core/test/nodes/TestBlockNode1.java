@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TestBlockNode1 extends AbstractExecutableNode {
 
-    @NotNull
     @Override
     protected ProcessStatus doExecute(Context context) throws Exception {
         // 获取当前Block

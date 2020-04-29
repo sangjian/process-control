@@ -1,7 +1,6 @@
 package cn.ideabuffer.process.core.nodes.transmitter;
 
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.TransmittableNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -15,7 +14,7 @@ import static cn.ideabuffer.process.core.executor.NodeExecutors.DEFAULT_POOL;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNode implements TransmittableNode<R> {
+public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNode<R> implements TransmittableNode<R> {
 
     private TransmittableProcessor processor;
 
@@ -58,25 +57,18 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
         Executor e = getExecutor() == null ? DEFAULT_POOL : getExecutor();
 
         Runnable task = () -> {
-            preExecute(context);
-            Exception exp = null;
             try {
-                R result = doInvoke(context);
+                preExecute(context);
+                R result = doExecute(context);
                 if (processor != null) {
                     //noinspection unchecked
                     processor.fire(context, result);
                 }
+                onComplete(context, result);
             } catch (Exception ex) {
-                ExceptionHandler handler = getExceptionHandler();
-                if (handler != null) {
-                    handler.handle(ex);
-                } else {
-                    exp = ex;
-                    throw new RuntimeException(ex);
-                }
-            } finally {
-                whenComplete(context, exp);
+                onFailure(context, ex);
             }
+
         };
 
         if (isParallel()) {
@@ -87,11 +79,4 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
         return ProcessStatus.PROCEED;
     }
 
-    @NotNull
-    @Override
-    protected final ProcessStatus doExecute(Context context) throws Exception {
-        return ProcessStatus.PROCEED;
-    }
-
-    protected abstract R doInvoke(Context context) throws Exception;
 }

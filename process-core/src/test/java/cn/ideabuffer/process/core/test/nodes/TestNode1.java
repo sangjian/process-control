@@ -11,14 +11,13 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/03/05
  */
-public class TestNode1 extends AbstractExecutableNode {
+public class TestNode1 extends AbstractExecutableNode<Integer> {
 
-    @NotNull
     @Override
-    protected ProcessStatus doExecute(Context context) throws Exception {
+    protected Integer doExecute(Context context) throws Exception {
         Key<Integer> key = Contexts.newKey("k", int.class);
         logger.info("in testNode1, k:{}", context.get(key));
         Thread.sleep(1000);
-        return ProcessStatus.PROCEED;
+        return 2;
     }
 }
