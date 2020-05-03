@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.Branches;
+import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,16 +14,16 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<BranchNode> {
+public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<Void, BranchProcessor, BranchNode> {
 
     private ExecutableNode[] nodes;
 
-    private BranchNodeBuilder(BranchNode node) {
-        super(node);
+    private BranchNodeBuilder() {
+        super(Branches.newBranch());
     }
 
     public static BranchNodeBuilder newBuilder() {
-        return new BranchNodeBuilder(Branches.newBranch());
+        return new BranchNodeBuilder();
     }
 
     @Override
@@ -55,9 +56,15 @@ public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<BranchNode>
     }
 
     @Override
+    public BranchNodeBuilder by(BranchProcessor processor) {
+        super.by(processor);
+        return this;
+    }
+
+    @Override
     public BranchNode build() {
         BranchNode node = super.build();
-        node.addNodes(nodes);
+        processor.addNodes(nodes);
         return node;
     }
 }

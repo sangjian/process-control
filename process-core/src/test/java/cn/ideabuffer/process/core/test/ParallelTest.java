@@ -4,10 +4,11 @@ import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
+import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.nodes.builder.ParallelBranchNodeBuilder;
 import cn.ideabuffer.process.core.strategy.ProceedStrategies;
-import cn.ideabuffer.process.core.test.nodes.parallel.TestParallelNode1;
-import cn.ideabuffer.process.core.test.nodes.parallel.TestParallelNode2;
+import cn.ideabuffer.process.core.test.nodes.parallel.TestParallelNodeProcessor1;
+import cn.ideabuffer.process.core.test.nodes.parallel.TestParallelNodeProcessor2;
 import org.junit.Test;
 
 /**
@@ -19,8 +20,9 @@ public class ParallelTest {
     @Test
     public void testParallelNode() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        ParallelBranchNode node = ParallelBranchNodeBuilder.newBuilder().addBranch(new TestParallelNode1()).addBranch(
-            new TestParallelNode2()).proceedWhen(ProceedStrategies.ALL_PROCEEDED).build();
+        ParallelBranchNode node = ParallelBranchNodeBuilder.newBuilder().addBranch(
+            new ProcessNode<>(new TestParallelNodeProcessor1())).addBranch(
+            new ProcessNode<>(new TestParallelNodeProcessor2())).proceedWhen(ProceedStrategies.ALL_PROCEEDED).build();
         definition.addProcessNodes(node);
         ProcessInstance<String> instance = definition.newInstance();
 

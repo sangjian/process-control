@@ -7,12 +7,14 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.Nodes;
-import cn.ideabuffer.process.core.nodes.builder.ExecutableNodeBuilder;
+import cn.ideabuffer.process.core.nodes.ProcessNode;
+import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.rule.Rules;
-import cn.ideabuffer.process.core.test.nodes.TestNode1;
-import cn.ideabuffer.process.core.test.nodes.TestNode2;
-import cn.ideabuffer.process.core.test.nodes.rule.TestRuleNode1;
+import cn.ideabuffer.process.core.status.ProcessStatus;
+import cn.ideabuffer.process.core.test.nodes.TestProcessor1;
+import cn.ideabuffer.process.core.test.nodes.TestProcessor2;
+import cn.ideabuffer.process.core.test.nodes.rule.TestRuleNodeProcessor1;
 import org.junit.Test;
 
 /**
@@ -25,7 +27,8 @@ public class RuleTest {
     public void testRule() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         // 注册一个执行节点，并设置规则
-        definition.addProcessNodes(ExecutableNodeBuilder.newBuilder(new TestRuleNode1()).processOn((ctx) -> false).build());
+        definition.addProcessNodes(ProcessNodeBuilder.<ProcessStatus>newBuilder().processOn((ctx) -> false)
+            .by(new TestRuleNodeProcessor1()).build());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -38,7 +41,8 @@ public class RuleTest {
         Rule tRule = (ctx) -> true;
         Rule fRule = (ctx) -> false;
         // 注册一个执行节点，并设置规则
-        definition.addProcessNodes(ExecutableNodeBuilder.newBuilder(new TestRuleNode1()).processOn(Rules.and(tRule, fRule)).build());
+        definition.addProcessNodes(ProcessNodeBuilder.<ProcessStatus>newBuilder().processOn(Rules.and(tRule, fRule))
+            .by(new TestRuleNodeProcessor1()).build());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -48,8 +52,9 @@ public class RuleTest {
     @Test
     public void testIfAndRule() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        definition.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false)).then(new TestRuleNode1())
-            .otherwise(new TestNode2()));
+        definition.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false))
+            .then(new ProcessNode<>(new TestRuleNodeProcessor1()))
+            .otherwise(new ProcessNode<>(new TestProcessor2())));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -59,8 +64,9 @@ public class RuleTest {
     @Test
     public void testOrRule() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        definition.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false)).then(new TestNode1())
-            .otherwise(new TestNode2()));
+        definition.addIf(Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false))
+            .then(new ProcessNode<>(new TestProcessor1()))
+            .otherwise(new ProcessNode<>(new TestProcessor2())));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -70,7 +76,8 @@ public class RuleTest {
     @Test
     public void testNotRule() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        definition.addIf(Nodes.newIf(Rules.not((ctx) -> true)).then(new TestNode1()).otherwise(new TestNode2()));
+        definition.addIf(Nodes.newIf(Rules.not((ctx) -> true)).then(new ProcessNode<>(new TestProcessor1()))
+            .otherwise(new ProcessNode<>(new TestProcessor2())));
 
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();

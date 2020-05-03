@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes;
 
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.transmitter.ResultStream;
 
 /**
@@ -8,6 +9,6 @@ import cn.ideabuffer.process.core.nodes.transmitter.ResultStream;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public interface TransmittableNode<R> extends ExecutableNode<R>, ResultStream<R> {
+public interface TransmittableNode<R, P extends Processor<R>> extends ExecutableNode<R, P>, ResultStream<R> {
 
 }

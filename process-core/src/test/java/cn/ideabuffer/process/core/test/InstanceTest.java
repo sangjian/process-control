@@ -8,14 +8,15 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.Nodes;
+import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.Branches;
 import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.test.nodes.TestBaseNode;
-import cn.ideabuffer.process.core.test.nodes.TestBreakNode;
-import cn.ideabuffer.process.core.test.nodes.TestNode1;
-import cn.ideabuffer.process.core.test.nodes.TestNode2;
+import cn.ideabuffer.process.core.test.nodes.TestBreakProcessor;
+import cn.ideabuffer.process.core.test.nodes.TestProcessor1;
+import cn.ideabuffer.process.core.test.nodes.TestProcessor2;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestFalseBranch;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestIfRule;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestTrueBranch;
@@ -36,9 +37,10 @@ public class InstanceTest {
     @Test
     public void testInstanceResult() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+
         definition
             // 注册执行节点
-            .addProcessNodes(new TestNode1(), new TestNode2())
+            .addProcessNodes(Nodes.newProcessNode(new TestProcessor1()), Nodes.newProcessNode(new TestProcessor2()))
             // 注册基础节点
             .addBaseNode(new TestBaseNode());
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
@@ -48,24 +50,24 @@ public class InstanceTest {
 
         instance.execute(context);
         // 输出执行结果
-        System.out.println(instance.getResult());
+        System.out.println(instance.getProcessor().getResult());
     }
 
     @Test
     public void testBranch() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         definition
-            .addBranchNode(Branches.newBranch(new TestNode1(), new TestNode2()));
+            .addBranchNode(Branches.newBranch(new TestProcessor1(), new TestProcessor2()));
         ProcessInstance<String> instance = definition.newInstance();
 
-        instance.execute(null);
+        instance.execute(Contexts.newContext());
     }
 
     @Test
     public void testBranchWithExecutor() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        BranchNode branchNode = BranchNodeBuilder.newBuilder().addNodes(new TestNode1(), new TestNode2()).parallel(
+        BranchNode branchNode = BranchNodeBuilder.newBuilder().addNodes(Nodes.newProcessNode(new TestProcessor1()), Nodes.newProcessNode(new TestProcessor2())).parallel(
             executorService).build();
         definition
             .addBranchNode(branchNode);
@@ -79,9 +81,9 @@ public class InstanceTest {
     public void testIf() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         // 创建true分支
-        BranchNode trueBranch = Branches.newBranch(new TestNode1());
+        BranchNode trueBranch = Branches.newBranch(new TestProcessor1());
         // 创建false分支
-        BranchNode falseBranch = Branches.newBranch(new TestNode1());
+        BranchNode falseBranch = Branches.newBranch(new TestProcessor2());
         Key<Integer> key = Contexts.newKey("k", int.class);
 
         // 判断条件，判断key对应的值是否小于5
@@ -103,7 +105,7 @@ public class InstanceTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         TestWhileRule rule = new TestWhileRule();
         definition.addWhile(Nodes.newWhile(rule)
-            .then(new TestWhileNode1(), new TestWhileNode2()));
+            .then(new TestWhileNodeProcessor1(), new TestWhileNodeProcessor2()));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);
@@ -116,8 +118,8 @@ public class InstanceTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         TestWhileRule rule = new TestWhileRule();
         definition.addWhile(Nodes.newWhile(rule)
-            .then(new TestWhileContinueNode1(), new TestWhileContinueNode2(),
-                new TestWhileContinueNode3()));
+            .then(new TestWhileContinueNodeProcessor1(), new TestWhileContinueNodeProcessor2(),
+                new TestWhileContinueNodeProcessor3()));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -129,8 +131,8 @@ public class InstanceTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         TestWhileRule rule = new TestWhileRule();
         definition.addWhile(Nodes.newWhile(rule)
-            .then(new TestWhileBreakNode1(), new TestWhileBreakNode2(),
-                new TestWhileBreakNode3()));
+            .then(new TestWhileBreakNodeProcessor1(), new TestWhileBreakNodeProcessor2(),
+                new TestWhileBreakNodeProcessor3()));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -147,13 +149,13 @@ public class InstanceTest {
         }).then(
             Nodes.newWhile(rule)
                 .then(
-                    new TestWhileContinueNode1(),
-                    new TestWhileContinueNode2(),
+                    Nodes.newProcessNode(new TestWhileContinueNodeProcessor1()),
+                    Nodes.newProcessNode(new TestWhileContinueNodeProcessor2()),
                     Nodes.newIf(rule).then(
-                        Nodes.newIf((ctx) -> true).then(new TestBreakNode()).end(),
-                        new TestNode1())
+                        Nodes.newIf((ctx) -> true).then(Nodes.newProcessNode(new TestBreakProcessor())).end(),
+                        Nodes.newProcessNode(new TestProcessor1()))
                         .end(),
-                    new TestWhileContinueNode3())));
+                    Nodes.newProcessNode(new TestWhileContinueNodeProcessor3()))));
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -177,9 +179,9 @@ public class InstanceTest {
     @Test
     public void testTryCatchFinally() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        definition.addProcessNodes(Nodes.newTry(new TryNode1(), new TryNode2())
-            .catchOn(Exception.class, new CatchNode1(), new CatchNode2())
-            .doFinally(new FinallyNode1(), new FinallyNode2()));
+        definition.addProcessNodes(Nodes.newTry(new TryNodeProcessor1(), new TryNodeProcessor2())
+            .catchOn(Exception.class, new CatchNodeProcessor1(), new CatchNodeProcessor2())
+            .doFinally(new FinallyNodeProcessor1(), new FinallyNodeProcessor2()));
 
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
@@ -216,7 +218,7 @@ public class InstanceTest {
             .otherwise(new TestFalseBranch()));
         ProcessInstance<String> subInstance = subDefine.newInstance();
 
-        definition.addProcessNodes(new TestNode1()).addProcessNodes(subInstance).addProcessNodes(new TestNode2());
+        definition.addProcessNodes(Nodes.newProcessNode(new TestProcessor1())).addProcessNodes(subInstance).addProcessNodes(Nodes.newProcessNode(new TestProcessor2()));
 
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);

@@ -9,9 +9,17 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/01/19
  */
-public interface ExecutableNode<R> extends Node, Executable, Parallelizable, Matchable, NodeListener<R> {
+public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executable, Parallelizable, Matchable {
 
-    void addListeners(@NotNull ProcessListener... listener);
+    void registerNodeListener(NodeListener<R> listener);
+
+    void registerProcessor(P processor);
+
+    void addProcessListeners(@NotNull ProcessListener... listeners);
+
+    NodeListener<R> getNodeListener();
+
+    P getProcessor();
 
     List<ProcessListener> getListeners();
 }

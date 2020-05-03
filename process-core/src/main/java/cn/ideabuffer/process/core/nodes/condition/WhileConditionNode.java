@@ -1,12 +1,10 @@
 package cn.ideabuffer.process.core.nodes.condition;
 
-import cn.ideabuffer.process.core.block.Block;
-import cn.ideabuffer.process.core.block.BlockWrapper;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.context.ContextWrapper;
-import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
+import cn.ideabuffer.process.core.processors.DefaultWhileProcessor;
+import cn.ideabuffer.process.core.processors.WhileProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -15,64 +13,27 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus> {
+public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus, WhileProcessor> {
 
-    protected BranchNode branch;
 
     public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
-        super(rule);
-        this.branch = branch;
+        this(new DefaultWhileProcessor(rule, branch));
     }
 
-    public void setBranch(BranchNode branch) {
-        this.branch = branch;
+    public WhileConditionNode(@NotNull WhileProcessor processor) {
+        super.registerProcessor(processor);
     }
 
     @Override
-    protected boolean ruleCheck(Context context) {
+    protected boolean ruleCheck(@NotNull Context context) {
         return true;
-    }
-
-    @NotNull
-    @Override
-    public ProcessStatus execute(Context context) throws Exception {
-        if (getRule() == null) {
-            throw new NullPointerException("rule can't be null");
-        }
-        return super.execute(context);
-    }
-
-    @Override
-    protected ProcessStatus doExecute(Context context) throws Exception {
-        if (branch == null) {
-            return ProcessStatus.PROCEED;
-        }
-
-        Block whileBlock = new Block(true, true, context.getBlock());
-        BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
-        ContextWrapper whileContext = Contexts.wrap(context, whileBlock);
-
-        while (getRule().match(whileContext)) {
-            ProcessStatus status = branch.execute(whileContext);
-            if (ProcessStatus.isComplete(status)) {
-                return status;
-            }
-            if (blockWrapper.hasBroken()) {
-                break;
-            }
-
-            blockWrapper.resetBreak();
-            blockWrapper.resetContinue();
-        }
-
-        return ProcessStatus.PROCEED;
     }
 
     @Override
     protected void onDestroy() {
         try {
-            if (branch != null) {
-                branch.destroy();
+            if (getProcessor().getBranch() != null) {
+                getProcessor().getBranch().destroy();
             }
         } catch (Exception e) {
             logger.error("destroy encountered problem!", e);

@@ -2,6 +2,8 @@ package cn.ideabuffer.process.core.nodes.aggregate;
 
 import cn.ideabuffer.process.core.aggregator.GenericAggregator;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.processors.AggregateProcessor;
+import cn.ideabuffer.process.core.processors.GenericAggregateProcessor;
 
 import java.util.List;
 
@@ -10,22 +12,14 @@ import java.util.List;
  * @date 2020/03/10
  */
 public class DefaultGenericAggregatableNode<P, R>
-    extends AbstractAggregatableNode<GenericAggregator<P, R>, MergeableNode<P>, R> implements
+    extends AbstractAggregatableNode<GenericAggregator<P, R>, MergeableNode<P>, R, GenericAggregateProcessor<P, R>> implements
     GenericAggregatableNode<P, R> {
 
     public DefaultGenericAggregatableNode() {
-        this(null, null);
+        this(new GenericAggregateProcessor<>());
     }
 
-    public DefaultGenericAggregatableNode(GenericAggregator<P, R> aggregator) {
-        this(aggregator, null);
-    }
-
-    public DefaultGenericAggregatableNode(List<MergeableNode<P>> mergeableNodes) {
-        this(null, mergeableNodes);
-    }
-
-    public DefaultGenericAggregatableNode(GenericAggregator<P, R> aggregator, List<MergeableNode<P>> mergeableNodes) {
-        super(aggregator, mergeableNodes);
+    public DefaultGenericAggregatableNode(GenericAggregateProcessor<P, R> processor) {
+        super(processor);
     }
 }

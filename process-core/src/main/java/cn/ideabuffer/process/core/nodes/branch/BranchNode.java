@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.nodes.branch;
 
 import cn.ideabuffer.process.core.Branch;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.processors.BranchProcessor;
 
 import java.util.List;
 
@@ -11,14 +12,6 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/03/01
  */
-public interface BranchNode extends ExecutableNode<Void>, Branch<ExecutableNode<?>> {
-
-    /**
-     * 获取分支下的所有节点
-     *
-     * @return 节点列表
-     */
-    @Override
-    List<ExecutableNode<?>> getNodes();
+public interface BranchNode extends ExecutableNode<Void, BranchProcessor>, Branch {
 
 }

@@ -11,6 +11,7 @@
     <modules>
         <module>process-core</module>
         <module>process-spring</module>
+        <module>process-extension</module>
     </modules>
 
     <name>Process Control</name>
@@ -23,6 +24,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <logback-classic.version>1.2.3</logback-classic.version>
         <process-core.version>1.0-SNAPSHOT</process-core.version>
+        <process-extension.version>1.0-SNAPSHOT</process-extension.version>
         <guava-retry.version>2.0.0</guava-retry.version>
         <sonar.projectKey>process-control</sonar.projectKey>
         <sonar.organization>sangjian</sonar.organization>
@@ -58,6 +60,11 @@
                 <groupId>cn.ideabuffer.process</groupId>
                 <artifactId>process-core</artifactId>
                 <version>${process-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.ideabuffer.process</groupId>
+                <artifactId>process-extension</artifactId>
+                <version>${process-extension.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

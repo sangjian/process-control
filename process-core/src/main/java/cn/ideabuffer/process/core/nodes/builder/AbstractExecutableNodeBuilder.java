@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 
@@ -10,7 +11,7 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public abstract class AbstractExecutableNodeBuilder<T extends ExecutableNode> implements Builder<T> {
+public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T extends ExecutableNode<R, P>> implements Builder<T> {
 
     protected boolean parallel;
 
@@ -21,6 +22,8 @@ public abstract class AbstractExecutableNodeBuilder<T extends ExecutableNode> im
     protected ProcessListener[] listeners;
 
     protected T node;
+
+    protected P processor;
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
@@ -46,6 +49,11 @@ public abstract class AbstractExecutableNodeBuilder<T extends ExecutableNode> im
         return this;
     }
 
+    public Builder<T> by(P processor) {
+        this.processor = processor;
+        return this;
+    }
+
     @Override
     public T build() {
         if (parallel) {
@@ -55,7 +63,10 @@ public abstract class AbstractExecutableNodeBuilder<T extends ExecutableNode> im
             node.parallel(executor);
         }
         node.processOn(rule);
-        node.addListeners(listeners);
+        if (listeners != null) {
+            node.addProcessListeners(listeners);
+        }
+        node.registerProcessor(processor);
         return node;
     }
 

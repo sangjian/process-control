@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.nodes.aggregate;
 
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
+import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
 
 import java.util.List;
 
@@ -10,24 +11,15 @@ import java.util.List;
  * @date 2020/03/10
  */
 public class DefaultDistributeAggregatableNode<R>
-    extends AbstractAggregatableNode<DistributeAggregator<R>, DistributeMergeableNode<?, R>, R> implements
+    extends AbstractAggregatableNode<DistributeAggregator<R>, DistributeMergeableNode<?, R>, R, DistributeAggregateProcessor<R>> implements
     DistributeAggregatableNode<R> {
 
     public DefaultDistributeAggregatableNode() {
-        this(null, null);
+        this(new DistributeAggregateProcessor<>());
     }
 
-    public DefaultDistributeAggregatableNode(DistributeAggregator<R> aggregator) {
-        this(aggregator, null);
-    }
-
-    public DefaultDistributeAggregatableNode(List<DistributeMergeableNode<?, R>> mergeableNodes) {
-        this(null, mergeableNodes);
-    }
-
-    public DefaultDistributeAggregatableNode(DistributeAggregator<R> aggregator,
-        List<DistributeMergeableNode<?, R>> mergeableNodes) {
-        super(aggregator, mergeableNodes);
+    public DefaultDistributeAggregatableNode(DistributeAggregateProcessor<R> processor) {
+        super(processor);
     }
 
 }

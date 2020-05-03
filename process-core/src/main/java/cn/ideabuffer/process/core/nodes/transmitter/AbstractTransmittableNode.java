@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.transmitter;
 
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.TransmittableNode;
@@ -14,35 +15,35 @@ import static cn.ideabuffer.process.core.executor.NodeExecutors.DEFAULT_POOL;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNode<R> implements TransmittableNode<R> {
+public abstract class AbstractTransmittableNode<R, P extends Processor<R>> extends AbstractExecutableNode<R, P> implements TransmittableNode<R,P> {
 
-    private TransmittableProcessor processor;
+    private TransmittableProcessor transmittableProcessor;
 
     @Override
     public <V> ResultStream<V> thenApply(@NotNull ResultProcessor<V, R> processor) {
         TransmittableProcessor<V> then = new TransmittableProcessor<>(processor);
-        this.processor = then;
+        this.transmittableProcessor = then;
         return then;
     }
 
     @Override
     public <V> ResultStream<V> thenApplyAsync(@NotNull ResultProcessor<V, R> processor) {
         TransmittableProcessor<V> then = new TransmittableProcessor<>(processor, true, getExecutor());
-        this.processor = then;
+        this.transmittableProcessor = then;
         return then;
     }
 
     @Override
     public ResultStream<Void> thenAccept(@NotNull ResultConsumer<R> consumer) {
         TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer);
-        this.processor = then;
+        this.transmittableProcessor = then;
         return then;
     }
 
     @Override
     public ResultStream<Void> thenAcceptAsync(@NotNull ResultConsumer<R> consumer) {
         TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer, true, getExecutor());
-        this.processor = then;
+        this.transmittableProcessor = then;
         return then;
     }
 
@@ -57,16 +58,22 @@ public abstract class AbstractTransmittableNode<R> extends AbstractExecutableNod
         Executor e = getExecutor() == null ? DEFAULT_POOL : getExecutor();
 
         Runnable task = () -> {
+            R result;
             try {
-                preExecute(context);
-                R result = doExecute(context);
-                if (processor != null) {
+                result = getProcessor().process(context);
+                if (transmittableProcessor != null) {
                     //noinspection unchecked
-                    processor.fire(context, result);
+                    transmittableProcessor.fire(context, result);
                 }
                 onComplete(context, result);
+                notifyListeners(context, null, true);
             } catch (Exception ex) {
+                notifyListeners(context, ex, false);
                 onFailure(context, ex);
+                return;
+            }
+            if (getNodeListener() != null) {
+                getNodeListener().onComplete(context, result);
             }
 
         };

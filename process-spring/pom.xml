@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>process-spring</artifactId>
+    <packaging>jar</packaging>
 
     <name>Process Spring</name>
     <!-- FIXME change it to the project's website -->

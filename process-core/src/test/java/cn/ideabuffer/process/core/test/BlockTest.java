@@ -4,8 +4,9 @@ import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.test.nodes.TestBlockNode2;
-import cn.ideabuffer.process.core.test.nodes.TestBlockNode1;
+import cn.ideabuffer.process.core.nodes.ProcessNode;
+import cn.ideabuffer.process.core.test.nodes.TestBlockProcessor2;
+import cn.ideabuffer.process.core.test.nodes.TestBlockProcessor1;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ public class BlockTest {
     @Test
     public void testContextBlockIsolate() throws Exception {
         ProcessDefinition<Void> definition = new DefaultProcessDefinition<>();
-        definition.addProcessNodes(new TestBlockNode1(), new TestBlockNode2());
+        definition.addProcessNodes(new ProcessNode<>(new TestBlockProcessor1()), new ProcessNode<>(new TestBlockProcessor2()));
 
         ProcessInstance<Void> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();

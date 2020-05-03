@@ -1,19 +1,22 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.aggregate.*;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
+import cn.ideabuffer.process.core.processors.GenericAggregateProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -25,29 +28,32 @@ public class Nodes {
         throw new IllegalStateException("Utility class");
     }
 
+    public static <R> ProcessNode<R> newProcessNode() {
+        return new ProcessNode<>();
+    }
+
+    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor) {
+        return new ProcessNode<>(processor);
+    }
+
     public static NodeGroup newGroup() {
         return new NodeGroup();
     }
 
     public static ParallelBranchNode newParallelBranchNode() {
-        return new DefaultParallelBranchNode();
+        return newParallelBranchNode(null);
     }
 
-    public static ParallelBranchNode newParallelBranchNode(List<BranchNode> branches) {
-        return new DefaultParallelBranchNode(branches);
+    public static ParallelBranchNode newParallelBranchNode(Rule rule) {
+        return newParallelBranchNode(rule, null);
     }
 
-    public static ParallelBranchNode newParallelBranchNode(@NotNull Executor executor) {
-        return new DefaultParallelBranchNode(null, executor, null);
+    public static ParallelBranchNode newParallelBranchNode(Rule rule, List<BranchNode> branches) {
+        return newParallelBranchNode(rule, null, branches);
     }
 
-    public static ParallelBranchNode newParallelBranchNode(@NotNull Executor executor, Rule rule) {
-        return new DefaultParallelBranchNode(rule, executor, null);
-    }
-
-    public static ParallelBranchNode newParallelBranchNode(@NotNull Executor executor, Rule rule,
-        ExceptionHandler handler) {
-        return new DefaultParallelBranchNode(rule, executor, handler);
+    public static ParallelBranchNode newParallelBranchNode(Rule rule, Executor executor, List<BranchNode> branches) {
+        return new DefaultParallelBranchNode(rule, executor, branches);
     }
 
     public static <R> UnitAggregatableNode<R> newUnitAggregatableNode() {
@@ -56,6 +62,10 @@ public class Nodes {
 
     public static <P, R> GenericAggregatableNode<P, R> newGenericAggregatableNode() {
         return new DefaultGenericAggregatableNode<>();
+    }
+
+    public static <P, R> GenericAggregatableNode<P, R> newGenericAggregatableNode(GenericAggregateProcessor<P, R> processor) {
+        return new DefaultGenericAggregatableNode<>(processor);
     }
 
     public static <R> DistributeAggregatableNode<R> newDistributeAggregatableNode() {
@@ -78,7 +88,19 @@ public class Nodes {
         return new TryCatchFinally(branch);
     }
 
-    public static TryCatchFinally newTry(ExecutableNode... nodes) {
+    public static TryCatchFinally newTry(ExecutableNode<?, ?>... nodes) {
+        return new TryCatchFinally(new DefaultBranchNode(nodes));
+    }
+
+    public static TryCatchFinally newTry(Processor<?>... processors) {
+        if (processors == null || processors.length == 0) {
+            return new TryCatchFinally(new DefaultBranchNode());
+        }
+        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList());
+        return newTry(nodes);
+    }
+
+    public static TryCatchFinally newTry(List<ExecutableNode<?, ?>> nodes) {
         return new TryCatchFinally(new DefaultBranchNode(nodes));
     }
 
@@ -94,7 +116,7 @@ public class Nodes {
             return new IfWhenBuilder(rule, branch);
         }
 
-        public IfWhenBuilder then(ExecutableNode... nodes) {
+        public IfWhenBuilder then(ExecutableNode<?, ?>... nodes) {
             return then(new DefaultBranchNode(nodes));
         }
 
@@ -113,7 +135,7 @@ public class Nodes {
                 return new IfConditionNode(rule, thenBranch, branch);
             }
 
-            public IfConditionNode otherwise(ExecutableNode... nodes) {
+            public IfConditionNode otherwise(ExecutableNode<?, ?>... nodes) {
                 return otherwise(new DefaultBranchNode(nodes));
             }
 
@@ -137,8 +159,17 @@ public class Nodes {
             return new WhileConditionNode(rule, branch);
         }
 
-        public WhileConditionNode then(ExecutableNode... nodes) {
+        public WhileConditionNode then(ExecutableNode<?, ?>... nodes) {
             return then(new DefaultBranchNode(nodes));
+        }
+
+        public WhileConditionNode then(List<ExecutableNode<?, ?>> nodes) {
+            return then(new DefaultBranchNode(null, nodes));
+        }
+
+        public WhileConditionNode then(@NotNull Processor<?>... processors) {
+            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList());
+            return then(nodes);
         }
 
     }
@@ -160,14 +191,14 @@ public class Nodes {
 
         private BranchNode tryBranch;
 
-        private Map<Class<? extends Exception>, BranchNode> catchMap;
+        private Map<Class<? extends Throwable>, BranchNode> catchMap;
 
         TryCatchFinally(BranchNode tryBranch) {
             this.tryBranch = tryBranch;
             this.catchMap = new HashMap<>();
         }
 
-        public TryCatchFinally catchOn(Class<? extends Exception> expClass, BranchNode branch) {
+        public TryCatchFinally catchOn(Class<? extends Throwable> expClass, BranchNode branch) {
             if (expClass == null) {
                 throw new NullPointerException();
             }
@@ -175,7 +206,19 @@ public class Nodes {
             return this;
         }
 
-        public TryCatchFinally catchOn(Class<? extends Throwable> expClass, ExecutableNode... nodes) {
+        public TryCatchFinally catchOn(@NotNull Class<? extends Throwable> expClass, ExecutableNode<?, ?>... nodes) {
+            return catchOn(expClass, new DefaultBranchNode(nodes));
+        }
+
+        public TryCatchFinally catchOn(@NotNull Class<? extends Throwable> expClass, List<ExecutableNode<?, ?>> nodes) {
+            return catchOn(expClass, new DefaultBranchNode(nodes));
+        }
+
+        public TryCatchFinally catchOn(@NotNull Class<? extends Throwable> expClass, Processor<?>... processors) {
+            if (processors == null || processors.length == 0) {
+                return catchOn(expClass, new DefaultBranchNode());
+            }
+            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList());
             return catchOn(expClass, new DefaultBranchNode(nodes));
         }
 
@@ -183,7 +226,20 @@ public class Nodes {
             return new TryCatchFinallyNode(tryBranch, catchMap, branch);
         }
 
-        public TryCatchFinallyNode doFinally(ExecutableNode... nodes) {
+        public TryCatchFinallyNode doFinally(ExecutableNode<?, ?>... nodes) {
+            return doFinally(new DefaultBranchNode(nodes));
+        }
+
+        public TryCatchFinallyNode doFinally(Processor<?>... processors) {
+            if (processors == null || processors.length == 0) {
+                return new TryCatchFinallyNode(tryBranch, catchMap, null);
+            }
+            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
+                Collectors.toList());
+            return doFinally(nodes);
+        }
+
+        public TryCatchFinallyNode doFinally(List<ExecutableNode<?, ?>> nodes) {
             return doFinally(new DefaultBranchNode(nodes));
         }
     }

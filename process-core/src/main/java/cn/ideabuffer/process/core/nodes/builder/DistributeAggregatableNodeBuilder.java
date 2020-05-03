@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
+import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class DistributeAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilder<DistributeAggregatableNode<R>> {
+public class DistributeAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, DistributeAggregateProcessor<R>, DistributeAggregatableNode<R>> {
 
     private List<DistributeMergeableNode<?, R>> mergeableNodes;
 
@@ -57,6 +58,12 @@ public class DistributeAggregatableNodeBuilder<R> extends AbstractExecutableNode
         return this;
     }
 
+    @Override
+    public DistributeAggregatableNodeBuilder<R> by(DistributeAggregateProcessor<R> processor) {
+        super.by(processor);
+        return this;
+    }
+
     public DistributeAggregatableNodeBuilder<R> aggregate(@NotNull DistributeMergeableNode<?, R>... nodes) {
         this.mergeableNodes.addAll(Arrays.asList(nodes));
         return this;
@@ -69,9 +76,12 @@ public class DistributeAggregatableNodeBuilder<R> extends AbstractExecutableNode
 
     @Override
     public DistributeAggregatableNode<R> build() {
+        if (processor == null) {
+            processor = new DistributeAggregateProcessor<>();
+        }
         DistributeAggregatableNode<R> node = super.build();
-        node.aggregate(mergeableNodes);
-        node.aggregator(aggregator);
+        processor.aggregate(mergeableNodes);
+        processor.aggregator(aggregator);
         return node;
     }
 }

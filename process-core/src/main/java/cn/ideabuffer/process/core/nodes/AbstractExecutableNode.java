@@ -1,13 +1,17 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.LifecycleState;
+import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.status.ProcessErrorCode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +24,14 @@ import java.util.concurrent.ExecutorService;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class AbstractExecutableNode<R> extends AbstractNode implements ExecutableNode<R> {
+public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends AbstractNode implements ExecutableNode<R, P> {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private boolean parallel = false;
     private Rule rule;
     private Executor executor;
+    private P processor;
+    private NodeListener<R> nodeListener;
     private List<ProcessListener> listeners;
 
     public AbstractExecutableNode() {
@@ -45,14 +51,16 @@ public abstract class AbstractExecutableNode<R> extends AbstractNode implements 
     }
 
     public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor) {
-        this(parallel, rule, executor, null);
+        this(parallel, rule, executor, null, null, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener> listeners) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener> listeners, NodeListener<R> nodeListener, P processor) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
         this.listeners = listeners;
+        this.nodeListener = nodeListener;
+        this.processor = processor;
     }
 
     public boolean isParallel() {
@@ -80,8 +88,28 @@ public abstract class AbstractExecutableNode<R> extends AbstractNode implements 
     }
 
     @Override
-    public void addListeners(@NotNull ProcessListener... listeners) {
+    public void registerNodeListener(NodeListener<R> listener) {
+        this.nodeListener = listener;
+    }
+
+    @Override
+    public void registerProcessor(P processor) {
+        this.processor = processor;
+    }
+
+    @Override
+    public void addProcessListeners(@NotNull ProcessListener... listeners) {
         this.listeners = Arrays.asList(listeners);
+    }
+
+    @Override
+    public NodeListener<R> getNodeListener() {
+        return this.nodeListener;
+    }
+
+    @Override
+    public P getProcessor() {
+        return this.processor;
     }
 
     @Override
@@ -105,11 +133,6 @@ public abstract class AbstractExecutableNode<R> extends AbstractNode implements 
     protected boolean ruleCheck(@NotNull Context context) {
         return rule == null || rule.match(context);
     }
-
-    protected void preExecute(@NotNull Context context) {
-
-    }
-
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
@@ -121,15 +144,20 @@ public abstract class AbstractExecutableNode<R> extends AbstractNode implements 
             doParallelExecute(context);
             return ProcessStatus.PROCEED;
         }
-        ProcessStatus status;
+        ProcessStatus status = ProcessStatus.PROCEED;
         try {
-            preExecute(context);
-            R result = doExecute(context);
-            status = onComplete(context, result);
+            R result = getProcessor().process(context);
+            if (nodeListener != null) {
+                status = nodeListener.onComplete(context, result);
+            }
             notifyListeners(context, null, true);
         } catch (Exception e) {
             notifyListeners(context, e, false);
-            status = onFailure(context, e);
+            if (nodeListener != null) {
+                status = nodeListener.onFailure(context, e);
+            } else {
+                throw e;
+            }
         }
         return status;
     }
@@ -138,8 +166,7 @@ public abstract class AbstractExecutableNode<R> extends AbstractNode implements 
         Executor e = executor == null ? NodeExecutors.DEFAULT_POOL : executor;
         e.execute(() -> {
             try {
-                preExecute(context);
-                R result = doExecute(context);
+                R result = getProcessor().process(context);
                 onComplete(context, result);
                 notifyListeners(context, null, true);
             } catch (Exception ex) {
@@ -151,43 +178,35 @@ public abstract class AbstractExecutableNode<R> extends AbstractNode implements 
         });
     }
 
-    private void notifyListeners(Context context, Exception e, boolean success) {
+    protected void onComplete(Context context, R result) {
+        if (nodeListener == null) {
+            return;
+        }
+        nodeListener.onComplete(context, result);
+    }
+
+    protected void onFailure(Context context, Exception e) {
+        if (nodeListener == null) {
+            return;
+        }
+        nodeListener.onFailure(context, e);
+    }
+
+    protected void notifyListeners(Context context, Exception e, boolean success) {
         if (listeners == null) {
             return;
         }
-        try {
-            if (success) {
-                listeners.forEach(processListener -> processListener.onComplete(context));
-            } else {
-                listeners.forEach(processListener -> processListener.onFailure(context, e));
+        listeners.forEach(processListener -> {
+            try {
+                if (success) {
+                    processListener.onComplete(context);
+                } else {
+                    processListener.onFailure(context, e);
+                }
+            } catch (Exception ex) {
+                // ignore
             }
-        } catch (Exception exception) {
-            // ignore
-        }
-
-    }
-
-    /**
-     * 子类实现具体执行逻辑
-     *
-     * @param context 当前流程上下文
-     * @return 状态
-     * @throws Exception
-     * @see ProcessStatus
-     */
-    protected abstract R doExecute(Context context) throws Exception;
-
-    @Override
-    public ProcessStatus onComplete(@NotNull Context context, R result) {
-        if (result instanceof ProcessStatus) {
-            return (ProcessStatus)result;
-        }
-        return ProcessStatus.PROCEED;
-    }
-
-    @Override
-    public ProcessStatus onFailure(@NotNull Context context, Throwable t) {
-        throw new ProcessException(t);
+        });
     }
 
     @Override

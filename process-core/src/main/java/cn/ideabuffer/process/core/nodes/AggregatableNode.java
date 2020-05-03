@@ -2,7 +2,7 @@ package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Parallelizable;
 import cn.ideabuffer.process.core.aggregator.Aggregator;
-import org.jetbrains.annotations.NotNull;
+import cn.ideabuffer.process.core.processors.AggregateProcessor;
 
 import java.util.List;
 
@@ -15,15 +15,7 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface AggregatableNode<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R>
-    extends TransmittableNode<R>, Parallelizable {
-
-    void aggregate(@NotNull List<N> nodes);
-
-    void aggregator(@NotNull A aggregator);
-
-    A getAggregator();
-
-    List<N> getMergeableNodes();
+public interface AggregatableNode<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R, AP extends AggregateProcessor<A, N, R>>
+    extends TransmittableNode<R, AP>, Parallelizable {
 
 }

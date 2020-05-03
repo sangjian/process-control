@@ -22,7 +22,7 @@ public interface ProcessDefinition<R> extends Lifecycle {
      * @param nodes 可执行节点
      * @return 当前实例
      */
-    ProcessDefinition<R> addProcessNodes(@NotNull ExecutableNode... nodes);
+    ProcessDefinition<R> addProcessNodes(@NotNull ExecutableNode<?, ?>... nodes);
 
     /**
      * 增加if节点

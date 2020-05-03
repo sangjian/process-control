@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.aggregator.UnitAggregator;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
+import cn.ideabuffer.process.core.processors.UnitAggregateProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class UnitAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilder<UnitAggregatableNode<R>> {
+public class UnitAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, UnitAggregateProcessor<R>, UnitAggregatableNode<R>> {
 
     private List<MergeableNode<R>> mergeableNodes;
 
@@ -57,6 +58,12 @@ public class UnitAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilde
         return this;
     }
 
+    @Override
+    public UnitAggregatableNodeBuilder<R> by(UnitAggregateProcessor<R> processor) {
+        super.by(processor);
+        return this;
+    }
+
     public UnitAggregatableNodeBuilder<R> aggregate(@NotNull MergeableNode<R>... nodes) {
         this.mergeableNodes.addAll(Arrays.asList(nodes));
         return this;
@@ -69,9 +76,12 @@ public class UnitAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilde
 
     @Override
     public UnitAggregatableNode<R> build() {
+        if (processor == null) {
+            processor = new UnitAggregateProcessor<>();
+        }
         UnitAggregatableNode<R> node = super.build();
-        node.aggregate(mergeableNodes);
-        node.aggregator(aggregator);
+        processor.aggregate(mergeableNodes);
+        processor.aggregator(aggregator);
         return node;
     }
 }

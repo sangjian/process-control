@@ -22,7 +22,7 @@ public class TestNode1 extends AbstractExecutableNode {
 
     @Override
     protected @NotNull ProcessStatus doExecute(Context context) throws Exception {
-        logger.info("in TestNode1");
+        logger.info("in TestProcessor1");
         return ProcessStatus.PROCEED;
     }
 }

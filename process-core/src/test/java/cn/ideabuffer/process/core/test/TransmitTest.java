@@ -6,7 +6,8 @@ import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
-import cn.ideabuffer.process.core.test.nodes.transmitter.TestTransmittableNode;
+import cn.ideabuffer.process.core.nodes.TransmitNode;
+import cn.ideabuffer.process.core.test.nodes.transmitter.TestTransmittableProcessor;
 import org.junit.Test;
 
 /**
@@ -18,7 +19,7 @@ public class TransmitTest {
     @Test
     public void testTransmitNode() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        TestTransmittableNode node = new TestTransmittableNode();
+        TransmitNode<String> node = new TransmitNode<>(new TestTransmittableProcessor());
         node.thenApply((ctx, r) -> {
             System.out.println(r);
             return r + " world";
@@ -27,7 +28,7 @@ public class TransmitTest {
             return r.length();
         }).thenAccept((ctx, r) -> System.out.println(r));
         definition.addProcessNodes(node);
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
         instance.execute(context);
