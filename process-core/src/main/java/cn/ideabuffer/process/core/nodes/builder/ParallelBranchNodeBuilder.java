@@ -59,7 +59,7 @@ public class ParallelBranchNodeBuilder extends AbstractExecutableNodeBuilder<Pro
         return this;
     }
 
-    public ParallelBranchNodeBuilder addBranch(@NotNull ExecutableNode... nodes) {
+    public ParallelBranchNodeBuilder addBranch(@NotNull ExecutableNode<?, ?>... nodes) {
         this.branches.add(Branches.newBranch(nodes));
         return this;
     }

@@ -59,7 +59,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     }
 
     @Override
-    public ProcessDefinition<R> addProcessNodes(@NotNull ExecutableNode... nodes) {
+    public ProcessDefinition<R> addProcessNodes(@NotNull ExecutableNode<?, ?>... nodes) {
         return addNode(nodes);
     }
 

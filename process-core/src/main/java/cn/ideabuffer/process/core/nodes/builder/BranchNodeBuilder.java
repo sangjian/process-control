@@ -50,7 +50,7 @@ public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<Void, Branc
         return this;
     }
 
-    public BranchNodeBuilder addNodes(@NotNull ExecutableNode... nodes) {
+    public BranchNodeBuilder addNodes(@NotNull ExecutableNode<?, ?>... nodes) {
         this.nodes = nodes;
         return this;
     }

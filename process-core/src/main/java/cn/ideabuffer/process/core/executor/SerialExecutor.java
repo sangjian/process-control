@@ -22,5 +22,5 @@ public interface SerialExecutor {
      * @throws Exception
      */
     @NotNull
-    ProcessStatus execute(Context context, ExecutableNode... nodes) throws Exception;
+    ProcessStatus execute(Context context, ExecutableNode<?, ?>... nodes) throws Exception;
 }

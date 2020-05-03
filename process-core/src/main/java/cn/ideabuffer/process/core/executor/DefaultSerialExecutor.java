@@ -14,7 +14,7 @@ public class DefaultSerialExecutor implements SerialExecutor {
 
     @NotNull
     @Override
-    public ProcessStatus execute(Context context, ExecutableNode... nodes) throws Exception {
+    public ProcessStatus execute(Context context, ExecutableNode<?, ?>... nodes) throws Exception {
         if (nodes == null || nodes.length == 0) {
             return ProcessStatus.PROCEED;
         }
