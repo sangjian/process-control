@@ -1,9 +1,6 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.DefaultProcessDefinition;
-import cn.ideabuffer.process.core.DefaultProcessInstance;
-import cn.ideabuffer.process.core.ProcessDefinition;
-import cn.ideabuffer.process.core.ProcessInstance;
+import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.aggregator.Aggregators;
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
 import cn.ideabuffer.process.core.context.Context;
@@ -39,10 +36,12 @@ public class AggregateTest {
 
         Executor executor = Executors.newFixedThreadPool(3);
 
+
         // 创建单元化聚合节点
         UnitAggregatableNode<List<String>> node = UnitAggregatableNodeBuilder.<List<String>>newBuilder().aggregator(
-            Aggregators.newParallelUnitAggregator(executor, new ArrayListMerger<>())).aggregate(
-            new TestListMergeableNode1(), new TestListMergeableNode2())
+            Aggregators.newParallelUnitAggregator(executor, new ArrayListMerger<>()))
+            .aggregate(new TestListMergeableNode1(), new TestListMergeableNode2())
+            .addListeners(new TestUnitAggregatableNodeListener1(), new TestUnitAggregatableNodeListener2())
             //.by(new UnitAggregateProcessor<>())
             .build();
 

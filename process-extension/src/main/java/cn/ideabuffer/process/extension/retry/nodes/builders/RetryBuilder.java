@@ -46,7 +46,7 @@ public class RetryBuilder<R> extends AbstractExecutableNodeBuilder<R, Processor<
     }
 
     @Override
-    public RetryBuilder<R> addListeners(ProcessListener... listeners) {
+    public RetryBuilder<R> addListeners(ProcessListener<R>... listeners) {
         super.addListeners(listeners);
         return this;
     }

@@ -42,7 +42,7 @@ public class DefaultRetryNode<R> extends AbstractRetryableNode<R> {
     }
 
     public DefaultRetryNode(boolean parallel, Rule rule, Executor executor,
-        List<ProcessListener> listeners,
+        List<ProcessListener<R>> listeners,
         NodeListener<R> nodeListener, Processor<R> processor,
         Retryer<R> retryer) {
         super(parallel, rule, executor, listeners, nodeListener, processor, retryer);

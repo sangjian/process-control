@@ -4,8 +4,13 @@ import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -19,7 +24,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     protected Rule rule;
 
-    protected ProcessListener[] listeners;
+    protected List<ProcessListener<R>> listeners;
 
     protected T node;
 
@@ -27,6 +32,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
+        this.listeners = new LinkedList<>();
     }
 
     public Builder<T> parallel() {
@@ -44,8 +50,12 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
-    public Builder<T> addListeners(ProcessListener... listeners) {
-        this.listeners = listeners;
+
+    @SuppressWarnings("unchecked")
+    public Builder<T> addListeners(ProcessListener<R>... listeners) {
+        if (listeners != null) {
+            this.listeners.addAll(Arrays.stream(listeners).collect(Collectors.toList()));
+        }
         return this;
     }
 
@@ -64,7 +74,8 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         }
         node.processOn(rule);
         if (listeners != null) {
-            node.addProcessListeners(listeners);
+            //noinspection unchecked
+            node.addProcessListeners(listeners.toArray(new ProcessListener[0]));
         }
         node.registerProcessor(processor);
         return node;

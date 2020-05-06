@@ -41,7 +41,7 @@ public class TransmittableNodeBuilder<R, P extends Processor<R>> extends Abstrac
     }
 
     @Override
-    public TransmittableNodeBuilder<R, P> addListeners(ProcessListener... listeners) {
+    public TransmittableNodeBuilder<R, P> addListeners(ProcessListener<R>... listeners) {
         super.addListeners(listeners);
         return this;
     }

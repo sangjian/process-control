@@ -15,11 +15,11 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
 
     void registerProcessor(P processor);
 
-    void addProcessListeners(@NotNull ProcessListener... listeners);
+    void addProcessListeners(@NotNull ProcessListener<R>... listeners);
 
     NodeListener<R> getNodeListener();
 
     P getProcessor();
 
-    List<ProcessListener> getListeners();
+    List<ProcessListener<R>> getListeners();
 }

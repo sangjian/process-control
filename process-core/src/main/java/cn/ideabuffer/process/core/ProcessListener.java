@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/04/29
  */
-public interface ProcessListener {
+public interface ProcessListener<R> {
 
-    void onComplete(@NotNull Context context);
+    void onComplete(@NotNull Context context, R result);
 
     void onFailure(@NotNull Context context, Throwable t);
 

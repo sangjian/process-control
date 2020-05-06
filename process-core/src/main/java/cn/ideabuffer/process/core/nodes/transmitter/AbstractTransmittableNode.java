@@ -66,9 +66,9 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
                     transmittableProcessor.fire(context, result);
                 }
                 onComplete(context, result);
-                notifyListeners(context, null, true);
+                notifyListeners(context, result, null, true);
             } catch (Exception ex) {
-                notifyListeners(context, ex, false);
+                notifyListeners(context, null, ex, false);
                 onFailure(context, ex);
                 return;
             }

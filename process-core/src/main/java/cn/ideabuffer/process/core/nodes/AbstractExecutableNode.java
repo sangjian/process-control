@@ -32,7 +32,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     private Executor executor;
     private P processor;
     private NodeListener<R> nodeListener;
-    private List<ProcessListener> listeners;
+    private List<ProcessListener<R>> listeners;
 
     public AbstractExecutableNode() {
         this(false);
@@ -54,7 +54,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this(parallel, rule, executor, null, null, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener> listeners, NodeListener<R> nodeListener, P processor) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, NodeListener<R> nodeListener, P processor) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
@@ -98,7 +98,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
-    public void addProcessListeners(@NotNull ProcessListener... listeners) {
+    public void addProcessListeners(@NotNull ProcessListener<R>... listeners) {
         this.listeners = Arrays.asList(listeners);
     }
 
@@ -122,11 +122,11 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
-    public List<ProcessListener> getListeners() {
+    public List<ProcessListener<R>> getListeners() {
         return listeners;
     }
 
-    public void setListeners(List<ProcessListener> listeners) {
+    public void setListeners(List<ProcessListener<R>> listeners) {
         this.listeners = listeners;
     }
 
@@ -150,9 +150,9 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             if (nodeListener != null) {
                 status = nodeListener.onComplete(context, result);
             }
-            notifyListeners(context, null, true);
+            notifyListeners(context, result, null, true);
         } catch (Exception e) {
-            notifyListeners(context, e, false);
+            notifyListeners(context, null, e, false);
             if (nodeListener != null) {
                 status = nodeListener.onFailure(context, e);
             } else {
@@ -168,10 +168,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             try {
                 R result = getProcessor().process(context);
                 onComplete(context, result);
-                notifyListeners(context, null, true);
+                notifyListeners(context, result, null, true);
             } catch (Exception ex) {
                 logger.error("doParallelExecute error, node:{}", this, ex);
-                notifyListeners(context, ex, false);
+                notifyListeners(context, null, ex, false);
                 onFailure(context, ex);
             }
 
@@ -192,14 +192,14 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         nodeListener.onFailure(context, e);
     }
 
-    protected void notifyListeners(Context context, Exception e, boolean success) {
+    protected void notifyListeners(Context context, R result, Exception e, boolean success) {
         if (listeners == null) {
             return;
         }
         listeners.forEach(processListener -> {
             try {
                 if (success) {
-                    processListener.onComplete(context);
+                    processListener.onComplete(context, result);
                 } else {
                     processListener.onFailure(context, e);
                 }

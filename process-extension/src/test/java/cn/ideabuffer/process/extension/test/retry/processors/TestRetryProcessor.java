@@ -17,7 +17,6 @@ public class TestRetryProcessor implements Processor<String> {
     @Override
     public String process(@NotNull Context context) throws Exception {
         logger.info("in process");
-        throw new RuntimeException("hahahah");
-        //return "hello";
+        return "";
     }
 }

@@ -48,7 +48,7 @@ public class ParallelBranchNodeBuilder extends AbstractExecutableNodeBuilder<Pro
     }
 
     @Override
-    public ParallelBranchNodeBuilder addListeners(ProcessListener... listeners) {
+    public ParallelBranchNodeBuilder addListeners(ProcessListener<ProcessStatus>... listeners) {
         super.addListeners(listeners);
         return this;
     }

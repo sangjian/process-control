@@ -54,7 +54,7 @@ public class GenericAggregatableNodeBuilder<P, R>
     }
 
     @Override
-    public GenericAggregatableNodeBuilder<P, R> addListeners(ProcessListener... listeners) {
+    public GenericAggregatableNodeBuilder<P, R> addListeners(ProcessListener<R>... listeners) {
         super.addListeners(listeners);
         return this;
     }

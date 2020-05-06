@@ -7,6 +7,7 @@ import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.extension.retry.processors.RetryProcessor;
 import com.github.rholder.retry.Retryer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -44,7 +45,7 @@ public abstract class AbstractRetryableNode<R> extends AbstractExecutableNode<R,
     }
 
     public AbstractRetryableNode(boolean parallel, Rule rule, Executor executor,
-        List<ProcessListener> listeners, NodeListener<R> nodeListener, Processor<R> processor,
+        List<ProcessListener<R>> listeners, NodeListener<R> nodeListener, Processor<R> processor,
         Retryer<R> retryer) {
         super(parallel, rule, executor, listeners, nodeListener, processor);
         this.retryer = retryer;
@@ -57,7 +58,7 @@ public abstract class AbstractRetryableNode<R> extends AbstractExecutableNode<R,
     }
 
     public void setRetryer(Retryer<R> retryer) {
-        this.retryer = retryer;
+        retryBy(retryer);
     }
 
     @Override
@@ -65,8 +66,10 @@ public abstract class AbstractRetryableNode<R> extends AbstractExecutableNode<R,
         return retryProcessor;
     }
 
-    public void setRetryProcessor(RetryProcessor<R> retryProcessor) {
+    public void setRetryProcessor(@NotNull RetryProcessor<R> retryProcessor) {
         this.retryProcessor = retryProcessor;
+        this.retryer = retryProcessor.getRetryer();
+        super.registerProcessor(this.retryProcessor);
     }
 
     @Override

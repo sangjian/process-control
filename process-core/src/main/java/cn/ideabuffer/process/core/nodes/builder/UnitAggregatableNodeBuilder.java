@@ -53,9 +53,8 @@ public class UnitAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilde
     }
 
     @Override
-    public UnitAggregatableNodeBuilder<R> addListeners(ProcessListener... listeners) {
-        super.addListeners(listeners);
-        return this;
+    public Builder<UnitAggregatableNode<R>> addListeners(ProcessListener<R>... listeners) {
+        return super.addListeners(listeners);
     }
 
     @Override

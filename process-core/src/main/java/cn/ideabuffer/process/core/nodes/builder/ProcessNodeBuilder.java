@@ -40,7 +40,7 @@ public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Proc
     }
 
     @Override
-    public ProcessNodeBuilder<R> addListeners(ProcessListener... listeners) {
+    public ProcessNodeBuilder<R> addListeners(ProcessListener<R>... listeners) {
         super.addListeners(listeners);
         return this;
     }

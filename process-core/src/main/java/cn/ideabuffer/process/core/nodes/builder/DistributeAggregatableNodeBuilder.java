@@ -53,7 +53,7 @@ public class DistributeAggregatableNodeBuilder<R> extends AbstractExecutableNode
     }
 
     @Override
-    public DistributeAggregatableNodeBuilder<R> addListeners(ProcessListener... listeners) {
+    public DistributeAggregatableNodeBuilder<R> addListeners(ProcessListener<R>... listeners) {
         super.addListeners(listeners);
         return this;
     }

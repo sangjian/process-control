@@ -46,7 +46,7 @@ public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<Void, Branc
     }
 
     @Override
-    public BranchNodeBuilder addListeners(ProcessListener... listeners) {
+    public BranchNodeBuilder addListeners(ProcessListener<Void>... listeners) {
         super.addListeners(listeners);
         return this;
     }
