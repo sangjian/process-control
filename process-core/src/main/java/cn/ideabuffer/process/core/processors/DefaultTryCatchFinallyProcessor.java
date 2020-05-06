@@ -90,17 +90,16 @@ public class DefaultTryCatchFinallyProcessor implements TryCatchFinallyProcessor
         for (Map.Entry<Class<? extends Throwable>, BranchNode> entry : catchMap.entrySet()) {
             Class<? extends Throwable> expClass = entry.getKey();
             BranchNode catchBranch = entry.getValue();
-            if (expClass.isAssignableFrom(e.getClass())) {
-                if (catchBranch == null) {
-                    continue;
-                }
-                Block catchBlock = new Block(context.getBlock());
-                ContextWrapper contextWrapper = Contexts.wrap(context, catchBlock);
-                ProcessStatus status = catchBranch.execute(contextWrapper);
-                if (ProcessStatus.isComplete(status)) {
-                    return status;
-                }
+
+            if (!expClass.isAssignableFrom(e.getClass())) {
+                continue;
             }
+            if (catchBranch == null) {
+                continue;
+            }
+            Block catchBlock = new Block(context.getBlock());
+            ContextWrapper contextWrapper = Contexts.wrap(context, catchBlock);
+            return catchBranch.execute(contextWrapper);
         }
         return ProcessStatus.PROCEED;
     }

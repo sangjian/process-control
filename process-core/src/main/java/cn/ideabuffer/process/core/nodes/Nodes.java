@@ -11,10 +11,7 @@ import cn.ideabuffer.process.core.processors.GenericAggregateProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
@@ -195,7 +192,7 @@ public class Nodes {
 
         TryCatchFinally(BranchNode tryBranch) {
             this.tryBranch = tryBranch;
-            this.catchMap = new HashMap<>();
+            this.catchMap = new LinkedHashMap<>();
         }
 
         public TryCatchFinally catchOn(Class<? extends Throwable> expClass, BranchNode branch) {

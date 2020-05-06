@@ -43,14 +43,14 @@ public class InstanceTest {
             .addProcessNodes(Nodes.newProcessNode(new TestProcessor1()), Nodes.newProcessNode(new TestProcessor2()))
             // 注册基础节点
             .addBaseNode(new TestBaseNode());
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 0);
 
         instance.execute(context);
         // 输出执行结果
-        System.out.println(instance.getProcessor().getResult());
+        System.out.println(instance.getResult());
     }
 
     @Test
@@ -183,7 +183,7 @@ public class InstanceTest {
             .catchOn(Exception.class, new CatchNodeProcessor1(), new CatchNodeProcessor2())
             .doFinally(new FinallyNodeProcessor1(), new FinallyNodeProcessor2()));
 
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 1);

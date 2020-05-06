@@ -16,7 +16,10 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
         super.registerProcessor(new DefaultProcessInstanceProcessor<>(definition));
     }
 
-
+    @Override
+    public R getResult() {
+        return getProcessor().getResult();
+    }
 
     @Override
     public boolean enabled() {

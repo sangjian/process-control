@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.Branches;
 import cn.ideabuffer.process.core.processors.BranchProcessor;
+import cn.ideabuffer.process.core.processors.DefaultBranchProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,6 +64,9 @@ public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<Void, Branc
 
     @Override
     public BranchNode build() {
+        if (processor == null) {
+            processor = new DefaultBranchProcessor();
+        }
         BranchNode node = super.build();
         processor.addNodes(nodes);
         return node;

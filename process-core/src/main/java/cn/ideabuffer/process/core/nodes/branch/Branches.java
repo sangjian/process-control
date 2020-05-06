@@ -26,12 +26,12 @@ public class Branches {
     }
 
     public static BranchNode newBranch(Rule rule, @NotNull Processor<?>... processors) {
-        return newBranch(rule, processors);
+        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList());
+        return newBranch(rule, nodes);
     }
 
     public static BranchNode newBranch(@NotNull Processor<?>... processors) {
-        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList());
-        return newBranch(null, nodes);
+        return newBranch(null, processors);
     }
 
     public static BranchNode newBranch(@NotNull List<ExecutableNode<?, ?>> nodes) {
