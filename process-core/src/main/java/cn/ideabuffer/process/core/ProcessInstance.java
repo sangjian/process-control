@@ -12,4 +12,6 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
  */
 public interface ProcessInstance<R> extends ExecutableNode<ProcessStatus, DefaultProcessInstanceProcessor<R>> {
 
+    R getResult();
+
 }
