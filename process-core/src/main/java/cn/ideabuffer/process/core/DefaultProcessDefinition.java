@@ -37,7 +37,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         }
     }
 
-    private ProcessDefinition<R> addNode(@NotNull Node... nodes) {
+    protected ProcessDefinition<R> addNode(@NotNull Node... nodes) {
         if (nodes.length == 0) {
             return this;
         }

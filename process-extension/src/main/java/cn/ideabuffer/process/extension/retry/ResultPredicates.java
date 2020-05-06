@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.extension;
+package cn.ideabuffer.process.extension.retry;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
