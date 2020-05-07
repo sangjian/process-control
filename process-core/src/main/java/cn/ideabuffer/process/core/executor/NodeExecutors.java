@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.executor;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * @author sangjian.sj
@@ -17,20 +18,12 @@ public class NodeExecutors {
      */
     public static final ParallelExecutor PARALLEL_EXECUTOR = new DefaultParallelExecutor();
     /**
-     * 默认线程池，该线程每执行时会创建一个新线程
+     * 默认线程池，使用默认commonPool
      */
-    public static final Executor DEFAULT_POOL = new ThreadPerTaskExecutor();
+    public static final Executor DEFAULT_POOL = ForkJoinPool.commonPool();
 
     private NodeExecutors() {
         throw new IllegalStateException("Utility class");
-    }
-
-    static final class ThreadPerTaskExecutor implements Executor {
-
-        @Override
-        public void execute(Runnable r) {
-            new Thread(r).start();
-        }
     }
 
 }
