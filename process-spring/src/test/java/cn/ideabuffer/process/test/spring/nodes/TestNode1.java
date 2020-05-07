@@ -20,9 +20,4 @@ public class TestNode1 extends AbstractExecutableNode {
         logger.info("onDestroy");
     }
 
-    @Override
-    protected @NotNull ProcessStatus doExecute(Context context) throws Exception {
-        logger.info("in TestProcessor1");
-        return ProcessStatus.PROCEED;
-    }
 }
