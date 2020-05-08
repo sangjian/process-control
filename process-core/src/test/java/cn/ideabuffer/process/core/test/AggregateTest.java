@@ -199,16 +199,4 @@ public class AggregateTest {
         instance.execute(null);
     }
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException, TimeoutException {
-        logger.info("ehhehehe");
-        Future<String> future = new FutureTask<>(() -> {
-            logger.info("in thread:{}", Thread.currentThread().getName());
-            Thread.sleep(5000);
-            logger.info("in thread:{}", Thread.currentThread().getName());
-            return "hello";
-        });
-        ((FutureTask<String>)future).run();
-        logger.info(future.get(3, TimeUnit.SECONDS));
-    }
-
 }
