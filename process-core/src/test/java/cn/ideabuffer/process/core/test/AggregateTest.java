@@ -12,6 +12,7 @@ import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
 import cn.ideabuffer.process.core.nodes.builder.*;
 import cn.ideabuffer.process.core.nodes.merger.*;
+import cn.ideabuffer.process.core.processors.UnitAggregateProcessorImpl;
 import cn.ideabuffer.process.core.test.merger.TestStringListMerger;
 import cn.ideabuffer.process.core.test.nodes.aggregate.*;
 import org.junit.Test;
@@ -44,7 +45,7 @@ public class AggregateTest {
             Aggregators.newParallelUnitAggregator(executor, new ArrayListMerger<>()))
             .aggregate(node1, node2)
             .addListeners(new TestUnitAggregatableNodeListener1(), new TestUnitAggregatableNodeListener2())
-            //.by(new UnitAggregateProcessorImpl<>())
+            .by(new UnitAggregateProcessorImpl<>())
             .build();
 
         // 链式结果处理
@@ -204,16 +205,18 @@ public class AggregateTest {
 
         // 创建分布式聚合节点
         DistributeAggregatableNode<Person> node = DistributeAggregatableNodeBuilder.<Person>newBuilder()
+            .aggregator(Aggregators.newParallelDistributeAggregator(executor, Person.class))
             // 注册分布式可合并节点，并设置结果处理器
             .aggregate(node1, node2).build();
         node.thenApply((ctx, result) -> {
             logger.info("result: {}", result);
             return result;
         });
+
         // 注册分布式聚合节点
         definition.addDistributeAggregateNode(node);
         ProcessInstance<String> instance = definition.newInstance();
-        instance.execute(null);
+        instance.execute(Contexts.newContext());
         Thread.sleep(10000);
     }
 
