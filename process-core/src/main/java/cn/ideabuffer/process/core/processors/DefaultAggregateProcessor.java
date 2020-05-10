@@ -11,49 +11,49 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/04/30
  */
-public class DefaultAggregateProcessor<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R> implements AggregateProcessor<A, N, R> {
+public class DefaultAggregateProcessor<I, O> implements AggregateProcessor<I, O> {
 
-    private A aggregator;
-    private List<N> mergeableNodes;
+    private Aggregator<I, O> aggregator;
+    private List<MergeableNode<I>> mergeableNodes;
 
     public DefaultAggregateProcessor() {
     }
 
-    public DefaultAggregateProcessor(@NotNull A aggregator, List<N> mergeableNodes) {
+    public DefaultAggregateProcessor(@NotNull Aggregator<I, O> aggregator, List<MergeableNode<I>> mergeableNodes) {
         this.aggregator = aggregator;
         this.mergeableNodes = mergeableNodes;
     }
 
     @Override
-    public A getAggregator() {
+    public Aggregator<I, O> getAggregator() {
         return aggregator;
     }
 
-    public void setAggregator(@NotNull A aggregator) {
+    public void setAggregator(@NotNull Aggregator<I, O> aggregator) {
         this.aggregator = aggregator;
     }
 
     @Override
-    public List<N> getMergeableNodes() {
+    public List<MergeableNode<I>> getMergeableNodes() {
         return mergeableNodes;
     }
 
-    public void setMergeableNodes(List<N> mergeableNodes) {
+    public void setMergeableNodes(List<MergeableNode<I>> mergeableNodes) {
         this.mergeableNodes = mergeableNodes;
     }
 
     @Override
-    public void aggregate(@NotNull List<N> nodes) {
+    public void aggregate(@NotNull List<MergeableNode<I>> nodes) {
         this.mergeableNodes = nodes;
     }
 
     @Override
-    public void aggregator(@NotNull A aggregator) {
+    public void aggregator(@NotNull Aggregator<I, O> aggregator) {
         this.aggregator = aggregator;
     }
 
     @Override
-    public R process(@NotNull Context context) throws Exception{
+    public O process(@NotNull Context context) throws Exception{
         return aggregator.aggregate(context, mergeableNodes);
     }
 }

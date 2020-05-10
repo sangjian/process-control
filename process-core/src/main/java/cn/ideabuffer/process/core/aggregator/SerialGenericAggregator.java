@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.aggregator;
 
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.merger.Merger;
@@ -7,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -26,10 +29,14 @@ public class SerialGenericAggregator<I, O> implements GenericAggregator<I, O> {
         if (nodes == null || nodes.isEmpty()) {
             return null;
         }
-        List<I> results = new LinkedList<>();
-        for (MergeableNode<I> node : nodes) {
-            results.add(node.invoke(context));
-        }
+        List<I> results = nodes.stream().map(MergeableNode::getProcessor).filter(Objects::nonNull).map(p -> {
+            try {
+                return p.process(context);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
         return merger.merge(results);
     }
 }

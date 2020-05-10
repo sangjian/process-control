@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.processors;
 
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.aggregator.Aggregator;
+import cn.ideabuffer.process.core.nodes.MergeNode;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,14 +12,14 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/05/02
  */
-public interface AggregateProcessor<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R> extends Processor<R> {
+public interface AggregateProcessor<I, O> extends Processor<O> {
 
-    void aggregate(@NotNull List<N> nodes);
+    void aggregate(@NotNull List<MergeableNode<I>> nodes);
 
-    void aggregator(@NotNull A aggregator);
+    void aggregator(@NotNull Aggregator<I, O> aggregator);
 
-    A getAggregator();
+    Aggregator<I, O> getAggregator();
 
-    List<N> getMergeableNodes();
+    List<MergeableNode<I>> getMergeableNodes();
 
 }

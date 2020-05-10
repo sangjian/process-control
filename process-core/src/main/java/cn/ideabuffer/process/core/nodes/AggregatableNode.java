@@ -15,7 +15,7 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface AggregatableNode<A extends Aggregator<List<N>, R>, N extends MergeableNode<?>, R, AP extends AggregateProcessor<A, N, R>>
-    extends TransmittableNode<R, AP>, Parallelizable {
+public interface AggregatableNode<I, O>
+    extends TransmittableNode<O, AggregateProcessor<I, O>>, Parallelizable {
 
 }

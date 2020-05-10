@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.nodes.AggregatableNode;
 import cn.ideabuffer.process.core.nodes.BaseNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.NodeGroup;
+import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
@@ -62,7 +63,15 @@ public interface ProcessDefinition<R> extends Lifecycle {
      * @param node 聚合节点
      * @return 当前实例
      */
-    ProcessDefinition<R> addAggregateNode(@NotNull AggregatableNode node);
+    <I, O> ProcessDefinition<R> addAggregateNode(@NotNull AggregatableNode<I, O> node);
+
+    /**
+     * 增加聚合节点
+     *
+     * @param node 聚合节点
+     * @return 当前实例
+     */
+    <O> ProcessDefinition<R> addDistributeAggregateNode(@NotNull DistributeAggregatableNode<O> node);
 
     /**
      * 增加分支节点

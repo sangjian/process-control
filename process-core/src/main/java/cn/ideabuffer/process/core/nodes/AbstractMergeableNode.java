@@ -1,9 +1,13 @@
 package cn.ideabuffer.process.core.nodes;
 
+import cn.ideabuffer.process.core.Matchable;
+import cn.ideabuffer.process.core.Mergeable;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,11 +17,20 @@ import java.util.concurrent.TimeUnit;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public abstract class AbstractMergeableNode<T> extends AbstractNode implements MergeableNode<T> {
+public abstract class AbstractMergeableNode extends AbstractNode implements Mergeable, Matchable {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private Rule rule;
     private ExceptionHandler exceptionHandler;
     private long timeout;
+
+    public AbstractMergeableNode() {
+    }
+
+    public AbstractMergeableNode(Rule rule, ExceptionHandler exceptionHandler, long timeout) {
+        this.rule = rule;
+        this.exceptionHandler = exceptionHandler;
+        this.timeout = timeout;
+    }
 
     @Override
     public void exceptionHandler(ExceptionHandler handler) {
@@ -61,19 +74,6 @@ public abstract class AbstractMergeableNode<T> extends AbstractNode implements M
         this.timeout = timeout;
     }
 
-    @Override
-    public T invoke(Context context) throws Exception {
-        try {
-            return doInvoke(context);
-        } catch (Exception e) {
-            if (exceptionHandler != null) {
-                exceptionHandler.handle(e);
-            } else {
-                throw e;
-            }
-        }
-        return null;
-    }
 
-    protected abstract T doInvoke(Context context) throws Exception;
+
 }

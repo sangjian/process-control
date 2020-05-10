@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Context;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author sangjian.sj
@@ -16,6 +17,7 @@ public interface Invokable<R> {
      * @return 执行结果
      * @throws Exception
      */
+    @Nullable
     R invoke(Context context) throws Exception;
 
 }

@@ -100,7 +100,10 @@ public class ParallelGenericAggregator<I, O> implements GenericAggregator<I, O> 
         @Override
         public V get() {
             try {
-                return node.invoke(context);
+                if (node.getProcessor() == null) {
+                    return null;
+                }
+                return node.getProcessor().process(context);
             } catch (Exception e) {
                 logger.error("InvokeSupplier invoke error, node:{}", node, e);
                 throw new RuntimeException(e);

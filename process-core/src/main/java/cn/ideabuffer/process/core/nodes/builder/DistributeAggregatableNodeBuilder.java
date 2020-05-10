@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
+import cn.ideabuffer.process.core.processors.DistributeAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,7 +78,7 @@ public class DistributeAggregatableNodeBuilder<R> extends AbstractExecutableNode
     @Override
     public DistributeAggregatableNode<R> build() {
         if (processor == null) {
-            processor = new DistributeAggregateProcessor<>();
+            processor = new DistributeAggregateProcessorImpl<>();
         }
         DistributeAggregatableNode<R> node = super.build();
         processor.aggregate(mergeableNodes);

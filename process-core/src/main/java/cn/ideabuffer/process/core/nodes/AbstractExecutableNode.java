@@ -133,10 +133,12 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     protected boolean ruleCheck(@NotNull Context context) {
         return rule == null || rule.match(context);
     }
+
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-        if (!ruleCheck(context)) {
+
+        if (getProcessor() == null || !ruleCheck(context)) {
             return ProcessStatus.PROCEED;
         }
 
@@ -144,20 +146,14 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             doParallelExecute(context);
             return ProcessStatus.PROCEED;
         }
-        ProcessStatus status = ProcessStatus.PROCEED;
+        ProcessStatus status;
         try {
             R result = getProcessor().process(context);
-            if (nodeListener != null) {
-                status = nodeListener.onComplete(context, result);
-            }
+            status = onComplete(context, result);
             notifyListeners(context, result, null, true);
         } catch (Exception e) {
             notifyListeners(context, null, e, false);
-            if (nodeListener != null) {
-                status = nodeListener.onFailure(context, e);
-            } else {
-                throw e;
-            }
+            status = onFailure(context, e);
         }
         return status;
     }
@@ -174,22 +170,21 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
                 notifyListeners(context, null, ex, false);
                 onFailure(context, ex);
             }
-
         });
     }
 
-    protected void onComplete(Context context, R result) {
-        if (nodeListener == null) {
-            return;
+    protected ProcessStatus onComplete(Context context, R result) {
+        if (getNodeListener() == null) {
+            return ProcessStatus.PROCEED;
         }
-        nodeListener.onComplete(context, result);
+        return getNodeListener().onComplete(context, result);
     }
 
-    protected void onFailure(Context context, Exception e) {
-        if (nodeListener == null) {
-            return;
+    protected ProcessStatus onFailure(Context context, Exception e) {
+        if (nodeListener != null) {
+            return nodeListener.onFailure(context, e);
         }
-        nodeListener.onFailure(context, e);
+        throw new ProcessException(e);
     }
 
     protected void notifyListeners(Context context, R result, Exception e, boolean success) {

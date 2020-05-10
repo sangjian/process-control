@@ -7,7 +7,7 @@ import cn.ideabuffer.process.core.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
-import cn.ideabuffer.process.core.processors.GenericAggregateProcessor;
+import cn.ideabuffer.process.core.processors.GenericAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,7 +61,7 @@ public class Nodes {
         return new DefaultGenericAggregatableNode<>();
     }
 
-    public static <P, R> GenericAggregatableNode<P, R> newGenericAggregatableNode(GenericAggregateProcessor<P, R> processor) {
+    public static <P, R> GenericAggregatableNode<P, R> newGenericAggregatableNode(GenericAggregateProcessorImpl<P, R> processor) {
         return new DefaultGenericAggregatableNode<>(processor);
     }
 

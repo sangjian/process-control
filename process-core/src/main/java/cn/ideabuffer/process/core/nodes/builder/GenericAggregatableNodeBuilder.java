@@ -5,7 +5,8 @@ import cn.ideabuffer.process.core.aggregator.GenericAggregator;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
-import cn.ideabuffer.process.core.processors.GenericAggregateProcessor;
+import cn.ideabuffer.process.core.processors.AggregateProcessor;
+import cn.ideabuffer.process.core.processors.GenericAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ import java.util.concurrent.Executor;
  * @date 2020/04/24
  */
 public class GenericAggregatableNodeBuilder<P, R>
-    extends AbstractExecutableNodeBuilder<R, GenericAggregateProcessor<P, R>, GenericAggregatableNode<P, R>> {
+    extends AbstractExecutableNodeBuilder<R, AggregateProcessor<P, R>, GenericAggregatableNode<P, R>> {
 
     private List<MergeableNode<P>> mergeableNodes;
 
@@ -70,7 +71,7 @@ public class GenericAggregatableNodeBuilder<P, R>
     }
 
     @Override
-    public GenericAggregatableNodeBuilder<P, R> by(GenericAggregateProcessor<P, R> processor) {
+    public GenericAggregatableNodeBuilder<P, R> by(AggregateProcessor<P, R> processor) {
         super.by(processor);
         return this;
     }
@@ -78,7 +79,7 @@ public class GenericAggregatableNodeBuilder<P, R>
     @Override
     public GenericAggregatableNode<P, R> build() {
         if (processor == null) {
-            processor = new GenericAggregateProcessor<>();
+            processor = new GenericAggregateProcessorImpl<>();
         }
         GenericAggregatableNode<P, R> node = super.build();
         processor.aggregator(aggregator);

@@ -1,18 +1,22 @@
 package cn.ideabuffer.process.core.test.nodes.aggregate;
 
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.nodes.AbstractDistributeMergeableNode;
+import cn.ideabuffer.process.core.processors.DistributeProcessor;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author sangjian.sj
  * @date 2020/03/27
  */
-public class TestDistributeMergeNode2 extends AbstractDistributeMergeableNode<String, Person> {
+public class TestDistributeMergeNodeProcessor2 implements DistributeProcessor<String, Person> {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    protected String doInvoke(Context context) throws Exception {
-        logger.info("in TestDistributeMergeNode2 doInvoke");
+    public String process(@NotNull Context context) throws Exception {
+        logger.info("in TestDistributeMergeNodeProcessor2 doInvoke");
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -23,7 +27,7 @@ public class TestDistributeMergeNode2 extends AbstractDistributeMergeableNode<St
 
     @Override
     public Person merge(String s, @NotNull Person person) {
-        logger.info("in TestDistributeMergeNode2 merge");
+        logger.info("in TestDistributeMergeNodeProcessor2 merge");
         person.setName(s);
         return person;
     }

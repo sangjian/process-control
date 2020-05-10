@@ -1,6 +1,14 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.DistributeMergeable;
+import cn.ideabuffer.process.core.Matchable;
+import cn.ideabuffer.process.core.Mergeable;
+import cn.ideabuffer.process.core.Node;
+import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.processors.DistributeProcessor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 可合并结果的节点
@@ -8,6 +16,9 @@ import cn.ideabuffer.process.core.DistributeMergeable;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface DistributeMergeableNode<T, R> extends MergeableNode<T>, DistributeMergeable<T, R> {
+public interface DistributeMergeableNode<T, R> extends Node, Mergeable, Matchable {
 
+    void registerProcessor(DistributeProcessor<T, R> processor);
+
+    DistributeProcessor<T, R> getProcessor();
 }

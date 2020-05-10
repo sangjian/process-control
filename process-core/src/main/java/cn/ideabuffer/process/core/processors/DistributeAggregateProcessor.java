@@ -1,11 +1,27 @@
 package cn.ideabuffer.process.core.processors;
 
+import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.aggregator.Aggregator;
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
+import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.nodes.DistributeMergeNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
+import cn.ideabuffer.process.core.nodes.MergeNode;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * @author sangjian.sj
- * @date 2020/05/02
+ * @date 2020/04/30
  */
-public class DistributeAggregateProcessor<R> extends DefaultAggregateProcessor<DistributeAggregator<R>, DistributeMergeableNode<?, R>, R> {
+public interface DistributeAggregateProcessor<O> extends Processor<O> {
+
+    void aggregate(@NotNull List<DistributeMergeableNode<?, O>> nodes);
+
+    void aggregator(@NotNull DistributeAggregator<O> aggregator);
+
+    DistributeAggregator<O> getAggregator();
+
+    List<DistributeMergeableNode<?, O>> getMergeableNodes();
 }

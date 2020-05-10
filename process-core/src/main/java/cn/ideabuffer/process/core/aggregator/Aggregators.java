@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.aggregator;
 
-import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.Mergeable;
+import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.merger.Merger;
 import cn.ideabuffer.process.core.nodes.merger.UnitMerger;
 import org.jetbrains.annotations.NotNull;
@@ -36,13 +37,14 @@ public class Aggregators {
         return new SerialUnitAggregator<>(merger);
     }
 
-    public static <R> DistributeAggregator<R> newParallelDistributeAggregator(@NotNull Executor executor,
-        @NotNull Class<R> resultClass) {
+    public static <O> DistributeAggregator<O> newParallelDistributeAggregator(
+        @NotNull Executor executor,
+        @NotNull Class<O> resultClass) {
         return new ParallelDistributeAggregator<>(executor, resultClass);
     }
 
-    public static long getMaxTimeout(@NotNull List<? extends MergeableNode<?>> nodes) {
-        return nodes.stream().mapToLong(MergeableNode::getTimeout).max().orElse(0);
+    public static long getMaxTimeout(@NotNull List<? extends Mergeable> nodes) {
+        return nodes.stream().mapToLong(Mergeable::getTimeout).max().orElse(0);
     }
 
 }

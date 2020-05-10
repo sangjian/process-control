@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.nodes.AggregatableNode;
 import cn.ideabuffer.process.core.nodes.BaseNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.NodeGroup;
+import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
@@ -84,7 +85,12 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     }
 
     @Override
-    public ProcessDefinition<R> addAggregateNode(@NotNull AggregatableNode node) {
+    public <I, O> ProcessDefinition<R> addAggregateNode(@NotNull AggregatableNode<I, O> node) {
+        return addNode(node);
+    }
+
+    @Override
+    public <O> ProcessDefinition<R> addDistributeAggregateNode(@NotNull DistributeAggregatableNode<O> node) {
         return addNode(node);
     }
 

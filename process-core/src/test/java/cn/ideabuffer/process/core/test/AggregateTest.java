@@ -5,12 +5,12 @@ import cn.ideabuffer.process.core.aggregator.Aggregators;
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
+import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
+import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
-import cn.ideabuffer.process.core.nodes.builder.DistributeAggregatableNodeBuilder;
-import cn.ideabuffer.process.core.nodes.builder.GenericAggregatableNodeBuilder;
-import cn.ideabuffer.process.core.nodes.builder.UnitAggregatableNodeBuilder;
+import cn.ideabuffer.process.core.nodes.builder.*;
 import cn.ideabuffer.process.core.nodes.merger.*;
 import cn.ideabuffer.process.core.test.merger.TestStringListMerger;
 import cn.ideabuffer.process.core.test.nodes.aggregate.*;
@@ -36,13 +36,15 @@ public class AggregateTest {
 
         Executor executor = Executors.newFixedThreadPool(3);
 
+        MergeableNode<List<String>> node1 = MergeNodeBuilder.<List<String>>newBuilder().by(new TestListMergeNodeProcessor1()).build();
+        MergeableNode<List<String>> node2 = MergeNodeBuilder.<List<String>>newBuilder().by(new TestListMergeNodeProcessor2()).build();
 
         // 创建单元化聚合节点
         UnitAggregatableNode<List<String>> node = UnitAggregatableNodeBuilder.<List<String>>newBuilder().aggregator(
             Aggregators.newParallelUnitAggregator(executor, new ArrayListMerger<>()))
-            .aggregate(new TestListMergeableNode1(), new TestListMergeableNode2())
+            .aggregate(node1, node2)
             .addListeners(new TestUnitAggregatableNodeListener1(), new TestUnitAggregatableNodeListener2())
-            //.by(new UnitAggregateProcessor<>())
+            //.by(new UnitAggregateProcessorImpl<>())
             .build();
 
         // 链式结果处理
@@ -63,11 +65,14 @@ public class AggregateTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
 
         Executor executor = Executors.newFixedThreadPool(3);
+
+        MergeableNode<String> node1 = MergeNodeBuilder.<String>newBuilder().by(new TestStringMergeNodeProcessor1()).build();
+        MergeableNode<String> node2 = MergeNodeBuilder.<String>newBuilder().by(new TestStringMergeNodeProcessor2()).build();
+
         // 创建通用聚合节点
         GenericAggregatableNode<String, List<String>> node
             = GenericAggregatableNodeBuilder.<String, List<String>>newBuilder().aggregator(
-            Aggregators.newParallelGenericAggregator(executor, new TestStringListMerger())).aggregate(
-            new TestStringMergeableNode1(), new TestStringMergeableNode2())
+            Aggregators.newParallelGenericAggregator(executor, new TestStringListMerger())).aggregate(node1, node2)
             .build();
         // 链式结果处理
         node.thenApply(((ctx, result) -> {
@@ -85,9 +90,11 @@ public class AggregateTest {
     @Test
     public void testIntSum() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        MergeableNode<Integer> node1 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor1()).build();
+        MergeableNode<Integer> node2 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor2()).build();
+
         UnitAggregatableNode<Integer> node = UnitAggregatableNodeBuilder.<Integer>newBuilder().aggregator(
-            Aggregators.newSerialUnitAggregator(new IntSumMerger())).aggregate(new IntMergeableNode1(),
-            new IntMergeableNode2()).build();
+            Aggregators.newSerialUnitAggregator(new IntSumMerger())).aggregate(node1, node2).build();
 
         node.thenApply(((ctx, result) -> {
             System.out.println(result);
@@ -105,9 +112,11 @@ public class AggregateTest {
     @Test
     public void testIntAvg() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        MergeableNode<Integer> node1 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor1()).build();
+        MergeableNode<Integer> node2 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor2()).build();
+
         UnitAggregatableNode<Integer> node = UnitAggregatableNodeBuilder.<Integer>newBuilder().aggregator(
-            Aggregators.newSerialUnitAggregator(new IntAvgMerger())).aggregate(new IntMergeableNode1(),
-            new IntMergeableNode2()).build();
+            Aggregators.newSerialUnitAggregator(new IntAvgMerger())).aggregate(node1, node2).build();
 
         node.thenApply(((ctx, result) -> {
             System.out.println(result);
@@ -115,7 +124,7 @@ public class AggregateTest {
         }));
         definition.addAggregateNode(node);
 
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
         instance.execute(context);
@@ -125,10 +134,11 @@ public class AggregateTest {
     @Test
     public void testDoubleSum() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        MergeableNode<Double> node1 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor1()).build();
+        MergeableNode<Double> node2 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor2()).build();
+
         UnitAggregatableNode<Double> node = UnitAggregatableNodeBuilder.<Double>newBuilder().aggregator(
-            Aggregators.newSerialUnitAggregator(new DoubleSumMerger())).aggregate(
-            new DoubleMergeableNode1(),
-            new DoubleMergeableNode2()).build();
+            Aggregators.newSerialUnitAggregator(new DoubleSumMerger())).aggregate(node1, node2).build();
         node.thenApply(((ctx, result) -> {
             System.out.println(result);
             return result;
@@ -144,10 +154,11 @@ public class AggregateTest {
     @Test
     public void testDoubleAvg() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        MergeableNode<Double> node1 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor1()).build();
+        MergeableNode<Double> node2 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor2()).build();
+
         UnitAggregatableNode<Double> node = UnitAggregatableNodeBuilder.<Double>newBuilder().aggregator(
-            Aggregators.newSerialUnitAggregator(new DoubleAvgMerger())).aggregate(
-            new DoubleMergeableNode1(),
-            new DoubleMergeableNode2()).build();
+            Aggregators.newSerialUnitAggregator(new DoubleAvgMerger())).aggregate(node1, node2).build();
         node.thenApply(((ctx, result) -> {
             System.out.println(result);
             return result;
@@ -163,10 +174,11 @@ public class AggregateTest {
     @Test
     public void testIntArray() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        MergeableNode<int[]> node1 = MergeNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor1()).build();
+        MergeableNode<int[]> node2 = MergeNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor2()).build();
+
         UnitAggregatableNode<int[]> node = UnitAggregatableNodeBuilder.<int[]>newBuilder().aggregator(
-            Aggregators.newSerialUnitAggregator(new IntArrayMerger())).aggregate(
-            new IntArrayMergeableNode1(),
-            new IntArrayMergeableNode2()).build();
+            Aggregators.newSerialUnitAggregator(new IntArrayMerger())).aggregate(node1, node2).build();
         node.thenApply(((ctx, result) -> {
             Arrays.stream(result).forEach(System.out::println);
             return result;
@@ -185,18 +197,24 @@ public class AggregateTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         // 指定线程池和返回结果类型，创建分布式聚合器
         DistributeAggregator<Person> aggregator = Aggregators.newParallelDistributeAggregator(executor, Person.class);
+
+        DistributeMergeableNode<Integer, Person> node1 = DistributeMergeNodeBuilder.<Integer, Person>newBuilder().by(new TestDistributeMergeNodeProcessor1()).build();
+        DistributeMergeableNode<String, Person> node2 = DistributeMergeNodeBuilder.<String, Person>newBuilder().by(new TestDistributeMergeNodeProcessor2()).build();
+
+
         // 创建分布式聚合节点
         DistributeAggregatableNode<Person> node = DistributeAggregatableNodeBuilder.<Person>newBuilder()
             // 注册分布式可合并节点，并设置结果处理器
-            .aggregate(new TestDistributeMergeNode1(), new TestDistributeMergeNode2()).build();
+            .aggregate(node1, node2).build();
         node.thenApply((ctx, result) -> {
             logger.info("result: {}", result);
             return result;
         });
         // 注册分布式聚合节点
-        definition.addAggregateNode(node);
+        definition.addDistributeAggregateNode(node);
         ProcessInstance<String> instance = definition.newInstance();
         instance.execute(null);
+        Thread.sleep(10000);
     }
 
 }
