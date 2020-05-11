@@ -2,7 +2,7 @@ package cn.ideabuffer.process.extension.retry;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -207,6 +207,8 @@ public final class ResultPredicates {
 
     private static class IsEmptyString implements Predicate<String>, Serializable {
 
+        private static final long serialVersionUID = 1461853120478457387L;
+
         @Override
         public boolean apply(@Nullable String value) {
             return value == null || "".equals(value);
@@ -220,6 +222,8 @@ public final class ResultPredicates {
     }
 
     private static class IsEmptyCollection<T> implements Predicate<Collection<? extends T>>, Serializable {
+
+        private static final long serialVersionUID = 318437526882418233L;
 
         @Override
         public boolean apply(@Nullable Collection<? extends T> input) {
@@ -235,6 +239,8 @@ public final class ResultPredicates {
 
     private static class IsEmptyMap<K, V> implements Predicate<Map<K, V>>, Serializable {
 
+        private static final long serialVersionUID = -8283306091570473799L;
+
         @Override
         public boolean apply(@Nullable Map<K, V> input) {
             return input == null || input.size() == 0;
@@ -245,11 +251,6 @@ public final class ResultPredicates {
             return "Predicates.IsEmptyCollection()";
         }
 
-    }
-
-    public static void main(String[] args) {
-        ObjectPredicate op = ObjectPredicate.IS_NULL;
-        System.out.println(op.apply(null));
     }
 
 }
