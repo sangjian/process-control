@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.aggregator;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -18,5 +19,6 @@ public interface DistributeAggregator<O> {
      * @return 聚合结果
      * @throws Exception
      */
-    O aggregate(Context context, List<DistributeMergeableNode<?, O>> nodes) throws Exception;
+    @NotNull
+    O aggregate(@NotNull Context context, List<DistributeMergeableNode<?, O>> nodes) throws Exception;
 }

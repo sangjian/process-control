@@ -6,9 +6,8 @@ import cn.ideabuffer.process.core.processors.GenericAggregateProcessorImpl;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public class DefaultGenericAggregatableNode<I, O>
-    extends AbstractAggregatableNode<I, O> implements
-    GenericAggregatableNode<I, O> {
+public class DefaultGenericAggregatableNode<I, O> extends AbstractAggregatableNode<I, O>
+    implements GenericAggregatableNode<I, O> {
 
     public DefaultGenericAggregatableNode() {
         this(new GenericAggregateProcessorImpl<>());

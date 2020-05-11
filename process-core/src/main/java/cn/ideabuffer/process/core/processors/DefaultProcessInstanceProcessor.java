@@ -25,6 +25,7 @@ public class DefaultProcessInstanceProcessor<R> implements ProcessInstanceProces
         this.definition = definition;
     }
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         checkState();

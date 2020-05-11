@@ -103,7 +103,7 @@ public class AggregateTest {
         }));
         definition.addAggregateNode(node);
 
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
         instance.execute(context);

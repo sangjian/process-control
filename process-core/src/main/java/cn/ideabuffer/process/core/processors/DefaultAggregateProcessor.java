@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.aggregator.Aggregator;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class DefaultAggregateProcessor<I, O> implements AggregateProcessor<I, O>
         this.aggregator = aggregator;
     }
 
+    @Nullable
     @Override
     public O process(@NotNull Context context) throws Exception{
         return aggregator.aggregate(context, mergeableNodes);

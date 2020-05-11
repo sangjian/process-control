@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TestGroupNode2 implements StatusProcessor {
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         Thread.sleep(3000);

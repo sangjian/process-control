@@ -19,6 +19,7 @@ public class TestBlockProcessor2 implements StatusProcessor {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         // 获取当前Block

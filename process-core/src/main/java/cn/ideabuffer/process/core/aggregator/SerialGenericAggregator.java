@@ -5,6 +5,9 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.merger.Merger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,15 +20,17 @@ import java.util.stream.Collectors;
  */
 public class SerialGenericAggregator<I, O> implements GenericAggregator<I, O> {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private Merger<I, O> merger;
 
     public SerialGenericAggregator(@NotNull Merger<I, O> merger) {
         this.merger = merger;
     }
 
+    @Nullable
     @Override
-    public O aggregate(Context context, List<MergeableNode<I>> nodes)
-        throws Exception {
+    public O aggregate(@NotNull Context context, List<MergeableNode<I>> nodes) throws Exception {
         if (nodes == null || nodes.isEmpty()) {
             return null;
         }
@@ -33,7 +38,7 @@ public class SerialGenericAggregator<I, O> implements GenericAggregator<I, O> {
             try {
                 return p.process(context);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("process error!", e);
             }
             return null;
         }).filter(Objects::nonNull).collect(Collectors.toList());

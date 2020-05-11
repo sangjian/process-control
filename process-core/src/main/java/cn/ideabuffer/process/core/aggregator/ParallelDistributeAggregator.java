@@ -29,17 +29,18 @@ public class ParallelDistributeAggregator<O> implements DistributeAggregator<O> 
         this.resultClass = resultClass;
     }
 
+    @NotNull
     @Override
-    public O aggregate(Context context, List<DistributeMergeableNode<?, O>> nodes) throws Exception {
-        if (nodes == null || nodes.isEmpty()) {
-            return null;
-        }
+    public O aggregate(@NotNull Context context, List<DistributeMergeableNode<?, O>> nodes) throws Exception {
         O result;
         try {
             result = resultClass.newInstance();
         } catch (Exception e) {
             logger.error("aggregate error, resultClass:{}, nodes:{}", resultClass, nodes, e);
-            throw new RuntimeException(e);
+            throw e;
+        }
+        if (nodes == null || nodes.isEmpty()) {
+            return result;
         }
         long maxTimeout = Aggregators.getMaxTimeout(nodes);
         BlockingQueue<MergerNode<?, O>> mergerNodes = new LinkedBlockingQueue<>(nodes.size());
@@ -70,7 +71,7 @@ public class ParallelDistributeAggregator<O> implements DistributeAggregator<O> 
                 allTimeouts.get(maxTimeout, TimeUnit.MILLISECONDS);
             }
         } catch (TimeoutException e) {
-            logger.error("timeout!", e);
+            logger.error("timeout! maxTimeout:{}", maxTimeout, e);
         } finally {
             // 确保没有超时控制的节点执行结束
             allNormals.join();

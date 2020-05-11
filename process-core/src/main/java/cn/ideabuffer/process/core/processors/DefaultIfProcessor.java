@@ -58,6 +58,7 @@ public class DefaultIfProcessor implements IfProcessor {
         return this.falseBranch;
     }
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         if (rule == null) {

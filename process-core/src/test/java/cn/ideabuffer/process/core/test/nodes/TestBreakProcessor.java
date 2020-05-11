@@ -18,6 +18,7 @@ public class TestBreakProcessor implements StatusProcessor {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         if (context.getBlock().allowBreak()) {

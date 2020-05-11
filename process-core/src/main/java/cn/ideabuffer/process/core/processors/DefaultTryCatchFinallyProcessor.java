@@ -60,6 +60,7 @@ public class DefaultTryCatchFinallyProcessor implements TryCatchFinallyProcessor
         }
     }
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         preCheck();

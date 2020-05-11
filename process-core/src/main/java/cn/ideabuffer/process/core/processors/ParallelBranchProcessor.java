@@ -1,13 +1,12 @@
 package cn.ideabuffer.process.core.processors;
 
 import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.strategy.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * @author sangjian.sj
@@ -33,4 +32,7 @@ public interface ParallelBranchProcessor extends Processor<ProcessStatus> {
 
     void proceedWhen(@NotNull ProceedStrategy strategy);
 
+    @NotNull
+    @Override
+    ProcessStatus process(@NotNull Context context) throws Exception;
 }

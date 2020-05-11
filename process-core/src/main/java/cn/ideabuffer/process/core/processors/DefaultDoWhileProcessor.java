@@ -20,6 +20,7 @@ public class DefaultDoWhileProcessor extends DefaultWhileProcessor {
         super(rule, branch);
     }
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         if (getRule() == null) {

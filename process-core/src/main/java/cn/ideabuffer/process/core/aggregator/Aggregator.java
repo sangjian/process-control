@@ -2,6 +2,8 @@ package cn.ideabuffer.process.core.aggregator;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public interface Aggregator<I, O> {
      * @return 聚合结果
      * @throws Exception
      */
-    O aggregate(Context context, List<MergeableNode<I>> nodes) throws Exception;
+    @Nullable
+    O aggregate(@NotNull Context context, List<MergeableNode<I>> nodes) throws Exception;
 
 }

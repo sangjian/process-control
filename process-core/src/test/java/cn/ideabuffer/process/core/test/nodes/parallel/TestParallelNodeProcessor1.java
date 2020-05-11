@@ -16,6 +16,7 @@ public class TestParallelNodeProcessor1 implements StatusProcessor {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         logger.info("in TestParallelNodeProcessor1");

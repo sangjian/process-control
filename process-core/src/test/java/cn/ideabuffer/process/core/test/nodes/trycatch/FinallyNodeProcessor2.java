@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 public class FinallyNodeProcessor2 implements StatusProcessor {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         System.out.println("in FinallyNodeProcessor2");

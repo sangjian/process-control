@@ -51,6 +51,7 @@ public class DefaultParallelBranchProcessor implements ParallelBranchProcessor {
         this.strategy = strategy;
     }
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         return NodeExecutors.PARALLEL_EXECUTOR.execute(executor, strategy, context,

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TryNodeProcessor1 implements StatusProcessor {
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         System.out.println("in TryNodeProcessor1");

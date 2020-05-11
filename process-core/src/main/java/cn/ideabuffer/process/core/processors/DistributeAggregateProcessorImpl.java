@@ -1,10 +1,10 @@
 package cn.ideabuffer.process.core.processors;
 
-import cn.ideabuffer.process.core.aggregator.Aggregator;
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -37,6 +37,7 @@ public class DistributeAggregateProcessorImpl<O> implements DistributeAggregateP
         return mergeableNodes;
     }
 
+    @Nullable
     @Override
     public O process(@NotNull Context context) throws Exception {
         return aggregator.aggregate(context, mergeableNodes);

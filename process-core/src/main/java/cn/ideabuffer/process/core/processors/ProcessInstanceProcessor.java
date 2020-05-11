@@ -1,16 +1,10 @@
 package cn.ideabuffer.process.core.processors;
 
-import cn.ideabuffer.process.core.*;
+import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.exception.ProcessException;
-import cn.ideabuffer.process.core.nodes.BaseNode;
-import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -32,4 +26,7 @@ public interface ProcessInstanceProcessor<R> extends Processor<ProcessStatus> {
      */
     R getResult();
 
+    @NotNull
+    @Override
+    ProcessStatus process(@NotNull Context context) throws Exception;
 }

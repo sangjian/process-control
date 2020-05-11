@@ -19,6 +19,7 @@ public class TestWhileBreakNodeProcessor1 implements StatusProcessor {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         Block block = context.getBlock();
