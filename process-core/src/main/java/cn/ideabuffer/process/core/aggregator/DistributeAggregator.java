@@ -10,7 +10,7 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/03/27
  */
-public interface DistributeAggregator<O> {
+public interface DistributeAggregator<R> {
     /**
      * 对可聚合的节点进行结果聚合，并返回聚合后的结果
      *
@@ -20,5 +20,5 @@ public interface DistributeAggregator<O> {
      * @throws Exception
      */
     @NotNull
-    O aggregate(@NotNull Context context, List<DistributeMergeableNode<?, O>> nodes) throws Exception;
+    R aggregate(@NotNull Context context, List<DistributeMergeableNode<?, R>> nodes) throws Exception;
 }

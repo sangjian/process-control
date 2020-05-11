@@ -9,9 +9,8 @@ import java.util.List;
 /**
  * 可聚合结果的节点
  *
- * @param <A> 聚合器类型
- * @param <N> 合并节点类型
- * @param <R> 聚合结果类型 {@inheritDoc}
+ * @param <I> 可合并结果类型
+ * @param <O> 聚合结果类型
  * @author sangjian.sj
  * @date 2020/03/07
  */

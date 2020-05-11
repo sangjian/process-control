@@ -1,9 +1,7 @@
 package cn.ideabuffer.process.core.aggregator;
 
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.nodes.DistributeMergeNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
-import cn.ideabuffer.process.core.processors.DistributeProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,22 +15,22 @@ import java.util.function.Supplier;
  * @author sangjian.sj
  * @date 2020/03/08
  */
-public class ParallelDistributeAggregator<O> implements DistributeAggregator<O> {
+public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Executor executor;
-    private Class<O> resultClass;
+    private Class<R> resultClass;
 
-    public ParallelDistributeAggregator(@NotNull Executor executor, @NotNull Class<O> resultClass) {
+    public ParallelDistributeAggregator(@NotNull Executor executor, @NotNull Class<R> resultClass) {
         this.executor = executor;
         this.resultClass = resultClass;
     }
 
     @NotNull
     @Override
-    public O aggregate(@NotNull Context context, List<DistributeMergeableNode<?, O>> nodes) throws Exception {
-        O result;
+    public R aggregate(@NotNull Context context, List<DistributeMergeableNode<?, R>> nodes) throws Exception {
+        R result;
         try {
             result = resultClass.newInstance();
         } catch (Exception e) {
@@ -43,7 +41,7 @@ public class ParallelDistributeAggregator<O> implements DistributeAggregator<O> 
             return result;
         }
         long maxTimeout = Aggregators.getMaxTimeout(nodes);
-        BlockingQueue<MergerNode<?, O>> mergerNodes = new LinkedBlockingQueue<>(nodes.size());
+        BlockingQueue<MergerNode<?, R>> mergerNodes = new LinkedBlockingQueue<>(nodes.size());
         List<CompletableFuture<?>> timeouts = new LinkedList<>();
         List<CompletableFuture<?>> normals = new LinkedList<>();
         nodes.forEach(node -> {
@@ -52,7 +50,7 @@ public class ParallelDistributeAggregator<O> implements DistributeAggregator<O> 
             // 将返回结果封装成对象后放入队列，所有节点执行完毕后再进行统一merge
             f.thenAccept(v -> {
                 //noinspection unchecked
-                MergerNode<?, O> m = new MergerNode(node, v, result);
+                MergerNode<?, R> m = new MergerNode(node, v, result);
                 mergerNodes.offer(m);
             });
             if (node.getTimeout() > 0) {
@@ -82,7 +80,7 @@ public class ParallelDistributeAggregator<O> implements DistributeAggregator<O> 
         return result;
     }
 
-    private CompletableFuture<?> getFuture(Context context, DistributeMergeableNode<?, O> node) {
+    private CompletableFuture<?> getFuture(Context context, DistributeMergeableNode<?, R> node) {
         Supplier<?> supplier = new InvokeSupplier<>(node, context);
         CompletableFuture<?> future;
         if (executor == null) {
@@ -113,11 +111,11 @@ public class ParallelDistributeAggregator<O> implements DistributeAggregator<O> 
 
     private class InvokeSupplier<V> implements Supplier<V> {
 
-        private DistributeMergeableNode<V, O> node;
+        private DistributeMergeableNode<V, R> node;
 
         private Context context;
 
-        InvokeSupplier(DistributeMergeableNode<V, O> node, Context context) {
+        InvokeSupplier(DistributeMergeableNode<V, R> node, Context context) {
             this.node = node;
             this.context = context;
         }
