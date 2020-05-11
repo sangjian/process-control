@@ -10,19 +10,19 @@ import java.util.Objects;
  * @author sangjian.sj
  * @date 2020/02/07
  */
-public class DefaultContext extends ParameterImpl implements Context {
+public class ContextImpl extends ParameterImpl implements Context {
 
     private Block block;
 
-    public DefaultContext() {
+    public ContextImpl() {
         this(null, null);
     }
 
-    public DefaultContext(Block block) {
+    public ContextImpl(Block block) {
         this(block, null);
     }
 
-    public DefaultContext(Block block, Map<Key<?>, Object> params) {
+    public ContextImpl(Block block, Map<Key<?>, Object> params) {
         super(params);
         this.block = block == null ? new ContextViewBlock() : block;
     }
@@ -34,14 +34,14 @@ public class DefaultContext extends ParameterImpl implements Context {
 
     @Override
     public Context cloneContext() {
-        return new DefaultContext(null, this.getParams());
+        return new ContextImpl(null, this.getParams());
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
-        DefaultContext that = (DefaultContext)o;
+        ContextImpl that = (ContextImpl)o;
         return Objects.equals(block, that.block);
     }
 
@@ -52,7 +52,7 @@ public class DefaultContext extends ParameterImpl implements Context {
     }
 
     private final class ContextViewBlock extends Block {
-        private Context context = DefaultContext.this;
+        private Context context = ContextImpl.this;
 
         @Override
         public <V> V put(@NotNull Key<V> key, V value) {

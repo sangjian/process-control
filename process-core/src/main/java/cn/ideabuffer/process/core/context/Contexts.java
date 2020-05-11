@@ -16,7 +16,7 @@ public class Contexts {
     }
 
     public static Context newContext() {
-        return new DefaultContext();
+        return new ContextImpl();
     }
 
     public static <V> Key<V> newKey(@NotNull Object key, @NotNull Class<V> valueType) {
@@ -24,23 +24,23 @@ public class Contexts {
     }
 
     public static Context clone(@NotNull Context context) {
-        return new DefaultContext(null, context.getParams());
+        return new ContextImpl(null, context.getParams());
     }
 
     public static Context cloneWithBlock(@NotNull Context context) {
-        return new DefaultContext(context.getBlock(), context.getParams());
+        return new ContextImpl(context.getBlock(), context.getParams());
     }
 
     public static Context of(@NotNull Map<Key<?>, Object> map) {
-        return new DefaultContext(null, map);
+        return new ContextImpl(null, map);
     }
 
     public static Context of(@NotNull Block block) {
-        return new DefaultContext(block);
+        return new ContextImpl(block);
     }
 
     public static Context of(@NotNull Block block, @NotNull Map<Key<?>, Object> map) {
-        return new DefaultContext(block, map);
+        return new ContextImpl(block, map);
     }
 
     public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block) {
