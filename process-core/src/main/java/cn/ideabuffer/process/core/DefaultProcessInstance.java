@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessStatus, ProcessInstanceProcessor<R>> implements ProcessInstance<R> {
 
 
-    public DefaultProcessInstance(ProcessInstanceProcessor<R> processor) {
+    public DefaultProcessInstance(@NotNull ProcessInstanceProcessor<R> processor) {
         super.registerProcessor(processor);
     }
 
