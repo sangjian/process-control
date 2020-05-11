@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.processors;
+package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockWrapper;
@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
+import cn.ideabuffer.process.core.processors.WhileProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -14,10 +15,32 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/05/02
  */
-public class DefaultDoWhileProcessor extends DefaultWhileProcessor {
+public class WhileProcessorImpl implements WhileProcessor {
 
-    public DefaultDoWhileProcessor(Rule rule, BranchNode branch) {
-        super(rule, branch);
+    private Rule rule;
+    private BranchNode branch;
+
+    public WhileProcessorImpl(Rule rule, BranchNode branch) {
+        this.rule = rule;
+        this.branch = branch;
+    }
+
+    public void setRule(Rule rule) {
+        this.rule = rule;
+    }
+
+    public void setBranch(BranchNode branch) {
+        this.branch = branch;
+    }
+
+    @Override
+    public Rule getRule() {
+        return rule;
+    }
+
+    @Override
+    public BranchNode getBranch() {
+        return branch;
     }
 
     @NotNull
@@ -26,7 +49,7 @@ public class DefaultDoWhileProcessor extends DefaultWhileProcessor {
         if (getRule() == null) {
             throw new NullPointerException("rule can't be null");
         }
-        if (getBranch() == null) {
+        if (branch == null) {
             return ProcessStatus.PROCEED;
         }
 
@@ -34,20 +57,18 @@ public class DefaultDoWhileProcessor extends DefaultWhileProcessor {
         BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
         ContextWrapper whileContext = Contexts.wrap(context, whileBlock);
 
-        do {
-            blockWrapper.resetBreak();
-            blockWrapper.resetContinue();
-            ProcessStatus status = getBranch().execute(whileContext);
+        while (getRule().match(whileContext)) {
+            ProcessStatus status = branch.execute(whileContext);
             if (ProcessStatus.isComplete(status)) {
                 return status;
-            }
-            if (blockWrapper.hasContinued()) {
-                continue;
             }
             if (blockWrapper.hasBroken()) {
                 break;
             }
-        } while (getRule().match(whileContext));
+
+            blockWrapper.resetBreak();
+            blockWrapper.resetContinue();
+        }
 
         return ProcessStatus.PROCEED;
     }

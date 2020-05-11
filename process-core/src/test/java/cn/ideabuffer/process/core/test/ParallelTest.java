@@ -6,7 +6,7 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.nodes.builder.ParallelBranchNodeBuilder;
-import cn.ideabuffer.process.core.processors.DefaultParallelBranchProcessor;
+import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
 import cn.ideabuffer.process.core.strategy.ProceedStrategies;
 import cn.ideabuffer.process.core.test.nodes.parallel.TestParallelNodeProcessor1;
 import cn.ideabuffer.process.core.test.nodes.parallel.TestParallelNodeProcessor2;
@@ -24,7 +24,7 @@ public class ParallelTest {
         ParallelBranchNode node = ParallelBranchNodeBuilder.newBuilder()
             .addBranch(new ProcessNode<>(new TestParallelNodeProcessor1()))
             .addBranch(new ProcessNode<>(new TestParallelNodeProcessor2()))
-            .by(new DefaultParallelBranchProcessor())
+            .by(new ParallelBranchProcessorImpl())
             .proceedWhen(ProceedStrategies.ALL_PROCEEDED).build();
         definition.addProcessNodes(node);
         ProcessInstance<String> instance = definition.newInstance();

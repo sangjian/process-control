@@ -1,8 +1,7 @@
 package cn.ideabuffer.process.core.nodes.condition;
 
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.processors.DefaultDoWhileProcessor;
-import cn.ideabuffer.process.core.processors.WhileProcessor;
+import cn.ideabuffer.process.core.processors.impl.DoWhileProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class DoWhileConditionNode extends WhileConditionNode {
 
     public DoWhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
-        super(new DefaultDoWhileProcessor(rule, branch));
+        super(new DoWhileProcessorImpl(rule, branch));
     }
 
 }

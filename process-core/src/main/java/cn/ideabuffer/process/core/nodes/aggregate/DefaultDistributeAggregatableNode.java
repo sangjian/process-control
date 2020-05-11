@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
-import cn.ideabuffer.process.core.processors.DistributeAggregateProcessorImpl;
+import cn.ideabuffer.process.core.processors.impl.DistributeAggregateProcessorImpl;
 
 /**
  * @author sangjian.sj

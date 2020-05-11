@@ -2,7 +2,7 @@ package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.processors.DefaultTryCatchFinallyProcessor;
+import cn.ideabuffer.process.core.processors.impl.TryCatchFinallyProcessorImpl;
 import cn.ideabuffer.process.core.processors.TryCatchFinallyProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 
@@ -17,7 +17,7 @@ public class TryCatchFinallyNode extends AbstractExecutableNode<ProcessStatus, T
 
     public TryCatchFinallyNode(BranchNode tryBranch,
         Map<Class<? extends Throwable>, BranchNode> catchMap, BranchNode finallyBranch) {
-        super.registerProcessor(new DefaultTryCatchFinallyProcessor(tryBranch, catchMap, finallyBranch));
+        super.registerProcessor(new TryCatchFinallyProcessorImpl(tryBranch, catchMap, finallyBranch));
     }
 
     @Override

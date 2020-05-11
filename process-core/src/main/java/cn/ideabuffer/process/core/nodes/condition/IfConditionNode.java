@@ -3,7 +3,7 @@ package cn.ideabuffer.process.core.nodes.condition;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.processors.DefaultIfProcessor;
+import cn.ideabuffer.process.core.processors.impl.IfProcessorImpl;
 import cn.ideabuffer.process.core.processors.IfProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -20,7 +20,7 @@ public class IfConditionNode extends AbstractExecutableNode<ProcessStatus, IfPro
     }
 
     public IfConditionNode(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch) {
-        super.registerProcessor(new DefaultIfProcessor(rule, trueBranch, falseBranch));
+        super.registerProcessor(new IfProcessorImpl(rule, trueBranch, falseBranch));
     }
 
     @Override

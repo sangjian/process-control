@@ -1,10 +1,11 @@
-package cn.ideabuffer.process.core.processors;
+package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.DefaultBranchNode;
+import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.strategy.ProceedStrategies;
 import cn.ideabuffer.process.core.strategy.ProceedStrategy;
@@ -18,7 +19,7 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/05/02
  */
-public class DefaultParallelBranchProcessor implements ParallelBranchProcessor {
+public class ParallelBranchProcessorImpl implements ParallelBranchProcessor {
 
     private List<BranchNode> branches;
 
@@ -26,12 +27,12 @@ public class DefaultParallelBranchProcessor implements ParallelBranchProcessor {
 
     private Executor executor;
 
-    public DefaultParallelBranchProcessor() {
+    public ParallelBranchProcessorImpl() {
         this(null, null);
     }
 
 
-    public DefaultParallelBranchProcessor(List<BranchNode> branches, Executor executor) {
+    public ParallelBranchProcessorImpl(List<BranchNode> branches, Executor executor) {
         this.executor = executor;
         this.branches = branches == null ? new ArrayList<>() : branches;
     }

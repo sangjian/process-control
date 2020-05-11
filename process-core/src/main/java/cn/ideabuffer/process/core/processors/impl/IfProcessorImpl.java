@@ -1,10 +1,11 @@
-package cn.ideabuffer.process.core.processors;
+package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
+import cn.ideabuffer.process.core.processors.IfProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/05/02
  */
-public class DefaultIfProcessor implements IfProcessor {
+public class IfProcessorImpl implements IfProcessor {
 
     private Rule rule;
 
@@ -21,11 +22,11 @@ public class DefaultIfProcessor implements IfProcessor {
 
     private BranchNode falseBranch;
 
-    public DefaultIfProcessor(@NotNull Rule rule, @NotNull BranchNode trueBranch) {
+    public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch) {
         this(rule, trueBranch, null);
     }
 
-    public DefaultIfProcessor(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch) {
+    public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch) {
         this.rule = rule;
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;

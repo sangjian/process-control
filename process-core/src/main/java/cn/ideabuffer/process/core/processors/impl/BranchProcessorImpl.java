@@ -1,8 +1,9 @@
-package cn.ideabuffer.process.core.processors;
+package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,15 +15,15 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/05/02
  */
-public class DefaultBranchProcessor implements BranchProcessor {
+public class BranchProcessorImpl implements BranchProcessor {
 
     private List<ExecutableNode<?, ?>> nodes;
 
-    public DefaultBranchProcessor(List<ExecutableNode<?, ?>> nodes) {
+    public BranchProcessorImpl(List<ExecutableNode<?, ?>> nodes) {
         this.nodes = nodes;
     }
 
-    public DefaultBranchProcessor(ExecutableNode<?, ?>... nodes) {
+    public BranchProcessorImpl(ExecutableNode<?, ?>... nodes) {
         this.nodes = new ArrayList<>();
         if (nodes != null && nodes.length > 0) {
             this.nodes.addAll(Arrays.asList(nodes));

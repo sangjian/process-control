@@ -2,7 +2,7 @@ package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.processors.DefaultParallelBranchProcessor;
+import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
 import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -24,7 +24,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode<ProcessSta
 
     public DefaultParallelBranchNode(Rule rule, Executor executor, List<BranchNode> branches) {
         super.processOn(rule);
-        super.registerProcessor(new DefaultParallelBranchProcessor(branches, executor));
+        super.registerProcessor(new ParallelBranchProcessorImpl(branches, executor));
     }
 
     @NotNull

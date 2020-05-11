@@ -1,10 +1,11 @@
-package cn.ideabuffer.process.core.processors;
+package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
+import cn.ideabuffer.process.core.processors.TryCatchFinallyProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,13 +15,13 @@ import java.util.Map;
  * @author sangjian.sj
  * @date 2020/05/02
  */
-public class DefaultTryCatchFinallyProcessor implements TryCatchFinallyProcessor {
+public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
 
     private BranchNode tryBranch;
     private Map<Class<? extends Throwable>, BranchNode> catchMap;
     private BranchNode finallyBranch;
 
-    public DefaultTryCatchFinallyProcessor(BranchNode tryBranch, Map<Class<? extends Throwable>, BranchNode> catchMap, BranchNode finallyBranch) {
+    public TryCatchFinallyProcessorImpl(BranchNode tryBranch, Map<Class<? extends Throwable>, BranchNode> catchMap, BranchNode finallyBranch) {
         this.tryBranch = tryBranch;
         this.catchMap = catchMap;
         this.finallyBranch = finallyBranch;

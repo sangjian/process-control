@@ -1,18 +1,12 @@
 package cn.ideabuffer.process.core.nodes.branch;
 
 import cn.ideabuffer.process.core.Lifecycle;
-import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.BranchProcessor;
-import cn.ideabuffer.process.core.processors.DefaultBranchProcessor;
+import cn.ideabuffer.process.core.processors.impl.BranchProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
-import cn.ideabuffer.process.core.status.ProcessStatus;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,12 +29,12 @@ public class DefaultBranchNode extends AbstractExecutableNode<Void, BranchProces
 
     public DefaultBranchNode(Rule rule, List<ExecutableNode<?, ?>> nodes) {
         super(rule);
-        super.registerProcessor(new DefaultBranchProcessor(nodes));
+        super.registerProcessor(new BranchProcessorImpl(nodes));
     }
 
     public DefaultBranchNode(Rule rule, ExecutableNode<?, ?>... nodes) {
         super(rule);
-        super.registerProcessor(new DefaultBranchProcessor(nodes));
+        super.registerProcessor(new BranchProcessorImpl(nodes));
     }
 
 

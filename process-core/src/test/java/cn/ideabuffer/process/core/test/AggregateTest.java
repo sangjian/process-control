@@ -12,7 +12,7 @@ import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
 import cn.ideabuffer.process.core.nodes.builder.*;
 import cn.ideabuffer.process.core.nodes.merger.*;
-import cn.ideabuffer.process.core.processors.UnitAggregateProcessorImpl;
+import cn.ideabuffer.process.core.processors.impl.UnitAggregateProcessorImpl;
 import cn.ideabuffer.process.core.test.merger.TestStringListMerger;
 import cn.ideabuffer.process.core.test.nodes.aggregate.*;
 import org.junit.Test;

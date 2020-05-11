@@ -1,10 +1,11 @@
-package cn.ideabuffer.process.core.processors;
+package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.nodes.BaseNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,12 +17,12 @@ import java.util.stream.Collectors;
  * @author sangjian.sj
  * @date 2020/05/03
  */
-public class DefaultProcessInstanceProcessor<R> implements ProcessInstanceProcessor<R> {
+public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor<R> {
 
     private ProcessDefinition<R> definition;
     private R result = null;
 
-    public DefaultProcessInstanceProcessor(ProcessDefinition<R> definition) {
+    public ProcessInstanceProcessorImpl(ProcessDefinition<R> definition) {
         this.definition = definition;
     }
 

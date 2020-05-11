@@ -6,7 +6,7 @@ import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
-import cn.ideabuffer.process.core.processors.DistributeAggregateProcessorImpl;
+import cn.ideabuffer.process.core.processors.impl.DistributeAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 

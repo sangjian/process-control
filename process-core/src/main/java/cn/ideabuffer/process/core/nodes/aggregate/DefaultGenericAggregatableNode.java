@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
-import cn.ideabuffer.process.core.processors.GenericAggregateProcessorImpl;
+import cn.ideabuffer.process.core.processors.impl.GenericAggregateProcessorImpl;
 
 /**
  * @author sangjian.sj

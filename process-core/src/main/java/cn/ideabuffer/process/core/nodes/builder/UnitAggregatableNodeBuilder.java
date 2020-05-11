@@ -6,7 +6,7 @@ import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
 import cn.ideabuffer.process.core.processors.AggregateProcessor;
-import cn.ideabuffer.process.core.processors.UnitAggregateProcessorImpl;
+import cn.ideabuffer.process.core.processors.impl.UnitAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 

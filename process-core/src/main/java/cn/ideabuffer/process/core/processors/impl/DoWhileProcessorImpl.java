@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.processors;
+package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockWrapper;
@@ -14,32 +14,10 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/05/02
  */
-public class DefaultWhileProcessor implements WhileProcessor {
+public class DoWhileProcessorImpl extends WhileProcessorImpl {
 
-    private Rule rule;
-    private BranchNode branch;
-
-    public DefaultWhileProcessor(Rule rule, BranchNode branch) {
-        this.rule = rule;
-        this.branch = branch;
-    }
-
-    public void setRule(Rule rule) {
-        this.rule = rule;
-    }
-
-    public void setBranch(BranchNode branch) {
-        this.branch = branch;
-    }
-
-    @Override
-    public Rule getRule() {
-        return rule;
-    }
-
-    @Override
-    public BranchNode getBranch() {
-        return branch;
+    public DoWhileProcessorImpl(Rule rule, BranchNode branch) {
+        super(rule, branch);
     }
 
     @NotNull
@@ -48,7 +26,7 @@ public class DefaultWhileProcessor implements WhileProcessor {
         if (getRule() == null) {
             throw new NullPointerException("rule can't be null");
         }
-        if (branch == null) {
+        if (getBranch() == null) {
             return ProcessStatus.PROCEED;
         }
 
@@ -56,18 +34,20 @@ public class DefaultWhileProcessor implements WhileProcessor {
         BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
         ContextWrapper whileContext = Contexts.wrap(context, whileBlock);
 
-        while (getRule().match(whileContext)) {
-            ProcessStatus status = branch.execute(whileContext);
+        do {
+            blockWrapper.resetBreak();
+            blockWrapper.resetContinue();
+            ProcessStatus status = getBranch().execute(whileContext);
             if (ProcessStatus.isComplete(status)) {
                 return status;
+            }
+            if (blockWrapper.hasContinued()) {
+                continue;
             }
             if (blockWrapper.hasBroken()) {
                 break;
             }
-
-            blockWrapper.resetBreak();
-            blockWrapper.resetContinue();
-        }
+        } while (getRule().match(whileContext));
 
         return ProcessStatus.PROCEED;
     }

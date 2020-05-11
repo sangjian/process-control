@@ -3,7 +3,7 @@ package cn.ideabuffer.process.core.nodes.condition;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.processors.DefaultWhileProcessor;
+import cn.ideabuffer.process.core.processors.impl.WhileProcessorImpl;
 import cn.ideabuffer.process.core.processors.WhileProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -17,7 +17,7 @@ public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus, Wh
 
 
     public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
-        this(new DefaultWhileProcessor(rule, branch));
+        this(new WhileProcessorImpl(rule, branch));
     }
 
     public WhileConditionNode(@NotNull WhileProcessor processor) {
