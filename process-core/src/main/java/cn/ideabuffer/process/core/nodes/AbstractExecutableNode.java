@@ -174,10 +174,13 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     protected ProcessStatus onComplete(Context context, R result) {
-        if (getNodeListener() == null) {
-            return ProcessStatus.PROCEED;
+        if (getNodeListener() != null) {
+            return getNodeListener().onComplete(context, result);
         }
-        return getNodeListener().onComplete(context, result);
+        if (result instanceof ProcessStatus) {
+            return (ProcessStatus)result;
+        }
+        return ProcessStatus.PROCEED;
     }
 
     protected ProcessStatus onFailure(Context context, Exception e) {
@@ -187,7 +190,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         throw new ProcessException(e);
     }
 
-    protected void notifyListeners(Context context, R result, Exception e, boolean success) {
+    protected void notifyListeners(Context context, @Nullable R result, Exception e, boolean success) {
         if (listeners == null) {
             return;
         }

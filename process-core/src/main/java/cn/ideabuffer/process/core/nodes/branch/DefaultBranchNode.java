@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.processors.impl.BranchProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/03/01
  */
-public class DefaultBranchNode extends AbstractExecutableNode<Void, BranchProcessor> implements BranchNode {
+public class DefaultBranchNode extends AbstractExecutableNode<ProcessStatus, BranchProcessor> implements BranchNode {
 
     public DefaultBranchNode() {
 
