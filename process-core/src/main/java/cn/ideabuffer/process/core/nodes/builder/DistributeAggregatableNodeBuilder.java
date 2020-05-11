@@ -70,6 +70,11 @@ public class DistributeAggregatableNodeBuilder<R> extends AbstractExecutableNode
         return this;
     }
 
+    public DistributeAggregatableNodeBuilder<R> aggregate(@NotNull List<DistributeMergeableNode<?, R>> nodes) {
+        this.mergeableNodes.addAll(nodes);
+        return this;
+    }
+
     public DistributeAggregatableNodeBuilder<R> aggregator(@NotNull DistributeAggregator<R> aggregator) {
         this.aggregator = aggregator;
         return this;

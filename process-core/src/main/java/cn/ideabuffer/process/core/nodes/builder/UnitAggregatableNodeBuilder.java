@@ -70,6 +70,11 @@ public class UnitAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilde
         return this;
     }
 
+    public UnitAggregatableNodeBuilder<R> aggregate(@NotNull List<MergeableNode<R>> nodes) {
+        this.mergeableNodes.addAll(nodes);
+        return this;
+    }
+
     public UnitAggregatableNodeBuilder<R> aggregator(@NotNull UnitAggregator<R> aggregator) {
         this.aggregator = aggregator;
         return this;

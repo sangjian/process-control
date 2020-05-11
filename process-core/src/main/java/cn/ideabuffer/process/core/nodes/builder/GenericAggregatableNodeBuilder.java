@@ -65,6 +65,11 @@ public class GenericAggregatableNodeBuilder<P, R>
         return this;
     }
 
+    public GenericAggregatableNodeBuilder<P, R> aggregate(@NotNull List<MergeableNode<P>> nodes) {
+        this.mergeableNodes.addAll(nodes);
+        return this;
+    }
+
     public GenericAggregatableNodeBuilder<P, R> aggregator(@NotNull GenericAggregator<P, R> aggregator) {
         this.aggregator = aggregator;
         return this;
