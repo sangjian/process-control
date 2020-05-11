@@ -1,16 +1,12 @@
 package cn.ideabuffer.process.core.processors;
 
 import cn.ideabuffer.process.core.ProcessDefinition;
-import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.status.ProcessStatus;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
  * @date 2020/05/03
  */
-public interface ProcessInstanceProcessor<R> extends Processor<ProcessStatus> {
+public interface ProcessInstanceProcessor<R> extends StatusProcessor {
 
     /**
      * 获取流程定义
@@ -26,7 +22,4 @@ public interface ProcessInstanceProcessor<R> extends Processor<ProcessStatus> {
      */
     R getResult();
 
-    @NotNull
-    @Override
-    ProcessStatus process(@NotNull Context context) throws Exception;
 }

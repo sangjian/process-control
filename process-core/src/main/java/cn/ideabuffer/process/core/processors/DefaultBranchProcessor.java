@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.processors;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -28,13 +29,13 @@ public class DefaultBranchProcessor implements BranchProcessor {
         }
     }
 
+    @NotNull
     @Override
-    public Void process(@NotNull Context context) throws Exception {
+    public ProcessStatus process(@NotNull Context context) throws Exception {
         if (nodes == null) {
-            return null;
+            return ProcessStatus.PROCEED;
         }
-        NodeExecutors.SERIAL_EXECUTOR.execute(context, this.nodes.toArray(new ExecutableNode[0]));
-        return null;
+        return NodeExecutors.SERIAL_EXECUTOR.execute(context, this.nodes.toArray(new ExecutableNode[0]));
     }
 
     @Override
