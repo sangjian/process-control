@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
-import cn.ideabuffer.process.core.processors.impl.ProcessInstanceProcessorImpl;
+import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 
 /**
@@ -10,7 +10,7 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public interface ProcessInstance<R> extends ExecutableNode<ProcessStatus, ProcessInstanceProcessorImpl<R>> {
+public interface ProcessInstance<R> extends ExecutableNode<ProcessStatus, ProcessInstanceProcessor<R>> {
 
     R getResult();
 

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author sangjian.sj
@@ -57,6 +58,16 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
         this.nodes = newArr;
         return this;
+    }
+
+    @Override
+    public ProcessDefinition<R> addProcessNode(@NotNull ExecutableNode<?, ?> node) {
+        return addNode(node);
+    }
+
+    @Override
+    public ProcessDefinition<R> addProcessNodes(@NotNull List<ExecutableNode<?, ?>> nodes) {
+        return addNode(nodes.toArray(new ExecutableNode[0]));
     }
 
     @Override

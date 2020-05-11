@@ -11,6 +11,8 @@ import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * @author sangjian.sj
  * @date 2020/03/24
@@ -20,10 +22,26 @@ public interface ProcessDefinition<R> extends Lifecycle {
     /**
      * 增加执行节点
      *
+     * @param node 可执行节点
+     * @return 当前实例
+     */
+    ProcessDefinition<R> addProcessNode(@NotNull ExecutableNode<?, ?> node);
+
+    /**
+     * 增加执行节点
+     *
      * @param nodes 可执行节点
      * @return 当前实例
      */
     ProcessDefinition<R> addProcessNodes(@NotNull ExecutableNode<?, ?>... nodes);
+
+    /**
+     * 增加执行节点
+     *
+     * @param nodes 可执行节点
+     * @return 当前实例
+     */
+    ProcessDefinition<R> addProcessNodes(@NotNull List<ExecutableNode<?, ?>> nodes);
 
     /**
      * 增加if节点
