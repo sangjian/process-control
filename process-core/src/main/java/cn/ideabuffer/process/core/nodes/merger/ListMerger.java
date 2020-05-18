@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -10,5 +12,5 @@ import java.util.List;
 public interface ListMerger<T> extends UnitMerger<List<T>> {
 
     @Override
-    List<T> merge(Collection<List<T>> results);
+    List<T> merge(@NotNull Collection<List<T>> results);
 }

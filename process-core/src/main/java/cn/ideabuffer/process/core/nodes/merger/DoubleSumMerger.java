@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Objects;
 
@@ -10,7 +12,7 @@ import java.util.Objects;
 public class DoubleSumMerger implements UnitMerger<Double> {
 
     @Override
-    public Double merge(Collection<Double> results) {
+    public Double merge(@NotNull Collection<Double> results) {
         if (results == null) {
             return 0d;
         }

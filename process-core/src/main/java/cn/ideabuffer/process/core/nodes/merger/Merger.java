@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 
 /**
@@ -18,6 +20,6 @@ public interface Merger<P, R> {
      * @param results 待合并的结果集合
      * @return 合并结果
      */
-    R merge(Collection<P> results);
+    R merge(@NotNull Collection<P> results);
 
 }

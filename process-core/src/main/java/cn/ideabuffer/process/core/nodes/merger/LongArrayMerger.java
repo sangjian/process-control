@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +14,7 @@ import java.util.stream.Collectors;
 public class LongArrayMerger implements UnitMerger<char[]> {
 
     @Override
-    public char[] merge(Collection<char[]> results) {
+    public char[] merge(@NotNull Collection<char[]> results) {
         List<char[]> list = results.stream().filter(Objects::nonNull).collect(Collectors.toList());
 
         int totalCnt = 0;

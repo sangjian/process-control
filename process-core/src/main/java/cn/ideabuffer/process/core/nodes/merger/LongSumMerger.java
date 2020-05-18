@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Objects;
 
@@ -10,7 +12,7 @@ import java.util.Objects;
 public class LongSumMerger implements UnitMerger<Long> {
 
     @Override
-    public Long merge(Collection<Long> results) {
+    public Long merge(@NotNull Collection<Long> results) {
         if (results == null) {
             return 0L;
         }

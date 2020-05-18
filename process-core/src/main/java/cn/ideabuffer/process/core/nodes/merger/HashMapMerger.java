@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +13,7 @@ import java.util.Map;
 public class HashMapMerger<K, V> implements MapMerger<K, V> {
 
     @Override
-    public HashMap<K, V> merge(Collection<Map<K, V>> results) {
-        if (results == null) {
-            return new HashMap<>();
-        }
+    public HashMap<K, V> merge(@NotNull Collection<Map<K, V>> results) {
         HashMap<K, V> result = new HashMap<>();
         results.forEach(result::putAll);
         return result;

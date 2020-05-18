@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Objects;
 
@@ -10,11 +12,7 @@ import java.util.Objects;
 public class IntAvgMerger implements UnitMerger<Integer> {
 
     @Override
-    public Integer merge(Collection<Integer> results) {
-        if (results == null) {
-            return 0;
-        }
-
+    public Integer merge(@NotNull Collection<Integer> results) {
         return (int)results.stream().filter(Objects::nonNull).mapToInt(value -> value).average().orElse(0);
     }
 }

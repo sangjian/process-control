@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Set;
 
@@ -10,5 +12,5 @@ import java.util.Set;
 public interface SetMerger<T> extends UnitMerger<Set<T>> {
 
     @Override
-    Set<T> merge(Collection<Set<T>> results);
+    Set<T> merge(@NotNull Collection<Set<T>> results);
 }

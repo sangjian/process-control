@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,10 +13,7 @@ import java.util.List;
 public class ArrayListMerger<T> implements ListMerger<T> {
 
     @Override
-    public ArrayList<T> merge(Collection<List<T>> results) {
-        if (results == null) {
-            return new ArrayList<>();
-        }
+    public ArrayList<T> merge(@NotNull Collection<List<T>> results) {
         ArrayList<T> list = new ArrayList<>();
         for (List<T> item : results) {
             list.addAll(item);

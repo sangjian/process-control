@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.merger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +14,7 @@ import java.util.stream.Collectors;
 public class IntArrayMerger implements UnitMerger<int[]> {
 
     @Override
-    public int[] merge(Collection<int[]> results) {
+    public int[] merge(@NotNull Collection<int[]> results) {
         List<int[]> list = results.stream().filter(Objects::nonNull).collect(Collectors.toList());
 
         int totalCnt = 0;
