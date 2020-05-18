@@ -53,7 +53,7 @@ public class AggregateUtils {
     }
 
     @NotNull
-    public static <T> CompletableFuture<Void> within(@NotNull CompletableFuture<T> future, long timeout,
+    public static CompletableFuture<Void> within(@NotNull CompletableFuture<?> future, long timeout,
         @NotNull TimeUnit unit) {
         long readTimeout = unit.toMillis(timeout);
         return future.acceptEither(failIn(readTimeout, unit), t -> {
