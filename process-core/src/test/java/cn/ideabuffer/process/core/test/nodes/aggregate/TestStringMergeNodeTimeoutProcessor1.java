@@ -6,23 +6,19 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author sangjian.sj
  * @date 2020/05/09
  */
-public class TestListMergeNodeProcessor1 implements Processor<List<String>> {
+public class TestStringMergeNodeTimeoutProcessor1 implements Processor<String> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public List<String> process(@NotNull Context context) throws Exception {
-        logger.info("in TestListMergeNodeProcessor1");
-        List<String> list = new ArrayList<>();
-        Thread.sleep(2000);
-        list.add("test1");
-        return list;
+    public String process(@NotNull Context context) throws Exception {
+        logger.info("in TestStringMergeNodeTimeoutProcessor1");
+        Thread.sleep(1000);
+        throw new RuntimeException("test");
+        //return "test1";
     }
 }

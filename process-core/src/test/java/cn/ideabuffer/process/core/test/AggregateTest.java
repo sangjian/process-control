@@ -7,7 +7,7 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
-import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
+import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
 import cn.ideabuffer.process.core.nodes.builder.*;
@@ -38,7 +38,7 @@ public class AggregateTest {
 
         Executor executor = Executors.newFixedThreadPool(3);
 
-        MergeableNode<List<String>> node1 = MergeNodeBuilder.<List<String>>newBuilder().by(new TestListMergeNodeProcessor1()).build();
+        MergeableNode<List<String>> node1 = MergeNodeBuilder.<List<String>>newBuilder().by(new TestListMergeNodeProcessor1()).timeout(1, TimeUnit.SECONDS).build();
         MergeableNode<List<String>> node2 = MergeNodeBuilder.<List<String>>newBuilder().by(new TestListMergeNodeProcessor2()).build();
 
         List<MergeableNode<List<String>>> nodes = new ArrayList<>();
@@ -83,6 +83,37 @@ public class AggregateTest {
         GenericAggregatableNode<String, List<String>> node
             = GenericAggregatableNodeBuilder.<String, List<String>>newBuilder().aggregator(
             Aggregators.newParallelGenericAggregator(executor, new TestStringListMerger())).aggregate(nodes)
+            .build();
+        // 链式结果处理
+        node.thenApply(((ctx, result) -> {
+            logger.info("result:{}", result);
+            return result.size();
+        })).thenAccept((ctx, result) -> logger.info("result:{}", result));
+        definition.addAggregateNode(node);
+
+        ProcessInstance<String> instance = definition.newInstance();
+        Context context = Contexts.newContext();
+
+        instance.execute(context);
+    }
+
+    @Test
+    public void testTimeoutGenericAggregateList() throws Exception {
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+
+        Executor executor = Executors.newFixedThreadPool(3);
+
+        MergeableNode<String> node1 = MergeNodeBuilder.<String>newBuilder().by(new TestStringMergeNodeTimeoutProcessor1()).build();
+        MergeableNode<String> node2 = MergeNodeBuilder.<String>newBuilder().by(new TestStringMergeNodeTimeoutProcessor2()).timeout(5000, TimeUnit.MILLISECONDS).build();
+
+        List<MergeableNode<String>> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+
+        // 创建通用聚合节点
+        GenericAggregatableNode<String, List<String>> node
+            = GenericAggregatableNodeBuilder.<String, List<String>>newBuilder().aggregator(
+            Aggregators.newParallelGenericAggregator(executor, new TestStringListMerger(), 2000)).aggregate(nodes)
             .build();
         // 链式结果处理
         node.thenApply(((ctx, result) -> {

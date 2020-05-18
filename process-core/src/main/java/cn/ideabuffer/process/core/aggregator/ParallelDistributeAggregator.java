@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.aggregator;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
+import cn.ideabuffer.process.core.util.AggregateUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.function.Supplier;
 
 /**
  * @author sangjian.sj
@@ -21,10 +21,24 @@ public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> 
 
     private Executor executor;
     private Class<R> resultClass;
+    private long timeout;
 
     public ParallelDistributeAggregator(@NotNull Executor executor, @NotNull Class<R> resultClass) {
+        this(executor, resultClass, 0);
+    }
+
+    public ParallelDistributeAggregator(@NotNull Executor executor, @NotNull Class<R> resultClass, long timeout) {
+        this(executor, resultClass, timeout, TimeUnit.MILLISECONDS);
+    }
+
+    public ParallelDistributeAggregator(@NotNull Executor executor, @NotNull Class<R> resultClass, long timeout,
+        @NotNull TimeUnit unit) {
+        if (timeout < 0) {
+            throw new IllegalArgumentException("timeout must >= 0");
+        }
         this.executor = executor;
         this.resultClass = resultClass;
+        this.timeout = unit.toMillis(timeout);
     }
 
     @NotNull
@@ -40,39 +54,24 @@ public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> 
         if (nodes == null || nodes.isEmpty()) {
             return result;
         }
-        long maxTimeout = Aggregators.getMaxTimeout(nodes);
         BlockingQueue<MergerNode<?, R>> mergerNodes = new LinkedBlockingQueue<>(nodes.size());
-        List<CompletableFuture<?>> timeouts = new LinkedList<>();
-        List<CompletableFuture<?>> normals = new LinkedList<>();
+        List<CompletableFuture<?>> futureList = new LinkedList<>();
         nodes.forEach(node -> {
-            CompletableFuture<?> f = getFuture(context, node);
-            // 因为结果对象只有一个，为了避免并发可能引起的问题，这里不希望并行地去merge；
-            // 将返回结果封装成对象后放入队列，所有节点执行完毕后再进行统一merge
-            f.thenAccept(v -> {
-                //noinspection unchecked
-                MergerNode<?, R> m = new MergerNode(node, v, result);
-                mergerNodes.offer(m);
-            });
-            if (node.getTimeout() > 0) {
-                timeouts.add(f);
-            } else {
-                normals.add(f);
-            }
+            CompletableFuture<?> f = getFuture(context, node, mergerNodes, result);
+            futureList.add(f);
         });
 
-        CompletableFuture<Void> allTimeouts = CompletableFuture.allOf(timeouts.toArray(new CompletableFuture[0]));
-        CompletableFuture<Void> allNormals = CompletableFuture.allOf(normals.toArray(new CompletableFuture[0]));
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
 
         try {
-            // 如果有超时控制，则等待最大的超时时间
-            if (maxTimeout > 0) {
-                allTimeouts.get(maxTimeout, TimeUnit.MILLISECONDS);
+            if (timeout > 0) {
+                allFutures.get(timeout, TimeUnit.MILLISECONDS);
+            } else {
+                allFutures.get();
             }
         } catch (TimeoutException e) {
-            logger.error("timeout! maxTimeout:{}", maxTimeout, e);
+            logger.error("aggregator timeout! timeout:{}", timeout, e);
         } finally {
-            // 确保没有超时控制的节点执行结束
-            allNormals.join();
             // 统一merge结果
             mergerNodes.forEach(MergerNode::merge);
         }
@@ -80,15 +79,24 @@ public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> 
         return result;
     }
 
-    private CompletableFuture<?> getFuture(Context context, DistributeMergeableNode<?, R> node) {
-        Supplier<?> supplier = new InvokeSupplier<>(node, context);
-        CompletableFuture<?> future;
-        if (executor == null) {
-            future = CompletableFuture.supplyAsync(supplier);
-        } else {
-            future = CompletableFuture.supplyAsync(supplier, executor);
+    private CompletableFuture<?> getFuture(Context context, DistributeMergeableNode<?, R> node,
+        BlockingQueue<MergerNode<?, R>> mergerNodes, R result) {
+        CompletableFuture<?> future = CompletableFuture.supplyAsync(() -> AggregateUtils.process(context, node),
+            executor)
+            .thenAccept(v -> {
+                // 因为结果对象只有一个，为了避免并发可能引起的问题，这里不希望并行地去merge；
+                // 将返回结果封装成对象后放入队列，所有节点执行完毕后再进行统一merge
+                //noinspection unchecked
+                MergerNode<?, R> m = new MergerNode(node, v, result);
+                mergerNodes.offer(m);
+            }).exceptionally(t -> {
+                logger.error("process error! node:{}", node, t);
+                return null;
+            });
+        if (node.getTimeout() <= 0) {
+            return future;
         }
-        return future;
+        return AggregateUtils.within(future, node.getTimeout(), TimeUnit.MILLISECONDS);
     }
 
     private class MergerNode<V, R> {
@@ -105,31 +113,6 @@ public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> 
         public void merge() {
             if (node.getProcessor() != null) {
                 node.getProcessor().merge(value, result);
-            }
-        }
-    }
-
-    private class InvokeSupplier<V> implements Supplier<V> {
-
-        private DistributeMergeableNode<V, R> node;
-
-        private Context context;
-
-        InvokeSupplier(DistributeMergeableNode<V, R> node, Context context) {
-            this.node = node;
-            this.context = context;
-        }
-
-        @Override
-        public V get() {
-            try {
-                if (node.getProcessor() == null) {
-                    return null;
-                }
-                return node.getProcessor().process(context);
-            } catch (Exception e) {
-                logger.error("InvokeSupplier invoke error, node:{}", node, e);
-                throw new RuntimeException(e);
             }
         }
     }

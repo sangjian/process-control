@@ -1,13 +1,11 @@
 package cn.ideabuffer.process.core.aggregator;
 
-import cn.ideabuffer.process.core.Mergeable;
-import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.merger.Merger;
 import cn.ideabuffer.process.core.nodes.merger.UnitMerger;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author sangjian.sj
@@ -21,7 +19,17 @@ public class Aggregators {
 
     public static <I, O> GenericAggregator<I, O> newParallelGenericAggregator(@NotNull Executor executor,
         @NotNull Merger<I, O> merger) {
-        return new ParallelGenericAggregator<>(executor, merger);
+        return newParallelGenericAggregator(executor, merger, 0);
+    }
+
+    public static <I, O> GenericAggregator<I, O> newParallelGenericAggregator(@NotNull Executor executor,
+        @NotNull Merger<I, O> merger, long timeout) {
+        return newParallelGenericAggregator(executor, merger, timeout, TimeUnit.MILLISECONDS);
+    }
+
+    public static <I, O> GenericAggregator<I, O> newParallelGenericAggregator(@NotNull Executor executor,
+        @NotNull Merger<I, O> merger, long timeout, @NotNull TimeUnit unit) {
+        return new ParallelGenericAggregator<>(executor, merger, timeout, unit);
     }
 
     public static <R> UnitAggregator<R> newParallelUnitAggregator(@NotNull Executor executor,
@@ -40,11 +48,19 @@ public class Aggregators {
     public static <O> DistributeAggregator<O> newParallelDistributeAggregator(
         @NotNull Executor executor,
         @NotNull Class<O> resultClass) {
-        return new ParallelDistributeAggregator<>(executor, resultClass);
+        return newParallelDistributeAggregator(executor, resultClass, 0);
     }
 
-    public static long getMaxTimeout(@NotNull List<? extends Mergeable> nodes) {
-        return nodes.stream().mapToLong(Mergeable::getTimeout).max().orElse(0);
+    public static <O> DistributeAggregator<O> newParallelDistributeAggregator(
+        @NotNull Executor executor,
+        @NotNull Class<O> resultClass, long timeout) {
+        return newParallelDistributeAggregator(executor, resultClass, timeout, TimeUnit.MILLISECONDS);
+    }
+
+    public static <O> DistributeAggregator<O> newParallelDistributeAggregator(
+        @NotNull Executor executor,
+        @NotNull Class<O> resultClass, long timeout, @NotNull TimeUnit unit) {
+        return new ParallelDistributeAggregator<>(executor, resultClass, timeout, unit);
     }
 
 }

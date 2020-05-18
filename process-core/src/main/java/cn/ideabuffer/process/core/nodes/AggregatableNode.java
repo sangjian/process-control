@@ -17,4 +17,8 @@ import java.util.List;
 public interface AggregatableNode<I, O>
     extends TransmittableNode<O, AggregateProcessor<I, O>>, Parallelizable {
 
+    void timeout(long timeout);
+
+    long getTimeout();
+
 }
