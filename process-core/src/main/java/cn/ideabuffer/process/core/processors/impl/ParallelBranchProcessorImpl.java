@@ -31,7 +31,6 @@ public class ParallelBranchProcessorImpl implements ParallelBranchProcessor {
         this(null, null);
     }
 
-
     public ParallelBranchProcessorImpl(List<BranchNode> branches, Executor executor) {
         this.executor = executor;
         this.branches = branches == null ? new ArrayList<>() : branches;

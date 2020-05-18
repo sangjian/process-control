@@ -20,7 +20,8 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class ParallelBranchNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStatus, ParallelBranchProcessor, ParallelBranchNode> {
+public class ParallelBranchNodeBuilder
+    extends AbstractExecutableNodeBuilder<ProcessStatus, ParallelBranchProcessor, ParallelBranchNode> {
 
     private List<BranchNode> branches;
 

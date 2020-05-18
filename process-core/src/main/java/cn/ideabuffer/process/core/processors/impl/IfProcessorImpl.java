@@ -32,21 +32,13 @@ public class IfProcessorImpl implements IfProcessor {
         this.falseBranch = falseBranch;
     }
 
-    public void setRule(Rule rule) {
-        this.rule = rule;
-    }
-
-    public void setTrueBranch(BranchNode trueBranch) {
-        this.trueBranch = trueBranch;
-    }
-
-    public void setFalseBranch(BranchNode falseBranch) {
-        this.falseBranch = falseBranch;
-    }
-
     @Override
     public Rule getRule() {
         return this.rule;
+    }
+
+    public void setRule(Rule rule) {
+        this.rule = rule;
     }
 
     @Override
@@ -54,9 +46,17 @@ public class IfProcessorImpl implements IfProcessor {
         return this.trueBranch;
     }
 
+    public void setTrueBranch(BranchNode trueBranch) {
+        this.trueBranch = trueBranch;
+    }
+
     @Override
     public BranchNode getFalseBranch() {
         return this.falseBranch;
+    }
+
+    public void setFalseBranch(BranchNode falseBranch) {
+        this.falseBranch = falseBranch;
     }
 
     @NotNull

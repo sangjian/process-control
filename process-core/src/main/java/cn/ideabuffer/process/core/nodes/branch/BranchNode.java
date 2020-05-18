@@ -5,8 +5,6 @@ import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 
-import java.util.List;
-
 /**
  * 分支节点
  *

@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T extends ExecutableNode<R, P>> implements Builder<T> {
+public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T extends ExecutableNode<R, P>>
+    implements Builder<T> {
 
     protected boolean parallel;
 
@@ -48,7 +49,6 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         this.rule = rule;
         return this;
     }
-
 
     @SuppressWarnings("unchecked")
     public Builder<T> addListeners(ProcessListener<R>... listeners) {

@@ -21,7 +21,8 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
     private Map<Class<? extends Throwable>, BranchNode> catchMap;
     private BranchNode finallyBranch;
 
-    public TryCatchFinallyProcessorImpl(BranchNode tryBranch, Map<Class<? extends Throwable>, BranchNode> catchMap, BranchNode finallyBranch) {
+    public TryCatchFinallyProcessorImpl(BranchNode tryBranch, Map<Class<? extends Throwable>, BranchNode> catchMap,
+        BranchNode finallyBranch) {
         this.tryBranch = tryBranch;
         this.catchMap = catchMap;
         this.finallyBranch = finallyBranch;

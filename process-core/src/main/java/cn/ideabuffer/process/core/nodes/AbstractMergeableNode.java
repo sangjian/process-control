@@ -2,12 +2,9 @@ package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Matchable;
 import cn.ideabuffer.process.core.Mergeable;
-import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +70,5 @@ public abstract class AbstractMergeableNode extends AbstractNode implements Merg
     public void setTimeout(long timeout) {
         this.timeout = timeout;
     }
-
-
 
 }

@@ -8,7 +8,6 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.rule.Rule;
-import cn.ideabuffer.process.core.status.ProcessErrorCode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +23,8 @@ import java.util.concurrent.ExecutorService;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends AbstractNode implements ExecutableNode<R, P> {
+public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends AbstractNode
+    implements ExecutableNode<R, P> {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private boolean parallel = false;
@@ -54,7 +54,8 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this(parallel, rule, executor, null, null, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, NodeListener<R> nodeListener, P processor) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+        NodeListener<R> nodeListener, P processor) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;

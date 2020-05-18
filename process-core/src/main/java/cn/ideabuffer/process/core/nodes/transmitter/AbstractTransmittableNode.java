@@ -15,7 +15,8 @@ import static cn.ideabuffer.process.core.executor.NodeExecutors.DEFAULT_POOL;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public abstract class AbstractTransmittableNode<R, P extends Processor<R>> extends AbstractExecutableNode<R, P> implements TransmittableNode<R,P> {
+public abstract class AbstractTransmittableNode<R, P extends Processor<R>> extends AbstractExecutableNode<R, P>
+    implements TransmittableNode<R, P> {
 
     private TransmittableProcessor transmittableProcessor;
 

@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.aggregator;
 
-import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.nodes.merger.Merger;
@@ -9,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

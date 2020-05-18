@@ -2,9 +2,9 @@ package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
+import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
-import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
 import cn.ideabuffer.process.core.processors.impl.DistributeAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
@@ -19,7 +19,8 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class DistributeAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, DistributeAggregateProcessor<R>, DistributeAggregatableNode<R>> {
+public class DistributeAggregatableNodeBuilder<R>
+    extends AbstractExecutableNodeBuilder<R, DistributeAggregateProcessor<R>, DistributeAggregatableNode<R>> {
 
     private List<DistributeMergeableNode<?, R>> mergeableNodes;
 

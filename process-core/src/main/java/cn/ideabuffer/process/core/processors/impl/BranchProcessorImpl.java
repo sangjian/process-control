@@ -50,7 +50,7 @@ public class BranchProcessorImpl implements BranchProcessor {
 
     @Override
     public void addNodes(ExecutableNode<?, ?>... nodes) {
-        if(nodes == null || nodes.length == 0) {
+        if (nodes == null || nodes.length == 0) {
             return;
         }
         this.nodes.addAll(Arrays.asList(nodes));

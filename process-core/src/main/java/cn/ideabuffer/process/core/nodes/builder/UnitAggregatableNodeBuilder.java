@@ -19,7 +19,8 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class UnitAggregatableNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, AggregateProcessor<R, R>, UnitAggregatableNode<R>> {
+public class UnitAggregatableNodeBuilder<R>
+    extends AbstractExecutableNodeBuilder<R, AggregateProcessor<R, R>, UnitAggregatableNode<R>> {
 
     private List<MergeableNode<R>> mergeableNodes;
 

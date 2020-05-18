@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessStatus, ProcessInstanceProcessor<R>> implements ProcessInstance<R> {
-
+public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessStatus, ProcessInstanceProcessor<R>>
+    implements ProcessInstance<R> {
 
     public DefaultProcessInstance(@NotNull ProcessInstanceProcessor<R> processor) {
         super.registerProcessor(processor);
@@ -30,6 +30,5 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
     public boolean enabled() {
         return true;
     }
-
 
 }

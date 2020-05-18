@@ -38,7 +38,6 @@ public class DefaultBranchNode extends AbstractExecutableNode<ProcessStatus, Bra
         super.registerProcessor(new BranchProcessorImpl(nodes));
     }
 
-
     @Override
     protected void onDestroy() {
         try {

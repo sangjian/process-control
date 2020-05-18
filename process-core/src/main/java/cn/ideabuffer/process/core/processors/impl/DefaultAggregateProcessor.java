@@ -56,7 +56,7 @@ public class DefaultAggregateProcessor<I, O> implements AggregateProcessor<I, O>
 
     @Nullable
     @Override
-    public O process(@NotNull Context context) throws Exception{
+    public O process(@NotNull Context context) throws Exception {
         return aggregator.aggregate(context, mergeableNodes);
     }
 }

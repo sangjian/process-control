@@ -1,10 +1,7 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Parallelizable;
-import cn.ideabuffer.process.core.aggregator.Aggregator;
 import cn.ideabuffer.process.core.processors.AggregateProcessor;
-
-import java.util.List;
 
 /**
  * 可聚合结果的节点

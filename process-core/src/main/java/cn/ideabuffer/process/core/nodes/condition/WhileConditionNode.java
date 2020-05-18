@@ -3,8 +3,8 @@ package cn.ideabuffer.process.core.nodes.condition;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.processors.impl.WhileProcessorImpl;
 import cn.ideabuffer.process.core.processors.WhileProcessor;
+import cn.ideabuffer.process.core.processors.impl.WhileProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
  * @date 2020/01/18
  */
 public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus, WhileProcessor> {
-
 
     public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
         this(new WhileProcessorImpl(rule, branch));

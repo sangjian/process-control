@@ -3,7 +3,6 @@ package cn.ideabuffer.process.core.nodes.builder;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.MergeNode;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 

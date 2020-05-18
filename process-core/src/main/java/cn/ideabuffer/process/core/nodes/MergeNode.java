@@ -27,12 +27,12 @@ public class MergeNode<R> extends AbstractMergeableNode implements MergeableNode
         this.processor = processor;
     }
 
-    public void setProcessor(Processor<R> processor) {
-        this.processor = processor;
-    }
-
     @Override
     public Processor<R> getProcessor() {
         return processor;
+    }
+
+    public void setProcessor(Processor<R> processor) {
+        this.processor = processor;
     }
 }

@@ -12,13 +12,15 @@ import java.util.concurrent.Executor;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class TransmittableNodeBuilder<R, P extends Processor<R>> extends AbstractExecutableNodeBuilder<R, P, TransmittableNode<R, P>> {
+public class TransmittableNodeBuilder<R, P extends Processor<R>>
+    extends AbstractExecutableNodeBuilder<R, P, TransmittableNode<R, P>> {
 
     private TransmittableNodeBuilder(TransmittableNode<R, P> node) {
         super(node);
     }
 
-    public static <R, P extends Processor<R>> TransmittableNodeBuilder newBuilder(@NotNull TransmittableNode<R, P> node) {
+    public static <R, P extends Processor<R>> TransmittableNodeBuilder newBuilder(
+        @NotNull TransmittableNode<R, P> node) {
         return new TransmittableNodeBuilder<>(node);
     }
 

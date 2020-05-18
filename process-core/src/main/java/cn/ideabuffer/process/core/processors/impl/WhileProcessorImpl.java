@@ -25,22 +25,22 @@ public class WhileProcessorImpl implements WhileProcessor {
         this.branch = branch;
     }
 
-    public void setRule(Rule rule) {
-        this.rule = rule;
-    }
-
-    public void setBranch(BranchNode branch) {
-        this.branch = branch;
-    }
-
     @Override
     public Rule getRule() {
         return rule;
     }
 
+    public void setRule(Rule rule) {
+        this.rule = rule;
+    }
+
     @Override
     public BranchNode getBranch() {
         return branch;
+    }
+
+    public void setBranch(BranchNode branch) {
+        this.branch = branch;
     }
 
     @NotNull

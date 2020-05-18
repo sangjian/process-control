@@ -3,7 +3,6 @@ package cn.ideabuffer.process.core.nodes.branch;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
-import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +25,8 @@ public class Branches {
     }
 
     public static BranchNode newBranch(Rule rule, @NotNull Processor<?>... processors) {
-        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList());
+        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
+            Collectors.toList());
         return newBranch(rule, nodes);
     }
 

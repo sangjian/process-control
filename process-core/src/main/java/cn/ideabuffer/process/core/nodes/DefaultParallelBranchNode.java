@@ -2,8 +2,8 @@ package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
 import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
+import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;

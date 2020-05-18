@@ -11,7 +11,10 @@ import cn.ideabuffer.process.core.processors.impl.GenericAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
@@ -61,7 +64,8 @@ public class Nodes {
         return new DefaultGenericAggregatableNode<>();
     }
 
-    public static <P, R> GenericAggregatableNode<P, R> newGenericAggregatableNode(GenericAggregateProcessorImpl<P, R> processor) {
+    public static <P, R> GenericAggregatableNode<P, R> newGenericAggregatableNode(
+        GenericAggregateProcessorImpl<P, R> processor) {
         return new DefaultGenericAggregatableNode<>(processor);
     }
 
@@ -93,7 +97,8 @@ public class Nodes {
         if (processors == null || processors.length == 0) {
             return new TryCatchFinally(new DefaultBranchNode());
         }
-        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList());
+        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
+            Collectors.toList());
         return newTry(nodes);
     }
 
@@ -165,7 +170,8 @@ public class Nodes {
         }
 
         public WhileConditionNode then(@NotNull Processor<?>... processors) {
-            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList());
+            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
+                Collectors.toList());
             return then(nodes);
         }
 
@@ -215,7 +221,8 @@ public class Nodes {
             if (processors == null || processors.length == 0) {
                 return catchOn(expClass, new DefaultBranchNode());
             }
-            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList());
+            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
+                Collectors.toList());
             return catchOn(expClass, new DefaultBranchNode(nodes));
         }
 
