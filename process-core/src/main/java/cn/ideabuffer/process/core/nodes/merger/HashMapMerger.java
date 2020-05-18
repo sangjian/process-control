@@ -13,7 +13,7 @@ public class HashMapMerger<K, V> implements MapMerger<K, V> {
     @Override
     public HashMap<K, V> merge(Collection<Map<K, V>> results) {
         if (results == null) {
-            return null;
+            return new HashMap<>();
         }
         HashMap<K, V> result = new HashMap<>();
         results.forEach(result::putAll);
