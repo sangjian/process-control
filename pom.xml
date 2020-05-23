@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cn.ideabuffer.process</groupId>
+    <groupId>cn.ideabuffer</groupId>
     <artifactId>process-control</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -57,12 +57,12 @@
                 <version>${guava-retry.version}</version>
             </dependency>
             <dependency>
-                <groupId>cn.ideabuffer.process</groupId>
+                <groupId>cn.ideabuffer</groupId>
                 <artifactId>process-core</artifactId>
                 <version>${process-core.version}</version>
             </dependency>
             <dependency>
-                <groupId>cn.ideabuffer.process</groupId>
+                <groupId>cn.ideabuffer</groupId>
                 <artifactId>process-extension</artifactId>
                 <version>${process-extension.version}</version>
             </dependency>
