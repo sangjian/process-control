@@ -23,8 +23,8 @@ public interface BaseNode<R> extends Node {
      */
     R invoke(@NotNull Context context, @NotNull ProcessStatus status);
 
-    void setProcessor(ResultProcessor<R> processor);
-
     ResultProcessor<R> getProcessor();
+
+    void setProcessor(ResultProcessor<R> processor);
 
 }

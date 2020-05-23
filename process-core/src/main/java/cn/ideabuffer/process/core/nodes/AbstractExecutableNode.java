@@ -141,13 +141,13 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
-    public void setKeyMapper(KeyMapper mapper) {
-        this.mapper = mapper;
+    public KeyMapper getKeyMapper() {
+        return mapper;
     }
 
     @Override
-    public KeyMapper getKeyMapper() {
-        return mapper;
+    public void setKeyMapper(KeyMapper mapper) {
+        this.mapper = mapper;
     }
 
     protected boolean ruleCheck(@NotNull Context context) {
@@ -162,7 +162,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @Override
     public ProcessStatus execute(Context context) throws Exception {
         Context ctx = context;
-        if(hasMapping()) {
+        if (hasMapping()) {
             ctx = Contexts.wrap(context, context.getBlock(), mapper);
         }
         if (getProcessor() == null || !ruleCheck(context)) {

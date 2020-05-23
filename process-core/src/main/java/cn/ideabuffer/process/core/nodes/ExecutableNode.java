@@ -24,7 +24,7 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
 
     List<ProcessListener<R>> getListeners();
 
-    void setKeyMapper(KeyMapper mapper);
-
     KeyMapper getKeyMapper();
+
+    void setKeyMapper(KeyMapper mapper);
 }
