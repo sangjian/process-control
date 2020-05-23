@@ -10,7 +10,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>process-core</module>
-        <module>process-spring</module>
         <module>process-extension</module>
     </modules>
 
