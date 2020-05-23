@@ -1,12 +1,14 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.aggregate.*;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
+import cn.ideabuffer.process.core.processors.ResultProcessor;
 import cn.ideabuffer.process.core.processors.impl.GenericAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +36,18 @@ public class Nodes {
 
     public static <R> ProcessNode<R> newProcessNode(Processor<R> processor) {
         return new ProcessNode<>(processor);
+    }
+
+    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, KeyMapper mapper) {
+        return new ProcessNode<>(processor, mapper);
+    }
+
+    public static <R> BaseNode<R> newBaseNode() {
+        return newBaseNode(null);
+    }
+
+    public static <R> BaseNode<R> newBaseNode(ResultProcessor<R> processor) {
+        return new DefaultBaseNode<>(processor);
     }
 
     public static NodeGroup newGroup() {

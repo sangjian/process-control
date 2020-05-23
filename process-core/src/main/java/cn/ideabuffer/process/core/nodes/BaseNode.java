@@ -2,7 +2,7 @@ package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Node;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.processors.ResultProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,22 +21,10 @@ public interface BaseNode<R> extends Node {
      * @param status  流程执行状态
      * @return 流程处理结果
      */
-    R invoke(Context context, @NotNull ProcessStatus status);
+    R invoke(@NotNull Context context, @NotNull ProcessStatus status);
 
-    /**
-     * 设置异常处理器
-     *
-     * @param handler 异常处理器
-     * @return 当前对象
-     * @see ExceptionHandler
-     */
-    BaseNode<R> exceptionHandler(ExceptionHandler handler);
+    void setProcessor(ResultProcessor<R> processor);
 
-    /**
-     * 获取异常处理器
-     *
-     * @return 异常处理器对象
-     */
-    ExceptionHandler getExceptionHandler();
+    ResultProcessor<R> getProcessor();
 
 }

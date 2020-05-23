@@ -5,7 +5,10 @@
 
     <bean id="testNode" class="cn.ideabuffer.process.test.spring.nodes.TestNode" />
     <bean id="testNode1" class="cn.ideabuffer.process.test.spring.nodes.TestNode1" />
-    <bean id="testBaseNode" class="cn.ideabuffer.process.test.spring.nodes.TestBaseNode" />
+    <bean id="testBaseNodeProcessor" class="cn.ideabuffer.process.test.spring.nodes.TestBaseNodeProcessor" />
+    <bean id="testBaseNode" class="cn.ideabuffer.process.core.nodes.DefaultBaseNode" >
+        <property name="processor" ref="testBaseNodeProcessor" />
+    </bean>
     <bean id="testDefinition" class="cn.ideabuffer.process.spring.SpringProcessDefinition">
         <property name="nodes">
             <array>

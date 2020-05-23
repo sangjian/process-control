@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.*;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -22,4 +23,8 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
     P getProcessor();
 
     List<ProcessListener<R>> getListeners();
+
+    void setKeyMapper(KeyMapper mapper);
+
+    KeyMapper getKeyMapper();
 }

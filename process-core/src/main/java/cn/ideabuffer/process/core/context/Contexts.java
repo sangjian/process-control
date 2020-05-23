@@ -44,6 +44,10 @@ public class Contexts {
     }
 
     public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block) {
-        return new ContextWrapper(context, block);
+        return wrap(context, block, null);
+    }
+
+    public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block, KeyMapper mapper) {
+        return new ContextWrapper(context, block, mapper);
     }
 }

@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
+import cn.ideabuffer.process.core.processors.ResultProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,34 +11,27 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractBaseNode<R> extends AbstractNode implements BaseNode<R> {
 
-    private ExceptionHandler handler;
+    private ResultProcessor<R> processor;
 
-    @Override
-    public R invoke(Context context, @NotNull ProcessStatus status) {
-        try {
-            return doInvoke(context, status);
-        } catch (Exception e) {
-            if (handler != null) {
-                handler.handle(e);
-            }
-        }
-        return null;
+    public AbstractBaseNode() {
     }
 
-    public void setHandler(ExceptionHandler handler) {
-        this.handler = handler;
-    }
-
-    protected abstract R doInvoke(Context context, @NotNull ProcessStatus status);
-
-    @Override
-    public BaseNode<R> exceptionHandler(ExceptionHandler handler) {
-        this.handler = handler;
-        return this;
+    public AbstractBaseNode(ResultProcessor<R> processor) {
+        this.processor = processor;
     }
 
     @Override
-    public ExceptionHandler getExceptionHandler() {
-        return handler;
+    public R invoke(@NotNull Context context, @NotNull ProcessStatus status) {
+        return processor.process(context, status);
+    }
+
+    @Override
+    public void setProcessor(ResultProcessor<R> processor) {
+        this.processor = processor;
+    }
+
+    @Override
+    public ResultProcessor<R> getProcessor() {
+        return processor;
     }
 }

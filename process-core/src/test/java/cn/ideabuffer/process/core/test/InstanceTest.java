@@ -12,7 +12,7 @@ import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.Branches;
 import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
 import cn.ideabuffer.process.core.rule.Rule;
-import cn.ideabuffer.process.core.test.nodes.TestBaseNode;
+import cn.ideabuffer.process.core.test.nodes.TestBaseNodeProcessor;
 import cn.ideabuffer.process.core.test.nodes.TestBreakProcessor;
 import cn.ideabuffer.process.core.test.nodes.TestProcessor1;
 import cn.ideabuffer.process.core.test.nodes.TestProcessor2;
@@ -41,7 +41,7 @@ public class InstanceTest {
             // 注册执行节点
             .addProcessNodes(Nodes.newProcessNode(new TestProcessor1()), Nodes.newProcessNode(new TestProcessor2()))
             // 注册基础节点
-            .addBaseNode(new TestBaseNode());
+            .addBaseNode(Nodes.newBaseNode(new TestBaseNodeProcessor()));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);

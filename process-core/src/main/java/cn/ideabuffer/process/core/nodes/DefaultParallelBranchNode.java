@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
 import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
@@ -30,10 +31,14 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode<ProcessSta
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-        if (!ruleCheck(context)) {
+        Context ctx = context;
+        if(hasMapping()) {
+            ctx = Contexts.wrap(context, context.getBlock(), super.getKeyMapper());
+        }
+        if (getProcessor() == null || !ruleCheck(ctx)) {
             return ProcessStatus.PROCEED;
         }
-        return getProcessor().process(context);
+        return getProcessor().process(ctx);
     }
 
 }

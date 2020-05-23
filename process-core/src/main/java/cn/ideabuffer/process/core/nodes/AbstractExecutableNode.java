@@ -5,6 +5,8 @@ import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.context.Contexts;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.rule.Rule;
@@ -33,6 +35,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     private P processor;
     private NodeListener<R> nodeListener;
     private List<ProcessListener<R>> listeners;
+    private KeyMapper mapper;
 
     public AbstractExecutableNode() {
         this(false);
@@ -56,12 +59,18 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
 
     public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
         NodeListener<R> nodeListener, P processor) {
+        this(parallel, rule, executor, listeners, nodeListener, processor, null);
+    }
+
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+        NodeListener<R> nodeListener, P processor, KeyMapper mapper) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
         this.listeners = listeners;
         this.nodeListener = nodeListener;
         this.processor = processor;
+        this.mapper = mapper;
     }
 
     public boolean isParallel() {
@@ -131,30 +140,47 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this.listeners = listeners;
     }
 
+    @Override
+    public void setKeyMapper(KeyMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    @Override
+    public KeyMapper getKeyMapper() {
+        return mapper;
+    }
+
     protected boolean ruleCheck(@NotNull Context context) {
         return rule == null || rule.match(context);
+    }
+
+    protected boolean hasMapping() {
+        return mapper != null && !mapper.isEmpty();
     }
 
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-
+        Context ctx = context;
+        if(hasMapping()) {
+            ctx = Contexts.wrap(context, context.getBlock(), mapper);
+        }
         if (getProcessor() == null || !ruleCheck(context)) {
             return ProcessStatus.PROCEED;
         }
 
         if (parallel) {
-            doParallelExecute(context);
+            doParallelExecute(ctx);
             return ProcessStatus.PROCEED;
         }
         ProcessStatus status;
         try {
-            R result = getProcessor().process(context);
-            status = onComplete(context, result);
-            notifyListeners(context, result, null, true);
+            R result = getProcessor().process(ctx);
+            status = onComplete(ctx, result);
+            notifyListeners(ctx, result, null, true);
         } catch (Exception e) {
-            notifyListeners(context, null, e, false);
-            status = onFailure(context, e);
+            notifyListeners(ctx, null, e, false);
+            status = onFailure(ctx, e);
         }
         return status;
     }

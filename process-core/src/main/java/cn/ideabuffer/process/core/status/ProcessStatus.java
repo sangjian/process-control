@@ -77,6 +77,22 @@ public class ProcessStatus implements Serializable {
         return status != null && status.isProceed();
     }
 
+    public static boolean isSuccess(ProcessStatus status) {
+        return isProceed(status);
+    }
+
+    public static boolean isFailure(ProcessStatus status) {
+        return isComplete(status);
+    }
+
+    public boolean isSuccess() {
+        return isProceed();
+    }
+
+    public boolean isFailure() {
+        return isComplete();
+    }
+
     public boolean isProceed() {
         return this.proceed;
     }
