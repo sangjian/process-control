@@ -13,6 +13,9 @@
     </modules>
 
     <name>Process Control</name>
+    <description>
+        A lightweight process control framework, used to solve the bloated and difficult to understand business code, through the process will refine the business logic, so that the business process can be orchestrated and can be clearly understood, at the same time, the code can be reasonable Realize complex business logic in a flexible way.
+    </description>
 
     <url>https://github.com/sangjian/process-control</url>
 

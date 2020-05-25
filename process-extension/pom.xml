@@ -17,6 +17,7 @@
     </modules>
 
     <name>Process Extension</name>
+    <description>Process Extension</description>
 
     <dependencyManagement>
         <dependencies>

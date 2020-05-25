@@ -15,6 +15,7 @@
 
 
     <name>Process Core</name>
+    <description>Process Core</description>
 
     <dependencies>
         <dependency>
