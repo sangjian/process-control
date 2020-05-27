@@ -2,8 +2,8 @@ package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.nodes.branch.Branches;
 import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.processors.impl.BranchProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
@@ -21,7 +21,7 @@ public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStat
     private ExecutableNode[] nodes;
 
     private BranchNodeBuilder() {
-        super(Branches.newBranch());
+        super(Nodes.newBranch());
     }
 
     public static BranchNodeBuilder newBuilder() {

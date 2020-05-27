@@ -34,8 +34,9 @@ public class ExecutableNodeTest {
     public void testSimpleExecutableNode() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         definition
-            .addProcessNodes(new ProcessNode<>(new TestExecutableNodeProcessor1()), new ProcessNode<>(new TestExecutableNodeProcessor2()));
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+            .addProcessNodes(new ProcessNode<>(new TestExecutableNodeProcessor1()),
+                new ProcessNode<>(new TestExecutableNodeProcessor2()));
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 0);
@@ -49,7 +50,6 @@ public class ExecutableNodeTest {
         // 执行规则
         Rule rule = (ctx) -> true;
         Executor executor = Executors.newFixedThreadPool(2);
-        ExceptionHandler handler = (t) -> logger.error("execute error!", t);
         ProcessNode<ProcessStatus> node1 = ProcessNodeBuilder.<ProcessStatus>newBuilder()
             // 设置规则
             .processOn(rule)

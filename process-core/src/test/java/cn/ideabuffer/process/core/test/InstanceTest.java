@@ -9,7 +9,6 @@ import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.nodes.branch.Branches;
 import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.test.nodes.TestBaseNodeProcessor;
@@ -56,7 +55,7 @@ public class InstanceTest {
     public void testBranch() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         definition
-            .addBranchNode(Branches.newBranch(new TestProcessor1(), new TestProcessor2()));
+            .addBranchNode(Nodes.newBranch(new TestProcessor1(), new TestProcessor2()));
         ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(Contexts.newContext());
@@ -81,9 +80,9 @@ public class InstanceTest {
     public void testIf() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         // 创建true分支
-        BranchNode trueBranch = Branches.newBranch(new TestProcessor1());
+        BranchNode trueBranch = Nodes.newBranch(new TestProcessor1());
         // 创建false分支
-        BranchNode falseBranch = Branches.newBranch(new TestProcessor2());
+        BranchNode falseBranch = Nodes.newBranch(new TestProcessor2());
         Key<Integer> key = Contexts.newKey("k", int.class);
 
         // 判断条件，判断key对应的值是否小于5

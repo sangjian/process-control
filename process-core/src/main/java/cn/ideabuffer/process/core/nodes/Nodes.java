@@ -54,6 +54,36 @@ public class Nodes {
         return new NodeGroup();
     }
 
+    public static BranchNode newBranch() {
+        return new DefaultBranchNode();
+    }
+
+    public static BranchNode newBranch(Rule rule, @NotNull Processor<?>... processors) {
+        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
+            Collectors.toList());
+        return newBranch(rule, nodes);
+    }
+
+    public static BranchNode newBranch(@NotNull Processor<?>... processors) {
+        return newBranch(null, processors);
+    }
+
+    public static BranchNode newBranch(@NotNull List<ExecutableNode<?, ?>> nodes) {
+        return newBranch(null, nodes);
+    }
+
+    public static BranchNode newBranch(Rule rule, @NotNull List<ExecutableNode<?, ?>> nodes) {
+        return new DefaultBranchNode(rule, nodes);
+    }
+
+    public static BranchNode newBranch(@NotNull ExecutableNode<?, ?>... nodes) {
+        return newBranch(null, Arrays.asList(nodes));
+    }
+
+    public static BranchNode newBranch(Rule rule, @NotNull ExecutableNode<?, ?>... nodes) {
+        return newBranch(rule, Arrays.asList(nodes));
+    }
+
     public static ParallelBranchNode newParallelBranchNode() {
         return newParallelBranchNode(null);
     }
