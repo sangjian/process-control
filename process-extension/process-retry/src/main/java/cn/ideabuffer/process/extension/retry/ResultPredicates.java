@@ -227,7 +227,7 @@ public final class ResultPredicates {
 
         @Override
         public boolean apply(@Nullable Collection<? extends T> input) {
-            return input == null || input.size() == 0;
+            return input == null || input.isEmpty();
         }
 
         @Override

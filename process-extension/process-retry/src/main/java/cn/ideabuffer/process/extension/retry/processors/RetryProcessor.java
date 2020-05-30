@@ -63,7 +63,7 @@ public class RetryProcessor<R> implements Processor<R> {
             }
             LOGGER.error("retry failed {} times, cost:{}ms", failedNum, cost, t);
             throw new ProcessException("retry failed", t);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             LOGGER.error("retry execute error, context:{}", context, e);
             throw e;
         }

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractNode implements Node {
 
-    private transient volatile LifecycleState state = LifecycleState.NEW;
+    private volatile LifecycleState state = LifecycleState.NEW;
 
     @Override
     public boolean enabled() {
@@ -31,8 +31,8 @@ public abstract class AbstractNode implements Node {
                 setState(LifecycleState.DESTROYING);
                 onDestroy();
                 setState(LifecycleState.DESTROYED);
-            } catch (Throwable t) {
-                handleException(t, "destroy failed!");
+            } catch (Exception e) {
+                handleException(e, "destroy failed!");
             }
         }
     }
@@ -50,8 +50,8 @@ public abstract class AbstractNode implements Node {
                 setState(LifecycleState.INITIALIZING);
                 onInitialize();
                 setState(LifecycleState.INITIALIZED);
-            } catch (Throwable t) {
-                handleException(t, "initialize failed!");
+            } catch (Exception e) {
+                handleException(e, "initialize failed!");
             }
         }
     }

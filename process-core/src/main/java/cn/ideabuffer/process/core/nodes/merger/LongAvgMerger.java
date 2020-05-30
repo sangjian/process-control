@@ -13,10 +13,6 @@ public class LongAvgMerger implements UnitMerger<Long> {
 
     @Override
     public Long merge(@NotNull Collection<Long> results) {
-        if (results == null) {
-            return 0L;
-        }
-
         return (long)results.stream().filter(Objects::nonNull).mapToLong(value -> value).average().orElse(0d);
     }
 }

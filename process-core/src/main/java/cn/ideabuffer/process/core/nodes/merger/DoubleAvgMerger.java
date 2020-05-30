@@ -13,10 +13,6 @@ public class DoubleAvgMerger implements UnitMerger<Double> {
 
     @Override
     public Double merge(@NotNull Collection<Double> results) {
-        if (results == null) {
-            return 0d;
-        }
-
         return results.stream().filter(Objects::nonNull).mapToDouble(value -> value).average().orElse(0d);
     }
 }

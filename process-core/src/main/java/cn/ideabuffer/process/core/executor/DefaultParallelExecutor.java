@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.executor;
 
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.strategy.ProceedStrategy;
@@ -31,7 +32,7 @@ public class DefaultParallelExecutor implements ParallelExecutor {
                 try {
                     return node.execute(context);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new ProcessException(e);
                 }
             };
             return executor == null ? CompletableFuture.supplyAsync(supplier) : CompletableFuture.supplyAsync(supplier,

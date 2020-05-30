@@ -254,15 +254,13 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             }
             try {
                 setState(LifecycleState.DESTROYING);
-                if (executor instanceof ExecutorService) {
-                    if (!((ExecutorService)executor).isShutdown()) {
-                        ((ExecutorService)executor).shutdown();
-                    }
+                if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
+                    ((ExecutorService)executor).shutdown();
                 }
                 onDestroy();
                 setState(LifecycleState.DESTROYED);
-            } catch (Throwable t) {
-                handleException(t, "destroy failed!");
+            } catch (Exception e) {
+                handleException(e, "destroy failed!");
             }
         }
     }

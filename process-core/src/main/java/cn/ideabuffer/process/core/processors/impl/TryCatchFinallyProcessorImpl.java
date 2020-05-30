@@ -94,10 +94,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
             Class<? extends Throwable> expClass = entry.getKey();
             BranchNode catchBranch = entry.getValue();
 
-            if (!expClass.isAssignableFrom(e.getClass())) {
-                continue;
-            }
-            if (catchBranch == null) {
+            if (!expClass.isAssignableFrom(e.getClass()) || catchBranch == null) {
                 continue;
             }
             Block catchBlock = new Block(context.getBlock());

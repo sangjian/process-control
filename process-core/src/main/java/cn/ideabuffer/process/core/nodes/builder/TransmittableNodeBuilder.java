@@ -19,7 +19,7 @@ public class TransmittableNodeBuilder<R, P extends Processor<R>>
         super(node);
     }
 
-    public static <R, P extends Processor<R>> TransmittableNodeBuilder newBuilder(
+    public static <R, P extends Processor<R>> TransmittableNodeBuilder<R, P> newBuilder(
         @NotNull TransmittableNode<R, P> node) {
         return new TransmittableNodeBuilder<>(node);
     }

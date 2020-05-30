@@ -19,7 +19,7 @@ public class DefaultSerialExecutor implements SerialExecutor {
             return ProcessStatus.PROCEED;
         }
         BlockWrapper blockWrapper = new BlockWrapper(context.getBlock());
-        for (ExecutableNode node : nodes) {
+        for (ExecutableNode<?, ?> node : nodes) {
             ProcessStatus status = node.execute(context);
             if (ProcessStatus.isComplete(status)) {
                 return status;

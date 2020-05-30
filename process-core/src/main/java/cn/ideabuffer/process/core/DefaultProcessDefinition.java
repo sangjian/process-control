@@ -21,9 +21,9 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private transient volatile LifecycleState state = LifecycleState.NEW;
+    private volatile LifecycleState state = LifecycleState.NEW;
 
-    private transient InitializeMode initializeMode = InitializeMode.ON_REGISTER;
+    private InitializeMode initializeMode = InitializeMode.ON_REGISTER;
 
     private Node[] nodes = new Node[0];
 
@@ -42,8 +42,8 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         if (initializeMode == InitializeMode.ON_REGISTER) {
             try {
                 Arrays.stream(nodes).forEach(Lifecycle::initialize);
-            } catch (Throwable t) {
-                throw new LifecycleException("initialize failed on register", t);
+            } catch (Exception e) {
+                throw new LifecycleException("initialize failed on register", e);
             }
         }
         int oldLen = this.nodes.length;
@@ -132,8 +132,8 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         if (initializeMode == InitializeMode.ON_REGISTER) {
             try {
                 baseNode.initialize();
-            } catch (Throwable t) {
-                throw new LifecycleException("initialize failed on register", t);
+            } catch (Exception e) {
+                throw new LifecycleException("initialize failed on register", e);
             }
         }
     }
@@ -156,9 +156,9 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
                 state = LifecycleState.INITIALIZING;
                 Arrays.stream(nodes).forEach(Lifecycle::initialize);
                 state = LifecycleState.INITIALIZED;
-            } catch (Throwable t) {
-                logger.error("initialize failed", t);
-                throw t;
+            } catch (Exception e) {
+                logger.error("initialize failed", e);
+                throw e;
             }
         }
     }
@@ -176,9 +176,9 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
                 state = LifecycleState.DESTROYING;
                 Arrays.stream(nodes).forEach(Lifecycle::destroy);
                 state = LifecycleState.DESTROYED;
-            } catch (Throwable t) {
-                logger.error("destroy failed", t);
-                throw t;
+            } catch (Exception e) {
+                logger.error("destroy failed", e);
+                throw e;
             }
         }
 
