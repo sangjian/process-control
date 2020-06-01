@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.executor;
 
-import cn.ideabuffer.process.core.block.BlockWrapper;
+import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -18,13 +18,13 @@ public class DefaultSerialExecutor implements SerialExecutor {
         if (nodes == null || nodes.length == 0) {
             return ProcessStatus.PROCEED;
         }
-        BlockWrapper blockWrapper = new BlockWrapper(context.getBlock());
+        Block block = context.getBlock();
         for (ExecutableNode<?, ?> node : nodes) {
             ProcessStatus status = node.execute(context);
             if (ProcessStatus.isComplete(status)) {
                 return status;
             }
-            if (blockWrapper.hasBroken() || blockWrapper.hasContinued()) {
+            if (block.hasBroken() || block.hasContinued()) {
                 break;
             }
         }

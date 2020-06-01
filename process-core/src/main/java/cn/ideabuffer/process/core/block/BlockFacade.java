@@ -10,38 +10,55 @@ import java.util.Map;
  * @author sangjian.sj
  * @date 2020/02/22
  */
-public class BlockWrapper extends Block {
+public class BlockFacade implements Block {
 
     private Block block;
 
     private KeyMapper mapper;
 
-    public BlockWrapper(Block block) {
+    public BlockFacade(Block block) {
         this(block, null);
     }
 
-    public BlockWrapper(Block block, KeyMapper mapper) {
+    public BlockFacade(Block block, KeyMapper mapper) {
         this.block = block;
         this.mapper = mapper;
     }
 
     @Override
-    public boolean breakable() {return block.breakable();}
+    public boolean allowBreak() {
+        return block.allowBreak();
+    }
 
     @Override
-    public boolean continuable() {return block.continuable();}
+    public boolean allowContinue() {
+        return block.allowContinue();
+    }
 
     @Override
-    public boolean hasBroken() {return block.hasBroken();}
+    public void doBreak() {
+        block.doBreak();
+    }
 
     @Override
-    public boolean hasContinued() {return block.hasContinued();}
+    public void doContinue() {
+        block.doContinue();
+    }
 
     @Override
-    public void resetBreak() {block.resetBreak();}
+    public boolean hasBroken() {
+        return block.hasBroken();
+    }
 
     @Override
-    public void resetContinue() {block.resetContinue();}
+    public boolean hasContinued() {
+        return block.hasContinued();
+    }
+
+    @Override
+    public Block getParent() {
+        return block.getParent();
+    }
 
     @Override
     public boolean equals(Object o) {return block.equals(o);}
@@ -49,14 +66,16 @@ public class BlockWrapper extends Block {
     @Override
     public int hashCode() {return block.hashCode();}
 
-    private boolean hasMapping() {
-        return mapper != null && !mapper.isEmpty();
+    private <V> Key<V> getMappingKey(Key<V> key) {
+        if (mapper == null || mapper.isEmpty()) {
+            return null;
+        }
+        return mapper.getMappingKey(key);
     }
-
     @Override
     public <V> V put(@NotNull Key<V> key, V value) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return block.put(mappingKey, value);
         }
         return block.put(key, value);
@@ -64,8 +83,8 @@ public class BlockWrapper extends Block {
 
     @Override
     public <V> V putIfAbsent(@NotNull Key<V> key, V value) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return block.putIfAbsent(mappingKey, value);
         }
         return block.putIfAbsent(key, value);
@@ -73,8 +92,8 @@ public class BlockWrapper extends Block {
 
     @Override
     public <V> V get(@NotNull Key<V> key) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return block.get(mappingKey);
         }
         return block.get(key);
@@ -82,8 +101,8 @@ public class BlockWrapper extends Block {
 
     @Override
     public <V> V get(@NotNull Key<V> key, V defaultValue) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return block.get(mappingKey, defaultValue);
         }
         return block.get(key, defaultValue);
@@ -106,8 +125,8 @@ public class BlockWrapper extends Block {
 
     @Override
     public boolean containsKey(Key<?> key) {
-        Key<?> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<?> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return block.containsKey(mappingKey);
         }
         return block.containsKey(key);
@@ -120,8 +139,8 @@ public class BlockWrapper extends Block {
 
     @Override
     public <V> V remove(Key<V> key) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return block.remove(mappingKey);
         }
         return block.remove(key);

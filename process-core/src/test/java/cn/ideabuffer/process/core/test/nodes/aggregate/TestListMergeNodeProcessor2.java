@@ -21,7 +21,7 @@ public class TestListMergeNodeProcessor2 implements Processor<List<String>> {
     public List<String> process(@NotNull Context context) throws Exception {
         logger.info("in TestListMergeNodeProcessor2");
         List<String> list = new ArrayList<>();
-        list.add("test1");
+        list.add("test2");
         return list;
     }
 }

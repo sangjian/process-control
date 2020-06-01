@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.block.Block;
+import cn.ideabuffer.process.core.block.BlockFacade;
+import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -65,7 +67,7 @@ public class IfProcessorImpl implements IfProcessor {
         if (rule == null) {
             throw new NullPointerException("rule can't be null");
         }
-        Block ifBlock = new Block(context.getBlock());
+        InnerBlock ifBlock = new InnerBlock(context.getBlock());
         ContextWrapper contextWrapper = Contexts.wrap(context, ifBlock);
         BranchNode branch = rule.match(contextWrapper) ? trueBranch : falseBranch;
         if (branch == null) {

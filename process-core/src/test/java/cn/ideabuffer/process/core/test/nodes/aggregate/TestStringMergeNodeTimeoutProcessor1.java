@@ -19,6 +19,5 @@ public class TestStringMergeNodeTimeoutProcessor1 implements Processor<String> {
         logger.info("in TestStringMergeNodeTimeoutProcessor1");
         Thread.sleep(1000);
         throw new RuntimeException("test");
-        //return "test1";
     }
 }

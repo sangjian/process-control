@@ -1,36 +1,44 @@
 package cn.ideabuffer.process.core.test;
 
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
-import cn.ideabuffer.process.core.DefaultProcessInstance;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
+import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
+import cn.ideabuffer.process.core.processors.StatusProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.test.nodes.TestBaseNodeProcessor;
-import cn.ideabuffer.process.core.test.nodes.TestBreakProcessor;
 import cn.ideabuffer.process.core.test.nodes.TestProcessor1;
 import cn.ideabuffer.process.core.test.nodes.TestProcessor2;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestFalseBranch;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestIfRule;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestTrueBranch;
-import cn.ideabuffer.process.core.test.nodes.trycatch.*;
-import cn.ideabuffer.process.core.test.nodes.whiles.*;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.Assert.*;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
 public class InstanceTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstanceTest.class);
 
     @Test
     public void testInstanceResult() throws Exception {
@@ -48,41 +56,73 @@ public class InstanceTest {
 
         instance.execute(context);
         // 输出执行结果
-        System.out.println(instance.getResult());
+        assertEquals("TestBaseNodeProcessor", instance.getResult());
     }
 
     @Test
     public void testBranch() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         definition
-            .addBranchNode(Nodes.newBranch(new TestProcessor1(), new TestProcessor2()));
+            .addBranchNode(Nodes.newBranch((StatusProcessor)context -> {
+                Key<Integer> key = Contexts.newKey("k", int.class);
+                context.put(key, 1);
+                return ProcessStatus.PROCEED;
+            }, context -> {
+                Key<Integer> key = Contexts.newKey("k", int.class);
+                context.put(key, 2);
+                return ProcessStatus.PROCEED;
+            }));
         ProcessInstance<String> instance = definition.newInstance();
+        Key<Integer> key = Contexts.newKey("k", int.class);
+        Context context = Contexts.newContext();
+        context.put(key, 0);
+        instance.execute(context);
 
-        instance.execute(Contexts.newContext());
+        assertEquals(2, (int)context.get(key));
     }
 
     @Test
     public void testBranchWithExecutor() throws Exception {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        BranchNode branchNode = BranchNodeBuilder.newBuilder().addNodes(Nodes.newProcessNode(new TestProcessor1()),
-            Nodes.newProcessNode(new TestProcessor2())).parallel(
-            executorService).build();
+        Thread mainThread = Thread.currentThread();
+        CountDownLatch latch = new CountDownLatch(2);
+        BranchNode branchNode = BranchNodeBuilder.newBuilder().addNodes(
+            Nodes.newProcessNode(context -> {
+                assertNotSame(mainThread, Thread.currentThread());
+                latch.countDown();
+                return ProcessStatus.PROCEED;
+            }),
+            Nodes.newProcessNode(context -> {
+                assertNotSame(mainThread, Thread.currentThread());
+                latch.countDown();
+                return ProcessStatus.PROCEED;
+            }))
+            .parallel(executorService)
+            .build();
         definition
             .addBranchNode(branchNode);
         ProcessInstance<String> instance = definition.newInstance();
-
-        instance.execute(null);
-        Thread.sleep(10000);
+        Context context = Contexts.newContext();
+        instance.execute(context);
+        latch.await();
     }
 
     @Test
     public void testIf() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         // 创建true分支
-        BranchNode trueBranch = Nodes.newBranch(new TestProcessor1());
+        BranchNode trueBranch = Nodes.newBranch((StatusProcessor)context -> {
+            Key<Integer> key = Contexts.newKey("k", int.class);
+            context.put(key, 1);
+            return ProcessStatus.PROCEED;
+        });
         // 创建false分支
-        BranchNode falseBranch = Nodes.newBranch(new TestProcessor2());
+        BranchNode falseBranch = Nodes.newBranch((StatusProcessor)context -> {
+            Key<Integer> key = Contexts.newKey("k", int.class);
+            context.put(key, 2);
+            return ProcessStatus.PROCEED;
+        });
         Key<Integer> key = Contexts.newKey("k", int.class);
 
         // 判断条件，判断key对应的值是否小于5
@@ -94,117 +134,289 @@ public class InstanceTest {
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         // 设置key值为1
-        context.put(key, 1);
+        context.put(key, 0);
 
         instance.execute(context);
+        assertEquals(1, (int)context.get(key));
     }
 
     @Test
     public void testWhile() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        TestWhileRule rule = new TestWhileRule();
+        AtomicInteger counter1 = new AtomicInteger();
+        AtomicInteger counter2 = new AtomicInteger();
+        AtomicInteger ruleCounter = new AtomicInteger();
+
+        Rule rule = context -> {
+            Key<Integer> key = Contexts.newKey("k", int.class);
+            int k = context.getBlock().get(key, 0);
+            ruleCounter.incrementAndGet();
+            return k < 10;
+        };
         definition.addWhile(Nodes.newWhile(rule)
-            .then(new TestWhileNodeProcessor1(), new TestWhileNodeProcessor2()));
+            .then((StatusProcessor)context -> {
+                counter1.incrementAndGet();
+                Block block = context.getBlock();
+                Key<Integer> key = Contexts.newKey("k", int.class);
+                int k = block.get(key, 0);
+                block.put(key, ++k);
+                return ProcessStatus.PROCEED;
+            }, context -> {
+                counter2.incrementAndGet();
+                Block block = context.getBlock();
+                Key<Integer> key = Contexts.newKey("k", int.class);
+                int k = block.get(key, 0);
+                block.put(key, ++k);
+                return ProcessStatus.PROCEED;
+            }));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 0);
         instance.execute(context);
+        assertEquals(5, counter1.get());
+        assertEquals(5, counter2.get());
+        assertEquals(6, ruleCounter.get());
     }
 
     @Test
     public void testWhileContinue() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        TestWhileRule rule = new TestWhileRule();
+        Key<Integer> key = Contexts.newKey("k", int.class);
+        // 整体循环计数器
+        AtomicInteger counter = new AtomicInteger();
+        // continue操作次数
+        AtomicInteger continueCounter = new AtomicInteger();
+        // processor1中的执行计数
+        AtomicInteger processor1Counter = new AtomicInteger();
+        // processor2中的执行计数
+        AtomicInteger processor2Counter = new AtomicInteger();
+        // processor2中的k的最大值
+        AtomicInteger processor2MaxK = new AtomicInteger();
+        Rule rule = context -> context.getBlock().get(key, 0) < 10 && counter.getAndIncrement() < 10;
         definition.addWhile(Nodes.newWhile(rule)
-            .then(new TestWhileContinueNodeProcessor1(), new TestWhileContinueNodeProcessor2(),
-                new TestWhileContinueNodeProcessor3()));
+            .then(context -> {
+                processor1Counter.incrementAndGet();
+                Block block = context.getBlock();
+                int k = block.get(key, 0);
+                block.put(key, ++k);
+                if (k == 5 && block.allowContinue()) {
+                    continueCounter.getAndIncrement();
+                    block.put(key, 0);
+                    block.doContinue();
+                }
+                return ProcessStatus.PROCEED;
+            }, context -> {
+                processor2Counter.incrementAndGet();
+                Block block = context.getBlock();
+                int k = block.get(key, 0);
+                if (k > processor2MaxK.get()) {
+                    processor2MaxK.set(k);
+                }
+                return ProcessStatus.PROCEED;
+            }));
         ProcessInstance<String> instance = definition.newInstance();
+
         Context context = Contexts.newContext();
 
         instance.execute(context);
+
+        assertEquals(2, continueCounter.get());
+        // k为5的时候进行continue，所以processor2中的k不可能大于4
+        assertEquals(4, processor2MaxK.get());
+        // processor1节点每次都会执行
+        assertEquals(10, processor1Counter.get());
+        // 两次k为5，所以只有8次进到processor2
+        assertEquals(8, processor2Counter.get());
     }
 
     @Test
     public void testWhileBreak() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        TestWhileRule rule = new TestWhileRule();
+        Key<Integer> key = Contexts.newKey("k", int.class);
+        Rule rule = context -> context.get(key, 0) < 10;
+        AtomicBoolean processor1Flag = new AtomicBoolean();
+        AtomicBoolean processor2Flag = new AtomicBoolean();
+        AtomicBoolean processor3Flag = new AtomicBoolean();
+        AtomicBoolean breakFlag = new AtomicBoolean();
+
+        // 循环分支包含3个节点，前两个节点每次对k进行加1，第二个节点进行break
         definition.addWhile(Nodes.newWhile(rule)
-            .then(new TestWhileBreakNodeProcessor1(), new TestWhileBreakNodeProcessor2(),
-                new TestWhileBreakNodeProcessor3()));
+            .then(context -> {
+                processor1Flag.set(true);
+                context.put(key, context.get(key, 0) + 1);
+                return ProcessStatus.PROCEED;
+            }, context -> {
+                processor2Flag.set(true);
+                context.put(key, context.get(key, 0) + 1);
+                if (context.getBlock().allowBreak()) {
+                    breakFlag.set(true);
+                    context.getBlock().doBreak();
+                }
+                return ProcessStatus.PROCEED;
+            }, context -> {
+                processor3Flag.set(true);
+                return ProcessStatus.PROCEED;
+            }));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
         instance.execute(context);
+
+        // 执行processor1标志
+        assertTrue(processor1Flag.get());
+        // 执行processor2标志
+        assertTrue(processor2Flag.get());
+        // 执行break标志
+        assertTrue(breakFlag.get());
+        // 执行processor3标志
+        assertFalse(processor3Flag.get());
+        // 对k的累加结果
+        assertEquals(2, (int)context.get(key));
+
     }
 
+    /**
+     * <pre>
+     * int k = 0;
+     * int counter = 0;
+     * while (true) {
+     *     while (k < 10) {
+     *         k++;
+     *         if (k % 2 == 1) {
+     *             if (k == 5) { continue; }
+     *             System.out.println("after if continue");
+     *         }
+     *         if (k % 2 == 0) {
+     *             if (k == 8) { break; }
+     *             System.out.println("after if break");
+     *         }
+     *         counter++;
+     *     }
+     *     LOGGER.info("k = {}, counter = {}", k, counter);
+     *     break;
+     * }
+     * </pre>
+     *
+     * @throws Exception
+     */
     @Test
     public void testNesting() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        TestWhileRule rule = new TestWhileRule();
-        definition.addWhile(Nodes.newWhile((ctx) -> {
-            System.out.println("in while --");
-            return true;
-        }).then(
+        Key<Integer> key = Contexts.newKey("k", int.class);
+        Key<Integer> counter = Contexts.newKey("counter", int.class);
+        Rule rule = context -> context.get(key, 0) < 10;
+
+        AtomicBoolean afterContinueFlag = new AtomicBoolean(false);
+        AtomicBoolean afterBreakFlag = new AtomicBoolean(false);
+
+        definition.addWhile(Nodes.newWhile((ctx) -> true).then(
             Nodes.newWhile(rule)
                 .then(
-                    Nodes.newProcessNode(new TestWhileContinueNodeProcessor1()),
-                    Nodes.newProcessNode(new TestWhileContinueNodeProcessor2()),
-                    Nodes.newIf(rule).then(
-                        Nodes.newIf((ctx) -> true).then(Nodes.newProcessNode(new TestBreakProcessor())).end(),
-                        Nodes.newProcessNode(new TestProcessor1()))
-                        .end(),
-                    Nodes.newProcessNode(new TestWhileContinueNodeProcessor3()))));
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+                    Nodes.newProcessNode(context -> {
+                        context.put(key, context.get(key, 0) + 1);
+                        return null;
+                    }),
+                    Nodes.newIf(context -> context.get(key, 0) % 2 == 1).then(
+                        Nodes.newIf(context -> context.get(key, 0) == 5).then(context -> {
+                            if (context.getBlock().allowContinue()) {
+                                context.getBlock().doContinue();
+                            }
+                            return null;
+                        }, context -> {
+                            afterContinueFlag.set(true);
+                            System.out.println("after if continue");
+                            return null;
+                        }).end()
+                    ).end(),
+                    Nodes.newIf(context -> context.get(key, 0) % 2 == 0).then(
+                        Nodes.newIf(context -> context.get(key, 0) == 8).then(context -> {
+                            if (context.getBlock().allowBreak()) {
+                                context.getBlock().doBreak();
+                            }
+                            return null;
+                        }, context -> {
+                            afterBreakFlag.set(true);
+                            System.out.println("after if break");
+                            return null;
+                        }).end()
+                    ).end(),
+                    Nodes.newProcessNode(context -> {
+                        context.put(counter, context.get(counter, 0) + 1);
+                        return null;
+                    })),
+            Nodes.newProcessNode((Processor<Void>)context -> {
+                LOGGER.info("k = {}, counter = {}", context.get(key), context.get(counter));
+                return null;
+            }),
+            Nodes.newProcessNode((Processor<Void>)context -> {
+                if (context.getBlock().allowBreak()) {
+                    context.getBlock().doBreak();
+                }
+                return null;
+            })
+        ));
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
         instance.execute(context);
-        Thread.sleep(10000);
-    }
+        assertEquals(8, (int)context.get(key));
+        assertEquals(6, (int)context.get(counter));
 
-    @Test
-    public void testSerial() throws Exception {
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
-        Context context = Contexts.newContext();
-        Key<Integer> key = Contexts.newKey("k", int.class);
-        context.put(key, 1);
-        long start = System.currentTimeMillis();
-        instance.execute(context);
-        System.out.println("cost:" + (System.currentTimeMillis() - start) / 1000);
+        assertFalse(afterContinueFlag.get());
+        assertFalse(afterBreakFlag.get());
     }
 
     @Test
     public void testTryCatchFinally() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        definition.addProcessNodes(Nodes.newTry(new TryNodeProcessor1(), new TryNodeProcessor2())
-            .catchOn(Exception.class, new CatchNodeProcessor1(), new CatchNodeProcessor2())
-            .doFinally(new FinallyNodeProcessor1(), new FinallyNodeProcessor2()));
+        AtomicBoolean processor1Flag = new AtomicBoolean();
+        AtomicBoolean processor2Flag = new AtomicBoolean();
+        AtomicBoolean processor3Flag = new AtomicBoolean();
+
+        AtomicBoolean catchProcessor1Flag = new AtomicBoolean();
+        AtomicBoolean catchProcessor2Flag = new AtomicBoolean();
+
+        AtomicBoolean finallyProcessor1Flag = new AtomicBoolean();
+        AtomicBoolean finallyProcessor2Flag = new AtomicBoolean();
+        definition.addProcessNodes(
+            Nodes.newTry((Processor<Void>)context -> {
+                processor1Flag.set(true);
+                return null;
+            }, context -> {
+                processor2Flag.set(true);
+                throw new NullPointerException();
+            }, context -> {
+                processor3Flag.set(true);
+                return null;
+            }).catchOn(Exception.class, (Processor<Void>)context -> {
+                catchProcessor1Flag.set(true);
+                return null;
+            }, context -> {
+                catchProcessor2Flag.set(true);
+                return null;
+            }).doFinally((Processor<Void>)context -> {
+                finallyProcessor1Flag.set(true);
+                return null;
+            }, context -> {
+                finallyProcessor2Flag.set(true);
+                return null;
+            }));
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
-        Key<Integer> key = Contexts.newKey("k", int.class);
-        context.put(key, 1);
 
         instance.execute(context);
-    }
 
-    @Test
-    public void testCompletableFuture() throws InterruptedException {
-        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-            System.out.println("haha");
-            return true;
-        });
-        Thread.sleep(5000);
-        future.whenComplete((r, e) -> {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            System.out.println(r);
-        });
+        assertTrue(processor1Flag.get());
+        assertTrue(processor2Flag.get());
+        assertFalse(processor3Flag.get());
+
+        assertTrue(catchProcessor1Flag.get());
+        assertTrue(catchProcessor2Flag.get());
+
+        assertTrue(finallyProcessor1Flag.get());
+        assertTrue(finallyProcessor2Flag.get());
     }
 
     @Test
@@ -227,11 +439,5 @@ public class InstanceTest {
         ProcessInstance<String> mainInstance = definition.newInstance();
 
         mainInstance.execute(context);
-    }
-
-    public static void main(String[] args) {
-        double d = 40;
-        Double r = d / 100;
-        System.out.println(r);
     }
 }

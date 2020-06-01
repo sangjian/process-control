@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
@@ -61,6 +62,11 @@ public class ParallelBranchNodeBuilder
 
     public ParallelBranchNodeBuilder addBranch(@NotNull ExecutableNode<?, ?>... nodes) {
         this.branches.add(Nodes.newBranch(nodes));
+        return this;
+    }
+
+    public ParallelBranchNodeBuilder addBranch(@NotNull Processor<?>... processors) {
+        this.branches.add(Nodes.newBranch(processors));
         return this;
     }
 

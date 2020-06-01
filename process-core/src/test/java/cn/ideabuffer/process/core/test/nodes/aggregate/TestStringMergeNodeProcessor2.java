@@ -17,6 +17,6 @@ public class TestStringMergeNodeProcessor2 implements Processor<String> {
     @Override
     public String process(@NotNull Context context) throws Exception {
         logger.info("in TestStringMergeNodeProcessor2");
-        return "test1";
+        return "test2";
     }
 }

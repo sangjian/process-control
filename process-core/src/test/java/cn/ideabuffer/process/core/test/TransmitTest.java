@@ -10,6 +10,9 @@ import cn.ideabuffer.process.core.nodes.TransmitNode;
 import cn.ideabuffer.process.core.test.nodes.transmitter.TestTransmittableProcessor;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * @author sangjian.sj
  * @date 2020/03/10
@@ -19,14 +22,14 @@ public class TransmitTest {
     @Test
     public void testTransmitNode() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        TransmitNode<String> node = new TransmitNode<>(new TestTransmittableProcessor());
+        TransmitNode<String> node = new TransmitNode<>(context -> "hello");
         node.thenApply((ctx, r) -> {
-            System.out.println(r);
+            assertEquals("hello", r);
             return r + " world";
         }).thenApply((ctx, r) -> {
-            System.out.println(r);
+            assertEquals("hello world", r);
             return r.length();
-        }).thenAccept((ctx, r) -> System.out.println(r));
+        }).thenAccept((ctx, r) -> assertEquals(11, (int)r));
         definition.addProcessNodes(node);
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();

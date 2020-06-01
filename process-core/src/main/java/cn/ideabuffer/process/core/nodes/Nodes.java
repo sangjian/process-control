@@ -9,6 +9,7 @@ import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
 import cn.ideabuffer.process.core.processors.ResultProcessor;
+import cn.ideabuffer.process.core.processors.StatusProcessor;
 import cn.ideabuffer.process.core.processors.impl.GenericAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -158,12 +159,20 @@ public class Nodes {
             this.rule = rule;
         }
 
-        public IfWhenBuilder then(BranchNode branch) {
+        public IfWhenBuilder then(@NotNull BranchNode branch) {
             return new IfWhenBuilder(rule, branch);
         }
 
-        public IfWhenBuilder then(ExecutableNode<?, ?>... nodes) {
+        public IfWhenBuilder then(@NotNull ExecutableNode<?, ?>... nodes) {
             return then(new DefaultBranchNode(nodes));
+        }
+
+        public IfWhenBuilder then(@NotNull List<ExecutableNode<?, ?>> nodes) {
+            return then(new DefaultBranchNode(nodes));
+        }
+
+        public IfWhenBuilder then(@NotNull Processor<?>... processors) {
+            return then(Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList()));
         }
 
         public class IfWhenBuilder {
@@ -183,6 +192,10 @@ public class Nodes {
 
             public IfConditionNode otherwise(ExecutableNode<?, ?>... nodes) {
                 return otherwise(new DefaultBranchNode(nodes));
+            }
+
+            public IfConditionNode otherwise(Processor<?>... processors) {
+                return otherwise(new DefaultBranchNode(processors));
             }
 
             public IfConditionNode end() {

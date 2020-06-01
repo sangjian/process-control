@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.context;
 
 import cn.ideabuffer.process.core.block.Block;
-import cn.ideabuffer.process.core.block.BlockWrapper;
+import cn.ideabuffer.process.core.block.BlockFacade;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -24,7 +24,7 @@ public class ContextWrapper implements Context {
 
     public ContextWrapper(Context context, Block block, KeyMapper mapper) {
         this.context = context;
-        this.block = new BlockWrapper(block, mapper);
+        this.block = new BlockFacade(block, mapper);
         this.mapper = mapper;
     }
 
@@ -38,14 +38,17 @@ public class ContextWrapper implements Context {
         return context.cloneContext();
     }
 
-    private boolean hasMapping() {
-        return mapper != null && !mapper.isEmpty();
+    private <V> Key<V> getMappingKey(Key<V> key) {
+        if (mapper == null || mapper.isEmpty()) {
+            return null;
+        }
+        return mapper.getMappingKey(key);
     }
 
     @Override
     public <V> V put(@NotNull Key<V> key, V value) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return context.put(mappingKey, value);
         }
         return context.put(key, value);
@@ -53,8 +56,8 @@ public class ContextWrapper implements Context {
 
     @Override
     public <V> V putIfAbsent(@NotNull Key<V> key, V value) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return context.putIfAbsent(mappingKey, value);
         }
         return context.putIfAbsent(key, value);
@@ -62,8 +65,8 @@ public class ContextWrapper implements Context {
 
     @Override
     public <V> V get(@NotNull Key<V> key) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return context.get(mappingKey);
         }
         return context.get(key);
@@ -71,8 +74,8 @@ public class ContextWrapper implements Context {
 
     @Override
     public <V> V get(@NotNull Key<V> key, V defaultValue) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return context.get(mappingKey, defaultValue);
         }
         return context.get(key, defaultValue);
@@ -89,8 +92,8 @@ public class ContextWrapper implements Context {
 
     @Override
     public boolean containsKey(Key<?> key) {
-        Key<?> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<?> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return context.containsKey(mappingKey);
         }
         return context.containsKey(key);
@@ -101,8 +104,8 @@ public class ContextWrapper implements Context {
 
     @Override
     public <V> V remove(Key<V> key) {
-        Key<V> mappingKey;
-        if (hasMapping() && (mappingKey = mapper.getMappingKey(key)) != null) {
+        Key<V> mappingKey = getMappingKey(key);
+        if (mappingKey != null) {
             return context.remove(mappingKey);
         }
         return context.remove(key);

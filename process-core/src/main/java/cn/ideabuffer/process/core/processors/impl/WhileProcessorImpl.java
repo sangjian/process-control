@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.processors.impl;
 
-import cn.ideabuffer.process.core.block.Block;
-import cn.ideabuffer.process.core.block.BlockWrapper;
+import cn.ideabuffer.process.core.block.BlockFacade;
+import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -53,8 +53,7 @@ public class WhileProcessorImpl implements WhileProcessor {
             return ProcessStatus.PROCEED;
         }
 
-        Block whileBlock = new Block(true, true, context.getBlock());
-        BlockWrapper blockWrapper = new BlockWrapper(whileBlock);
+        InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
         ContextWrapper whileContext = Contexts.wrap(context, whileBlock);
 
         while (getRule().match(whileContext)) {
@@ -62,12 +61,12 @@ public class WhileProcessorImpl implements WhileProcessor {
             if (ProcessStatus.isComplete(status)) {
                 return status;
             }
-            if (blockWrapper.hasBroken()) {
+            if (whileBlock.hasBroken()) {
                 break;
             }
 
-            blockWrapper.resetBreak();
-            blockWrapper.resetContinue();
+            whileBlock.resetBreak();
+            whileBlock.resetContinue();
         }
 
         return ProcessStatus.PROCEED;

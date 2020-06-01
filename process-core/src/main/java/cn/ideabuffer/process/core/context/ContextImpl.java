@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.core.context;
 
 import cn.ideabuffer.process.core.block.Block;
+import cn.ideabuffer.process.core.block.BlockFacade;
+import cn.ideabuffer.process.core.block.InnerBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -51,7 +53,7 @@ public class ContextImpl extends ParameterImpl implements Context {
         return Objects.hash(block);
     }
 
-    private final class ContextViewBlock extends Block {
+    private final class ContextViewBlock implements Block {
         private Context context = ContextImpl.this;
 
         @Override
@@ -112,6 +114,41 @@ public class ContextImpl extends ParameterImpl implements Context {
         @Override
         public void clear() {
             context.clear();
+        }
+
+        @Override
+        public boolean allowBreak() {
+            return false;
+        }
+
+        @Override
+        public boolean allowContinue() {
+            return false;
+        }
+
+        @Override
+        public void doBreak() {
+
+        }
+
+        @Override
+        public void doContinue() {
+
+        }
+
+        @Override
+        public boolean hasBroken() {
+            return false;
+        }
+
+        @Override
+        public boolean hasContinued() {
+            return false;
+        }
+
+        @Override
+        public Block getParent() {
+            return null;
         }
     }
 }

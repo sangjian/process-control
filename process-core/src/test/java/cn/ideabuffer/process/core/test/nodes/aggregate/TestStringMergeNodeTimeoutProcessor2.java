@@ -17,7 +17,7 @@ public class TestStringMergeNodeTimeoutProcessor2 implements Processor<String> {
     @Override
     public String process(@NotNull Context context) throws Exception {
         logger.info("in TestStringMergeNodeTimeoutProcessor2");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         return "test2";
     }
 }

@@ -24,11 +24,7 @@ public class Contexts {
     }
 
     public static Context clone(@NotNull Context context) {
-        return new ContextImpl(null, context.getParams());
-    }
-
-    public static Context cloneWithBlock(@NotNull Context context) {
-        return new ContextImpl(context.getBlock(), context.getParams());
+        return context.cloneContext();
     }
 
     public static Context of(@NotNull Map<Key<?>, Object> map) {
