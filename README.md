@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/sangjian/process-control.svg?branch=master)](https://travis-ci.org/sangjian/process-control)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/cn.ideabuffer/process-control/badge.svg)](https://maven-badges.herokuapp.com/maven-central/cn.ideabuffer/process-control)
 
 ## 简介
 
