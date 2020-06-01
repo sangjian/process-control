@@ -46,8 +46,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <logback-classic.version>1.2.3</logback-classic.version>
-        <process-core.version>1.0.5</process-core.version>
-        <process-extension.version>1.0.5</process-extension.version>
+        <process-core.version>1.0.6</process-core.version>
+        <process-extension.version>1.0.6</process-extension.version>
         <guava-retry.version>2.0.0</guava-retry.version>
     </properties>
 
