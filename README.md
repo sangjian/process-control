@@ -1,4 +1,4 @@
-![build](https://github.com/sangjian/process-control/workflows/build/badge.svg)
+[![Build Status](https://travis-ci.org/sangjian/process-control.svg?branch=master)](https://travis-ci.org/sangjian/process-control)
 
 ## 简介
 
