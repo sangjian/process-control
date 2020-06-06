@@ -8,7 +8,7 @@ import cn.ideabuffer.process.core.rule.Rule;
  * @author sangjian.sj
  * @date 2020/05/09
  */
-public class MergeNode<R> extends AbstractMergeableNode implements MergeableNode<R> {
+public class MergeNode<R> extends AbstractMergeableNode implements GenericMergeableNode<R> {
 
     private Processor<R> processor;
 

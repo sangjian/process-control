@@ -1,24 +1,46 @@
 package cn.ideabuffer.process.core.processors;
 
 import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.aggregator.Aggregator;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.aggregator.GenericAggregator;
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 /**
+ * 聚合处理器
+ *
  * @author sangjian.sj
  * @date 2020/05/02
  */
 public interface AggregateProcessor<I, O> extends Processor<O> {
 
-    void aggregate(@NotNull List<MergeableNode<I>> nodes);
+    /**
+     * 添加合并节点
+     *
+     * @param nodes 合并节点列表
+     */
+    void aggregate(@NotNull List<GenericMergeableNode<I>> nodes);
 
-    void aggregator(@NotNull Aggregator<I, O> aggregator);
+    /**
+     * 设置聚合器
+     *
+     * @param aggregator 聚合器
+     */
+    void aggregator(@NotNull GenericAggregator<I, O> aggregator);
 
-    Aggregator<I, O> getAggregator();
+    /**
+     * 获取聚合器
+     *
+     * @return 聚合器
+     */
+    GenericAggregator<I, O> getAggregator();
 
-    List<MergeableNode<I>> getMergeableNodes();
+    /**
+     * 获取合并节点
+     *
+     * @return 合并节点列表
+     */
+    List<GenericMergeableNode<I>> getMergeableNodes();
 
 }

@@ -11,9 +11,6 @@ import cn.ideabuffer.process.core.Processor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface MergeableNode<R> extends Node, Mergeable, Matchable {
+public interface MergeableNode extends Node, Mergeable, Matchable {
 
-    void registerProcessor(Processor<R> processor);
-
-    Processor<R> getProcessor();
 }

@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.status;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 
@@ -82,7 +83,7 @@ public class ProcessStatus implements Serializable {
     }
 
     public static boolean isFailure(ProcessStatus status) {
-        return isComplete(status);
+        return status != null && isComplete(status) && status.getErrorCode() != null;
     }
 
     public boolean isSuccess() {
@@ -90,7 +91,7 @@ public class ProcessStatus implements Serializable {
     }
 
     public boolean isFailure() {
-        return isComplete();
+        return isComplete() && errorCode != null;
     }
 
     public boolean isProceed() {
@@ -105,6 +106,7 @@ public class ProcessStatus implements Serializable {
         setErrorCode(new ProcessErrorCode(code, message));
     }
 
+    @Nullable
     public ProcessErrorCode getErrorCode() {
         return errorCode;
     }
@@ -113,10 +115,12 @@ public class ProcessStatus implements Serializable {
         this.errorCode = errorCode;
     }
 
+    @Nullable
     public String getCode() {
         return errorCode == null ? null : errorCode.getCode();
     }
 
+    @Nullable
     public String getMessage() {
         return errorCode == null ? null : errorCode.getMessage();
     }

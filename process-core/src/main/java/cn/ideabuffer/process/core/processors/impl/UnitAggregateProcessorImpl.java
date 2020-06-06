@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.processors.impl;
 
-import cn.ideabuffer.process.core.aggregator.Aggregator;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.aggregator.UnitAggregator;
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -15,8 +15,8 @@ public class UnitAggregateProcessorImpl<R> extends DefaultAggregateProcessor<R, 
     }
 
     public UnitAggregateProcessorImpl(
-        @NotNull Aggregator<R, R> aggregator,
-        List<MergeableNode<R>> mergeableNodes) {
+        @NotNull UnitAggregator<R> aggregator,
+        List<GenericMergeableNode<R>> mergeableNodes) {
         super(aggregator, mergeableNodes);
     }
 }

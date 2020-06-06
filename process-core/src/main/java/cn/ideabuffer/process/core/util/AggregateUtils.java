@@ -4,7 +4,7 @@ import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class AggregateUtils {
     }
 
     @Nullable
-    public static <V> V process(@NotNull Context context, @NotNull MergeableNode<V> node) {
+    public static <V> V process(@NotNull Context context, @NotNull GenericMergeableNode<V> node) {
         return process(node.getProcessor(), context);
     }
 

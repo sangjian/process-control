@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.aggregator;
 
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.merger.Merger;
 import cn.ideabuffer.process.core.util.AggregateUtils;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,7 @@ public class ParallelGenericAggregator<I, O> implements GenericAggregator<I, O> 
 
     @Nullable
     @Override
-    public O aggregate(@NotNull Context context, List<MergeableNode<I>> nodes) throws Exception {
+    public O aggregate(@NotNull Context context, List<GenericMergeableNode<I>> nodes) throws Exception {
         if (nodes == null || nodes.isEmpty()) {
             return null;
         }
@@ -77,7 +77,7 @@ public class ParallelGenericAggregator<I, O> implements GenericAggregator<I, O> 
         return merger.merge(results);
     }
 
-    private CompletableFuture<?> getFuture(Context context, MergeableNode<I> node, BlockingQueue<I> resultQueue) {
+    private CompletableFuture<?> getFuture(Context context, GenericMergeableNode<I> node, BlockingQueue<I> resultQueue) {
         CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> AggregateUtils.process(context, node),
             executor)
             .thenAccept(r -> {

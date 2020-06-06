@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.core.aggregator;
 
 /**
+ *
+ *
  * @author sangjian.sj
  * @date 2020/03/28
  */

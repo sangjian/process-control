@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.aggregator;
 
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.merger.Merger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,11 +28,11 @@ public class SerialGenericAggregator<I, O> implements GenericAggregator<I, O> {
 
     @Nullable
     @Override
-    public O aggregate(@NotNull Context context, List<MergeableNode<I>> nodes) throws Exception {
+    public O aggregate(@NotNull Context context, List<GenericMergeableNode<I>> nodes) throws Exception {
         if (nodes == null || nodes.isEmpty()) {
             return null;
         }
-        List<I> results = nodes.stream().map(MergeableNode::getProcessor).filter(Objects::nonNull).map(p -> {
+        List<I> results = nodes.stream().map(GenericMergeableNode::getProcessor).filter(Objects::nonNull).map(p -> {
             try {
                 return p.process(context);
             } catch (Exception e) {

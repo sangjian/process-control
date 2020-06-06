@@ -2,7 +2,7 @@ package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.aggregator.GenericAggregator;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
 import cn.ideabuffer.process.core.processors.AggregateProcessor;
@@ -22,7 +22,7 @@ import java.util.concurrent.Executor;
 public class GenericAggregatableNodeBuilder<P, R>
     extends AbstractExecutableNodeBuilder<R, AggregateProcessor<P, R>, GenericAggregatableNode<P, R>> {
 
-    private List<MergeableNode<P>> mergeableNodes;
+    private List<GenericMergeableNode<P>> mergeableNodes;
 
     private GenericAggregator<P, R> aggregator;
 
@@ -60,12 +60,12 @@ public class GenericAggregatableNodeBuilder<P, R>
         return this;
     }
 
-    public GenericAggregatableNodeBuilder<P, R> aggregate(@NotNull MergeableNode<P>... nodes) {
+    public GenericAggregatableNodeBuilder<P, R> aggregate(@NotNull GenericMergeableNode<P>... nodes) {
         this.mergeableNodes.addAll(Arrays.asList(nodes));
         return this;
     }
 
-    public GenericAggregatableNodeBuilder<P, R> aggregate(@NotNull List<MergeableNode<P>> nodes) {
+    public GenericAggregatableNodeBuilder<P, R> aggregate(@NotNull List<GenericMergeableNode<P>> nodes) {
         this.mergeableNodes.addAll(nodes);
         return this;
     }

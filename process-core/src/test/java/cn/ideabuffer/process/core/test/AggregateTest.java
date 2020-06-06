@@ -5,12 +5,11 @@ import cn.ideabuffer.process.core.DefaultProcessInstance;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.aggregator.Aggregators;
-import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
 import cn.ideabuffer.process.core.nodes.builder.*;
@@ -23,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -48,12 +46,12 @@ public class AggregateTest {
 
         Executor executor = Executors.newFixedThreadPool(3);
 
-        MergeableNode<List<String>> node1 = MergeNodeBuilder.<List<String>>newBuilder().by(
+        GenericMergeableNode<List<String>> node1 = MergeNodeBuilder.<List<String>>newBuilder().by(
             new TestListMergeNodeProcessor1()).build();
-        MergeableNode<List<String>> node2 = MergeNodeBuilder.<List<String>>newBuilder().by(
+        GenericMergeableNode<List<String>> node2 = MergeNodeBuilder.<List<String>>newBuilder().by(
             new TestListMergeNodeProcessor2()).build();
 
-        List<MergeableNode<List<String>>> nodes = new ArrayList<>();
+        List<GenericMergeableNode<List<String>>> nodes = new ArrayList<>();
         nodes.add(node1);
         nodes.add(node2);
 
@@ -91,12 +89,12 @@ public class AggregateTest {
 
         Executor executor = Executors.newFixedThreadPool(3);
 
-        MergeableNode<String> node1 = MergeNodeBuilder.<String>newBuilder().by(new TestStringMergeNodeProcessor1())
+        GenericMergeableNode<String> node1 = MergeNodeBuilder.<String>newBuilder().by(new TestStringMergeNodeProcessor1())
             .build();
-        MergeableNode<String> node2 = MergeNodeBuilder.<String>newBuilder().by(new TestStringMergeNodeProcessor2())
+        GenericMergeableNode<String> node2 = MergeNodeBuilder.<String>newBuilder().by(new TestStringMergeNodeProcessor2())
             .build();
 
-        List<MergeableNode<String>> nodes = new ArrayList<>();
+        List<GenericMergeableNode<String>> nodes = new ArrayList<>();
         nodes.add(node1);
         nodes.add(node2);
 
@@ -131,12 +129,12 @@ public class AggregateTest {
 
         Executor executor = Executors.newFixedThreadPool(3);
 
-        MergeableNode<String> node1 = MergeNodeBuilder.<String>newBuilder().by(
+        GenericMergeableNode<String> node1 = MergeNodeBuilder.<String>newBuilder().by(
             new TestStringMergeNodeTimeoutProcessor1()).build();
-        MergeableNode<String> node2 = MergeNodeBuilder.<String>newBuilder().by(
+        GenericMergeableNode<String> node2 = MergeNodeBuilder.<String>newBuilder().by(
             new TestStringMergeNodeTimeoutProcessor2()).timeout(5000, TimeUnit.MILLISECONDS).build();
 
-        List<MergeableNode<String>> nodes = new ArrayList<>();
+        List<GenericMergeableNode<String>> nodes = new ArrayList<>();
         nodes.add(node1);
         nodes.add(node2);
 
@@ -168,10 +166,10 @@ public class AggregateTest {
     @Test
     public void testIntSum() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        MergeableNode<Integer> node1 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor1()).build();
-        MergeableNode<Integer> node2 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor2()).build();
+        GenericMergeableNode<Integer> node1 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor1()).build();
+        GenericMergeableNode<Integer> node2 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor2()).build();
 
-        List<MergeableNode<Integer>> nodes = new ArrayList<>();
+        List<GenericMergeableNode<Integer>> nodes = new ArrayList<>();
         nodes.add(node1);
         nodes.add(node2);
 
@@ -193,10 +191,10 @@ public class AggregateTest {
     @Test
     public void testIntAvg() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        MergeableNode<Integer> node1 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor1()).build();
-        MergeableNode<Integer> node2 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor2()).build();
+        GenericMergeableNode<Integer> node1 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor1()).build();
+        GenericMergeableNode<Integer> node2 = MergeNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor2()).build();
 
-        List<MergeableNode<Integer>> nodes = new ArrayList<>();
+        List<GenericMergeableNode<Integer>> nodes = new ArrayList<>();
         nodes.add(node1);
         nodes.add(node2);
 
@@ -218,10 +216,10 @@ public class AggregateTest {
     @Test
     public void testDoubleSum() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        MergeableNode<Double> node1 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor1()).build();
-        MergeableNode<Double> node2 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor2()).build();
+        GenericMergeableNode<Double> node1 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor1()).build();
+        GenericMergeableNode<Double> node2 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor2()).build();
 
-        List<MergeableNode<Double>> nodes = new ArrayList<>();
+        List<GenericMergeableNode<Double>> nodes = new ArrayList<>();
         nodes.add(node1);
         nodes.add(node2);
 
@@ -242,10 +240,10 @@ public class AggregateTest {
     @Test
     public void testDoubleAvg() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        MergeableNode<Double> node1 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor1()).build();
-        MergeableNode<Double> node2 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor2()).build();
+        GenericMergeableNode<Double> node1 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor1()).build();
+        GenericMergeableNode<Double> node2 = MergeNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor2()).build();
 
-        List<MergeableNode<Double>> nodes = new ArrayList<>();
+        List<GenericMergeableNode<Double>> nodes = new ArrayList<>();
         nodes.add(node1);
         nodes.add(node2);
 
@@ -266,9 +264,9 @@ public class AggregateTest {
     @Test
     public void testIntArray() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        MergeableNode<int[]> node1 = MergeNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor1()).build();
-        MergeableNode<int[]> node2 = MergeNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor2()).build();
-        List<MergeableNode<int[]>> nodes = new ArrayList<>();
+        GenericMergeableNode<int[]> node1 = MergeNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor1()).build();
+        GenericMergeableNode<int[]> node2 = MergeNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor2()).build();
+        List<GenericMergeableNode<int[]>> nodes = new ArrayList<>();
         nodes.add(node1);
         nodes.add(node2);
         UnitAggregatableNode<int[]> node = UnitAggregatableNodeBuilder.<int[]>newBuilder().aggregator(

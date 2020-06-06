@@ -1,8 +1,8 @@
 package cn.ideabuffer.process.core.processors.impl;
 
-import cn.ideabuffer.process.core.aggregator.Aggregator;
+import cn.ideabuffer.process.core.aggregator.GenericAggregator;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.nodes.MergeableNode;
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.processors.AggregateProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,42 +15,42 @@ import java.util.List;
  */
 public class DefaultAggregateProcessor<I, O> implements AggregateProcessor<I, O> {
 
-    private Aggregator<I, O> aggregator;
-    private List<MergeableNode<I>> mergeableNodes;
+    private GenericAggregator<I, O> aggregator;
+    private List<GenericMergeableNode<I>> mergeableNodes;
 
     public DefaultAggregateProcessor() {
     }
 
-    public DefaultAggregateProcessor(@NotNull Aggregator<I, O> aggregator, List<MergeableNode<I>> mergeableNodes) {
+    public DefaultAggregateProcessor(@NotNull GenericAggregator<I, O> aggregator, List<GenericMergeableNode<I>> mergeableNodes) {
         this.aggregator = aggregator;
         this.mergeableNodes = mergeableNodes;
     }
 
     @Override
-    public Aggregator<I, O> getAggregator() {
+    public GenericAggregator<I, O> getAggregator() {
         return aggregator;
     }
 
-    public void setAggregator(@NotNull Aggregator<I, O> aggregator) {
+    public void setAggregator(@NotNull GenericAggregator<I, O> aggregator) {
         this.aggregator = aggregator;
     }
 
     @Override
-    public List<MergeableNode<I>> getMergeableNodes() {
+    public List<GenericMergeableNode<I>> getMergeableNodes() {
         return mergeableNodes;
     }
 
-    public void setMergeableNodes(List<MergeableNode<I>> mergeableNodes) {
+    public void setMergeableNodes(List<GenericMergeableNode<I>> mergeableNodes) {
         this.mergeableNodes = mergeableNodes;
     }
 
     @Override
-    public void aggregate(@NotNull List<MergeableNode<I>> nodes) {
+    public void aggregate(@NotNull List<GenericMergeableNode<I>> nodes) {
         this.mergeableNodes = nodes;
     }
 
     @Override
-    public void aggregator(@NotNull Aggregator<I, O> aggregator) {
+    public void aggregator(@NotNull GenericAggregator<I, O> aggregator) {
         this.aggregator = aggregator;
     }
 
