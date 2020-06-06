@@ -66,7 +66,7 @@ public class InnerBlock extends ParameterImpl implements Block {
     @Override
     public void doBreak() {
         if (!allowBreak()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("break is not allowed in current block");
         }
         hasBroken = true;
         if (breakable) {
@@ -74,14 +74,14 @@ public class InnerBlock extends ParameterImpl implements Block {
         }
         Block p = getParent();
         if (p != null) {
-           p.doBreak();
+            p.doBreak();
         }
     }
 
     @Override
     public void doContinue() {
         if (!allowContinue()) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("continue is not allowed in current block");
         }
         hasContinued = true;
         if (continuable) {

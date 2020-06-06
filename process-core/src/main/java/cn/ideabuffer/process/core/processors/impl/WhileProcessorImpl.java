@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.processors.impl;
 
-import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;

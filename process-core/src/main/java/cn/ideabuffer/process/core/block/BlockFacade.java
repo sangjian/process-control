@@ -72,6 +72,7 @@ public class BlockFacade implements Block {
         }
         return mapper.getMappingKey(key);
     }
+
     @Override
     public <V> V put(@NotNull Key<V> key, V value) {
         Key<V> mappingKey = getMappingKey(key);

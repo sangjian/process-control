@@ -21,7 +21,8 @@ public class DefaultAggregateProcessor<I, O> implements AggregateProcessor<I, O>
     public DefaultAggregateProcessor() {
     }
 
-    public DefaultAggregateProcessor(@NotNull GenericAggregator<I, O> aggregator, List<GenericMergeableNode<I>> mergeableNodes) {
+    public DefaultAggregateProcessor(@NotNull GenericAggregator<I, O> aggregator,
+        List<GenericMergeableNode<I>> mergeableNodes) {
         this.aggregator = aggregator;
         this.mergeableNodes = mergeableNodes;
     }

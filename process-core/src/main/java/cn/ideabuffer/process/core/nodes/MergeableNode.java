@@ -3,7 +3,6 @@ package cn.ideabuffer.process.core.nodes;
 import cn.ideabuffer.process.core.Matchable;
 import cn.ideabuffer.process.core.Mergeable;
 import cn.ideabuffer.process.core.Node;
-import cn.ideabuffer.process.core.Processor;
 
 /**
  * 可合并结果的节点

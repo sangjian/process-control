@@ -1,8 +1,6 @@
 package cn.ideabuffer.process.core.context;
 
 import cn.ideabuffer.process.core.block.Block;
-import cn.ideabuffer.process.core.block.BlockFacade;
-import cn.ideabuffer.process.core.block.InnerBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -128,12 +126,12 @@ public class ContextImpl extends ParameterImpl implements Context {
 
         @Override
         public void doBreak() {
-
+            throw new IllegalStateException("break is not allowed in current block");
         }
 
         @Override
         public void doContinue() {
-
+            throw new IllegalStateException("continue is not allowed in current block");
         }
 
         @Override

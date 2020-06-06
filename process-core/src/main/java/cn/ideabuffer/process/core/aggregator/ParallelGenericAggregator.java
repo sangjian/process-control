@@ -77,7 +77,8 @@ public class ParallelGenericAggregator<I, O> implements GenericAggregator<I, O> 
         return merger.merge(results);
     }
 
-    private CompletableFuture<?> getFuture(Context context, GenericMergeableNode<I> node, BlockingQueue<I> resultQueue) {
+    private CompletableFuture<?> getFuture(Context context, GenericMergeableNode<I> node,
+        BlockingQueue<I> resultQueue) {
         CompletableFuture<Void> future = CompletableFuture.supplyAsync(() -> AggregateUtils.process(context, node),
             executor)
             .thenAccept(r -> {
