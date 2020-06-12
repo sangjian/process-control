@@ -1,8 +1,9 @@
 package cn.ideabuffer.process.core.processors;
 
+import cn.ideabuffer.process.core.nodes.TryCatchFinallyNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author sangjian.sj
@@ -12,7 +13,7 @@ public interface TryCatchFinallyProcessor extends StatusProcessor {
 
     BranchNode getTryBranch();
 
-    Map<Class<? extends Throwable>, BranchNode> getCatchMap();
+    List<TryCatchFinallyNode.CatchMapper> getCatchMapperList();
 
     BranchNode getFinallyBranch();
 

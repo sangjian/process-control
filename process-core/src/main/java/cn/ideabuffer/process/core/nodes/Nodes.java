@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
@@ -42,11 +42,7 @@ public class Nodes {
         return new ProcessNode<>(processor, mapper);
     }
 
-    public static <R> BaseNode<R> newBaseNode() {
-        return newBaseNode(null);
-    }
-
-    public static <R> BaseNode<R> newBaseNode(ResultProcessor<R> processor) {
+    public static <R> BaseNode<R> newBaseNode(@NotNull ResultProcessor<R> processor) {
         return new DefaultBaseNode<>(processor);
     }
 
@@ -250,18 +246,18 @@ public class Nodes {
 
         private BranchNode tryBranch;
 
-        private Map<Class<? extends Throwable>, BranchNode> catchMap;
+        private List<TryCatchFinallyNode.CatchMapper> catchMapperList;
 
         TryCatchFinally(BranchNode tryBranch) {
             this.tryBranch = tryBranch;
-            this.catchMap = new LinkedHashMap<>();
+            this.catchMapperList = new LinkedList<>();
         }
 
         public TryCatchFinally catchOn(Class<? extends Throwable> expClass, BranchNode branch) {
             if (expClass == null) {
                 throw new NullPointerException();
             }
-            this.catchMap.put(expClass, branch);
+            this.catchMapperList.add(new TryCatchFinallyNode.CatchMapper(expClass, branch));
             return this;
         }
 
@@ -283,7 +279,7 @@ public class Nodes {
         }
 
         public TryCatchFinallyNode doFinally(BranchNode branch) {
-            return new TryCatchFinallyNode(tryBranch, catchMap, branch);
+            return new TryCatchFinallyNode(tryBranch, catchMapperList, branch);
         }
 
         public TryCatchFinallyNode doFinally(ExecutableNode<?, ?>... nodes) {
@@ -292,7 +288,7 @@ public class Nodes {
 
         public TryCatchFinallyNode doFinally(Processor<?>... processors) {
             if (processors == null || processors.length == 0) {
-                return new TryCatchFinallyNode(tryBranch, catchMap, null);
+                return new TryCatchFinallyNode(tryBranch, catchMapperList, null);
             }
             List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
                 Collectors.toList());

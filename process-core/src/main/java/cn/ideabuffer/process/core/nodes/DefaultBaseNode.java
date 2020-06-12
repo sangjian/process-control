@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.processors.ResultProcessor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author sangjian.sj
@@ -11,7 +12,7 @@ public class DefaultBaseNode<R> extends AbstractBaseNode<R> {
     public DefaultBaseNode() {
     }
 
-    public DefaultBaseNode(ResultProcessor<R> processor) {
+    public DefaultBaseNode(@NotNull ResultProcessor<R> processor) {
         super(processor);
     }
 }

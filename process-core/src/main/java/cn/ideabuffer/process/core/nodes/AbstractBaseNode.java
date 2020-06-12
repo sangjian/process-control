@@ -16,7 +16,7 @@ public abstract class AbstractBaseNode<R> extends AbstractNode implements BaseNo
     public AbstractBaseNode() {
     }
 
-    public AbstractBaseNode(ResultProcessor<R> processor) {
+    public AbstractBaseNode(@NotNull ResultProcessor<R> processor) {
         this.processor = processor;
     }
 
@@ -31,7 +31,7 @@ public abstract class AbstractBaseNode<R> extends AbstractNode implements BaseNo
     }
 
     @Override
-    public void setProcessor(ResultProcessor<R> processor) {
+    public void setProcessor(@NotNull ResultProcessor<R> processor) {
         this.processor = processor;
     }
 }

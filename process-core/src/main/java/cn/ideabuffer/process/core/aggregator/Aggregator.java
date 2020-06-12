@@ -7,6 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
+ * 聚合器，聚合一组 {@link MergeableNode} ，并返回指定类型的结果
+ *
+ * @param <R> 聚合结果类型
+ * @param <N> {@link MergeableNode}
  * @author sangjian.sj
  * @date 2020/06/06
  */

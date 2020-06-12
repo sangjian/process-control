@@ -4,12 +4,17 @@ import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
+import cn.ideabuffer.process.core.exception.IllegalCatchGrammarException;
+import cn.ideabuffer.process.core.nodes.TryCatchFinallyNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.TryCatchFinallyProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -18,13 +23,13 @@ import java.util.Map;
 public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
 
     private BranchNode tryBranch;
-    private Map<Class<? extends Throwable>, BranchNode> catchMap;
+    private List<TryCatchFinallyNode.CatchMapper> catchMapperList;
     private BranchNode finallyBranch;
 
-    public TryCatchFinallyProcessorImpl(BranchNode tryBranch, Map<Class<? extends Throwable>, BranchNode> catchMap,
+    public TryCatchFinallyProcessorImpl(BranchNode tryBranch, List<TryCatchFinallyNode.CatchMapper> catchMapperList,
         BranchNode finallyBranch) {
         this.tryBranch = tryBranch;
-        this.catchMap = catchMap;
+        this.catchMapperList = catchMapperList;
         this.finallyBranch = finallyBranch;
     }
 
@@ -38,13 +43,14 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
     }
 
     @Override
-    public Map<Class<? extends Throwable>, BranchNode> getCatchMap() {
-        return catchMap;
+    public List<TryCatchFinallyNode.CatchMapper> getCatchMapperList() {
+        return catchMapperList;
     }
 
-    public void setCatchMap(
-        Map<Class<? extends Throwable>, BranchNode> catchMap) {
-        this.catchMap = catchMap;
+    public void setCatchMapperList(
+        List<TryCatchFinallyNode.CatchMapper> catchMapperList) {
+        checkCatchGrammar(catchMapperList);
+        this.catchMapperList = catchMapperList;
     }
 
     @Override
@@ -56,8 +62,42 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
         this.finallyBranch = finallyBranch;
     }
 
+    /**
+     * 检查是否满足catch语法
+     *
+     * @param catchMapperList catchMapperList
+     */
+    private void checkCatchGrammar(List<TryCatchFinallyNode.CatchMapper> catchMapperList) {
+        if (catchMapperList == null || catchMapperList.isEmpty()) {
+            return;
+        }
+
+        TryCatchFinallyNode.CatchMapper lastMapper = null;
+
+        Set<Class<? extends Throwable>> expClassSet = new HashSet<>();
+        for (TryCatchFinallyNode.CatchMapper mapper : catchMapperList) {
+            if (expClassSet.contains(mapper.getExceptionClass())) {
+                throw new IllegalCatchGrammarException(String.format("Exception \"%s\" is duplicated", mapper.getExceptionClass().getName()));
+            }
+            expClassSet.add(mapper.getExceptionClass());
+            if (lastMapper == null) {
+                lastMapper = mapper;
+                continue;
+            }
+            Class<? extends Throwable> lastExpClass = lastMapper.getExceptionClass();
+            Class<? extends Throwable> currentExpClass = mapper.getExceptionClass();
+            // 校验是否满足catch层级关系
+            if (lastExpClass.isAssignableFrom(currentExpClass)) {
+                throw new IllegalCatchGrammarException(String
+                    .format("Exception \"%s\" has already been caught by \"%s\"", currentExpClass.getName(),
+                        lastExpClass.getName()));
+            }
+            lastMapper = mapper;
+        }
+    }
+
     private void preCheck() {
-        if ((catchMap == null || catchMap.isEmpty()) && finallyBranch == null) {
+        if ((catchMapperList == null || catchMapperList.isEmpty()) && finallyBranch == null) {
             throw new IllegalStateException("'catch' or 'finally' expected");
         }
     }
@@ -87,12 +127,12 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
     }
 
     private ProcessStatus runCatchBranch(Context context, Exception e) throws Exception {
-        if (catchMap == null || catchMap.isEmpty()) {
-            return ProcessStatus.PROCEED;
+        if (catchMapperList == null || catchMapperList.isEmpty()) {
+            throw e;
         }
-        for (Map.Entry<Class<? extends Throwable>, BranchNode> entry : catchMap.entrySet()) {
-            Class<? extends Throwable> expClass = entry.getKey();
-            BranchNode catchBranch = entry.getValue();
+        for (TryCatchFinallyNode.CatchMapper mapper : catchMapperList) {
+            Class<? extends Throwable> expClass = mapper.getExceptionClass();
+            BranchNode catchBranch = mapper.getBranchNode();
 
             if (!expClass.isAssignableFrom(e.getClass()) || catchBranch == null) {
                 continue;
@@ -101,7 +141,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
             ContextWrapper contextWrapper = Contexts.wrap(context, catchBlock);
             return catchBranch.execute(contextWrapper);
         }
-        return ProcessStatus.PROCEED;
+        throw e;
     }
 
     private void runFinallyBranch(Context context) throws Exception {
