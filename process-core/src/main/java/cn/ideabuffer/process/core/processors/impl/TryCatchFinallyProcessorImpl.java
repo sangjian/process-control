@@ -98,7 +98,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
 
     private void preCheck() {
         if ((catchMapperList == null || catchMapperList.isEmpty()) && finallyBranch == null) {
-            throw new IllegalStateException("'catch' or 'finally' expected");
+            throw new IllegalCatchGrammarException("'catch' or 'finally' expected");
         }
     }
 
