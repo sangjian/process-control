@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
+import cn.ideabuffer.process.core.processors.DoWhileProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author sangjian.sj
  * @date 2020/05/02
  */
-public class DoWhileProcessorImpl extends WhileProcessorImpl {
+public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileProcessor {
 
     public DoWhileProcessorImpl(Rule rule, BranchNode branch) {
         super(rule, branch);

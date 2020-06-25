@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -30,6 +31,8 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     protected P processor;
 
+    protected NodeListener<R> nodeListener;
+
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
         this.listeners = new LinkedList<>();
@@ -58,6 +61,11 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
+    public Builder<T> nodeListener(NodeListener<R> nodeListener) {
+        this.nodeListener = nodeListener;
+        return this;
+    }
+
     public Builder<T> by(P processor) {
         this.processor = processor;
         return this;
@@ -77,6 +85,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
             node.addProcessListeners(listeners.toArray(new ProcessListener[0]));
         }
         node.registerProcessor(processor);
+        node.registerNodeListener(nodeListener);
         return node;
     }
 

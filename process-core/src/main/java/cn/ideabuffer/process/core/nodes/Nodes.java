@@ -236,8 +236,25 @@ public class Nodes {
         }
 
         @Override
-        public WhileConditionNode then(BranchNode branch) {
+        public DoWhileConditionNode then(BranchNode branch) {
             return new DoWhileConditionNode(rule, branch);
+        }
+
+        @Override
+        public DoWhileConditionNode then(ExecutableNode<?, ?>... nodes) {
+            return then(new DefaultBranchNode(nodes));
+        }
+
+        @Override
+        public DoWhileConditionNode then(List<ExecutableNode<?, ?>> nodes) {
+            return then(new DefaultBranchNode(null, nodes));
+        }
+
+        @Override
+        public DoWhileConditionNode then(@NotNull Processor<?>... processors) {
+            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
+                Collectors.toList());
+            return then(nodes);
         }
 
     }

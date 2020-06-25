@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
@@ -42,6 +43,12 @@ public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Proc
     @Override
     public ProcessNodeBuilder<R> addListeners(ProcessListener<R>... listeners) {
         super.addListeners(listeners);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> nodeListener(NodeListener<R> nodeListener) {
+        super.nodeListener(nodeListener);
         return this;
     }
 

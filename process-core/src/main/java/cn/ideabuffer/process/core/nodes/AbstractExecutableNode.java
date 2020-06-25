@@ -73,6 +73,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this.mapper = mapper;
     }
 
+    @Override
     public boolean isParallel() {
         return parallel;
     }

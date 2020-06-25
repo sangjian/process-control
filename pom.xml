@@ -6,10 +6,12 @@
     <groupId>cn.ideabuffer</groupId>
     <artifactId>process-control</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <modules>
         <module>process-core</module>
         <module>process-extension</module>
+        <module>process-annotation</module>
+        <module>process-api</module>
     </modules>
 
     <name>Process Control</name>
@@ -46,8 +48,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <logback-classic.version>1.2.3</logback-classic.version>
-        <process-core.version>1.0.7</process-core.version>
-        <process-extension.version>1.0.7</process-extension.version>
+        <process-core.version>1.0.8</process-core.version>
+        <process-extension.version>1.0.8</process-extension.version>
+        <process-annotation.version>1.0.8</process-annotation.version>
         <guava-retry.version>2.0.0</guava-retry.version>
     </properties>
 
@@ -90,6 +93,11 @@
                 <groupId>cn.ideabuffer</groupId>
                 <artifactId>process-extension</artifactId>
                 <version>${process-extension.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.ideabuffer</groupId>
+                <artifactId>process-annotation</artifactId>
+                <version>${process-annotation.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

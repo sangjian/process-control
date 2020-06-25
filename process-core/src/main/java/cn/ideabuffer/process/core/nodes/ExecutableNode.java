@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executable, Parallelizable, Matchable {
 
+    boolean isParallel();
+
     void registerNodeListener(NodeListener<R> listener);
 
     void registerProcessor(P processor);

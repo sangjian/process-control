@@ -3,18 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>process-extension</artifactId>
+        <artifactId>process-control</artifactId>
         <groupId>cn.ideabuffer</groupId>
         <version>1.0.8</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Process Retry</name>
-    <description>Process Retry</description>
-
-    <artifactId>process-retry</artifactId>
+    <artifactId>process-api</artifactId>
     <version>1.0.8</version>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -22,12 +18,19 @@
             <artifactId>process-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.rholder</groupId>
-            <artifactId>guava-retrying</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.10.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
+
 </project>

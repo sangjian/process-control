@@ -28,6 +28,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
 
     public TryCatchFinallyProcessorImpl(BranchNode tryBranch, List<TryCatchFinallyNode.CatchMapper> catchMapperList,
         BranchNode finallyBranch) {
+        checkCatchGrammar(catchMapperList);
         this.tryBranch = tryBranch;
         this.catchMapperList = catchMapperList;
         this.finallyBranch = finallyBranch;
