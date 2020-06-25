@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.api.model;
 
-import cn.ideabuffer.process.annotation.model.ProcessModel;
+import cn.ideabuffer.process.annotation.model.ResourceModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +34,7 @@ public class Model<R> implements Serializable {
         this.setId(resource.getClass().getName());
         this.setName(resource.getClass().getName());
         this.setClassName(resource.getClass().getName());
-        ProcessModel pm = resource.getClass().getAnnotation(ProcessModel.class);
+        ResourceModel pm = resource.getClass().getAnnotation(ResourceModel.class);
         if (pm == null) {
             return;
         }
