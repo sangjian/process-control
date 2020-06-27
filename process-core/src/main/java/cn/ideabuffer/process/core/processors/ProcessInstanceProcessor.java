@@ -1,12 +1,13 @@
 package cn.ideabuffer.process.core.processors;
 
 import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.status.ProcessStatus;
 
 /**
  * @author sangjian.sj
  * @date 2020/05/03
  */
-public interface ProcessInstanceProcessor<R> extends StatusProcessor {
+public interface ProcessInstanceProcessor<R> extends ComplexProcessor<ProcessStatus> {
 
     /**
      * 获取流程定义

@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.processors;
 
-import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.aggregator.GenericAggregator;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +12,7 @@ import java.util.List;
  * @author sangjian.sj
  * @date 2020/05/02
  */
-public interface AggregateProcessor<I, O> extends Processor<O> {
+public interface AggregateProcessor<I, O> extends ComplexProcessor<O> {
 
     /**
      * 添加合并节点
