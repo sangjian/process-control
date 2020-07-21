@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.context;
 
+import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
 
 /**
@@ -18,4 +19,8 @@ public interface Context extends Parameter {
     Block getBlock();
 
     Context cloneContext();
+
+    void setResultKey(ProcessDefinition<?> definition);
+
+    <V> Key<V> getResultKey();
 }

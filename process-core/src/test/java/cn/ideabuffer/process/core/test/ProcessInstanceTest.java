@@ -43,9 +43,9 @@ public class ProcessInstanceTest {
 
         definition
             // 注册执行节点
-            .addProcessNodes(Nodes.newProcessNode(new TestProcessor1()), Nodes.newProcessNode(new TestProcessor2()))
+            .addProcessNodes(Nodes.newProcessNode(new TestProcessor1()), Nodes.newProcessNode(new TestProcessor2()));
             // 注册基础节点
-            .addBaseNode(Nodes.newBaseNode(new TestBaseNodeProcessor()));
+            //.addBaseNode(Nodes.newBaseNode(new TestBaseNodeProcessor()));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);

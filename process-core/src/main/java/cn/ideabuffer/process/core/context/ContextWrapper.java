@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.context;
 
+import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockFacade;
 import org.jetbrains.annotations.NotNull;
@@ -120,4 +121,13 @@ public class ContextWrapper implements Context {
     @Override
     public void clear() {context.clear();}
 
+    @Override
+    public void setResultKey(ProcessDefinition<?> definition) {
+        context.setResultKey(definition);
+    }
+
+    @Override
+    public Key<?> getResultKey() {
+        return context.getResultKey();
+    }
 }

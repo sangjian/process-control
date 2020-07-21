@@ -20,6 +20,7 @@ public class ProcessStatus implements Serializable {
     private static final long serialVersionUID = 8817242079278554141L;
     private boolean proceed;
     private ProcessErrorCode errorCode;
+    private Exception exception;
 
     public ProcessStatus(boolean proceed) {
         this.proceed = proceed;
@@ -28,6 +29,10 @@ public class ProcessStatus implements Serializable {
     public ProcessStatus(ProcessErrorCode errorCode) {
         this.proceed = false;
         this.errorCode = errorCode;
+    }
+
+    public ProcessStatus(Exception exception) {
+        this.exception = exception;
     }
 
     public static ProcessStatus proceed() {
@@ -44,6 +49,14 @@ public class ProcessStatus implements Serializable {
 
     public static ProcessStatus completeWithError(String code, String message) {
         return completeWithError(new ProcessErrorCode(code, message));
+    }
+
+    /**
+     * @param exception
+     * @return
+     */
+    public static ProcessStatus completeWithException(Exception exception) {
+        return new ProcessStatus(exception);
     }
 
     /**
@@ -87,11 +100,11 @@ public class ProcessStatus implements Serializable {
     }
 
     public boolean isSuccess() {
-        return isProceed();
+        return isProceed() && errorCode == null && exception == null;
     }
 
     public boolean isFailure() {
-        return isComplete() && errorCode != null;
+        return !isSuccess();
     }
 
     public boolean isProceed() {
@@ -125,12 +138,20 @@ public class ProcessStatus implements Serializable {
         return errorCode == null ? null : errorCode.getMessage();
     }
 
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
+    }
+
     @Override
     public String toString() {
         return "ProcessStatus{" +
             "proceed=" + proceed +
             ", errorCode=" + errorCode +
+            ", exception=" + exception +
             '}';
     }
-
 }

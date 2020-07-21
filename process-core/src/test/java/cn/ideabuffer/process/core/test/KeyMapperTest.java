@@ -51,9 +51,9 @@ public class KeyMapperTest {
                     assertNull(context.get(from));
                     context.put(from, 456);
                     return null;
-                }))
+                }));
             // 注册基础节点
-            .addBaseNode(Nodes.newBaseNode(new TestBaseNodeProcessor()));
+            //.addBaseNode(Nodes.newBaseNode(new TestBaseNodeProcessor()));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(to, 123);

@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core;
 
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.exception.IllegalResultClassException;
 import cn.ideabuffer.process.core.exception.LifecycleException;
 import cn.ideabuffer.process.core.nodes.*;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
@@ -27,7 +29,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private Node[] nodes = new Node[0];
 
-    private BaseNode<R> baseNode;
+    private Key<R> resultKey;
 
     public DefaultProcessDefinition() {
         if (initializeMode == InitializeMode.ON_REGISTER) {
@@ -39,6 +41,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         if (nodes.length == 0) {
             return this;
         }
+        resultNodeCheck(nodes);
         if (initializeMode == InitializeMode.ON_REGISTER) {
             try {
                 Arrays.stream(nodes).forEach(Lifecycle::initialize);
@@ -46,6 +49,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
                 throw new LifecycleException("initialize failed on register", e);
             }
         }
+
         int oldLen = this.nodes.length;
         int newLen = this.nodes.length + nodes.length;
         Node[] newArr = new Node[newLen];
@@ -54,6 +58,20 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
         this.nodes = newArr;
         return this;
+    }
+
+    private void resultNodeCheck(Node... nodes) {
+        for (Node node : nodes) {
+            if (node instanceof ResultNode) {
+                if (resultKey == null) {
+                    throw new IllegalResultClassException("");
+                }
+                //noinspection unchecked
+                if (!((ResultNode)node).getResultClass().isAssignableFrom(resultKey.getValueType())) {
+                    throw new IllegalResultClassException("");
+                }
+            }
+        }
     }
 
     @Override
@@ -107,9 +125,8 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     }
 
     @Override
-    public ProcessDefinition<R> addBaseNode(@NotNull BaseNode<R> node) {
-        this.baseNode = node;
-        return this;
+    public ProcessDefinition<R> addResultNode(@NotNull ResultNode<R, ?> node) {
+        return addNode(node);
     }
 
     @NotNull
@@ -120,22 +137,6 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     public void setNodes(@NotNull Node[] nodes) {
         addNode(nodes);
-    }
-
-    @Override
-    public BaseNode<R> getBaseNode() {
-        return baseNode;
-    }
-
-    public void setBaseNode(BaseNode<R> baseNode) {
-        this.baseNode = baseNode;
-        if (initializeMode == InitializeMode.ON_REGISTER) {
-            try {
-                baseNode.initialize();
-            } catch (Exception e) {
-                throw new LifecycleException("initialize failed on register", e);
-            }
-        }
     }
 
     @Override
@@ -197,5 +198,16 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     @Override
     public ProcessInstance<R> newInstance() {
         return new DefaultProcessInstance<>(this);
+    }
+
+    @Override
+    public ProcessDefinition<R> resultKey(Key<R> key) {
+        this.resultKey = key;
+        return this;
+    }
+
+    @Override
+    public Key<R> getResultKey() {
+        return this.resultKey;
     }
 }

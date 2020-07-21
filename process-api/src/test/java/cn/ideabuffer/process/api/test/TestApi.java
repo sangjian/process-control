@@ -110,6 +110,7 @@ public class TestApi {
 
     @org.junit.Test
     public void testSuper() {
+        System.out.println(long.class.getName());
         ProcessNode<ProcessStatus> node = ProcessNodeBuilder.<ProcessStatus>newBuilder().build();
         Class<?> clazz = node.getClass();
 

@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core;
 
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.*;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
@@ -102,7 +103,7 @@ public interface ProcessDefinition<R> extends Lifecycle {
      * @return
      * @see BaseNode
      */
-    ProcessDefinition<R> addBaseNode(@NotNull BaseNode<R> node);
+    ProcessDefinition<R> addResultNode(@NotNull ResultNode<R, ?> node);
 
     /**
      * 获取所有节点
@@ -112,14 +113,12 @@ public interface ProcessDefinition<R> extends Lifecycle {
     @NotNull
     Node[] getNodes();
 
-    /**
-     * 获取基础节点
-     *
-     * @return
-     */
-    BaseNode<R> getBaseNode();
 
     InitializeMode getInitializeMode();
 
     ProcessInstance<R> newInstance();
+
+    ProcessDefinition<R> resultKey(@NotNull Key<R> key);
+
+    Key<R> getResultKey();
 }

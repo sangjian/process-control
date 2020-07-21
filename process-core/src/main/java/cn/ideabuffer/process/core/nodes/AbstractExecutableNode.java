@@ -175,13 +175,18 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             return ProcessStatus.PROCEED;
         }
         ProcessStatus status;
+        R result = null;
         try {
-            R result = getProcessor().process(ctx);
+            result = getProcessor().process(ctx);
             status = onComplete(ctx, result);
             notifyListeners(ctx, result, null, true);
         } catch (Exception e) {
             notifyListeners(ctx, null, e, false);
             status = onFailure(ctx, e);
+        }
+        if (this instanceof ResultNode) {
+            context.put(context.getResultKey(), result);
+            status = ProcessStatus.isComplete(status) ? status : ProcessStatus.COMPLETE;
         }
         return status;
     }

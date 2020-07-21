@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.context;
 
+import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +14,8 @@ import java.util.Objects;
 public class ContextImpl extends ParameterImpl implements Context {
 
     private Block block;
+
+    private Key<?> resultKey;
 
     public ContextImpl() {
         this(null, null);
@@ -35,6 +38,16 @@ public class ContextImpl extends ParameterImpl implements Context {
     @Override
     public Context cloneContext() {
         return new ContextImpl(null, this.getParams());
+    }
+
+    @Override
+    public void setResultKey(@NotNull ProcessDefinition<?> definition) {
+        this.resultKey = definition.getResultKey();
+    }
+
+    @Override
+    public <V> Key<V> getResultKey() {
+        return (Key<V>)this.resultKey;
     }
 
     @Override

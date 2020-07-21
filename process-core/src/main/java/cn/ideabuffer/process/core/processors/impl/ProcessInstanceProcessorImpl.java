@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.nodes.BaseNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.nodes.ResultNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +37,7 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
         Node[] nodes = definition.getNodes();
         ProcessStatus status = ProcessStatus.PROCEED;
         int i = 0;
+        context.setResultKey(definition);
         for (; i < nodes.length; i++) {
             Node node = nodes[i];
 
@@ -51,10 +53,14 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
                     }
                     status = ((ExecutableNode)node).execute(ctx);
                     if (ProcessStatus.isComplete(status)) {
+                        if (node instanceof ResultNode) {
+                            this.result = ctx.get(context.getResultKey());
+                        }
                         break;
                     }
                 } catch (Exception e) {
                     exception = e;
+                    status = ProcessStatus.completeWithException(e);
                     break;
                 }
             }
@@ -63,23 +69,14 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
         if (i >= nodes.length) {
             i--;
         }
-        BaseNode<R> baseNode = definition.getBaseNode();
-        if (baseNode != null && baseNode.enabled()) {
-            try {
-                result = definition.getBaseNode().invoke(context, status);
-            } catch (Exception e) {
-                exception = e;
-            }
-        }
 
         List<Node> postNodeList = Arrays.stream(nodes).collect(Collectors.toList()).subList(0, ++i);
-        boolean baseProcessed = postProcess(definition.getBaseNode(), context, exception);
         boolean chainProcessed = postProcess(postNodeList, context, exception);
 
         if (exception == null) {
             return status;
         }
-        if (!baseProcessed && !chainProcessed) {
+        if (!chainProcessed) {
             throw exception;
         }
 
