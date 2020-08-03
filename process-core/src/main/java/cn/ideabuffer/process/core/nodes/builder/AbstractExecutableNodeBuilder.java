@@ -1,8 +1,9 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.ReturnCondition;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 
@@ -31,7 +32,11 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     protected P processor;
 
-    protected NodeListener<R> nodeListener;
+    protected Key<R> resultKey;
+
+    protected boolean returnable;
+
+    protected ReturnCondition<R> returnCondition;
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
@@ -61,13 +66,23 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
-    public Builder<T> nodeListener(NodeListener<R> nodeListener) {
-        this.nodeListener = nodeListener;
+    public Builder<T> by(P processor) {
+        this.processor = processor;
         return this;
     }
 
-    public Builder<T> by(P processor) {
-        this.processor = processor;
+    public Builder<T> resultKey(Key<R> resultKey) {
+        this.resultKey = resultKey;
+        return this;
+    }
+
+    public Builder<T> returnable(boolean returnable) {
+        this.returnable = returnable;
+        return this;
+    }
+
+    public Builder<T> returnOn(ReturnCondition<R> condition) {
+        this.returnCondition = condition;
         return this;
     }
 
@@ -85,7 +100,9 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
             node.addProcessListeners(listeners.toArray(new ProcessListener[0]));
         }
         node.registerProcessor(processor);
-        node.registerNodeListener(nodeListener);
+        node.setResultKey(resultKey);
+        node.returnable(returnable);
+        node.returnOn(returnCondition);
         return node;
     }
 

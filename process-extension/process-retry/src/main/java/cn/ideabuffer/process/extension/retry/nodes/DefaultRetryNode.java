@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.extension.retry.nodes;
 
-import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.rule.Rule;
@@ -42,9 +41,8 @@ public class DefaultRetryNode<R> extends AbstractRetryableNode<R> {
     }
 
     public DefaultRetryNode(boolean parallel, Rule rule, Executor executor,
-        List<ProcessListener<R>> listeners,
-        NodeListener<R> nodeListener, Processor<R> processor,
+        List<ProcessListener<R>> listeners, Processor<R> processor,
         Retryer<R> retryer) {
-        super(parallel, rule, executor, listeners, nodeListener, processor, retryer);
+        super(parallel, rule, executor, listeners, processor, retryer);
     }
 }

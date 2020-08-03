@@ -1,12 +1,11 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.LifecycleState;
-import cn.ideabuffer.process.core.NodeListener;
-import cn.ideabuffer.process.core.ProcessListener;
-import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
+import cn.ideabuffer.process.core.exception.IllegalResultClassException;
 import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.rule.Rule;
@@ -33,9 +32,11 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     private Rule rule;
     private Executor executor;
     private P processor;
-    private NodeListener<R> nodeListener;
     private List<ProcessListener<R>> listeners;
     private KeyMapper mapper;
+    private Key<R> resultKey;
+    private boolean returnable;
+    private ReturnCondition<R> returnCondition;
 
     public AbstractExecutableNode() {
         this(false);
@@ -54,23 +55,31 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor) {
-        this(parallel, rule, executor, null, null, null);
+        this(parallel, rule, executor, null, null);
     }
 
     public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
-        NodeListener<R> nodeListener, P processor) {
-        this(parallel, rule, executor, listeners, nodeListener, processor, null);
+        P processor) {
+        this(parallel, rule, executor, listeners, processor, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
-        NodeListener<R> nodeListener, P processor, KeyMapper mapper) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper) {
+        this(parallel, rule, executor, listeners, processor, mapper, null);
+    }
+
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey) {
+        this(parallel, rule, executor, listeners, processor, mapper, null, false);
+    }
+
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, boolean returnable) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
         this.listeners = listeners;
-        this.nodeListener = nodeListener;
         this.processor = processor;
         this.mapper = mapper;
+        this.resultKey = resultKey;
+        this.returnable = returnable;
     }
 
     @Override
@@ -99,11 +108,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
-    public void registerNodeListener(NodeListener<R> listener) {
-        this.nodeListener = listener;
-    }
-
-    @Override
     public void registerProcessor(P processor) {
         this.processor = processor;
     }
@@ -111,11 +115,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @Override
     public void addProcessListeners(@NotNull ProcessListener<R>... listeners) {
         this.listeners = Arrays.asList(listeners);
-    }
-
-    @Override
-    public NodeListener<R> getNodeListener() {
-        return this.nodeListener;
     }
 
     @Override
@@ -174,21 +173,20 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             doParallelExecute(ctx);
             return ProcessStatus.PROCEED;
         }
-        ProcessStatus status;
-        R result = null;
         try {
-            result = getProcessor().process(ctx);
-            status = onComplete(ctx, result);
-            notifyListeners(ctx, result, null, true);
+            R result = getProcessor().process(ctx);
+            context.put(resultKey, result);
+            notifyListeners(context, result, null, true);
+            if (returnable && returnCondition.onCondition(result)) {
+                return ProcessStatus.COMPLETE;
+            }
         } catch (Exception e) {
             notifyListeners(ctx, null, e, false);
-            status = onFailure(ctx, e);
+            return ProcessStatus.completeWithException(e);
         }
-        if (this instanceof ResultNode) {
-            context.put(context.getResultKey(), result);
-            status = ProcessStatus.isComplete(status) ? status : ProcessStatus.COMPLETE;
-        }
-        return status;
+
+
+        return ProcessStatus.PROCEED;
     }
 
     private void doParallelExecute(Context context) {
@@ -196,31 +194,13 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         e.execute(() -> {
             try {
                 R result = getProcessor().process(context);
-                onComplete(context, result);
+                context.put(resultKey, result);
                 notifyListeners(context, result, null, true);
             } catch (Exception ex) {
                 logger.error("doParallelExecute error, node:{}", this, ex);
                 notifyListeners(context, null, ex, false);
-                onFailure(context, ex);
             }
         });
-    }
-
-    protected ProcessStatus onComplete(Context context, R result) {
-        if (getNodeListener() != null) {
-            return getNodeListener().onComplete(context, result);
-        }
-        if (result instanceof ProcessStatus) {
-            return (ProcessStatus)result;
-        }
-        return ProcessStatus.PROCEED;
-    }
-
-    protected ProcessStatus onFailure(Context context, Exception e) {
-        if (nodeListener != null) {
-            return nodeListener.onFailure(context, e);
-        }
-        throw new ProcessException(e);
     }
 
     protected void notifyListeners(Context context, @Nullable R result, Exception e, boolean success) {
@@ -235,6 +215,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
                     processListener.onFailure(context, e);
                 }
             } catch (Exception ex) {
+                logger.error("listener execute error, context:{}, result:{}, exception:{}", context, result, e, ex);
                 // ignore
             }
         });
@@ -247,6 +228,36 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
 
     public void setExecutor(Executor executor) {
         this.executor = executor;
+    }
+
+    @Override
+    public void setResultKey(Key<R> resultKey) {
+        this.resultKey = resultKey;
+    }
+
+    @Override
+    public Key<R> getResultKey() {
+        return resultKey;
+    }
+
+    @Override
+    public void returnable(boolean returnable) {
+        this.returnable = returnable;
+    }
+
+    @Override
+    public boolean isReturnable() {
+        return returnable;
+    }
+
+    @Override
+    public void returnOn(ReturnCondition<R> condition) {
+        this.returnCondition = condition;
+    }
+
+    @Override
+    public ReturnCondition<R> getReturnCondition() {
+        return returnCondition;
     }
 
     @Override

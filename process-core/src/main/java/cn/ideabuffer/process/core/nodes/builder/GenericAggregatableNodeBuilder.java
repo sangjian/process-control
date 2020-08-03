@@ -1,7 +1,9 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.aggregator.GenericAggregator;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
@@ -78,6 +80,24 @@ public class GenericAggregatableNodeBuilder<P, R>
     @Override
     public GenericAggregatableNodeBuilder<P, R> by(AggregateProcessor<P, R> processor) {
         super.by(processor);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> resultKey(Key<R> resultKey) {
+        super.resultKey(resultKey);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> returnable(boolean returnable) {
+        super.returnable(returnable);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> returnOn(ReturnCondition<R> condition) {
+        super.returnOn(condition);
         return this;
     }
 

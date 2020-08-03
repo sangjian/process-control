@@ -1,15 +1,12 @@
 package cn.ideabuffer.process.api.model.node;
 
 import cn.ideabuffer.process.api.model.*;
-import cn.ideabuffer.process.api.model.builder.NodeListenerModelBuilder;
 import cn.ideabuffer.process.api.model.builder.ProcessListenerModelBuilder;
 import cn.ideabuffer.process.api.model.builder.ProcessorModelBuilder;
 import cn.ideabuffer.process.api.model.builder.RuleModelBuilder;
 import cn.ideabuffer.process.api.model.executor.ExecutorModel;
-import cn.ideabuffer.process.api.model.listener.NodeListenerModel;
 import cn.ideabuffer.process.api.model.listener.ProcessListenerModel;
 import cn.ideabuffer.process.api.model.processor.ProcessorModel;
-import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -30,8 +27,6 @@ public class ExecutableNodeModel<R extends ExecutableNode> extends NodeModel<R> 
 
     private ProcessorModel processorModel;
 
-    private NodeListenerModel nodeListenerModel;
-
     private List<ProcessListenerModel> processListenerModels;
 
     private RuleModel ruleModel;
@@ -50,14 +45,6 @@ public class ExecutableNodeModel<R extends ExecutableNode> extends NodeModel<R> 
 
     public void setProcessorModel(@Nullable ProcessorModel processorModel) {
         this.processorModel = processorModel;
-    }
-
-    public NodeListenerModel getNodeListenerModel() {
-        return nodeListenerModel;
-    }
-
-    public void setNodeListenerModel(@Nullable NodeListenerModel nodeListenerModel) {
-        this.nodeListenerModel = nodeListenerModel;
     }
 
     public List<ProcessListenerModel> getProcessListenerModels() {
@@ -102,10 +89,6 @@ public class ExecutableNodeModel<R extends ExecutableNode> extends NodeModel<R> 
         ProcessorModelBuilder<Processor> processorModelBuilder = factory.getModelBuilder(resource.getProcessor());
         if (processorModelBuilder != null) {
             this.setProcessorModel(processorModelBuilder.build(resource.getProcessor()));
-        }
-        NodeListenerModelBuilder<NodeListener> nodeListenerModelBuilder = factory.getModelBuilder(resource.getNodeListener());
-        if (nodeListenerModelBuilder != null) {
-            this.nodeListenerModel = nodeListenerModelBuilder.build(resource.getNodeListener());
         }
         List<ProcessListener> processListeners = resource.getListeners();
         if (processListeners != null && !processListeners.isEmpty()) {

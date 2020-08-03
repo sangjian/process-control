@@ -36,7 +36,6 @@ public class ModelBuilderFactory {
         builderMap.putIfAbsent(ComplexProcessor.class, new ComplexProcessorModelBuilder());
         builderMap.putIfAbsent(BranchProcessor.class, new BranchProcessorModelBuilder());
         builderMap.putIfAbsent(ProcessListener.class, new ProcessListenerModelBuilder());
-        builderMap.putIfAbsent(NodeListener.class, new NodeListenerModelBuilder());
         builderMap.putIfAbsent(Rule.class, new RuleModelBuilder());
         builderMap.putIfAbsent(ProcessDefinition.class, new ProcessDefinitionModelBuilder());
 

@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.extension.retry.nodes;
 
-import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
@@ -41,13 +40,13 @@ public abstract class AbstractRetryableNode<R> extends AbstractExecutableNode<R,
 
     public AbstractRetryableNode(boolean parallel, Rule rule, Executor executor,
         Retryer<R> retryer) {
-        this(parallel, rule, executor, null, null, null, retryer);
+        this(parallel, rule, executor, null, null, retryer);
     }
 
     public AbstractRetryableNode(boolean parallel, Rule rule, Executor executor,
-        List<ProcessListener<R>> listeners, NodeListener<R> nodeListener, Processor<R> processor,
+        List<ProcessListener<R>> listeners, Processor<R> processor,
         Retryer<R> retryer) {
-        super(parallel, rule, executor, listeners, nodeListener, processor);
+        super(parallel, rule, executor, listeners, processor);
         this.retryer = retryer;
         this.retryProcessor = new RetryProcessor<>(retryer, processor);
     }

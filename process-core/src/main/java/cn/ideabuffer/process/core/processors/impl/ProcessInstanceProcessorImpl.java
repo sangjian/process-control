@@ -5,7 +5,6 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.nodes.BaseNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
-import cn.ideabuffer.process.core.nodes.ResultNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -53,9 +52,6 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
                     }
                     status = ((ExecutableNode)node).execute(ctx);
                     if (ProcessStatus.isComplete(status)) {
-                        if (node instanceof ResultNode) {
-                            this.result = ctx.get(context.getResultKey());
-                        }
                         break;
                     }
                 } catch (Exception e) {

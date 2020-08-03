@@ -15,7 +15,11 @@ import cn.ideabuffer.process.core.test.nodes.TestProcessor1;
 import cn.ideabuffer.process.core.test.nodes.TestProcessor2;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -149,6 +153,23 @@ public class RuleTest {
 
         assertFalse(processor1Flag.get());
         assertTrue(processor2Flag.get());
+    }
+
+    public static void main(String[] args) {
+        List<Integer> list = new ArrayList<>();
+        list.add(3);
+        list.add(1);
+        list.add(7);
+        list.add(2);
+
+        Integer m = list.stream().min(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 - o2;
+            }
+        }).get();
+
+        System.out.println(m);
     }
 
 }

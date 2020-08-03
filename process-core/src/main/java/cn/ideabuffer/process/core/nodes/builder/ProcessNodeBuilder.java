@@ -1,8 +1,9 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.ReturnCondition;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.rule.Rule;
 
@@ -47,14 +48,26 @@ public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Proc
     }
 
     @Override
-    public ProcessNodeBuilder<R> nodeListener(NodeListener<R> nodeListener) {
-        super.nodeListener(nodeListener);
+    public ProcessNodeBuilder<R> by(Processor<R> processor) {
+        super.by(processor);
         return this;
     }
 
     @Override
-    public ProcessNodeBuilder<R> by(Processor<R> processor) {
-        super.by(processor);
+    public ProcessNodeBuilder<R> resultKey(Key<R> resultKey) {
+        super.resultKey(resultKey);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> returnable(boolean returnable) {
+        super.returnable(returnable);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
+        super.returnOn(condition);
         return this;
     }
 }

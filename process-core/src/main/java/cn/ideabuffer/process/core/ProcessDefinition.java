@@ -97,15 +97,6 @@ public interface ProcessDefinition<R> extends Lifecycle {
     ProcessDefinition<R> addBranchNode(@NotNull BranchNode node);
 
     /**
-     * 增加基础节点
-     *
-     * @param node
-     * @return
-     * @see BaseNode
-     */
-    ProcessDefinition<R> addResultNode(@NotNull ResultNode<R, ?> node);
-
-    /**
      * 获取所有节点
      *
      * @return
@@ -121,4 +112,8 @@ public interface ProcessDefinition<R> extends Lifecycle {
     ProcessDefinition<R> resultKey(@NotNull Key<R> key);
 
     Key<R> getResultKey();
+
+    void returnOn(ReturnCondition<R> condition);
+
+    ReturnCondition<R> getReturnCondition();
 }

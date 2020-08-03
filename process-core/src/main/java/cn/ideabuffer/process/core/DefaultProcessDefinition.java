@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.exception.IllegalResultClassException;
+import cn.ideabuffer.process.core.exception.IllegalResultKeyException;
 import cn.ideabuffer.process.core.exception.LifecycleException;
 import cn.ideabuffer.process.core.nodes.*;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
@@ -31,6 +31,8 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private Key<R> resultKey;
 
+    private ReturnCondition<R> returnCondition;
+
     public DefaultProcessDefinition() {
         if (initializeMode == InitializeMode.ON_REGISTER) {
             state = LifecycleState.INITIALIZED;
@@ -41,7 +43,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         if (nodes.length == 0) {
             return this;
         }
-        resultNodeCheck(nodes);
+        returnableCheck(nodes);
         if (initializeMode == InitializeMode.ON_REGISTER) {
             try {
                 Arrays.stream(nodes).forEach(Lifecycle::initialize);
@@ -60,15 +62,22 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         return this;
     }
 
-    private void resultNodeCheck(Node... nodes) {
+    private void returnableCheck(Node... nodes) {
         for (Node node : nodes) {
-            if (node instanceof ResultNode) {
-                if (resultKey == null) {
-                    throw new IllegalResultClassException("");
+            if (node instanceof ExecutableNode && ((ExecutableNode)node).isReturnable()) {
+                Key<?> nodeResultKey = ((ExecutableNode)node).getResultKey();
+                // 没有设置结果key
+                if (nodeResultKey == null) {
+                    throw new NullPointerException("");
                 }
-                //noinspection unchecked
-                if (!((ResultNode)node).getResultClass().isAssignableFrom(resultKey.getValueType())) {
-                    throw new IllegalResultClassException("");
+                // 结果Key不一致
+                if (!nodeResultKey.equals(resultKey)) {
+                    throw new IllegalResultKeyException(String.format("resultKey[%s] of returnable node is not equals resultKey:[%s] of definition", nodeResultKey.toString(), resultKey.toString()));
+                }
+                // 没有返回条件，使用默认的返回条件
+                if (((ExecutableNode)node).getReturnCondition() == null) {
+                    //noinspection unchecked
+                    ((ExecutableNode)node).returnOn(returnCondition);
                 }
             }
         }
@@ -121,11 +130,6 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     @Override
     public ProcessDefinition<R> addBranchNode(@NotNull BranchNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessDefinition<R> addResultNode(@NotNull ResultNode<R, ?> node) {
         return addNode(node);
     }
 
@@ -209,5 +213,15 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     @Override
     public Key<R> getResultKey() {
         return this.resultKey;
+    }
+
+    @Override
+    public void returnOn(ReturnCondition<R> condition) {
+        this.returnCondition = condition;
+    }
+
+    @Override
+    public ReturnCondition<R> getReturnCondition() {
+        return this.returnCondition;
     }
 }

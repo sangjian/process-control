@@ -2,7 +2,9 @@ package cn.ideabuffer.process.extension.retry.nodes.builders;
 
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.builder.AbstractExecutableNodeBuilder;
+import cn.ideabuffer.process.core.nodes.builder.Builder;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.extension.retry.nodes.DefaultRetryNode;
 import cn.ideabuffer.process.extension.retry.nodes.RetryableNode;
@@ -59,6 +61,18 @@ public class RetryBuilder<R> extends AbstractExecutableNodeBuilder<R, Processor<
 
     public RetryBuilder<R> retryBy(@NotNull Retryer<R> retryer) {
         this.retryer = retryer;
+        return this;
+    }
+
+    @Override
+    public  RetryBuilder<R> resultKey(Key<R> resultKey) {
+        super.resultKey(resultKey);
+        return this;
+    }
+
+    @Override
+    public  RetryBuilder<R> returnable(boolean returnable) {
+        super.returnable(returnable);
         return this;
     }
 

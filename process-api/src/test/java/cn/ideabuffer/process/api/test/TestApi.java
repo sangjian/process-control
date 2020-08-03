@@ -6,7 +6,6 @@ import cn.ideabuffer.process.api.model.builder.ProcessDefinitionModelBuilder;
 import cn.ideabuffer.process.api.model.node.ExecutableNodeModel;
 import cn.ideabuffer.process.api.model.node.ProcessDefinitionModel;
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
-import cn.ideabuffer.process.core.NodeListener;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
@@ -39,18 +38,7 @@ public class TestApi {
 
         Executor executor = Executors.newFixedThreadPool(2);
 
-        ProcessNode<ProcessStatus> node = ProcessNodeBuilder.<ProcessStatus>newBuilder().nodeListener(
-            new NodeListener<ProcessStatus>() {
-                @Override
-                public ProcessStatus onComplete(@NotNull Context context, @Nullable ProcessStatus result) {
-                    return null;
-                }
-
-                @Override
-                public ProcessStatus onFailure(@NotNull Context context, @NotNull Throwable t) {
-                    return null;
-                }
-            }).addListeners(new TestProcessListener1(), new TestProcessListener2()).parallel(executor).by(
+        ProcessNode<ProcessStatus> node = ProcessNodeBuilder.<ProcessStatus>newBuilder().addListeners(new TestProcessListener1(), new TestProcessListener2()).parallel(executor).by(
             context -> null).processOn(context -> false).build();
 
         ExecutableNodeModel<ProcessNode<ProcessStatus>> model
@@ -66,18 +54,7 @@ public class TestApi {
 
         Executor executor = Executors.newFixedThreadPool(2);
 
-        ProcessNode<ProcessStatus> node = ProcessNodeBuilder.<ProcessStatus>newBuilder().nodeListener(
-            new NodeListener<ProcessStatus>() {
-                @Override
-                public ProcessStatus onComplete(@NotNull Context context, @Nullable ProcessStatus result) {
-                    return null;
-                }
-
-                @Override
-                public ProcessStatus onFailure(@NotNull Context context, @NotNull Throwable t) {
-                    return null;
-                }
-            }).addListeners(new TestProcessListener1(), new TestProcessListener2()).parallel(executor).by(
+        ProcessNode<ProcessStatus> node = ProcessNodeBuilder.<ProcessStatus>newBuilder().addListeners(new TestProcessListener1(), new TestProcessListener2()).parallel(executor).by(
             context -> null).processOn(context -> false).build();
 
         IfConditionNode ifConditionNode = Nodes.newIf(context -> true).then(

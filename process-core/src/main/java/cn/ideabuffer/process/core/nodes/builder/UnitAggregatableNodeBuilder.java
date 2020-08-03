@@ -1,7 +1,9 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.aggregator.UnitAggregator;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
@@ -78,6 +80,24 @@ public class UnitAggregatableNodeBuilder<R>
 
     public UnitAggregatableNodeBuilder<R> aggregator(@NotNull UnitAggregator<R> aggregator) {
         this.aggregator = aggregator;
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> resultKey(Key<R> resultKey) {
+        super.resultKey(resultKey);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> returnable(boolean returnable) {
+        super.returnable(returnable);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
+        super.returnOn(condition);
         return this;
     }
 

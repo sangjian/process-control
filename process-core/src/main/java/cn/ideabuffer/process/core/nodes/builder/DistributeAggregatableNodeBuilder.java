@@ -1,7 +1,9 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
@@ -78,6 +80,24 @@ public class DistributeAggregatableNodeBuilder<R>
 
     public DistributeAggregatableNodeBuilder<R> aggregator(@NotNull DistributeAggregator<R> aggregator) {
         this.aggregator = aggregator;
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> resultKey(Key<R> resultKey) {
+        super.resultKey(resultKey);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> returnable(boolean returnable) {
+        super.returnable(returnable);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
+        super.returnOn(condition);
         return this;
     }
 

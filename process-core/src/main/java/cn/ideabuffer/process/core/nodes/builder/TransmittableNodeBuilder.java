@@ -2,6 +2,8 @@ package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.ReturnCondition;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.TransmittableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -48,4 +50,27 @@ public class TransmittableNodeBuilder<R, P extends Processor<R>>
         return this;
     }
 
+    @Override
+    public TransmittableNodeBuilder<R, P> by(P processor) {
+        super.by(processor);
+        return this;
+    }
+
+    @Override
+    public TransmittableNodeBuilder<R, P> resultKey(Key<R> resultKey) {
+        super.resultKey(resultKey);
+        return this;
+    }
+
+    @Override
+    public TransmittableNodeBuilder<R, P> returnable(boolean returnable) {
+        super.returnable(returnable);
+        return this;
+    }
+
+    @Override
+    public TransmittableNodeBuilder<R, P> returnOn(ReturnCondition<R> condition) {
+        super.returnOn(condition);
+        return this;
+    }
 }

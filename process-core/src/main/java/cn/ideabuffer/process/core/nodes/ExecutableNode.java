@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.*;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,13 +15,9 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
 
     boolean isParallel();
 
-    void registerNodeListener(NodeListener<R> listener);
-
     void registerProcessor(P processor);
 
     void addProcessListeners(@NotNull ProcessListener<R>... listeners);
-
-    NodeListener<R> getNodeListener();
 
     P getProcessor();
 
@@ -29,4 +26,16 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
     KeyMapper getKeyMapper();
 
     void setKeyMapper(KeyMapper mapper);
+
+    void setResultKey(Key<R> resultKey);
+
+    Key<R> getResultKey();
+
+    void returnable(boolean returnable);
+
+    boolean isReturnable();
+
+    void returnOn(ReturnCondition<R> condition);
+
+    ReturnCondition<R> getReturnCondition();
 }
