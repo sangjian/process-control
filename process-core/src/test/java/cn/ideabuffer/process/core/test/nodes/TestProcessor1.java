@@ -23,6 +23,6 @@ public class TestProcessor1 implements Processor<Integer> {
         Key<Integer> key = Contexts.newKey("k", int.class);
         logger.info("in testNode1, k:{}", context.get(key));
         Thread.sleep(1000);
-        return 2;
+        return 1;
     }
 }

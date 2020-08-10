@@ -90,12 +90,6 @@ public class UnitAggregatableNodeBuilder<R>
     }
 
     @Override
-    public UnitAggregatableNodeBuilder<R> returnable(boolean returnable) {
-        super.returnable(returnable);
-        return this;
-    }
-
-    @Override
     public UnitAggregatableNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
         super.returnOn(condition);
         return this;

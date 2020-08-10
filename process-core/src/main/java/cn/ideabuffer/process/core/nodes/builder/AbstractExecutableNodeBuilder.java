@@ -34,8 +34,6 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     protected Key<R> resultKey;
 
-    protected boolean returnable;
-
     protected ReturnCondition<R> returnCondition;
 
     protected AbstractExecutableNodeBuilder(T node) {
@@ -76,11 +74,6 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
-    public Builder<T> returnable(boolean returnable) {
-        this.returnable = returnable;
-        return this;
-    }
-
     public Builder<T> returnOn(ReturnCondition<R> condition) {
         this.returnCondition = condition;
         return this;
@@ -101,7 +94,6 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         }
         node.registerProcessor(processor);
         node.setResultKey(resultKey);
-        node.returnable(returnable);
         node.returnOn(returnCondition);
         return node;
     }

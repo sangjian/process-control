@@ -31,10 +31,6 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
 
     Key<R> getResultKey();
 
-    void returnable(boolean returnable);
-
-    boolean isReturnable();
-
     void returnOn(ReturnCondition<R> condition);
 
     ReturnCondition<R> getReturnCondition();

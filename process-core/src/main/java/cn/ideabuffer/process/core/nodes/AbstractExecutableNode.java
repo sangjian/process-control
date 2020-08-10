@@ -35,7 +35,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     private List<ProcessListener<R>> listeners;
     private KeyMapper mapper;
     private Key<R> resultKey;
-    private boolean returnable;
     private ReturnCondition<R> returnCondition;
 
     public AbstractExecutableNode() {
@@ -68,10 +67,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey) {
-        this(parallel, rule, executor, listeners, processor, mapper, null, false);
+        this(parallel, rule, executor, listeners, processor, mapper, null, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, boolean returnable) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
@@ -79,7 +78,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this.processor = processor;
         this.mapper = mapper;
         this.resultKey = resultKey;
-        this.returnable = returnable;
+        this.returnCondition = returnCondition;
     }
 
     @Override
@@ -175,14 +174,17 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         }
         try {
             R result = getProcessor().process(ctx);
-            context.put(resultKey, result);
+            if (resultKey != null) {
+                context.put(resultKey, result);
+            }
             notifyListeners(context, result, null, true);
-            if (returnable && returnCondition.onCondition(result)) {
+            // 判断是否满足returnCondition
+            if (returnCondition != null && returnCondition.onCondition(result)) {
                 return ProcessStatus.COMPLETE;
             }
         } catch (Exception e) {
             notifyListeners(ctx, null, e, false);
-            return ProcessStatus.completeWithException(e);
+            throw e;
         }
 
 
@@ -238,16 +240,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @Override
     public Key<R> getResultKey() {
         return resultKey;
-    }
-
-    @Override
-    public void returnable(boolean returnable) {
-        this.returnable = returnable;
-    }
-
-    @Override
-    public boolean isReturnable() {
-        return returnable;
     }
 
     @Override

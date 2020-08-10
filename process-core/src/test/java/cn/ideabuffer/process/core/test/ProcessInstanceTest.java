@@ -10,9 +10,9 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
+import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
 import cn.ideabuffer.process.core.processors.StatusProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-import cn.ideabuffer.process.core.test.nodes.TestBaseNodeProcessor;
 import cn.ideabuffer.process.core.test.nodes.TestProcessor1;
 import cn.ideabuffer.process.core.test.nodes.TestProcessor2;
 import cn.ideabuffer.process.core.test.nodes.ifs.TestFalseBranch;
@@ -39,21 +39,58 @@ public class ProcessInstanceTest {
 
     @Test
     public void testInstanceResult() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        Key<Integer> resultKey = new Key<>("resultKey", int.class);
+        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
 
         definition
             // 注册执行节点
-            .addProcessNodes(Nodes.newProcessNode(new TestProcessor1()), Nodes.newProcessNode(new TestProcessor2()));
-            // 注册基础节点
-            //.addBaseNode(Nodes.newBaseNode(new TestBaseNodeProcessor()));
-        ProcessInstance<String> instance = definition.newInstance();
+            .addProcessNodes(
+                ProcessNodeBuilder.<Integer>newBuilder()
+                    .resultKey(resultKey)
+                    .by(new TestProcessor2())
+                    .returnOn(result -> true)
+                    .build(),
+                ProcessNodeBuilder.<Integer>newBuilder()
+                    .resultKey(resultKey)
+                    .by(new TestProcessor1())
+                    .returnOn(result -> false)
+                    .build());
+        ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
         Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 0);
 
         instance.execute(context);
         // 输出执行结果
-        assertEquals("TestBaseNodeProcessor", instance.getResult());
+        assertEquals(2L, (long)instance.getResult());
+    }
+
+    @Test
+    public void testInstanceResult2() throws Exception {
+        Key<Integer> resultKey = new Key<>("resultKey", int.class);
+        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
+
+        definition
+            // 注册执行节点
+            .addProcessNodes(
+                ProcessNodeBuilder.<Integer>newBuilder()
+                    .resultKey(resultKey)
+                    .by(new TestProcessor2())
+                    .returnOn(result -> false)
+                    .build(),
+                ProcessNodeBuilder.<Integer>newBuilder()
+                    .resultKey(resultKey)
+                    .by(new TestProcessor1())
+                    .returnOn(result -> true)
+                    .build());
+        ProcessInstance<Integer> instance = definition.newInstance();
+        Context context = Contexts.newContext();
+        Key<Integer> key = Contexts.newKey("k", int.class);
+        context.put(key, 0);
+
+        instance.execute(context);
+        // 输出执行结果
+        assertEquals(1L, (long)instance.getResult());
     }
 
     @Test

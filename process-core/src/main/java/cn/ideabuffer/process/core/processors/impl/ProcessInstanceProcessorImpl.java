@@ -3,7 +3,6 @@ package cn.ideabuffer.process.core.processors.impl;
 import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.exception.ProcessException;
-import cn.ideabuffer.process.core.nodes.BaseNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -61,6 +60,9 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
                 }
             }
 
+        }
+        if (context.getResultKey() != null) {
+            result = context.get(context.getResultKey());
         }
         if (i >= nodes.length) {
             i--;

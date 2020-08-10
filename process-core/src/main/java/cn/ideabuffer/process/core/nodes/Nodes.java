@@ -42,10 +42,6 @@ public class Nodes {
         return new ProcessNode<>(processor, mapper);
     }
 
-    public static <R> BaseNode<R> newBaseNode(@NotNull ResultProcessor<R> processor) {
-        return new DefaultBaseNode<>(processor);
-    }
-
     public static NodeGroup newGroup() {
         return new NodeGroup();
     }

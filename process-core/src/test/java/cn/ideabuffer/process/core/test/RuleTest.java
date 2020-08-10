@@ -6,20 +6,16 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.Nodes;
-import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.rule.Rules;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-import cn.ideabuffer.process.core.test.nodes.TestProcessor1;
-import cn.ideabuffer.process.core.test.nodes.TestProcessor2;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

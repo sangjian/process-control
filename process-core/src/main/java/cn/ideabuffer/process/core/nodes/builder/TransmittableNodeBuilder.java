@@ -63,12 +63,6 @@ public class TransmittableNodeBuilder<R, P extends Processor<R>>
     }
 
     @Override
-    public TransmittableNodeBuilder<R, P> returnable(boolean returnable) {
-        super.returnable(returnable);
-        return this;
-    }
-
-    @Override
     public TransmittableNodeBuilder<R, P> returnOn(ReturnCondition<R> condition) {
         super.returnOn(condition);
         return this;

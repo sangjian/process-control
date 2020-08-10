@@ -71,12 +71,6 @@ public class RetryBuilder<R> extends AbstractExecutableNodeBuilder<R, Processor<
     }
 
     @Override
-    public  RetryBuilder<R> returnable(boolean returnable) {
-        super.returnable(returnable);
-        return this;
-    }
-
-    @Override
     public RetryableNode<R> build() {
         RetryableNode<R> node = super.build();
         node.retryBy(retryer);

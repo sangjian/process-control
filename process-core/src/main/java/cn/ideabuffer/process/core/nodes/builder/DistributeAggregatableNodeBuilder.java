@@ -90,12 +90,6 @@ public class DistributeAggregatableNodeBuilder<R>
     }
 
     @Override
-    public DistributeAggregatableNodeBuilder<R> returnable(boolean returnable) {
-        super.returnable(returnable);
-        return this;
-    }
-
-    @Override
     public DistributeAggregatableNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
         super.returnOn(condition);
         return this;

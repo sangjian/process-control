@@ -34,9 +34,14 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     private ReturnCondition<R> returnCondition;
 
     public DefaultProcessDefinition() {
+        this(null);
+    }
+
+    public DefaultProcessDefinition(Key<R> resultKey) {
         if (initializeMode == InitializeMode.ON_REGISTER) {
             state = LifecycleState.INITIALIZED;
         }
+        this.resultKey = resultKey;
     }
 
     protected ProcessDefinition<R> addNode(@NotNull Node... nodes) {
@@ -64,7 +69,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private void returnableCheck(Node... nodes) {
         for (Node node : nodes) {
-            if (node instanceof ExecutableNode && ((ExecutableNode)node).isReturnable()) {
+            if (node instanceof ExecutableNode && ((ExecutableNode)node).getReturnCondition() != null) {
                 Key<?> nodeResultKey = ((ExecutableNode)node).getResultKey();
                 // 没有设置结果key
                 if (nodeResultKey == null) {

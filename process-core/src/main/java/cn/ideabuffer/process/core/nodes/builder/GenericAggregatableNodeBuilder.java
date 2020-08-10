@@ -90,12 +90,6 @@ public class GenericAggregatableNodeBuilder<P, R>
     }
 
     @Override
-    public GenericAggregatableNodeBuilder<P, R> returnable(boolean returnable) {
-        super.returnable(returnable);
-        return this;
-    }
-
-    @Override
     public GenericAggregatableNodeBuilder<P, R> returnOn(ReturnCondition<R> condition) {
         super.returnOn(condition);
         return this;

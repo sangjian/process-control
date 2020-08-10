@@ -20,9 +20,19 @@ public class Key<V> {
      */
     private Class<V> valueType;
 
+    /**
+     * 描述
+     */
+    private String description;
+
     public Key(@NotNull Object key, @NotNull Class<V> valueType) {
+        this(key, valueType, null);
+    }
+
+    public Key(@NotNull Object key, @NotNull Class<V> valueType, String description) {
         this.key = key;
         this.valueType = valueType;
+        this.description = description;
     }
 
     public Object getKey() {
@@ -31,6 +41,10 @@ public class Key<V> {
 
     public Class<V> getValueType() {
         return valueType;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     @Override

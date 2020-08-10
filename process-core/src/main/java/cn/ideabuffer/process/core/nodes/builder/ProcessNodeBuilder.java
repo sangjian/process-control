@@ -60,12 +60,6 @@ public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Proc
     }
 
     @Override
-    public ProcessNodeBuilder<R> returnable(boolean returnable) {
-        super.returnable(returnable);
-        return this;
-    }
-
-    @Override
     public ProcessNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
         super.returnOn(condition);
         return this;
