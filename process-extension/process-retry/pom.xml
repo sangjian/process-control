@@ -5,7 +5,7 @@
     <parent>
         <artifactId>process-extension</artifactId>
         <groupId>cn.ideabuffer</groupId>
-        <version>1.0.8</version>
+        <version>1.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,7 +13,7 @@
     <description>Process Retry</description>
 
     <artifactId>process-retry</artifactId>
-    <version>1.0.8</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <dependencies>
