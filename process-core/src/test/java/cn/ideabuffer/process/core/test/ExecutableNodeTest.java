@@ -68,7 +68,7 @@ public class ExecutableNodeTest {
                 Key<Integer> key = Contexts.newKey("k", int.class);
                 // 设置key的值为5
                 context.put(key, 5);
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             })
             .build();
         definition

@@ -21,7 +21,7 @@ public class TestFalseBranch extends DefaultBranchNode {
         context.put(key, 11);
         logger.info("in false branch, k:{}", context.get(key));
         super.execute(context);
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 
 }

@@ -17,7 +17,7 @@ public class TestGroupNode1 implements StatusProcessor {
     public ProcessStatus process(@NotNull Context context) throws Exception {
         Thread.sleep(10000);
         System.out.println(Thread.currentThread().getName() + "in testGroupNode1");
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 
 }

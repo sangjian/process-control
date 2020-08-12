@@ -11,12 +11,6 @@ import java.io.Serializable;
  */
 public class ProcessStatus implements Serializable {
 
-    public static final ProcessStatus PROCEED = new InnerProcessStatus(true) {
-        private static final long serialVersionUID = -246614296436859585L;
-    };
-    public static final ProcessStatus COMPLETE = new InnerProcessStatus(false) {
-        private static final long serialVersionUID = -2356048364637594820L;
-    };
     private static final long serialVersionUID = 8817242079278554141L;
     private boolean proceed;
     private ProcessErrorCode errorCode;
@@ -37,6 +31,10 @@ public class ProcessStatus implements Serializable {
 
     public static ProcessStatus proceed() {
         return new ProcessStatus(true);
+    }
+
+    public static ProcessStatus complete() {
+        return new ProcessStatus(false);
     }
 
     public static ProcessStatus completeWithError() {

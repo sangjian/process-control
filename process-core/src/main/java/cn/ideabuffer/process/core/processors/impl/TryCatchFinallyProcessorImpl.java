@@ -102,7 +102,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
     public ProcessStatus process(@NotNull Context context) throws Exception {
         try {
             if (tryBranch == null) {
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }
             InnerBlock tryBlock = new InnerBlock(context.getBlock());
             ContextWrapper contextWrapper = Contexts.wrap(context, tryBlock);
@@ -116,7 +116,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
             runFinallyBranch(context);
         }
 
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 
     private ProcessStatus runCatchBranch(Context context, Exception e) throws Exception {

@@ -34,7 +34,7 @@ public class BranchProcessorImpl implements BranchProcessor {
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         if (nodes == null) {
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
         return NodeExecutors.SERIAL_EXECUTOR.execute(context, this.nodes.toArray(new ExecutableNode[0]));
     }

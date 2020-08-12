@@ -21,6 +21,6 @@ public class TestParallelNodeProcessor1 implements StatusProcessor {
     public ProcessStatus process(@NotNull Context context) throws Exception {
         logger.info("in TestParallelNodeProcessor1");
         Thread.sleep(1000);
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

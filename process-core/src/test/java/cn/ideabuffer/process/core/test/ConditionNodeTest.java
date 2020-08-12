@@ -39,13 +39,13 @@ public class ConditionNodeTest {
         BranchNode trueBranch = Nodes.newBranch((StatusProcessor)context -> {
             Key<Integer> key = Contexts.newKey("k", int.class);
             context.put(key, 1);
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         });
         // 创建false分支
         BranchNode falseBranch = Nodes.newBranch((StatusProcessor)context -> {
             Key<Integer> key = Contexts.newKey("k", int.class);
             context.put(key, 2);
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         });
         Key<Integer> key = Contexts.newKey("k", int.class);
 
@@ -84,14 +84,14 @@ public class ConditionNodeTest {
                 Key<Integer> key = Contexts.newKey("k", int.class);
                 int k = block.get(key, 0);
                 block.put(key, ++k);
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }, context -> {
                 counter2.incrementAndGet();
                 Block block = context.getBlock();
                 Key<Integer> key = Contexts.newKey("k", int.class);
                 int k = block.get(key, 0);
                 block.put(key, ++k);
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -129,7 +129,7 @@ public class ConditionNodeTest {
                     block.put(key, 0);
                     block.doContinue();
                 }
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }, context -> {
                 processor2Counter.incrementAndGet();
                 Block block = context.getBlock();
@@ -137,7 +137,7 @@ public class ConditionNodeTest {
                 if (k > processor2MaxK.get()) {
                     processor2MaxK.set(k);
                 }
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }));
         ProcessInstance<String> instance = definition.newInstance();
 
@@ -169,7 +169,7 @@ public class ConditionNodeTest {
             .then(context -> {
                 processor1Flag.set(true);
                 context.put(key, context.get(key, 0) + 1);
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }, context -> {
                 processor2Flag.set(true);
                 context.put(key, context.get(key, 0) + 1);
@@ -177,10 +177,10 @@ public class ConditionNodeTest {
                     breakFlag.set(true);
                     context.getBlock().doBreak();
                 }
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }, context -> {
                 processor3Flag.set(true);
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();

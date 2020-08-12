@@ -26,6 +26,6 @@ public class TestWhileNodeProcessor1 implements StatusProcessor {
         block.put(key, ++k);
         logger.info("k = " + k);
         Thread.sleep(1000);
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

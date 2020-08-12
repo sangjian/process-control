@@ -69,7 +69,7 @@ public class IfProcessorImpl implements IfProcessor {
         ContextWrapper contextWrapper = Contexts.wrap(context, ifBlock);
         BranchNode branch = rule.match(contextWrapper) ? trueBranch : falseBranch;
         if (branch == null) {
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
         return branch.execute(contextWrapper);
     }

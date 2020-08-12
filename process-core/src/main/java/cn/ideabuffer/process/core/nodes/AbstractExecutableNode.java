@@ -165,12 +165,12 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             ctx = Contexts.wrap(context, context.getBlock(), mapper);
         }
         if (getProcessor() == null || !ruleCheck(context)) {
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
 
         if (parallel) {
             doParallelExecute(ctx);
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
         try {
             R result = getProcessor().process(ctx);
@@ -180,7 +180,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             notifyListeners(context, result, null, true);
             // 判断是否满足returnCondition
             if (returnCondition != null && returnCondition.onCondition(result)) {
-                return ProcessStatus.COMPLETE;
+                return ProcessStatus.complete();
             }
         } catch (Exception e) {
             notifyListeners(ctx, null, e, false);
@@ -188,7 +188,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         }
 
 
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 
     private void doParallelExecute(Context context) {

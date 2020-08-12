@@ -100,11 +100,11 @@ public class ProcessInstanceTest {
             .addBranchNode(Nodes.newBranch((StatusProcessor)context -> {
                 Key<Integer> key = Contexts.newKey("k", int.class);
                 context.put(key, 1);
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }, context -> {
                 Key<Integer> key = Contexts.newKey("k", int.class);
                 context.put(key, 2);
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }));
         ProcessInstance<String> instance = definition.newInstance();
         Key<Integer> key = Contexts.newKey("k", int.class);
@@ -125,12 +125,12 @@ public class ProcessInstanceTest {
             Nodes.newProcessNode(context -> {
                 assertNotSame(mainThread, Thread.currentThread());
                 latch.countDown();
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }),
             Nodes.newProcessNode(context -> {
                 assertNotSame(mainThread, Thread.currentThread());
                 latch.countDown();
-                return ProcessStatus.PROCEED;
+                return ProcessStatus.proceed();
             }))
             .parallel(executorService)
             .build();

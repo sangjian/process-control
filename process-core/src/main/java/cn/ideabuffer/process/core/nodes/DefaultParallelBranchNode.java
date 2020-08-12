@@ -36,7 +36,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode<ProcessSta
             ctx = Contexts.wrap(context, context.getBlock(), super.getKeyMapper());
         }
         if (getProcessor() == null || !ruleCheck(ctx)) {
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
         return getProcessor().process(ctx);
     }

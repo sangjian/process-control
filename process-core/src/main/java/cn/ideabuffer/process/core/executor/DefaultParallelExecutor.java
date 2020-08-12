@@ -25,7 +25,7 @@ public class DefaultParallelExecutor implements ParallelExecutor {
     public ProcessStatus execute(Executor executor, @NotNull ProceedStrategy proceedStrategy, @NotNull Context context,
         ExecutableNode<?, ?>... nodes) throws Exception {
         if (nodes == null || nodes.length == 0) {
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
         List<CompletableFuture<ProcessStatus>> futures = Stream.of(nodes).map(node -> {
             Supplier<ProcessStatus> supplier = () -> {

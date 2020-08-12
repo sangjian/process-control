@@ -53,7 +53,7 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
     public ProcessStatus execute(Context context) throws Exception {
 
         if (!ruleCheck(context)) {
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
 
         Executor e = getExecutor() == null ? DEFAULT_POOL : getExecutor();
@@ -78,7 +78,7 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
         } else {
             task.run();
         }
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 
 }

@@ -26,7 +26,7 @@ public class AtLeastOneProceededStrategy implements ProceedStrategy {
             future.whenComplete((b, t) -> {
                 if (t != null) {
                     // 有异常
-                    queue.offer(ProcessStatus.COMPLETE);
+                    queue.offer(ProcessStatus.complete());
                 } else {
                     // 执行结果入队
                     queue.offer(b);

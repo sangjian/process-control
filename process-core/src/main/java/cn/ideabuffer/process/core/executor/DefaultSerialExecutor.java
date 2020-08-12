@@ -16,7 +16,7 @@ public class DefaultSerialExecutor implements SerialExecutor {
     @Override
     public ProcessStatus execute(Context context, ExecutableNode<?, ?>... nodes) throws Exception {
         if (nodes == null || nodes.length == 0) {
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
         Block block = context.getBlock();
         for (ExecutableNode<?, ?> node : nodes) {
@@ -28,6 +28,6 @@ public class DefaultSerialExecutor implements SerialExecutor {
                 break;
             }
         }
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

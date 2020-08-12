@@ -30,6 +30,6 @@ public class TestBlockProcessor1 implements StatusProcessor {
         // 设置当前Block的变量k
         block.put(key, 100);
         logger.info("after put, k in Block: {}", block.get(key));
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

@@ -26,6 +26,6 @@ public class TestBreakProcessor implements StatusProcessor {
             logger.info("start break, k = " + context.getBlock().get(key));
             context.getBlock().doBreak();
         }
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

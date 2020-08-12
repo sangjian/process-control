@@ -30,6 +30,6 @@ public class TestWhileContinueNodeProcessor2 implements StatusProcessor {
             block.doContinue();
         }
         Thread.sleep(1000);
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

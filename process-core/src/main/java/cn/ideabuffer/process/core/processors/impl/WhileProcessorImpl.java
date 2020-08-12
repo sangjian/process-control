@@ -49,7 +49,7 @@ public class WhileProcessorImpl implements WhileProcessor {
             throw new NullPointerException("rule can't be null");
         }
         if (branch == null) {
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
 
         InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
@@ -68,6 +68,6 @@ public class WhileProcessorImpl implements WhileProcessor {
             whileBlock.resetContinue();
         }
 
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

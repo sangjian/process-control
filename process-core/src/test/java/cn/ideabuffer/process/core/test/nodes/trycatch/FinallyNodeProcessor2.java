@@ -19,6 +19,6 @@ public class FinallyNodeProcessor2 implements StatusProcessor {
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
         System.out.println("in FinallyNodeProcessor2");
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

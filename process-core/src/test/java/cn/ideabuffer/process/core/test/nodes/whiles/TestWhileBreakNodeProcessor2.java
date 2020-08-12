@@ -30,6 +30,6 @@ public class TestWhileBreakNodeProcessor2 implements StatusProcessor {
             block.doBreak();
         }
         Thread.sleep(1000);
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

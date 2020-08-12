@@ -27,7 +27,7 @@ public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileP
             throw new NullPointerException("rule can't be null");
         }
         if (getBranch() == null) {
-            return ProcessStatus.PROCEED;
+            return ProcessStatus.proceed();
         }
 
         InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
@@ -48,6 +48,6 @@ public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileP
             }
         } while (getRule().match(whileContext));
 
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

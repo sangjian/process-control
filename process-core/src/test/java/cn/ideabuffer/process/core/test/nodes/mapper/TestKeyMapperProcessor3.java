@@ -22,6 +22,6 @@ public class TestKeyMapperProcessor3 implements StatusProcessor {
         logger.info("in TestKeyMapperProcessor3, newK:{}", context.get(key));
         //context.put(key, 456);
         Thread.sleep(1000);
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }

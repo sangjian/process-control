@@ -33,7 +33,7 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
         Exception exception = null;
 
         Node[] nodes = definition.getNodes();
-        ProcessStatus status = ProcessStatus.PROCEED;
+        ProcessStatus status = ProcessStatus.proceed();
         int i = 0;
         context.setResultKey(definition);
         for (; i < nodes.length; i++) {

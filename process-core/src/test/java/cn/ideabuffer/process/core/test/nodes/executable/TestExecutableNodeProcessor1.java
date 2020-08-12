@@ -25,6 +25,6 @@ public class TestExecutableNodeProcessor1 implements StatusProcessor {
         logger.info("in TestExecutableNodeProcessor1, k:{}", context.get(key));
         context.put(key, 5);
         Thread.sleep(1000);
-        return ProcessStatus.PROCEED;
+        return ProcessStatus.proceed();
     }
 }
