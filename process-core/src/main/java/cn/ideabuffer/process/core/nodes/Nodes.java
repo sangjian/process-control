@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.aggregate.*;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
@@ -13,10 +14,7 @@ import cn.ideabuffer.process.core.processors.impl.GenericAggregateProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
@@ -35,11 +33,15 @@ public class Nodes {
     }
 
     public static <R> ProcessNode<R> newProcessNode(Processor<R> processor) {
-        return new ProcessNode<>(processor);
+        return newProcessNode(processor, null);
     }
 
-    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, KeyMapper mapper) {
-        return new ProcessNode<>(processor, mapper);
+    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, Key<?>... requiredKeys) {
+        return newProcessNode(processor, null, requiredKeys);
+    }
+
+    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, KeyMapper mapper, Key<?>... requiredKeys) {
+        return new ProcessNode<>(processor, mapper, requiredKeys);
     }
 
     public static NodeGroup newGroup() {
@@ -48,16 +50,6 @@ public class Nodes {
 
     public static BranchNode newBranch() {
         return new DefaultBranchNode();
-    }
-
-    public static BranchNode newBranch(Rule rule, @NotNull Processor<?>... processors) {
-        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
-            Collectors.toList());
-        return newBranch(rule, nodes);
-    }
-
-    public static BranchNode newBranch(@NotNull Processor<?>... processors) {
-        return newBranch(null, processors);
     }
 
     public static BranchNode newBranch(@NotNull List<ExecutableNode<?, ?>> nodes) {
@@ -109,16 +101,24 @@ public class Nodes {
         return new DefaultDistributeAggregatableNode<>();
     }
 
-    public static IfWhen newIf(Rule rule) {
-        return new IfWhen(rule);
+    public static IfWhen newIf(Rule rule, Key<?>... requiredKeys) {
+        return newIf(rule, null, requiredKeys);
     }
 
-    public static WhileWhen newWhile(Rule rule) {
-        return new WhileWhen(rule);
+    public static IfWhen newIf(Rule rule, KeyMapper keyMapper, Key<?>... requiredKeys) {
+        return new IfWhen(rule, keyMapper, requiredKeys);
     }
 
-    public static DoWhileWhen newDoWhile(Rule rule) {
-        return new DoWhileWhen(rule);
+    public static WhileWhen newWhile(Rule rule, Key<?>... requiredKeys) {
+        return new WhileWhen(rule, requiredKeys);
+    }
+
+    public static WhileWhen newWhile(Rule rule, KeyMapper keyMapper, Key<?>... requiredKeys) {
+        return new WhileWhen(rule, keyMapper, requiredKeys);
+    }
+
+    public static DoWhileWhen newDoWhile(Rule rule, Key<?>... requiredKeys) {
+        return new DoWhileWhen(rule, requiredKeys);
     }
 
     public static TryCatchFinally newTry(BranchNode branch) {
@@ -129,15 +129,6 @@ public class Nodes {
         return new TryCatchFinally(new DefaultBranchNode(nodes));
     }
 
-    public static TryCatchFinally newTry(Processor<?>... processors) {
-        if (processors == null || processors.length == 0) {
-            return new TryCatchFinally(new DefaultBranchNode());
-        }
-        List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
-            Collectors.toList());
-        return newTry(nodes);
-    }
-
     public static TryCatchFinally newTry(List<ExecutableNode<?, ?>> nodes) {
         return new TryCatchFinally(new DefaultBranchNode(nodes));
     }
@@ -146,12 +137,26 @@ public class Nodes {
 
         private Rule rule;
 
-        IfWhen(Rule rule) {
+        private KeyMapper keyMapper;
+
+        private Set<Key<?>> requiredKeys;
+
+        IfWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
             this.rule = rule;
+            this.keyMapper = keyMapper;
+            this.requiredKeys = requiredKeys;
+        }
+
+        IfWhen(Rule rule,KeyMapper keyMapper, Key<?>... requiredKeys) {
+            this.rule = rule;
+            this.keyMapper = keyMapper;
+            if (requiredKeys != null) {
+                this.requiredKeys = Arrays.stream(requiredKeys).collect(Collectors.toSet());
+            }
         }
 
         public IfWhenBuilder then(@NotNull BranchNode branch) {
-            return new IfWhenBuilder(rule, branch);
+            return new IfWhenBuilder(rule, branch, keyMapper, requiredKeys);
         }
 
         public IfWhenBuilder then(@NotNull ExecutableNode<?, ?>... nodes) {
@@ -162,35 +167,33 @@ public class Nodes {
             return then(new DefaultBranchNode(nodes));
         }
 
-        public IfWhenBuilder then(@NotNull Processor<?>... processors) {
-            return then(Arrays.stream(processors).map(Nodes::newProcessNode).collect(Collectors.toList()));
-        }
-
         public class IfWhenBuilder {
 
             private Rule rule;
 
             private BranchNode thenBranch;
 
-            IfWhenBuilder(Rule rule, BranchNode thenBranch) {
+            private KeyMapper keyMapper;
+
+            private Set<Key<?>> requiredKeys;
+
+            IfWhenBuilder(Rule rule, BranchNode thenBranch, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
                 this.rule = rule;
                 this.thenBranch = thenBranch;
+                this.keyMapper = keyMapper;
+                this.requiredKeys = requiredKeys;
             }
 
             public IfConditionNode otherwise(BranchNode branch) {
-                return new IfConditionNode(rule, thenBranch, branch);
+                return new IfConditionNode(rule, thenBranch, branch, keyMapper, requiredKeys);
             }
 
             public IfConditionNode otherwise(ExecutableNode<?, ?>... nodes) {
                 return otherwise(new DefaultBranchNode(nodes));
             }
 
-            public IfConditionNode otherwise(Processor<?>... processors) {
-                return otherwise(new DefaultBranchNode(processors));
-            }
-
             public IfConditionNode end() {
-                return new IfConditionNode(rule, thenBranch);
+                return new IfConditionNode(rule, thenBranch, null, keyMapper, requiredKeys);
             }
 
         }
@@ -201,12 +204,30 @@ public class Nodes {
 
         protected Rule rule;
 
-        WhileWhen(Rule rule) {
+        protected KeyMapper keyMapper;
+
+        protected Set<Key<?>> requiredKeys;
+
+        WhileWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
             this.rule = rule;
+            this.keyMapper = keyMapper;
+            this.requiredKeys = requiredKeys;
+        }
+
+        WhileWhen(Rule rule, KeyMapper keyMapper, Key<?>... requiredKeys) {
+            this.rule = rule;
+            this.keyMapper = keyMapper;
+            if (requiredKeys != null) {
+                this.requiredKeys = Arrays.stream(requiredKeys).collect(Collectors.toSet());
+            }
+        }
+
+        WhileWhen(Rule rule, Key<?>... requiredKeys) {
+            this(rule, null, requiredKeys);
         }
 
         public WhileConditionNode then(BranchNode branch) {
-            return new WhileConditionNode(rule, branch);
+            return new WhileConditionNode(rule, branch, keyMapper, requiredKeys);
         }
 
         public WhileConditionNode then(ExecutableNode<?, ?>... nodes) {
@@ -217,23 +238,21 @@ public class Nodes {
             return then(new DefaultBranchNode(null, nodes));
         }
 
-        public WhileConditionNode then(@NotNull Processor<?>... processors) {
-            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
-                Collectors.toList());
-            return then(nodes);
-        }
-
     }
 
     public static class DoWhileWhen extends WhileWhen {
 
-        DoWhileWhen(Rule rule) {
-            super(rule);
+        DoWhileWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
+            super(rule, keyMapper, requiredKeys);
+        }
+
+        DoWhileWhen(Rule rule, Key<?>... requiredKeys) {
+            super(rule, requiredKeys);
         }
 
         @Override
         public DoWhileConditionNode then(BranchNode branch) {
-            return new DoWhileConditionNode(rule, branch);
+            return new DoWhileConditionNode(rule, branch, keyMapper, requiredKeys);
         }
 
         @Override
@@ -244,13 +263,6 @@ public class Nodes {
         @Override
         public DoWhileConditionNode then(List<ExecutableNode<?, ?>> nodes) {
             return then(new DefaultBranchNode(null, nodes));
-        }
-
-        @Override
-        public DoWhileConditionNode then(@NotNull Processor<?>... processors) {
-            List<ExecutableNode<?, ?>> nodes = Arrays.stream(processors).map(Nodes::newProcessNode).collect(
-                Collectors.toList());
-            return then(nodes);
         }
 
     }

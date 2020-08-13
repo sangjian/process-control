@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.core.nodes.condition;
 
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.IfProcessor;
@@ -8,6 +10,8 @@ import cn.ideabuffer.process.core.processors.impl.IfProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -20,7 +24,31 @@ public class IfConditionNode extends AbstractExecutableNode<ProcessStatus, IfPro
     }
 
     public IfConditionNode(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch) {
-        super.registerProcessor(new IfProcessorImpl(rule, trueBranch, falseBranch));
+        this(rule, trueBranch, falseBranch, null, null);
+    }
+
+    public IfConditionNode(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
+        super.registerProcessor(new IfProcessorImpl(rule, trueBranch, falseBranch, keyMapper, requiredKeys));
+    }
+
+    @Override
+    public KeyMapper getKeyMapper() {
+        return getProcessor().getKeyMapper();
+    }
+
+    @Override
+    public void setKeyMapper(KeyMapper mapper) {
+        getProcessor().setKeyMapper(mapper);
+    }
+
+    @Override
+    public void setRequiredKeys(Set<Key<?>> keys) {
+        getProcessor().setRequiredKeys(keys);
+    }
+
+    @Override
+    public Set<Key<?>> getRequiredKeys() {
+        return getProcessor().getRequiredKeys();
     }
 
     @Override

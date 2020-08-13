@@ -6,10 +6,9 @@ import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
@@ -36,9 +35,12 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     protected ReturnCondition<R> returnCondition;
 
+    protected Set<Key<?>> requiredKeys;
+
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
         this.listeners = new LinkedList<>();
+        this.requiredKeys = new HashSet<>();
     }
 
     public Builder<T> parallel() {
@@ -71,11 +73,27 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     public Builder<T> resultKey(Key<R> resultKey) {
         this.resultKey = resultKey;
+        this.requiredKeys.add(resultKey);
         return this;
     }
 
     public Builder<T> returnOn(ReturnCondition<R> condition) {
         this.returnCondition = condition;
+        return this;
+    }
+
+    public Builder<T> require(@NotNull Key<?> key) {
+        this.requiredKeys.add(key);
+        return this;
+    }
+
+    public Builder<T> require(@NotNull Key<?>... keys) {
+        this.requiredKeys.addAll(Arrays.stream(keys).collect(Collectors.toSet()));
+        return this;
+    }
+
+    public Builder<T> require(@NotNull Set<Key<?>> keys) {
+        this.requiredKeys = keys;
         return this;
     }
 
@@ -95,6 +113,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         node.registerProcessor(processor);
         node.setResultKey(resultKey);
         node.returnOn(returnCondition);
+        node.setRequiredKeys(requiredKeys);
         return node;
     }
 

@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 /**
@@ -92,6 +93,24 @@ public class DistributeAggregatableNodeBuilder<R>
     @Override
     public DistributeAggregatableNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
         super.returnOn(condition);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> require(@NotNull Key<?> key) {
+        super.require(key);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> require(@NotNull Key<?>... keys) {
+        super.require(keys);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> require(@NotNull Set<Key<?>> keys) {
+        super.require(keys);
         return this;
     }
 

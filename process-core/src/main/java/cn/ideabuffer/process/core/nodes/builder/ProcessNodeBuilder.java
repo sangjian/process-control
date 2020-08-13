@@ -6,8 +6,12 @@ import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -62,6 +66,24 @@ public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Proc
     @Override
     public ProcessNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
         super.returnOn(condition);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> require(@NotNull Key<?> key) {
+        super.require(key);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> require(@NotNull Key<?>... keys) {
+        super.require(Arrays.stream(keys).collect(Collectors.toSet()));
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> require(@NotNull Set<Key<?>> keys) {
+        super.require(keys);
         return this;
     }
 }

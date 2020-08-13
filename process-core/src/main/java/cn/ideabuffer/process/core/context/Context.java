@@ -23,4 +23,6 @@ public interface Context extends Parameter {
     void setResultKey(ProcessDefinition<?> definition);
 
     <V> Key<V> getResultKey();
+
+    boolean keyAvailable(Key<?> key);
 }

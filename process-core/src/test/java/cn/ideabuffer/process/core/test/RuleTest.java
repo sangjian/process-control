@@ -87,13 +87,13 @@ public class RuleTest {
         AtomicBoolean processor1Flag = new AtomicBoolean(false);
         AtomicBoolean processor2Flag = new AtomicBoolean(false);
         definition.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false))
-            .then(context -> {
+            .then(Nodes.newProcessNode(context -> {
                 processor1Flag.set(true);
                 return null;
-            }).otherwise(context -> {
+            })).otherwise(Nodes.newProcessNode(context -> {
                 processor2Flag.set(true);
                 return null;
-            }));
+            })));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -110,13 +110,13 @@ public class RuleTest {
         AtomicBoolean processor2Flag = new AtomicBoolean(false);
         definition.addIf(
             Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false))
-                .then(context -> {
+                .then(Nodes.newProcessNode(context -> {
                     processor1Flag.set(true);
                     return null;
-                }).otherwise(context -> {
+                })).otherwise(Nodes.newProcessNode(context -> {
                 processor2Flag.set(true);
                 return null;
-            }));
+            })));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -133,14 +133,14 @@ public class RuleTest {
         AtomicBoolean processor2Flag = new AtomicBoolean(false);
         definition.addIf(
             Nodes.newIf(Rules.not((ctx) -> true))
-                .then(context -> {
+                .then(Nodes.newProcessNode(context -> {
                     processor1Flag.set(true);
                     return null;
-                })
-                .otherwise(context -> {
+                }))
+                .otherwise(Nodes.newProcessNode(context -> {
                     processor2Flag.set(true);
                     return null;
-                }));
+                })));
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();

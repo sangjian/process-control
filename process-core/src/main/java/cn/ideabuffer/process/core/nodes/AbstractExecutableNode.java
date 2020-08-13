@@ -5,8 +5,6 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
-import cn.ideabuffer.process.core.exception.IllegalResultClassException;
-import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -16,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
@@ -36,6 +36,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     private KeyMapper mapper;
     private Key<R> resultKey;
     private ReturnCondition<R> returnCondition;
+    private Set<Key<?>> requiredKeys;
 
     public AbstractExecutableNode() {
         this(false);
@@ -67,10 +68,14 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey) {
-        this(parallel, rule, executor, listeners, processor, mapper, null, null);
+        this(parallel, rule, executor, listeners, processor, mapper, resultKey, null);
     }
 
     public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition) {
+        this(parallel, rule, executor, listeners, processor, mapper, resultKey, returnCondition, null);
+    }
+
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition, Set<Key<?>> requiredKeys) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
@@ -79,6 +84,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this.mapper = mapper;
         this.resultKey = resultKey;
         this.returnCondition = returnCondition;
+        this.requiredKeys = requiredKeys == null ? new HashSet<>() : requiredKeys;
+        if (resultKey != null) {
+            this.requiredKeys.add(resultKey);
+        }
     }
 
     @Override
@@ -160,10 +169,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-        Context ctx = context;
-        if (hasMapping()) {
-            ctx = Contexts.wrap(context, context.getBlock(), mapper);
-        }
+        Context ctx = Contexts.wrap(context, context.getBlock(), mapper, requiredKeys);
         if (getProcessor() == null || !ruleCheck(context)) {
             return ProcessStatus.proceed();
         }
@@ -235,6 +241,9 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @Override
     public void setResultKey(Key<R> resultKey) {
         this.resultKey = resultKey;
+        if (resultKey != null) {
+            this.requiredKeys.add(resultKey);
+        }
     }
 
     @Override
@@ -250,6 +259,22 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @Override
     public ReturnCondition<R> getReturnCondition() {
         return returnCondition;
+    }
+
+    @Override
+    public void setRequiredKeys(Set<Key<?>> keys) {
+        if (keys == null) {
+            return;
+        }
+        this.requiredKeys = keys;
+        if (this.resultKey != null) {
+            this.requiredKeys.add(resultKey);
+        }
+    }
+
+    @Override
+    public Set<Key<?>> getRequiredKeys() {
+        return this.requiredKeys;
     }
 
     @Override

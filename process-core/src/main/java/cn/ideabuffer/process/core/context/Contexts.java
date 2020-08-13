@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -44,6 +45,10 @@ public class Contexts {
     }
 
     public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block, KeyMapper mapper) {
-        return new ContextWrapper(context, block, mapper);
+        return wrap(context, block, mapper, null);
+    }
+
+    public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block, KeyMapper mapper, Set<Key<?>> requiredKeys) {
+        return new ContextWrapper(context, block, mapper, requiredKeys);
     }
 }

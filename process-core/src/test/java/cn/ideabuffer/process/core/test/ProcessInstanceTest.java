@@ -11,7 +11,7 @@ import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
-import cn.ideabuffer.process.core.processors.StatusProcessor;
+import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.test.nodes.TestProcessor1;
 import cn.ideabuffer.process.core.test.nodes.TestProcessor2;
@@ -42,6 +42,7 @@ public class ProcessInstanceTest {
         Key<Integer> resultKey = new Key<>("resultKey", int.class);
         ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
 
+        Key<Integer> key = Contexts.newKey("k", int.class);
         definition
             // 注册执行节点
             .addProcessNodes(
@@ -49,15 +50,16 @@ public class ProcessInstanceTest {
                     .resultKey(resultKey)
                     .by(new TestProcessor2())
                     .returnOn(result -> true)
+                    .require(key)
                     .build(),
                 ProcessNodeBuilder.<Integer>newBuilder()
                     .resultKey(resultKey)
                     .by(new TestProcessor1())
                     .returnOn(result -> false)
+                    .require(key)
                     .build());
         ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
-        Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 0);
 
         instance.execute(context);
@@ -70,6 +72,7 @@ public class ProcessInstanceTest {
         Key<Integer> resultKey = new Key<>("resultKey", int.class);
         ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
 
+        Key<Integer> key = Contexts.newKey("k", int.class);
         definition
             // 注册执行节点
             .addProcessNodes(
@@ -77,15 +80,16 @@ public class ProcessInstanceTest {
                     .resultKey(resultKey)
                     .by(new TestProcessor2())
                     .returnOn(result -> false)
+                    .require(key)
                     .build(),
                 ProcessNodeBuilder.<Integer>newBuilder()
                     .resultKey(resultKey)
                     .by(new TestProcessor1())
                     .returnOn(result -> true)
+                    .require(key)
                     .build());
         ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
-        Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 0);
 
         instance.execute(context);
@@ -96,18 +100,26 @@ public class ProcessInstanceTest {
     @Test
     public void testBranch() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        definition
-            .addBranchNode(Nodes.newBranch((StatusProcessor)context -> {
-                Key<Integer> key = Contexts.newKey("k", int.class);
-                context.put(key, 1);
-                return ProcessStatus.proceed();
-            }, context -> {
-                Key<Integer> key = Contexts.newKey("k", int.class);
-                context.put(key, 2);
-                return ProcessStatus.proceed();
-            }));
-        ProcessInstance<String> instance = definition.newInstance();
         Key<Integer> key = Contexts.newKey("k", int.class);
+        definition
+            .addBranchNode(Nodes.newBranch(
+                ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                    .by(context -> {
+                        context.put(key, 1);
+                        return ProcessStatus.proceed();
+                    })
+                    .returnOn(result -> false)
+                    .require(key)
+                    .build(),
+                ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                    .by(context -> {
+                        context.put(key, 2);
+                        return ProcessStatus.proceed();
+                    })
+                    .returnOn(result -> false)
+                    .require(key)
+                    .build()));
+        ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(key, 0);
         instance.execute(context);
@@ -155,28 +167,31 @@ public class ProcessInstanceTest {
         AtomicBoolean finallyProcessor1Flag = new AtomicBoolean();
         AtomicBoolean finallyProcessor2Flag = new AtomicBoolean();
         definition.addProcessNodes(
-            Nodes.newTry((Processor<Void>)context -> {
-                processor1Flag.set(true);
-                return null;
-            }, context -> {
-                processor2Flag.set(true);
-                throw new NullPointerException();
-            }, context -> {
-                processor3Flag.set(true);
-                return null;
-            }).catchOn(Exception.class, (Processor<Void>)context -> {
-                catchProcessor1Flag.set(true);
-                return null;
-            }, context -> {
-                catchProcessor2Flag.set(true);
-                return null;
-            }).doFinally((Processor<Void>)context -> {
+            Nodes.newTry(Nodes.newProcessNode(context -> {
+                    processor1Flag.set(true);
+                    return null;
+                }),
+                Nodes.newProcessNode(context -> {
+                    processor2Flag.set(true);
+                    throw new NullPointerException();
+                }),
+                Nodes.newProcessNode(context -> {
+                    processor3Flag.set(true);
+                    return null;
+                }))
+                .catchOn(Exception.class, Nodes.newProcessNode(context -> {
+                    catchProcessor1Flag.set(true);
+                    return null;
+                }), Nodes.newProcessNode(context -> {
+                    catchProcessor2Flag.set(true);
+                    return null;
+                })).doFinally(Nodes.newProcessNode(context -> {
                 finallyProcessor1Flag.set(true);
                 return null;
-            }, context -> {
+            }), Nodes.newProcessNode(context -> {
                 finallyProcessor2Flag.set(true);
                 return null;
-            }));
+            })));
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -198,17 +213,19 @@ public class ProcessInstanceTest {
     public void testSubChain() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
 
+        Key<Integer> key = Contexts.newKey("k", int.class);
         ProcessDefinition<String> subDefine = new DefaultProcessDefinition<>();
         TestIfRule rule = new TestIfRule();
-        subDefine.addIf(Nodes.newIf(rule).then(new TestTrueBranch())
-            .otherwise(new TestFalseBranch()));
+        IfConditionNode ifConditionNode = Nodes.newIf(rule, key).then(new TestTrueBranch())
+            .otherwise(new TestFalseBranch());
+        subDefine.addIf(ifConditionNode);
         ProcessInstance<String> subInstance = subDefine.newInstance();
 
-        definition.addProcessNodes(Nodes.newProcessNode(new TestProcessor1())).addProcessNodes(subInstance)
-            .addProcessNodes(Nodes.newProcessNode(new TestProcessor2()));
+        definition.addProcessNodes(Nodes.newProcessNode(new TestProcessor1(), key))
+            .addProcessNodes(subInstance)
+            .addProcessNodes(Nodes.newProcessNode(new TestProcessor2(), key));
 
         Context context = Contexts.newContext();
-        Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 1);
 
         ProcessInstance<String> mainInstance = definition.newInstance();

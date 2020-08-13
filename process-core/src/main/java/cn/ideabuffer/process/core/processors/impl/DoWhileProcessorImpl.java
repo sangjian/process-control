@@ -1,14 +1,14 @@
 package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.block.InnerBlock;
-import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.context.ContextWrapper;
-import cn.ideabuffer.process.core.context.Contexts;
+import cn.ideabuffer.process.core.context.*;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.DoWhileProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -16,8 +16,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileProcessor {
 
-    public DoWhileProcessorImpl(Rule rule, BranchNode branch) {
-        super(rule, branch);
+    public DoWhileProcessorImpl(Rule rule, BranchNode branch, KeyMapper keyMapper,
+        Set<Key<?>> requiredKeys) {
+        super(rule, branch, keyMapper, requiredKeys);
     }
 
     @NotNull
@@ -31,7 +32,7 @@ public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileP
         }
 
         InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
-        ContextWrapper whileContext = Contexts.wrap(context, whileBlock);
+        ContextWrapper whileContext = Contexts.wrap(context, whileBlock, getKeyMapper(), getRequiredKeys());
 
         do {
             whileBlock.resetBreak();

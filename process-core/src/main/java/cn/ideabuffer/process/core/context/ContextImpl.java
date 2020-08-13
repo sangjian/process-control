@@ -51,6 +51,11 @@ public class ContextImpl extends ParameterImpl implements Context {
     }
 
     @Override
+    public boolean keyAvailable(Key<?> key) {
+        return true;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }

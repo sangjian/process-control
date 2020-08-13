@@ -58,16 +58,16 @@ public class TestApi {
             context -> null).processOn(context -> false).build();
 
         IfConditionNode ifConditionNode = Nodes.newIf(context -> true).then(
-            Nodes.newBranch((Processor<ProcessStatus>)context -> null)).otherwise(Nodes.newBranch(
-            (Processor<ProcessStatus>)context -> null));
+            Nodes.newBranch(Nodes.newProcessNode(context -> null))).otherwise(Nodes.newBranch(
+            Nodes.newProcessNode(context -> null)));
 
-        TryCatchFinallyNode tryCatchFinallyNode = Nodes.newTry((Processor<ProcessStatus>)context -> null)
-            .catchOn(NullPointerException.class, (Processor<ProcessStatus>)context -> null)
-            .catchOn(IllegalArgumentException.class, (Processor<ProcessStatus>)context -> null)
-            .doFinally((Processor<ProcessStatus>)context -> null);
+        TryCatchFinallyNode tryCatchFinallyNode = Nodes.newTry(Nodes.newProcessNode(context -> null))
+            .catchOn(NullPointerException.class, Nodes.newProcessNode(context -> null))
+            .catchOn(IllegalArgumentException.class, Nodes.newProcessNode(context -> null))
+            .doFinally(Nodes.newProcessNode(context -> null));
 
-        WhileConditionNode whileConditionNode = Nodes.newWhile(ctx -> true).then((Processor<ProcessStatus>)context -> null);
-        DoWhileConditionNode doWhileConditionNode = Nodes.newDoWhile(ctx -> true).then((Processor<ProcessStatus>)context -> null);
+        WhileConditionNode whileConditionNode = Nodes.newWhile(ctx -> true).then(Nodes.newProcessNode(context -> null));
+        DoWhileConditionNode doWhileConditionNode = Nodes.newDoWhile(ctx -> true).then((Nodes.newProcessNode(context -> null)));
 
         ProcessDefinition<ProcessStatus> definition = new DefaultProcessDefinition<>();
         definition.addBranchNode(BranchNodeBuilder.newBuilder()

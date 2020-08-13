@@ -61,4 +61,13 @@ public class Key<V> {
 
         return Objects.hash(key, valueType);
     }
+
+    @Override
+    public String toString() {
+        return "Key{" +
+            "key=" + key +
+            ", valueType=" + valueType +
+            ", description='" + description + '\'' +
+            '}';
+    }
 }

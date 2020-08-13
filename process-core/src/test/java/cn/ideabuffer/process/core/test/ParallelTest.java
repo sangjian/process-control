@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Contexts;
+import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.nodes.builder.ParallelBranchNodeBuilder;
@@ -26,14 +27,14 @@ public class ParallelTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Thread mainThread = Thread.currentThread();
         ParallelBranchNode node = ParallelBranchNodeBuilder.newBuilder()
-            .addBranch(context -> {
+            .addBranch(Nodes.newProcessNode(context -> {
                 assertNotEquals(mainThread, Thread.currentThread());
                 return null;
-            })
-            .addBranch(context -> {
+            }))
+            .addBranch(Nodes.newProcessNode(context -> {
                 assertNotEquals(mainThread, Thread.currentThread());
                 return null;
-            })
+            }))
             .by(new ParallelBranchProcessorImpl())
             .proceedWhen(ProceedStrategies.ALL_PROCEEDED).build();
         definition.addProcessNodes(node);

@@ -3,9 +3,11 @@ package cn.ideabuffer.process.core.context;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockFacade;
+import cn.ideabuffer.process.core.exception.KeyNotRegisteredException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -19,14 +21,21 @@ public class ContextWrapper implements Context {
 
     private KeyMapper mapper;
 
+    private Set<Key<?>> requiredKeys;
+
     public ContextWrapper(Context context, Block block) {
         this(context, block, null);
     }
 
     public ContextWrapper(Context context, Block block, KeyMapper mapper) {
+        this(context, block, mapper, null);
+    }
+
+    public ContextWrapper(Context context, Block block, KeyMapper mapper, Set<Key<?>> requiredKeys) {
         this.context = context;
         this.block = new BlockFacade(block, mapper);
         this.mapper = mapper;
+        this.requiredKeys = requiredKeys;
     }
 
     @Override
@@ -48,36 +57,80 @@ public class ContextWrapper implements Context {
 
     @Override
     public <V> V put(@NotNull Key<V> key, V value) {
+        return put(key, value, true);
+    }
+
+    protected <V> V put(@NotNull Key<V> key, V value, boolean keyCheck) {
+        Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
-            return context.put(mappingKey, value);
+            k = mappingKey;
         }
-        return context.put(key, value);
+        if (keyCheck && !keyAvailable(k)) {
+            throw new KeyNotRegisteredException(k + " is not registered!");
+        }
+        if (context instanceof ContextWrapper) {
+            return ((ContextWrapper)context).put(k, value, false);
+        }
+        return context.put(k, value);
     }
 
     @Override
     public <V> V putIfAbsent(@NotNull Key<V> key, V value) {
+        return putIfAbsent(key, value, true);
+    }
+
+    protected <V> V putIfAbsent(@NotNull Key<V> key, V value, boolean keyCheck) {
+        Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
-            return context.putIfAbsent(mappingKey, value);
+            k = mappingKey;
+        }
+        if (keyCheck && !keyAvailable(k)) {
+            throw new KeyNotRegisteredException(k + " is not registered!");
+        }
+        if (context instanceof ContextWrapper) {
+            return ((ContextWrapper)context).putIfAbsent(k, value, false);
         }
         return context.putIfAbsent(key, value);
     }
 
     @Override
     public <V> V get(@NotNull Key<V> key) {
+        return get(key, true);
+    }
+
+    protected <V> V get(@NotNull Key<V> key, boolean keyCheck) {
+        Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
-            return context.get(mappingKey);
+            k = mappingKey;
         }
-        return context.get(key);
+        if (keyCheck && !keyAvailable(k)) {
+            throw new KeyNotRegisteredException(k + " is not registered!");
+        }
+        if (context instanceof ContextWrapper) {
+            return ((ContextWrapper)context).get(k, false);
+        }
+        return context.get(k);
     }
 
     @Override
     public <V> V get(@NotNull Key<V> key, V defaultValue) {
+        return get(key, defaultValue, true);
+    }
+
+    protected <V> V get(@NotNull Key<V> key, V defaultValue, boolean keyCheck) {
+        Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
-            return context.get(mappingKey, defaultValue);
+            k = mappingKey;
+        }
+        if (keyCheck && !keyAvailable(k)) {
+            throw new KeyNotRegisteredException(k + " is not registered!");
+        }
+        if (context instanceof ContextWrapper) {
+            return ((ContextWrapper)context).get(k, defaultValue, false);
         }
         return context.get(key, defaultValue);
     }
@@ -93,11 +146,12 @@ public class ContextWrapper implements Context {
 
     @Override
     public boolean containsKey(Key<?> key) {
+        Key<?> k = key;
         Key<?> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
-            return context.containsKey(mappingKey);
+            k = mappingKey;
         }
-        return context.containsKey(key);
+        return context.containsKey(k);
     }
 
     @Override
@@ -105,9 +159,20 @@ public class ContextWrapper implements Context {
 
     @Override
     public <V> V remove(Key<V> key) {
+        return remove(key, true);
+    }
+
+    protected <V> V remove(Key<V> key, boolean keyCheck) {
+        Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
-            return context.remove(mappingKey);
+            k = mappingKey;
+        }
+        if (keyCheck && !keyAvailable(k)) {
+            throw new KeyNotRegisteredException(k + " is not registered!");
+        }
+        if (context instanceof ContextWrapper) {
+            return ((ContextWrapper)context).remove(k, false);
         }
         return context.remove(key);
     }
@@ -127,7 +192,15 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public Key<?> getResultKey() {
+    public <V> Key<V> getResultKey() {
         return context.getResultKey();
+    }
+
+    @Override
+    public boolean keyAvailable(Key<?> key) {
+        if (requiredKeys == null || requiredKeys.isEmpty()) {
+            return false;
+        }
+        return requiredKeys.contains(key);
     }
 }

@@ -30,12 +30,12 @@ public class ExecutableNodeTest {
     @Test
     public void testSimpleExecutableNode() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+        Key<Integer> key = Contexts.newKey("k", int.class);
         definition
-            .addProcessNodes(new ProcessNode<>(new TestExecutableNodeProcessor1()),
-                new ProcessNode<>(new TestExecutableNodeProcessor2()));
+            .addProcessNodes(new ProcessNode<>(new TestExecutableNodeProcessor1(), null, key),
+                new ProcessNode<>(new TestExecutableNodeProcessor2(), null, key));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
-        Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 1);
 
         instance.execute(context);
@@ -48,6 +48,7 @@ public class ExecutableNodeTest {
         // 执行规则
         Rule rule = (ctx) -> true;
         Executor executor = Executors.newFixedThreadPool(2);
+        Key<Integer> key = Contexts.newKey("k", int.class);
         ProcessNode<ProcessStatus> node1 = ProcessNodeBuilder.<ProcessStatus>newBuilder()
             // 设置规则
             .processOn(rule)
@@ -57,6 +58,7 @@ public class ExecutableNodeTest {
             .by(context -> {
                 throw new RuntimeException("test exception!");
             })
+            .require(key)
             .build();
 
         ProcessNode<ProcessStatus> node2 = ProcessNodeBuilder.<ProcessStatus>newBuilder()
@@ -65,17 +67,16 @@ public class ExecutableNodeTest {
             // 设置并行执行，指定线程池执行
             .parallel(executor)
             .by(context -> {
-                Key<Integer> key = Contexts.newKey("k", int.class);
                 // 设置key的值为5
                 context.put(key, 5);
                 return ProcessStatus.proceed();
             })
+            .require(key)
             .build();
         definition
             .addProcessNodes(node1, node2);
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
-        Key<Integer> key = Contexts.newKey("k", int.class);
         // 初始化key的值为1
         context.put(key, 1);
         instance.execute(context);

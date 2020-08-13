@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.context.KeyMapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -34,4 +35,8 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
     void returnOn(ReturnCondition<R> condition);
 
     ReturnCondition<R> getReturnCondition();
+
+    void setRequiredKeys(Set<Key<?>> keys);
+
+    Set<Key<?>> getRequiredKeys();
 }

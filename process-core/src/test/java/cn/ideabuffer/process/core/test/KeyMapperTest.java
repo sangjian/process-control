@@ -35,7 +35,7 @@ public class KeyMapperTest {
             .addProcessNodes(Nodes.newProcessNode((Processor<Void>)context -> {
                     assertEquals(123, (int)context.get(to));
                     return null;
-                }),
+                }, to),
                 Nodes.newProcessNode(context -> {
                     // 指定了mapper，这里取from与取to相同
                     assertEquals(123, (int)context.get(from));
@@ -45,15 +45,13 @@ public class KeyMapperTest {
                     assertEquals(456, (int)context.get(from));
                     assertEquals(456, (int)context.get(to));
                     return null;
-                }, mapper),
+                }, mapper, from, to),
                 Nodes.newProcessNode(context -> {
                     // 没有指定mapper，找不到对应的key
                     assertNull(context.get(from));
                     context.put(from, 456);
                     return null;
-                }));
-            // 注册基础节点
-            //.addBaseNode(Nodes.newBaseNode(new TestBaseNodeProcessor()));
+                }, from));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(to, 123);

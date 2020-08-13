@@ -65,11 +65,6 @@ public class ParallelBranchNodeBuilder
         return this;
     }
 
-    public ParallelBranchNodeBuilder addBranch(@NotNull Processor<?>... processors) {
-        this.branches.add(Nodes.newBranch(processors));
-        return this;
-    }
-
     public ParallelBranchNodeBuilder addBranch(@NotNull BranchNode branch) {
         this.branches.add(branch);
         return this;
