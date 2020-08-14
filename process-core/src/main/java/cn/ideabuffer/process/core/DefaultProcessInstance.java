@@ -34,6 +34,9 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
             if (requiredKeys != null) {
                 keys.addAll(requiredKeys);
             }
+            if (((ExecutableNode)node).getResultKey() != null) {
+                keys.add(((ExecutableNode)node).getResultKey());
+            }
         });
         return keys;
     }
