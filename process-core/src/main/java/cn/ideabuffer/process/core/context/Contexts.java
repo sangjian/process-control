@@ -20,8 +20,12 @@ public class Contexts {
         return new ContextImpl();
     }
 
-    public static <V> Key<V> newKey(@NotNull Object key, @NotNull Class<V> valueType) {
-        return new Key<>(key, valueType);
+    public static <V> Key<V> newKey(@NotNull Object key, @NotNull Class<? extends V> valueType) {
+        return newKey(key, valueType, null);
+    }
+
+    public static <V> Key<V> newKey(@NotNull Object key, @NotNull Class<? extends V> valueType, String description) {
+        return new Key<>(key, valueType, description);
     }
 
     public static Context clone(@NotNull Context context) {

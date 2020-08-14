@@ -18,18 +18,18 @@ public class Key<V> {
     /**
      * value类型
      */
-    private Class<V> valueType;
+    private Class<? extends V> valueType;
 
     /**
      * 描述
      */
     private String description;
 
-    public Key(@NotNull Object key, @NotNull Class<V> valueType) {
+    public Key(@NotNull Object key, @NotNull Class<? extends V> valueType) {
         this(key, valueType, null);
     }
 
-    public Key(@NotNull Object key, @NotNull Class<V> valueType, String description) {
+    public Key(@NotNull Object key, @NotNull Class<? extends V> valueType, String description) {
         this.key = key;
         this.valueType = valueType;
         this.description = description;
@@ -39,7 +39,7 @@ public class Key<V> {
         return key;
     }
 
-    public Class<V> getValueType() {
+    public Class<? extends V> getValueType() {
         return valueType;
     }
 
