@@ -170,7 +170,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @Override
     public ProcessStatus execute(Context context) throws Exception {
         Context ctx = Contexts.wrap(context, context.getBlock(), mapper, requiredKeys);
-        if (getProcessor() == null || !ruleCheck(context)) {
+        if (getProcessor() == null || !ruleCheck(ctx)) {
             return ProcessStatus.proceed();
         }
 
@@ -181,9 +181,9 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         try {
             R result = getProcessor().process(ctx);
             if (resultKey != null) {
-                context.put(resultKey, result);
+                ctx.put(resultKey, result);
             }
-            notifyListeners(context, result, null, true);
+            notifyListeners(ctx, result, null, true);
             // 判断是否满足returnCondition
             if (returnCondition != null && returnCondition.onCondition(result)) {
                 return ProcessStatus.complete();
