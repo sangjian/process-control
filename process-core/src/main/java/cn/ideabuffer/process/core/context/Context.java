@@ -25,4 +25,8 @@ public interface Context extends Parameter {
     <V> Key<V> getResultKey();
 
     boolean keyAvailable(Key<?> key);
+
+    Exception getCurrentException();
+
+    void setCurrentException(Exception e);
 }

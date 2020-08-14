@@ -203,4 +203,14 @@ public class ContextWrapper implements Context {
         }
         return requiredKeys.contains(key);
     }
+
+    @Override
+    public Exception getCurrentException() {
+        return context.getCurrentException();
+    }
+
+    @Override
+    public void setCurrentException(Exception e) {
+        context.setCurrentException(e);
+    }
 }

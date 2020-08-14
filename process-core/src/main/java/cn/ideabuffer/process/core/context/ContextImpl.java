@@ -17,6 +17,8 @@ public class ContextImpl extends ParameterImpl implements Context {
 
     private Key<?> resultKey;
 
+    private Exception exception;
+
     public ContextImpl() {
         this(null, null);
     }
@@ -53,6 +55,16 @@ public class ContextImpl extends ParameterImpl implements Context {
     @Override
     public boolean keyAvailable(Key<?> key) {
         return true;
+    }
+
+    @Override
+    public Exception getCurrentException() {
+        return this.exception;
+    }
+
+    @Override
+    public void setCurrentException(Exception e) {
+        this.exception = e;
     }
 
     @Override

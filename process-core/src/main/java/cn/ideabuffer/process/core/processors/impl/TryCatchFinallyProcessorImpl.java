@@ -120,6 +120,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
     }
 
     private ProcessStatus runCatchBranch(Context context, Exception e) throws Exception {
+        context.setCurrentException(e);
         if (catchMapperList == null || catchMapperList.isEmpty()) {
             throw e;
         }
@@ -132,6 +133,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
             }
             InnerBlock catchBlock = new InnerBlock(context.getBlock());
             ContextWrapper contextWrapper = Contexts.wrap(context, catchBlock);
+            contextWrapper.setCurrentException(e);
             return catchBranch.execute(contextWrapper);
         }
         throw e;
