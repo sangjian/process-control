@@ -22,6 +22,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -231,5 +234,12 @@ public class ProcessInstanceTest {
         ProcessInstance<String> mainInstance = definition.newInstance();
 
         mainInstance.execute(context);
+    }
+
+    @Test
+    public void testKey() {
+        Key<List<String>> k = new Key<>("k", List.class);
+        Context context = Contexts.newContext();
+        context.put(k, new ArrayList<>());
     }
 }

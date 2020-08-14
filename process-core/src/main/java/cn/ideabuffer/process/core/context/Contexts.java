@@ -20,11 +20,11 @@ public class Contexts {
         return new ContextImpl();
     }
 
-    public static <V> Key<V> newKey(@NotNull Object key, @NotNull Class<? extends V> valueType) {
+    public static <V> Key<V> newKey(@NotNull Object key, @NotNull Class<? super V> valueType) {
         return newKey(key, valueType, null);
     }
 
-    public static <V> Key<V> newKey(@NotNull Object key, @NotNull Class<? extends V> valueType, String description) {
+    public static <V> Key<V> newKey(@NotNull Object key, @NotNull Class<? super V> valueType, String description) {
         return new Key<>(key, valueType, description);
     }
 
