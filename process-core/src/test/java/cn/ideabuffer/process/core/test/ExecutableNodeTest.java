@@ -32,8 +32,17 @@ public class ExecutableNodeTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
         definition
-            .addProcessNodes(new ProcessNode<>(new TestExecutableNodeProcessor1(), null, key),
-                new ProcessNode<>(new TestExecutableNodeProcessor2(), null, key));
+            .addProcessNodes(
+                ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                    .by(new TestExecutableNodeProcessor1())
+                    .readableKeys(key)
+                    .writableKeys(key)
+                    .build(),
+                ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                    .by(new TestExecutableNodeProcessor2())
+                    .readableKeys(key)
+                    .writableKeys(key)
+                    .build());
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(key, 1);
@@ -58,7 +67,6 @@ public class ExecutableNodeTest {
             .by(context -> {
                 throw new RuntimeException("test exception!");
             })
-            .require(key)
             .build();
 
         ProcessNode<ProcessStatus> node2 = ProcessNodeBuilder.<ProcessStatus>newBuilder()
@@ -71,7 +79,7 @@ public class ExecutableNodeTest {
                 context.put(key, 5);
                 return ProcessStatus.proceed();
             })
-            .require(key)
+            .writableKeys(key)
             .build();
         definition
             .addProcessNodes(node1, node2);

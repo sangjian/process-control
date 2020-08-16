@@ -17,8 +17,8 @@ import java.util.Set;
 public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileProcessor {
 
     public DoWhileProcessorImpl(Rule rule, BranchNode branch, KeyMapper keyMapper,
-        Set<Key<?>> requiredKeys) {
-        super(rule, branch, keyMapper, requiredKeys);
+        Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        super(rule, branch, keyMapper, readableKeys, writableKeys);
     }
 
     @NotNull
@@ -32,7 +32,7 @@ public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileP
         }
 
         InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
-        ContextWrapper whileContext = Contexts.wrap(context, whileBlock, getKeyMapper(), getRequiredKeys());
+        ContextWrapper whileContext = Contexts.wrap(context, whileBlock, getKeyMapper(), getReadableKeys(), getWritableKeys());
 
         do {
             whileBlock.resetBreak();

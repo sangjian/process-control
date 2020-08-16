@@ -31,7 +31,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode<ProcessSta
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-        Context ctx = Contexts.wrap(context, context.getBlock(), getKeyMapper(), getRequiredKeys());
+        Context ctx = Contexts.wrap(context, context.getBlock(), getKeyMapper(), getReadableKeys(), getWritableKeys());
         if (getProcessor() == null || !ruleCheck(ctx)) {
             return ProcessStatus.proceed();
         }

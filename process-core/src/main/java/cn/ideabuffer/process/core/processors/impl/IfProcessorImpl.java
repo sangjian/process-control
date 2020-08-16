@@ -17,29 +17,27 @@ import java.util.Set;
 public class IfProcessorImpl implements IfProcessor {
 
     private Rule rule;
-
     private BranchNode trueBranch;
-
     private BranchNode falseBranch;
-
     private KeyMapper keyMapper;
-
-    private Set<Key<?>> requiredKeys;
+    private Set<Key<?>> readableKeys;
+    private Set<Key<?>> writableKeys;
 
     public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch) {
         this(rule, trueBranch, null);
     }
 
     public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch) {
-        this(rule, trueBranch, falseBranch, null, null);
+        this(rule, trueBranch, falseBranch, null, null, null);
     }
 
-    public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
+    public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         this.rule = rule;
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;
         this.keyMapper = keyMapper;
-        this.requiredKeys = requiredKeys;
+        this.readableKeys = readableKeys;
+        this.writableKeys = writableKeys;
     }
 
     @Override
@@ -80,13 +78,23 @@ public class IfProcessorImpl implements IfProcessor {
     }
 
     @Override
-    public Set<Key<?>> getRequiredKeys() {
-        return requiredKeys;
+    public Set<Key<?>> getReadableKeys() {
+        return readableKeys;
     }
 
     @Override
-    public void setRequiredKeys(Set<Key<?>> requiredKeys) {
-        this.requiredKeys = requiredKeys;
+    public void setReadableKeys(Set<Key<?>> readableKeys) {
+        this.readableKeys = readableKeys;
+    }
+
+    @Override
+    public Set<Key<?>> getWritableKeys() {
+        return writableKeys;
+    }
+
+    @Override
+    public void setWritableKeys(Set<Key<?>> writableKeys) {
+        this.writableKeys = writableKeys;
     }
 
     @NotNull
@@ -96,7 +104,7 @@ public class IfProcessorImpl implements IfProcessor {
             throw new NullPointerException("rule can't be null");
         }
         InnerBlock ifBlock = new InnerBlock(context.getBlock());
-        ContextWrapper contextWrapper = Contexts.wrap(context, ifBlock, keyMapper, requiredKeys);
+        ContextWrapper contextWrapper = Contexts.wrap(context, ifBlock, keyMapper, readableKeys, writableKeys);
         BranchNode branch = rule.match(contextWrapper) ? trueBranch : falseBranch;
         if (branch == null) {
             return ProcessStatus.proceed();

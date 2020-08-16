@@ -19,13 +19,15 @@ public class WhileProcessorImpl implements WhileProcessor {
     private Rule rule;
     private BranchNode branch;
     private KeyMapper keyMapper;
-    private Set<Key<?>> requiredKeys;
+    private Set<Key<?>> readableKeys;
+    private Set<Key<?>> writableKeys;
 
-    public WhileProcessorImpl(Rule rule, BranchNode branch, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
+    public WhileProcessorImpl(Rule rule, BranchNode branch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         this.rule = rule;
         this.branch = branch;
         this.keyMapper = keyMapper;
-        this.requiredKeys = requiredKeys;
+        this.readableKeys = readableKeys;
+        this.writableKeys = writableKeys;
     }
 
     @Override
@@ -57,13 +59,23 @@ public class WhileProcessorImpl implements WhileProcessor {
     }
 
     @Override
-    public Set<Key<?>> getRequiredKeys() {
-        return requiredKeys;
+    public Set<Key<?>> getReadableKeys() {
+        return readableKeys;
     }
 
     @Override
-    public void setRequiredKeys(Set<Key<?>> requiredKeys) {
-        this.requiredKeys = requiredKeys;
+    public void setReadableKeys(Set<Key<?>> readableKeys) {
+        this.readableKeys = readableKeys;
+    }
+
+    @Override
+    public Set<Key<?>> getWritableKeys() {
+        return writableKeys;
+    }
+
+    @Override
+    public void setWritableKeys(Set<Key<?>> writableKeys) {
+        this.writableKeys = writableKeys;
     }
 
     @NotNull
@@ -77,7 +89,7 @@ public class WhileProcessorImpl implements WhileProcessor {
         }
 
         InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
-        ContextWrapper whileContext = Contexts.wrap(context, whileBlock, keyMapper, requiredKeys);
+        ContextWrapper whileContext = Contexts.wrap(context, whileBlock, keyMapper, readableKeys, writableKeys);
 
         while (getRule().match(whileContext)) {
             ProcessStatus status = branch.execute(whileContext);

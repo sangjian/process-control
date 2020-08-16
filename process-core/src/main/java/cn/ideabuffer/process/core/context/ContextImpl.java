@@ -53,7 +53,12 @@ public class ContextImpl extends ParameterImpl implements Context {
     }
 
     @Override
-    public boolean keyAvailable(Key<?> key) {
+    public boolean readableKey(Key<?> key) {
+        return true;
+    }
+
+    @Override
+    public boolean writableKey(Key<?> key) {
         return true;
     }
 

@@ -97,24 +97,6 @@ public class DistributeAggregatableNodeBuilder<R>
     }
 
     @Override
-    public DistributeAggregatableNodeBuilder<R> require(@NotNull Key<?> key) {
-        super.require(key);
-        return this;
-    }
-
-    @Override
-    public DistributeAggregatableNodeBuilder<R> require(@NotNull Key<?>... keys) {
-        super.require(keys);
-        return this;
-    }
-
-    @Override
-    public DistributeAggregatableNodeBuilder<R> require(@NotNull Set<Key<?>> keys) {
-        super.require(keys);
-        return this;
-    }
-
-    @Override
     public DistributeAggregatableNode<R> build() {
         if (processor == null) {
             processor = new DistributeAggregateProcessorImpl<>();

@@ -3,7 +3,6 @@ package cn.ideabuffer.process.core.test;
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
-import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
@@ -22,7 +21,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -53,13 +51,13 @@ public class ProcessInstanceTest {
                     .resultKey(resultKey)
                     .by(new TestProcessor2())
                     .returnOn(result -> true)
-                    .require(key)
+                    .readableKeys(key)
                     .build(),
                 ProcessNodeBuilder.<Integer>newBuilder()
                     .resultKey(resultKey)
                     .by(new TestProcessor1())
                     .returnOn(result -> false)
-                    .require(key)
+                    .readableKeys(key)
                     .build());
         ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -83,13 +81,13 @@ public class ProcessInstanceTest {
                     .resultKey(resultKey)
                     .by(new TestProcessor2())
                     .returnOn(result -> false)
-                    .require(key)
+                    .readableKeys(key)
                     .build(),
                 ProcessNodeBuilder.<Integer>newBuilder()
                     .resultKey(resultKey)
                     .by(new TestProcessor1())
                     .returnOn(result -> true)
-                    .require(key)
+                    .readableKeys(key)
                     .build());
         ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -112,7 +110,7 @@ public class ProcessInstanceTest {
                         return ProcessStatus.proceed();
                     })
                     .returnOn(result -> false)
-                    .require(key)
+                    .writableKeys(key)
                     .build(),
                 ProcessNodeBuilder.<ProcessStatus>newBuilder()
                     .by(context -> {
@@ -120,7 +118,7 @@ public class ProcessInstanceTest {
                         return ProcessStatus.proceed();
                     })
                     .returnOn(result -> false)
-                    .require(key)
+                    .writableKeys(key)
                     .build()));
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -223,10 +221,16 @@ public class ProcessInstanceTest {
             .otherwise(new TestFalseBranch());
         subDefine.addIf(ifConditionNode);
         ProcessInstance<String> subInstance = subDefine.newInstance();
-
-        definition.addProcessNodes(Nodes.newProcessNode(new TestProcessor1(), key))
+        definition.addProcessNodes(
+            ProcessNodeBuilder.<Integer>newBuilder()
+                .readableKeys(key)
+                .by(new TestProcessor1())
+                .build())
             .addProcessNodes(subInstance)
-            .addProcessNodes(Nodes.newProcessNode(new TestProcessor2(), key));
+            .addProcessNodes(ProcessNodeBuilder.<Integer>newBuilder()
+                .readableKeys(key)
+                .by(new TestProcessor2())
+                .build());
 
         Context context = Contexts.newContext();
         context.put(key, 1);

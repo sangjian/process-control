@@ -3,7 +3,8 @@ package cn.ideabuffer.process.core.context;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockFacade;
-import cn.ideabuffer.process.core.exception.KeyNotRegisteredException;
+import cn.ideabuffer.process.core.exception.UnreadableKeyException;
+import cn.ideabuffer.process.core.exception.KeyNotWritableException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -16,26 +17,25 @@ import java.util.Set;
 public class ContextWrapper implements Context {
 
     private Context context;
-
     private Block block;
-
     private KeyMapper mapper;
-
-    private Set<Key<?>> requiredKeys;
+    private Set<Key<?>> readableKeys;
+    private Set<Key<?>> writableKeys;
 
     public ContextWrapper(Context context, Block block) {
         this(context, block, null);
     }
 
     public ContextWrapper(Context context, Block block, KeyMapper mapper) {
-        this(context, block, mapper, null);
+        this(context, block, mapper, null, null);
     }
 
-    public ContextWrapper(Context context, Block block, KeyMapper mapper, Set<Key<?>> requiredKeys) {
+    public ContextWrapper(Context context, Block block, KeyMapper mapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         this.context = context;
         this.block = new BlockFacade(block, mapper);
         this.mapper = mapper;
-        this.requiredKeys = requiredKeys;
+        this.readableKeys = readableKeys;
+        this.writableKeys = writableKeys;
     }
 
     @Override
@@ -62,12 +62,12 @@ public class ContextWrapper implements Context {
 
     protected <V> V put(@NotNull Key<V> key, V value, boolean keyCheck) {
         Key<V> k = key;
+        if (keyCheck && !writableKey(k)) {
+            throw new KeyNotWritableException(k + " is not writable, check the registration of the key!");
+        }
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             k = mappingKey;
-        }
-        if (keyCheck && !keyAvailable(k)) {
-            throw new KeyNotRegisteredException(k + " is not registered!");
         }
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).put(k, value, false);
@@ -81,13 +81,13 @@ public class ContextWrapper implements Context {
     }
 
     protected <V> V putIfAbsent(@NotNull Key<V> key, V value, boolean keyCheck) {
+        if (keyCheck && !writableKey(key)) {
+            throw new KeyNotWritableException(key + " is not writable, check the registration of the key!");
+        }
         Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             k = mappingKey;
-        }
-        if (keyCheck && !keyAvailable(k)) {
-            throw new KeyNotRegisteredException(k + " is not registered!");
         }
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).putIfAbsent(k, value, false);
@@ -101,18 +101,7 @@ public class ContextWrapper implements Context {
     }
 
     protected <V> V get(@NotNull Key<V> key, boolean keyCheck) {
-        Key<V> k = key;
-        Key<V> mappingKey = getMappingKey(key);
-        if (mappingKey != null) {
-            k = mappingKey;
-        }
-        if (keyCheck && !keyAvailable(k)) {
-            throw new KeyNotRegisteredException(k + " is not registered!");
-        }
-        if (context instanceof ContextWrapper) {
-            return ((ContextWrapper)context).get(k, false);
-        }
-        return context.get(k);
+        return get(key, null, keyCheck);
     }
 
     @Override
@@ -121,13 +110,13 @@ public class ContextWrapper implements Context {
     }
 
     protected <V> V get(@NotNull Key<V> key, V defaultValue, boolean keyCheck) {
+        if (keyCheck && !readableKey(key)) {
+            throw new UnreadableKeyException(key + " is not readable, check the registration of the key!");
+        }
         Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             k = mappingKey;
-        }
-        if (keyCheck && !keyAvailable(k)) {
-            throw new KeyNotRegisteredException(k + " is not registered!");
         }
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).get(k, defaultValue, false);
@@ -168,8 +157,8 @@ public class ContextWrapper implements Context {
         if (mappingKey != null) {
             k = mappingKey;
         }
-        if (keyCheck && !keyAvailable(k)) {
-            throw new KeyNotRegisteredException(k + " is not registered!");
+        if (keyCheck && !writableKey(k)) {
+            throw new KeyNotWritableException(k + " is not writable, check the registration of the key!");
         }
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).remove(k, false);
@@ -197,11 +186,19 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public boolean keyAvailable(Key<?> key) {
-        if (requiredKeys == null || requiredKeys.isEmpty()) {
+    public boolean readableKey(Key<?> key) {
+        if (readableKeys == null || readableKeys.isEmpty()) {
             return false;
         }
-        return requiredKeys.contains(key);
+        return readableKeys.contains(key);
+    }
+
+    @Override
+    public boolean writableKey(Key<?> key) {
+        if (writableKeys == null || writableKeys.isEmpty()) {
+            return false;
+        }
+        return writableKeys.contains(key);
     }
 
     @Override

@@ -23,17 +23,13 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
 
     public DefaultProcessInstance(@NotNull ProcessDefinition<R> definition) {
         super.registerProcessor(new ProcessInstanceProcessorImpl<>(definition));
-        super.setRequiredKeys(getAllRequiredKeys(definition));
+        super.setReadableKeys(getAllResultKeys(definition));
     }
 
-    private Set<Key<?>> getAllRequiredKeys(@NotNull ProcessDefinition<R> definition) {
+    private Set<Key<?>> getAllResultKeys(@NotNull ProcessDefinition<R> definition) {
         Node[] nodes = definition.getNodes();
         Set<Key<?>> keys = new HashSet<>();
         Arrays.stream(nodes).filter(node -> node instanceof ExecutableNode).forEach(node -> {
-            Set<Key<?>> requiredKeys = ((ExecutableNode)node).getRequiredKeys();
-            if (requiredKeys != null) {
-                keys.addAll(requiredKeys);
-            }
             if (((ExecutableNode)node).getResultKey() != null) {
                 keys.add(((ExecutableNode)node).getResultKey());
             }

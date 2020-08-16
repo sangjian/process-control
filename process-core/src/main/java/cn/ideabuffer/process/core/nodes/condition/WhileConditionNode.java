@@ -20,11 +20,11 @@ import java.util.Set;
 public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus, WhileProcessor> {
 
     public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
-        this(rule, branch, null, null);
+        this(rule, branch, null, null, null);
     }
 
-    public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
-        this(new WhileProcessorImpl(rule, branch, keyMapper, requiredKeys));
+    public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        this(new WhileProcessorImpl(rule, branch, keyMapper, readableKeys, writableKeys));
     }
 
     public WhileConditionNode(@NotNull WhileProcessor processor) {
@@ -42,13 +42,23 @@ public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus, Wh
     }
 
     @Override
-    public void setRequiredKeys(Set<Key<?>> keys) {
-        getProcessor().setRequiredKeys(keys);
+    public void setReadableKeys(Set<Key<?>> keys) {
+        getProcessor().setReadableKeys(keys);
     }
 
     @Override
-    public Set<Key<?>> getRequiredKeys() {
-        return getProcessor().getRequiredKeys();
+    public Set<Key<?>> getReadableKeys() {
+        return getProcessor().getReadableKeys();
+    }
+
+    @Override
+    public void setWritableKeys(Set<Key<?>> keys) {
+        getProcessor().setWritableKeys(keys);
+    }
+
+    @Override
+    public Set<Key<?>> getWritableKeys() {
+        return getProcessor().getWritableKeys();
     }
 
     @Override

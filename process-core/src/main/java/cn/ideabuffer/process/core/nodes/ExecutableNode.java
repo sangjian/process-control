@@ -36,7 +36,11 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
 
     ReturnCondition<R> getReturnCondition();
 
-    void setRequiredKeys(Set<Key<?>> keys);
+    void setReadableKeys(Set<Key<?>> keys);
 
-    Set<Key<?>> getRequiredKeys();
+    Set<Key<?>> getReadableKeys();
+
+    void setWritableKeys(Set<Key<?>> keys);
+
+    Set<Key<?>> getWritableKeys();
 }

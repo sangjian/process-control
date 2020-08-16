@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -20,27 +21,22 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
     implements Builder<T> {
 
     protected boolean parallel;
-
     protected Executor executor;
-
     protected Rule rule;
-
     protected List<ProcessListener<R>> listeners;
-
     protected T node;
-
     protected P processor;
-
     protected Key<R> resultKey;
-
     protected ReturnCondition<R> returnCondition;
-
-    protected Set<Key<?>> requiredKeys;
+    protected KeyMapper keyMapper;
+    protected Set<Key<?>> readableKeys;
+    protected Set<Key<?>> writableKeys;
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
         this.listeners = new LinkedList<>();
-        this.requiredKeys = new HashSet<>();
+        this.readableKeys = new HashSet<>();
+        this.writableKeys = new HashSet<>();
     }
 
     public Builder<T> parallel() {
@@ -73,7 +69,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     public Builder<T> resultKey(Key<R> resultKey) {
         this.resultKey = resultKey;
-        this.requiredKeys.add(resultKey);
+        this.writableKeys.add(resultKey);
         return this;
     }
 
@@ -82,18 +78,28 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
-    public Builder<T> require(@NotNull Key<?> key) {
-        this.requiredKeys.add(key);
+    public Builder<T> keyMapper(KeyMapper keyMapper) {
+        this.keyMapper = keyMapper;
         return this;
     }
 
-    public Builder<T> require(@NotNull Key<?>... keys) {
-        this.requiredKeys.addAll(Arrays.stream(keys).collect(Collectors.toSet()));
+    public Builder<T> readableKeys(@NotNull Key<?>... keys) {
+        this.readableKeys.addAll(Arrays.stream(keys).collect(Collectors.toSet()));
         return this;
     }
 
-    public Builder<T> require(@NotNull Set<Key<?>> keys) {
-        this.requiredKeys = keys;
+    public Builder<T> readableKeys(@NotNull Set<Key<?>> keys) {
+        this.readableKeys = keys;
+        return this;
+    }
+
+    public Builder<T> writableKeys(@NotNull Key<?>... keys) {
+        this.writableKeys.addAll(Arrays.stream(keys).collect(Collectors.toSet()));
+        return this;
+    }
+
+    public Builder<T> writableKeys(@NotNull Set<Key<?>> keys) {
+        this.writableKeys = keys;
         return this;
     }
 
@@ -113,7 +119,9 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         node.registerProcessor(processor);
         node.setResultKey(resultKey);
         node.returnOn(returnCondition);
-        node.setRequiredKeys(requiredKeys);
+        node.setKeyMapper(keyMapper);
+        node.setReadableKeys(readableKeys);
+        node.setWritableKeys(writableKeys);
         return node;
     }
 

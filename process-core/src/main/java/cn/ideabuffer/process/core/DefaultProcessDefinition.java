@@ -73,11 +73,14 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
                 Key<?> nodeResultKey = ((ExecutableNode)node).getResultKey();
                 // 没有设置结果key
                 if (nodeResultKey == null) {
-                    throw new NullPointerException("");
+                    throw new NullPointerException(String.format("resultKey must be set for node:%s.", node));
+                }
+                if (resultKey == null) {
+                    throw new NullPointerException(String.format("the resultKey:[%s] must be set for the definition.", nodeResultKey));
                 }
                 // 结果Key不一致
                 if (!nodeResultKey.equals(resultKey)) {
-                    throw new IllegalResultKeyException(String.format("resultKey[%s] of returnable node is not equals resultKey:[%s] of definition", nodeResultKey.toString(), resultKey.toString()));
+                    throw new IllegalResultKeyException(String.format("resultKey[%s] of returnable node is not equals resultKey:[%s] of definition", nodeResultKey, resultKey));
                 }
                 // 没有返回条件，使用默认的返回条件
                 if (((ExecutableNode)node).getReturnCondition() == null) {

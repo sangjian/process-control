@@ -17,12 +17,12 @@ import java.util.Set;
 public class DoWhileConditionNode extends WhileConditionNode {
 
     public DoWhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
-        super(new DoWhileProcessorImpl(rule, branch, null, null));
+        super(new DoWhileProcessorImpl(rule, branch, null, null, null));
     }
 
     public DoWhileConditionNode(@NotNull Rule rule,
-        @NotNull BranchNode branch, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
-        super(rule, branch, keyMapper, requiredKeys);
+        @NotNull BranchNode branch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        super(rule, branch, keyMapper, readableKeys, writableKeys);
     }
 
 }

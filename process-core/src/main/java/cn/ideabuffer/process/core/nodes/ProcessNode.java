@@ -26,18 +26,11 @@ public class ProcessNode<R> extends AbstractExecutableNode<R, Processor<R>> {
         super.setKeyMapper(mapper);
     }
 
-    public ProcessNode(Processor<R> processor, KeyMapper mapper, Set<Key<?>> requiredKeys) {
+    public ProcessNode(Processor<R> processor, KeyMapper mapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         super.registerProcessor(processor);
         super.setKeyMapper(mapper);
-        super.setRequiredKeys(requiredKeys);
-    }
-
-    public ProcessNode(Processor<R> processor, KeyMapper mapper, Key<?>... requiredKeys) {
-        super.registerProcessor(processor);
-        super.setKeyMapper(mapper);
-        if (requiredKeys != null) {
-            super.setRequiredKeys(Arrays.stream(requiredKeys).collect(Collectors.toSet()));
-        }
+        super.setReadableKeys(readableKeys);
+        super.setWritableKeys(writableKeys);
     }
 
 }

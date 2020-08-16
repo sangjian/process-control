@@ -33,15 +33,15 @@ public class Nodes {
     }
 
     public static <R> ProcessNode<R> newProcessNode(Processor<R> processor) {
-        return newProcessNode(processor, null);
+        return newProcessNode(processor, null, null);
     }
 
-    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, Key<?>... requiredKeys) {
-        return newProcessNode(processor, null, requiredKeys);
+    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        return newProcessNode(processor, null, readableKeys, writableKeys);
     }
 
-    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, KeyMapper mapper, Key<?>... requiredKeys) {
-        return new ProcessNode<>(processor, mapper, requiredKeys);
+    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, KeyMapper mapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        return new ProcessNode<>(processor, mapper, readableKeys, writableKeys);
     }
 
     public static NodeGroup newGroup() {
@@ -101,24 +101,52 @@ public class Nodes {
         return new DefaultDistributeAggregatableNode<>();
     }
 
-    public static IfWhen newIf(Rule rule, Key<?>... requiredKeys) {
-        return newIf(rule, null, requiredKeys);
+    public static IfWhen newIf(Rule rule, Key<?>... readableKeys) {
+        return newIf(rule, null, readableKeys);
     }
 
-    public static IfWhen newIf(Rule rule, KeyMapper keyMapper, Key<?>... requiredKeys) {
-        return new IfWhen(rule, keyMapper, requiredKeys);
+    public static IfWhen newIf(Rule rule, KeyMapper keyMapper, Key<?>... readableKeys) {
+        return new IfWhen(rule, keyMapper, readableKeys);
     }
 
-    public static WhileWhen newWhile(Rule rule, Key<?>... requiredKeys) {
-        return new WhileWhen(rule, requiredKeys);
+    public static WhileWhen newWhile(Rule rule, Key<?>... readableKeys) {
+        return newWhile(rule, null, readableKeys);
     }
 
-    public static WhileWhen newWhile(Rule rule, KeyMapper keyMapper, Key<?>... requiredKeys) {
-        return new WhileWhen(rule, keyMapper, requiredKeys);
+    public static WhileWhen newWhile(Rule rule, KeyMapper keyMapper, Key<?>... readableKeys) {
+        return new WhileWhen(rule, keyMapper, readableKeys);
     }
 
-    public static DoWhileWhen newDoWhile(Rule rule, Key<?>... requiredKeys) {
-        return new DoWhileWhen(rule, requiredKeys);
+    public static WhileWhen newWhile(Rule rule, Set<Key<?>> readableKeys) {
+        return newWhile(rule, null, readableKeys, null);
+    }
+
+    public static WhileWhen newWhile(Rule rule, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        return newWhile(rule, null, readableKeys, writableKeys);
+    }
+
+    public static WhileWhen newWhile(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        return new WhileWhen(rule, keyMapper, readableKeys, writableKeys);
+    }
+
+    public static DoWhileWhen newDoWhile(Rule rule, Key<?>... readableKeys) {
+        return new DoWhileWhen(rule, readableKeys);
+    }
+
+    public static WhileWhen newDoWhile(Rule rule, KeyMapper keyMapper, Key<?>... readableKeys) {
+        return new DoWhileWhen(rule, keyMapper, readableKeys);
+    }
+
+    public static WhileWhen newDoWhile(Rule rule, Set<Key<?>> readableKeys) {
+        return newDoWhile(rule, null, readableKeys, null);
+    }
+
+    public static WhileWhen newDoWhile(Rule rule, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        return newDoWhile(rule, null, readableKeys, writableKeys);
+    }
+
+    public static WhileWhen newDoWhile(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        return new DoWhileWhen(rule, keyMapper, readableKeys, writableKeys);
     }
 
     public static TryCatchFinally newTry(BranchNode branch) {
@@ -136,27 +164,31 @@ public class Nodes {
     public static class IfWhen {
 
         private Rule rule;
-
         private KeyMapper keyMapper;
+        private Set<Key<?>> readableKeys;
+        private Set<Key<?>> writableKeys;
 
-        private Set<Key<?>> requiredKeys;
-
-        IfWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
-            this.rule = rule;
-            this.keyMapper = keyMapper;
-            this.requiredKeys = requiredKeys;
+        IfWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys) {
+            this(rule, keyMapper, readableKeys, null);
         }
 
-        IfWhen(Rule rule,KeyMapper keyMapper, Key<?>... requiredKeys) {
+        IfWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
             this.rule = rule;
             this.keyMapper = keyMapper;
-            if (requiredKeys != null) {
-                this.requiredKeys = Arrays.stream(requiredKeys).collect(Collectors.toSet());
+            this.readableKeys = readableKeys;
+            this.writableKeys = writableKeys;
+        }
+
+        IfWhen(Rule rule,KeyMapper keyMapper, Key<?>... readableKeys) {
+            this.rule = rule;
+            this.keyMapper = keyMapper;
+            if (readableKeys != null) {
+                this.readableKeys = Arrays.stream(readableKeys).collect(Collectors.toSet());
             }
         }
 
         public IfWhenBuilder then(@NotNull BranchNode branch) {
-            return new IfWhenBuilder(rule, branch, keyMapper, requiredKeys);
+            return new IfWhenBuilder(rule, branch, keyMapper, readableKeys, writableKeys);
         }
 
         public IfWhenBuilder then(@NotNull ExecutableNode<?, ?>... nodes) {
@@ -170,22 +202,21 @@ public class Nodes {
         public class IfWhenBuilder {
 
             private Rule rule;
-
             private BranchNode thenBranch;
-
             private KeyMapper keyMapper;
+            private Set<Key<?>> readableKeys;
+            private Set<Key<?>> writableKeys;
 
-            private Set<Key<?>> requiredKeys;
-
-            IfWhenBuilder(Rule rule, BranchNode thenBranch, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
+            IfWhenBuilder(Rule rule, BranchNode thenBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
                 this.rule = rule;
                 this.thenBranch = thenBranch;
                 this.keyMapper = keyMapper;
-                this.requiredKeys = requiredKeys;
+                this.readableKeys = readableKeys;
+                this.writableKeys = writableKeys;
             }
 
             public IfConditionNode otherwise(BranchNode branch) {
-                return new IfConditionNode(rule, thenBranch, branch, keyMapper, requiredKeys);
+                return new IfConditionNode(rule, thenBranch, branch, keyMapper, readableKeys, writableKeys);
             }
 
             public IfConditionNode otherwise(ExecutableNode<?, ?>... nodes) {
@@ -193,7 +224,7 @@ public class Nodes {
             }
 
             public IfConditionNode end() {
-                return new IfConditionNode(rule, thenBranch, null, keyMapper, requiredKeys);
+                return new IfConditionNode(rule, thenBranch, null, keyMapper, readableKeys, writableKeys);
             }
 
         }
@@ -203,31 +234,35 @@ public class Nodes {
     public static class WhileWhen {
 
         protected Rule rule;
-
         protected KeyMapper keyMapper;
+        protected Set<Key<?>> readableKeys;
+        protected Set<Key<?>> writableKeys;
 
-        protected Set<Key<?>> requiredKeys;
-
-        WhileWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
-            this.rule = rule;
-            this.keyMapper = keyMapper;
-            this.requiredKeys = requiredKeys;
+        WhileWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys) {
+            this(rule, keyMapper, readableKeys, null);
         }
 
-        WhileWhen(Rule rule, KeyMapper keyMapper, Key<?>... requiredKeys) {
+        WhileWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
             this.rule = rule;
             this.keyMapper = keyMapper;
-            if (requiredKeys != null) {
-                this.requiredKeys = Arrays.stream(requiredKeys).collect(Collectors.toSet());
+            this.readableKeys = readableKeys;
+            this.writableKeys = writableKeys;
+        }
+
+        WhileWhen(Rule rule, KeyMapper keyMapper, Key<?>... readableKeys) {
+            this.rule = rule;
+            this.keyMapper = keyMapper;
+            if (readableKeys != null) {
+                this.readableKeys = Arrays.stream(readableKeys).collect(Collectors.toSet());
             }
         }
 
-        WhileWhen(Rule rule, Key<?>... requiredKeys) {
-            this(rule, null, requiredKeys);
+        WhileWhen(Rule rule, Key<?>... readableKeys) {
+            this(rule, null, readableKeys);
         }
 
         public WhileConditionNode then(BranchNode branch) {
-            return new WhileConditionNode(rule, branch, keyMapper, requiredKeys);
+            return new WhileConditionNode(rule, branch, keyMapper, readableKeys, writableKeys);
         }
 
         public WhileConditionNode then(ExecutableNode<?, ?>... nodes) {
@@ -242,17 +277,26 @@ public class Nodes {
 
     public static class DoWhileWhen extends WhileWhen {
 
-        DoWhileWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
-            super(rule, keyMapper, requiredKeys);
+        DoWhileWhen(Rule rule, KeyMapper keyMapper, Key<?>... readableKeys) {
+            super(rule, keyMapper, readableKeys);
         }
 
-        DoWhileWhen(Rule rule, Key<?>... requiredKeys) {
-            super(rule, requiredKeys);
+        DoWhileWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys) {
+            super(rule, keyMapper, readableKeys);
+        }
+
+        DoWhileWhen(Rule rule, Key<?>... readableKeys) {
+            super(rule, readableKeys);
+        }
+
+        DoWhileWhen(Rule rule, KeyMapper keyMapper,
+            Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+            super(rule, keyMapper, readableKeys, writableKeys);
         }
 
         @Override
         public DoWhileConditionNode then(BranchNode branch) {
-            return new DoWhileConditionNode(rule, branch, keyMapper, requiredKeys);
+            return new DoWhileConditionNode(rule, branch, keyMapper, readableKeys, writableKeys);
         }
 
         @Override

@@ -24,11 +24,11 @@ public class IfConditionNode extends AbstractExecutableNode<ProcessStatus, IfPro
     }
 
     public IfConditionNode(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch) {
-        this(rule, trueBranch, falseBranch, null, null);
+        this(rule, trueBranch, falseBranch, null, null, null);
     }
 
-    public IfConditionNode(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch, KeyMapper keyMapper, Set<Key<?>> requiredKeys) {
-        super.registerProcessor(new IfProcessorImpl(rule, trueBranch, falseBranch, keyMapper, requiredKeys));
+    public IfConditionNode(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+        super.registerProcessor(new IfProcessorImpl(rule, trueBranch, falseBranch, keyMapper, readableKeys, writableKeys));
     }
 
     @Override
@@ -42,13 +42,23 @@ public class IfConditionNode extends AbstractExecutableNode<ProcessStatus, IfPro
     }
 
     @Override
-    public void setRequiredKeys(Set<Key<?>> keys) {
-        getProcessor().setRequiredKeys(keys);
+    public void setReadableKeys(Set<Key<?>> keys) {
+        getProcessor().setReadableKeys(keys);
     }
 
     @Override
-    public Set<Key<?>> getRequiredKeys() {
-        return getProcessor().getRequiredKeys();
+    public Set<Key<?>> getReadableKeys() {
+        return getProcessor().getReadableKeys();
+    }
+
+    @Override
+    public void setWritableKeys(Set<Key<?>> keys) {
+        getProcessor().setWritableKeys(keys);
+    }
+
+    @Override
+    public Set<Key<?>> getWritableKeys() {
+        return getProcessor().getWritableKeys();
     }
 
     @Override

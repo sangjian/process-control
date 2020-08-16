@@ -24,7 +24,11 @@ public interface IfProcessor extends ComplexProcessor<ProcessStatus> {
 
     void setKeyMapper(KeyMapper keyMapper);
 
-    Set<Key<?>> getRequiredKeys();
+    Set<Key<?>> getReadableKeys();
 
-    void setRequiredKeys(Set<Key<?>> requiredKeys);
+    void setReadableKeys(Set<Key<?>> readableKeys);
+
+    Set<Key<?>> getWritableKeys();
+
+    void setWritableKeys(Set<Key<?>> writableKeys);
 }

@@ -3,13 +3,11 @@ package cn.ideabuffer.process.core.test;
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
-import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
-import cn.ideabuffer.process.core.nodes.Nodes;
-import cn.ideabuffer.process.core.test.nodes.TestBaseNodeProcessor;
+import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -32,11 +30,11 @@ public class KeyMapperTest {
 
         definition
             // 注册执行节点
-            .addProcessNodes(Nodes.newProcessNode((Processor<Void>)context -> {
+            .addProcessNodes(ProcessNodeBuilder.<Void>newBuilder().by(context -> {
                     assertEquals(123, (int)context.get(to));
                     return null;
-                }, to),
-                Nodes.newProcessNode(context -> {
+                }).readableKeys(to).build(),
+                ProcessNodeBuilder.<Void>newBuilder().by(context -> {
                     // 指定了mapper，这里取from与取to相同
                     assertEquals(123, (int)context.get(from));
                     assertEquals(123, (int)context.get(to));
@@ -45,13 +43,13 @@ public class KeyMapperTest {
                     assertEquals(456, (int)context.get(from));
                     assertEquals(456, (int)context.get(to));
                     return null;
-                }, mapper, from, to),
-                Nodes.newProcessNode(context -> {
+                }).readableKeys(from, to).writableKeys(from).keyMapper(mapper).build(),
+                ProcessNodeBuilder.<Void>newBuilder().by(context -> {
                     // 没有指定mapper，找不到对应的key
                     assertNull(context.get(from));
                     context.put(from, 456);
                     return null;
-                }, from));
+                }).readableKeys(from).writableKeys(from).build());
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(to, 123);

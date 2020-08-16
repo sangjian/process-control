@@ -97,24 +97,6 @@ public class GenericAggregatableNodeBuilder<P, R>
     }
 
     @Override
-    public GenericAggregatableNodeBuilder<P, R> require(@NotNull Key<?> key) {
-        super.require(key);
-        return this;
-    }
-
-    @Override
-    public GenericAggregatableNodeBuilder<P, R> require(@NotNull Key<?>... keys) {
-        super.require(keys);
-        return this;
-    }
-
-    @Override
-    public GenericAggregatableNodeBuilder<P, R> require(@NotNull Set<Key<?>> keys) {
-        super.require(keys);
-        return this;
-    }
-
-    @Override
     public GenericAggregatableNode<P, R> build() {
         if (processor == null) {
             processor = new GenericAggregateProcessorImpl<>();

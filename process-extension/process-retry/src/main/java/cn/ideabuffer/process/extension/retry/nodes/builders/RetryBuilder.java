@@ -3,6 +3,7 @@ package cn.ideabuffer.process.extension.retry.nodes.builders;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.builder.AbstractExecutableNodeBuilder;
 import cn.ideabuffer.process.core.nodes.builder.Builder;
 import cn.ideabuffer.process.core.rule.Rule;
@@ -11,6 +12,7 @@ import cn.ideabuffer.process.extension.retry.nodes.RetryableNode;
 import com.github.rholder.retry.Retryer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 /**
@@ -65,8 +67,38 @@ public class RetryBuilder<R> extends AbstractExecutableNodeBuilder<R, Processor<
     }
 
     @Override
-    public  RetryBuilder<R> resultKey(Key<R> resultKey) {
+    public RetryBuilder<R> resultKey(Key<R> resultKey) {
         super.resultKey(resultKey);
+        return this;
+    }
+
+    @Override
+    public RetryBuilder<R> keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
+        return this;
+    }
+
+    @Override
+    public RetryBuilder<R> readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public RetryBuilder<R> readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public RetryBuilder<R> writableKeys(@NotNull Key<?>... keys) {
+        super.writableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public RetryBuilder<R> writableKeys(@NotNull Set<Key<?>> keys) {
+        super.writableKeys(keys);
         return this;
     }
 

@@ -36,7 +36,8 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     private KeyMapper mapper;
     private Key<R> resultKey;
     private ReturnCondition<R> returnCondition;
-    private Set<Key<?>> requiredKeys;
+    private Set<Key<?>> readableKeys;
+    private Set<Key<?>> writableKeys;
 
     public AbstractExecutableNode() {
         this(false);
@@ -72,10 +73,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition) {
-        this(parallel, rule, executor, listeners, processor, mapper, resultKey, returnCondition, null);
+        this(parallel, rule, executor, listeners, processor, mapper, resultKey, returnCondition, null, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition, Set<Key<?>> requiredKeys) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
@@ -84,9 +85,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this.mapper = mapper;
         this.resultKey = resultKey;
         this.returnCondition = returnCondition;
-        this.requiredKeys = requiredKeys == null ? new HashSet<>() : requiredKeys;
+        this.readableKeys = readableKeys;
+        this.writableKeys = writableKeys == null ? new HashSet<>() : writableKeys;
         if (resultKey != null) {
-            this.requiredKeys.add(resultKey);
+            this.writableKeys.add(resultKey);
         }
     }
 
@@ -162,14 +164,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         return rule == null || rule.match(context);
     }
 
-    protected boolean hasMapping() {
-        return mapper != null && !mapper.isEmpty();
-    }
-
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-        Context ctx = Contexts.wrap(context, context.getBlock(), mapper, requiredKeys);
+        Context ctx = Contexts.wrap(context, context.getBlock(), mapper, readableKeys, writableKeys);
         if (getProcessor() == null || !ruleCheck(ctx)) {
             return ProcessStatus.proceed();
         }
@@ -242,7 +240,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     public void setResultKey(Key<R> resultKey) {
         this.resultKey = resultKey;
         if (resultKey != null) {
-            this.requiredKeys.add(resultKey);
+            this.writableKeys.add(resultKey);
         }
     }
 
@@ -262,19 +260,26 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
-    public void setRequiredKeys(Set<Key<?>> keys) {
-        if (keys == null) {
-            return;
-        }
-        this.requiredKeys = keys;
+    public void setReadableKeys(Set<Key<?>> keys) {
+        this.readableKeys = keys;
+    }
+
+    @Override
+    public Set<Key<?>> getReadableKeys() {
+        return readableKeys;
+    }
+
+    @Override
+    public void setWritableKeys(Set<Key<?>> keys) {
+        this.writableKeys = keys == null ? new HashSet<>() : keys;
         if (this.resultKey != null) {
-            this.requiredKeys.add(resultKey);
+            this.writableKeys.add(this.resultKey);
         }
     }
 
     @Override
-    public Set<Key<?>> getRequiredKeys() {
-        return this.requiredKeys;
+    public Set<Key<?>> getWritableKeys() {
+        return writableKeys;
     }
 
     @Override

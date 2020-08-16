@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -70,20 +71,32 @@ public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Proc
     }
 
     @Override
-    public ProcessNodeBuilder<R> require(@NotNull Key<?> key) {
-        super.require(key);
+    public ProcessNodeBuilder<R> keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
         return this;
     }
 
     @Override
-    public ProcessNodeBuilder<R> require(@NotNull Key<?>... keys) {
-        super.require(Arrays.stream(keys).collect(Collectors.toSet()));
+    public ProcessNodeBuilder<R> readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
         return this;
     }
 
     @Override
-    public ProcessNodeBuilder<R> require(@NotNull Set<Key<?>> keys) {
-        super.require(keys);
+    public ProcessNodeBuilder<R> readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> writableKeys(@NotNull Key<?>... keys) {
+        super.writableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> writableKeys(@NotNull Set<Key<?>> keys) {
+        super.writableKeys(keys);
         return this;
     }
 }
