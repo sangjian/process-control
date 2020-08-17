@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author sangjian.sj
@@ -93,6 +94,12 @@ public class DistributeAggregatableNodeBuilder<R>
     @Override
     public DistributeAggregatableNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
         super.returnOn(condition);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> enabled(BooleanSupplier supplier) {
+        super.enabled(supplier);
         return this;
     }
 

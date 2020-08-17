@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
 /**
@@ -99,4 +100,11 @@ public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Proc
         super.writableKeys(keys);
         return this;
     }
+
+    @Override
+    public ProcessNodeBuilder<R> enabled(BooleanSupplier supplier) {
+        super.enabled(supplier);
+        return this;
+    }
+
 }

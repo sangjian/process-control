@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author sangjian.sj
@@ -72,6 +73,12 @@ public class ParallelBranchNodeBuilder
 
     public ParallelBranchNodeBuilder proceedWhen(@NotNull ProceedStrategy strategy) {
         this.strategy = strategy;
+        return this;
+    }
+
+    @Override
+    public ParallelBranchNodeBuilder enabled(BooleanSupplier supplier) {
+        super.enabled(supplier);
         return this;
     }
 

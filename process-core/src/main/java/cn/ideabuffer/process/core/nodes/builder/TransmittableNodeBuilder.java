@@ -9,6 +9,7 @@ import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author sangjian.sj
@@ -67,4 +68,11 @@ public class TransmittableNodeBuilder<R, P extends Processor<R>>
         super.returnOn(condition);
         return this;
     }
+
+    @Override
+    public TransmittableNodeBuilder<R, P> enabled(BooleanSupplier supplier) {
+        super.enabled(supplier);
+        return this;
+    }
+
 }

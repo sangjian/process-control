@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author sangjian.sj
@@ -92,6 +93,12 @@ public class UnitAggregatableNodeBuilder<R>
     @Override
     public UnitAggregatableNodeBuilder<R> returnOn(ReturnCondition<R> condition) {
         super.returnOn(condition);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> enabled(BooleanSupplier supplier) {
+        super.enabled(supplier);
         return this;
     }
 

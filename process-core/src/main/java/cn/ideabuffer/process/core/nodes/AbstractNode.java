@@ -5,6 +5,8 @@ import cn.ideabuffer.process.core.Node;
 import cn.ideabuffer.process.core.exception.LifecycleException;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.BooleanSupplier;
+
 /**
  * @author sangjian.sj
  * @date 2020/01/18
@@ -13,9 +15,27 @@ public abstract class AbstractNode implements Node {
 
     private volatile LifecycleState state = LifecycleState.NEW;
 
+    /**
+     * 默认开启
+     */
+    private BooleanSupplier enableSupplier = () -> true;
+
     @Override
     public boolean enabled() {
-        return true;
+        if (enableSupplier != null) {
+            return enableSupplier.getAsBoolean();
+        }
+        return false;
+    }
+
+    @Override
+    public void setEnabled(boolean enable) {
+        this.enableSupplier = () -> enable;
+    }
+
+    @Override
+    public void setEnabled(BooleanSupplier supplier) {
+        this.enableSupplier = supplier;
     }
 
     @Override

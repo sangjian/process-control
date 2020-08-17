@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.Executor;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +32,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
     protected KeyMapper keyMapper;
     protected Set<Key<?>> readableKeys;
     protected Set<Key<?>> writableKeys;
+    protected BooleanSupplier enableSupplier;
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
@@ -103,6 +105,11 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
+    public Builder<T> enabled(BooleanSupplier supplier) {
+        this.enableSupplier = supplier;
+        return this;
+    }
+
     @Override
     public T build() {
         if (parallel) {
@@ -122,6 +129,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         node.setKeyMapper(keyMapper);
         node.setReadableKeys(readableKeys);
         node.setWritableKeys(writableKeys);
+        node.setEnabled(enableSupplier);
         return node;
     }
 

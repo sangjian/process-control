@@ -5,12 +5,12 @@
     <parent>
         <artifactId>process-control</artifactId>
         <groupId>cn.ideabuffer</groupId>
-        <version>1.1.6</version>
+        <version>1.1.7</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>process-api</artifactId>
-    <version>1.1.6</version>
+    <version>1.1.7</version>
 
     <dependencies>
         <dependency>

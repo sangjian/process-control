@@ -11,6 +11,7 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author sangjian.sj
@@ -60,6 +61,12 @@ public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStat
     @Override
     public BranchNodeBuilder by(BranchProcessor processor) {
         super.by(processor);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder enabled(BooleanSupplier supplier) {
+        super.enabled(supplier);
         return this;
     }
 

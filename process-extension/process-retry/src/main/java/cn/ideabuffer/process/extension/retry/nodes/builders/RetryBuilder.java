@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author sangjian.sj
@@ -99,6 +100,12 @@ public class RetryBuilder<R> extends AbstractExecutableNodeBuilder<R, Processor<
     @Override
     public RetryBuilder<R> writableKeys(@NotNull Set<Key<?>> keys) {
         super.writableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public RetryBuilder<R> enabled(BooleanSupplier supplier) {
+        super.enabled(supplier);
         return this;
     }
 
