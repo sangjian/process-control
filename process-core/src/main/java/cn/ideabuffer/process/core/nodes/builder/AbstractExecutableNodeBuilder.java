@@ -129,7 +129,9 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         node.setKeyMapper(keyMapper);
         node.setReadableKeys(readableKeys);
         node.setWritableKeys(writableKeys);
-        node.setEnabled(enableSupplier);
+        if (enableSupplier != null) {
+            node.setEnabled(enableSupplier);
+        }
         return node;
     }
 
