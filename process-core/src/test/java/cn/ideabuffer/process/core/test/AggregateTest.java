@@ -159,8 +159,53 @@ public class AggregateTest {
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
-
+        long start = System.currentTimeMillis();
         instance.execute(context);
+        long costs = System.currentTimeMillis() - start;
+        logger.warn("testTimeoutGenericAggregateList costs:{}", costs);
+        assertTrue(costs < 3000);
+    }
+
+    @Test
+    public void testGenericAggregateListWithException() throws Exception {
+        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+
+        Executor executor = Executors.newFixedThreadPool(3);
+
+        GenericMergeableNode<String> node1 = MergeNodeBuilder.<String>newBuilder()
+            .by(context -> {
+                throw new RuntimeException("test exception");
+            }).build();
+        GenericMergeableNode<String> node2 = MergeNodeBuilder.<String>newBuilder().by(
+            new TestStringMergeNodeTimeoutProcessor2()).timeout(5000, TimeUnit.MILLISECONDS).build();
+
+        List<GenericMergeableNode<String>> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+
+        // 创建通用聚合节点
+        GenericAggregatableNode<String, List<String>> node
+            = GenericAggregatableNodeBuilder.<String, List<String>>newBuilder().aggregator(
+            Aggregators.newParallelGenericAggregator(executor, new TestStringListMerger(), 5000)).aggregate(nodes)
+            .build();
+        // 链式结果处理
+        node.thenApply(((ctx, result) -> {
+            assertEquals("test2", result.get(0));
+            logger.info("result:{}", result);
+            return result.size();
+        })).thenAccept((ctx, size) -> {
+            assertEquals("size must be 1", 1, (int)size);
+            logger.info("result:{}", size);
+        });
+        definition.addAggregateNode(node);
+
+        ProcessInstance<String> instance = definition.newInstance();
+        Context context = Contexts.newContext();
+        long start = System.currentTimeMillis();
+        instance.execute(context);
+        long costs = System.currentTimeMillis() - start;
+        logger.warn("testGenericAggregateListWithException costs:{}", costs);
+        assertTrue(costs < 2000);
     }
 
     @Test

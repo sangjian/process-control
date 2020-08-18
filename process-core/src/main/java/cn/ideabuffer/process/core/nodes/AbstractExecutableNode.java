@@ -200,7 +200,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         e.execute(() -> {
             try {
                 R result = getProcessor().process(context);
-                context.put(resultKey, result);
                 notifyListeners(context, result, null, true);
             } catch (Exception ex) {
                 logger.error("doParallelExecute error, node:{}", this, ex);

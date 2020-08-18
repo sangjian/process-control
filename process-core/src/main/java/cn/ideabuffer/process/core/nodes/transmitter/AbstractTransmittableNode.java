@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.nodes.transmitter;
 
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.TransmittableNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -51,14 +52,37 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-
-        if (!ruleCheck(context)) {
+        Context ctx = Contexts.wrap(context, context.getBlock(), getKeyMapper(), getReadableKeys(), getWritableKeys());
+        if (getProcessor() == null || !ruleCheck(ctx)) {
             return ProcessStatus.proceed();
         }
 
-        Executor e = getExecutor() == null ? DEFAULT_POOL : getExecutor();
+        if (isParallel()) {
+            doParallelProcess(ctx);
+            return ProcessStatus.proceed();
+        }
+        try {
+            R result = getProcessor().process(ctx);
+            if (getResultKey() != null) {
+                ctx.put(getResultKey(), result);
+            }
+            if (transmittableProcessor != null) {
+                //noinspection unchecked
+                transmittableProcessor.fire(ctx, result);
+            }
+            notifyListeners(ctx, result, null, true);
+        } catch (Exception ex) {
+            logger.error("process error, node:{}, context:{}", this, context, ex);
+            notifyListeners(ctx, null, ex, false);
+            throw ex;
+        }
 
-        Runnable task = () -> {
+        return ProcessStatus.proceed();
+    }
+
+    private void doParallelProcess(Context context) {
+        Executor e = getExecutor() == null ? DEFAULT_POOL : getExecutor();
+        e.execute(() -> {
             R result;
             try {
                 result = getProcessor().process(context);
@@ -68,17 +92,10 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
                 }
                 notifyListeners(context, result, null, true);
             } catch (Exception ex) {
+                logger.error("process error, node:{}, context:{}", this, context, ex);
                 notifyListeners(context, null, ex, false);
             }
-
-        };
-
-        if (isParallel()) {
-            e.execute(task);
-        } else {
-            task.run();
-        }
-        return ProcessStatus.proceed();
+        });
     }
 
 }

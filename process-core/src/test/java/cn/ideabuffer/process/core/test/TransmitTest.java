@@ -1,13 +1,11 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.DefaultProcessDefinition;
-import cn.ideabuffer.process.core.DefaultProcessInstance;
-import cn.ideabuffer.process.core.ProcessDefinition;
-import cn.ideabuffer.process.core.ProcessInstance;
+import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
-import cn.ideabuffer.process.core.nodes.TransmitNode;
-import cn.ideabuffer.process.core.test.nodes.transmitter.TestTransmittableProcessor;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.nodes.TransmissionNode;
+import cn.ideabuffer.process.core.nodes.builder.TransmissionNodeBuilder;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -22,12 +20,21 @@ public class TransmitTest {
     @Test
     public void testTransmitNode() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        TransmitNode<String> node = new TransmitNode<>(context -> "hello");
+        Key<String> key = Contexts.newKey("k", String.class);
+        Key<String> resultKey = Contexts.newKey("rk", String.class);
+        TransmissionNode<String> node = TransmissionNodeBuilder.<String>newBuilder()
+            .by(context -> context.get(key, "hello"))
+            .resultKey(resultKey)
+            .readableKeys(key, resultKey)
+            .build();
         node.thenApply((ctx, r) -> {
             assertEquals("hello", r);
+            assertEquals("hello", ctx.get(resultKey));
+            ctx.get(key);
             return r + " world";
         }).thenApply((ctx, r) -> {
             assertEquals("hello world", r);
+            ctx.get(key);
             return r.length();
         }).thenAccept((ctx, r) -> assertEquals(11, (int)r));
         definition.addProcessNodes(node);

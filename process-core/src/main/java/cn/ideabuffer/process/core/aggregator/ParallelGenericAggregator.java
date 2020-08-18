@@ -69,7 +69,7 @@ public class ParallelGenericAggregator<I, O> implements GenericAggregator<I, O> 
                 allFutures.get();
             }
         } catch (TimeoutException e) {
-            logger.error("timeout!", e);
+            logger.error("aggregate timeout in {} milliseconds", timeout, e);
         } finally {
             resultQueue.drainTo(results);
         }
