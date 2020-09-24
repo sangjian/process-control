@@ -3,7 +3,10 @@ package cn.ideabuffer.process.core;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.exception.IllegalResultKeyException;
 import cn.ideabuffer.process.core.exception.LifecycleException;
-import cn.ideabuffer.process.core.nodes.*;
+import cn.ideabuffer.process.core.nodes.AggregatableNode;
+import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
+import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.nodes.NodeGroup;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
@@ -69,21 +72,27 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private void returnableCheck(Node... nodes) {
         for (Node node : nodes) {
-            if (node instanceof ExecutableNode && ((ExecutableNode)node).getReturnCondition() != null) {
+            if (node instanceof ExecutableNode) {
                 Key<?> nodeResultKey = ((ExecutableNode)node).getResultKey();
-                // 没有设置结果key
-                if (nodeResultKey == null) {
-                    throw new NullPointerException(String.format("resultKey must be set for node:%s.", node));
-                }
-                if (resultKey == null) {
-                    throw new NullPointerException(String.format("the resultKey:[%s] must be set for the definition.", nodeResultKey));
-                }
-                // 结果Key不一致
-                if (!nodeResultKey.equals(resultKey)) {
-                    throw new IllegalResultKeyException(String.format("resultKey[%s] of returnable node is not equals resultKey:[%s] of definition", nodeResultKey, resultKey));
+                if (((ExecutableNode)node).getReturnCondition() != null) {
+                    // 没有设置结果key
+                    if (nodeResultKey == null) {
+                        throw new NullPointerException(String.format("resultKey must be set for node:%s.", node));
+                    }
+                    if (resultKey == null) {
+                        throw new NullPointerException(
+                            String.format("the resultKey:[%s] must be set for the definition.", nodeResultKey));
+                    }
+                    // 结果Key不一致
+                    if (!nodeResultKey.equals(resultKey)) {
+                        throw new IllegalResultKeyException(String
+                            .format("resultKey[%s] of returnable node is not equals resultKey:[%s] of definition",
+                                nodeResultKey, resultKey));
+                    }
                 }
                 // 没有返回条件，使用默认的返回条件
-                if (((ExecutableNode)node).getReturnCondition() == null) {
+                if (nodeResultKey != null && nodeResultKey.equals(resultKey)
+                    && ((ExecutableNode)node).getReturnCondition() == null) {
                     //noinspection unchecked
                     ((ExecutableNode)node).returnOn(returnCondition);
                 }
@@ -213,7 +222,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     }
 
     @Override
-    public ProcessDefinition<R> resultKey(Key<R> key) {
+    public ProcessDefinition<R> resultKey(@NotNull Key<R> key) {
         this.resultKey = key;
         return this;
     }

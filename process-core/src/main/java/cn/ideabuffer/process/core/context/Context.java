@@ -22,13 +22,41 @@ public interface Context extends Parameter {
 
     void setResultKey(ProcessDefinition<?> definition);
 
+    /**
+     * 获取结果key
+     *
+     * @param <V>
+     * @return
+     */
     <V> Key<V> getResultKey();
 
+    /**
+     * 当前key是否可读
+     *
+     * @param key
+     * @return
+     */
     boolean readableKey(Key<?> key);
 
+    /**
+     * 当前key是否可写
+     *
+     * @param key
+     * @return
+     */
     boolean writableKey(Key<?> key);
 
+    /**
+     * 获取当前异常对象
+     *
+     * @return
+     */
     Exception getCurrentException();
 
+    /**
+     * 设置当前异常对象
+     *
+     * @param e
+     */
     void setCurrentException(Exception e);
 }

@@ -48,9 +48,13 @@ public class ProcessInstanceTest {
             // 注册执行节点
             .addProcessNodes(
                 ProcessNodeBuilder.<Integer>newBuilder()
+                    // 设置返回结果key
                     .resultKey(resultKey)
+                    // 设置Processor
                     .by(new TestProcessor2())
+                    // 返回条件
                     .returnOn(result -> true)
+                    // 注册可读的key
                     .readableKeys(key)
                     .build(),
                 ProcessNodeBuilder.<Integer>newBuilder()
