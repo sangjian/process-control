@@ -54,12 +54,12 @@ public class ContextImpl extends ParameterImpl implements Context {
 
     @Override
     public boolean readableKey(Key<?> key) {
-        return true;
+        return false;
     }
 
     @Override
     public boolean writableKey(Key<?> key) {
-        return true;
+        return false;
     }
 
     @Override
@@ -90,12 +90,12 @@ public class ContextImpl extends ParameterImpl implements Context {
         private Context context = ContextImpl.this;
 
         @Override
-        public <V> V put(@NotNull Key<V> key, V value) {
+        public <V> V put(@NotNull Key<V> key, @NotNull V value) {
             return context.put(key, value);
         }
 
         @Override
-        public <V> V putIfAbsent(@NotNull Key<V> key, V value) {
+        public <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value) {
             return context.putIfAbsent(key, value);
         }
 
@@ -125,17 +125,17 @@ public class ContextImpl extends ParameterImpl implements Context {
         }
 
         @Override
-        public boolean containsKey(Key<?> key) {
+        public boolean containsKey(@NotNull Key<?> key) {
             return context.containsKey(key);
         }
 
         @Override
-        public boolean containsValue(Object value) {
+        public boolean containsValue(@NotNull Object value) {
             return context.containsValue(value);
         }
 
         @Override
-        public <V> V remove(Key<V> key) {
+        public <V> V remove(@NotNull Key<V> key) {
             return context.remove(key);
         }
 

@@ -74,7 +74,7 @@ public class BlockFacade implements Block {
     }
 
     @Override
-    public <V> V put(@NotNull Key<V> key, V value) {
+    public <V> V put(@NotNull Key<V> key, @NotNull V value) {
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             return block.put(mappingKey, value);
@@ -83,7 +83,7 @@ public class BlockFacade implements Block {
     }
 
     @Override
-    public <V> V putIfAbsent(@NotNull Key<V> key, V value) {
+    public <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value) {
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             return block.putIfAbsent(mappingKey, value);
@@ -125,7 +125,7 @@ public class BlockFacade implements Block {
     }
 
     @Override
-    public boolean containsKey(Key<?> key) {
+    public boolean containsKey(@NotNull Key<?> key) {
         Key<?> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             return block.containsKey(mappingKey);
@@ -134,12 +134,12 @@ public class BlockFacade implements Block {
     }
 
     @Override
-    public boolean containsValue(Object value) {
+    public boolean containsValue(@NotNull Object value) {
         return block.containsValue(value);
     }
 
     @Override
-    public <V> V remove(Key<V> key) {
+    public <V> V remove(@NotNull Key<V> key) {
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             return block.remove(mappingKey);

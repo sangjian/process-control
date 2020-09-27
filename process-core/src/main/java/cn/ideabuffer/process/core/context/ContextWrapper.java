@@ -56,7 +56,7 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public <V> V put(@NotNull Key<V> key, V value) {
+    public <V> V put(@NotNull Key<V> key, @NotNull V value) {
         return put(key, value, true);
     }
 
@@ -76,11 +76,11 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public <V> V putIfAbsent(@NotNull Key<V> key, V value) {
+    public <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value) {
         return putIfAbsent(key, value, true);
     }
 
-    protected <V> V putIfAbsent(@NotNull Key<V> key, V value, boolean keyCheck) {
+    protected <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value, boolean keyCheck) {
         if (keyCheck && !writableKey(key)) {
             throw new KeyNotWritableException(key + " is not writable, check the registration of the key!");
         }
@@ -121,7 +121,7 @@ public class ContextWrapper implements Context {
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).get(k, defaultValue, false);
         }
-        return context.get(key, defaultValue);
+        return context.get(k, defaultValue);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class ContextWrapper implements Context {
     public boolean isEmpty() {return context.isEmpty();}
 
     @Override
-    public boolean containsKey(Key<?> key) {
+    public boolean containsKey(@NotNull Key<?> key) {
         Key<?> k = key;
         Key<?> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
@@ -144,10 +144,10 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public boolean containsValue(Object value) {return context.containsValue(value);}
+    public boolean containsValue(@NotNull Object value) {return context.containsValue(value);}
 
     @Override
-    public <V> V remove(Key<V> key) {
+    public <V> V remove(@NotNull Key<V> key) {
         return remove(key, true);
     }
 

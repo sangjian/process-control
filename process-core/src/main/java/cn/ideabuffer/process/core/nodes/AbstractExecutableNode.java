@@ -179,7 +179,11 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         try {
             R result = getProcessor().process(ctx);
             if (resultKey != null) {
-                ctx.put(resultKey, result);
+                if (result != null) {
+                    ctx.put(resultKey, result);
+                } else {
+                    ctx.remove(resultKey);
+                }
             }
             notifyListeners(ctx, result, null, true);
             // 判断是否满足returnCondition

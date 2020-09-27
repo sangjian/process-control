@@ -64,7 +64,11 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
         try {
             R result = getProcessor().process(ctx);
             if (getResultKey() != null) {
-                ctx.put(getResultKey(), result);
+                if (result != null) {
+                    ctx.put(getResultKey(), result);
+                } else {
+                    ctx.remove(getResultKey());
+                }
             }
             if (transmittableProcessor != null) {
                 //noinspection unchecked

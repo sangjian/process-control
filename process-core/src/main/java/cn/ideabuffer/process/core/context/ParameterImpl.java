@@ -22,7 +22,7 @@ public class ParameterImpl implements Parameter {
     }
 
     @Override
-    public <V> V put(@NotNull Key<V> key, V value) {
+    public <V> V put(@NotNull Key<V> key, @NotNull V value) {
         Object v = params.put(key, value);
         if (v == null) {
             return null;
@@ -32,7 +32,7 @@ public class ParameterImpl implements Parameter {
     }
 
     @Override
-    public <V> V putIfAbsent(@NotNull Key<V> key, V value) {
+    public <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value) {
         Object v = params.putIfAbsent(key, value);
         if (v == null) {
             return null;
@@ -76,17 +76,17 @@ public class ParameterImpl implements Parameter {
     }
 
     @Override
-    public boolean containsKey(Key<?> key) {
+    public boolean containsKey(@NotNull Key<?> key) {
         return params.containsKey(key);
     }
 
     @Override
-    public boolean containsValue(Object value) {
+    public boolean containsValue(@NotNull Object value) {
         return params.containsValue(value);
     }
 
     @Override
-    public <V> V remove(Key<V> key) {
+    public <V> V remove(@NotNull Key<V> key) {
         Object v = params.remove(key);
         if (v == null) {
             return null;

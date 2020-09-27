@@ -12,9 +12,9 @@ import java.util.Map;
  */
 public interface Parameter {
 
-    <V> V put(@NotNull Key<V> key, V value);
+    <V> V put(@NotNull Key<V> key, @NotNull V value);
 
-    <V> V putIfAbsent(@NotNull Key<V> key, V value);
+    <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value);
 
     /**
      * 获取指定类型的值
@@ -41,11 +41,11 @@ public interface Parameter {
 
     boolean isEmpty();
 
-    boolean containsKey(Key<?> key);
+    boolean containsKey(@NotNull Key<?> key);
 
-    boolean containsValue(Object value);
+    boolean containsValue(@NotNull Object value);
 
-    <V> V remove(Key<V> key);
+    <V> V remove(@NotNull Key<V> key);
 
     void putAll(@NotNull Map<? extends Key<?>, ?> params);
 
