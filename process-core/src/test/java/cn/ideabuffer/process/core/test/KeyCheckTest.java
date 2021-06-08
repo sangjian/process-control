@@ -5,7 +5,7 @@ import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.exception.KeyNotWritableException;
+import cn.ideabuffer.process.core.exception.UnwritableKeyException;
 import cn.ideabuffer.process.core.exception.UnreadableKeyException;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class KeyCheckTest {
         definition.newInstance().execute(Contexts.newContext());
     }
 
-    @Test(expected = KeyNotWritableException.class)
+    @Test(expected = UnwritableKeyException.class)
     public void keyNotWritableTest() throws Exception {
         ProcessDefinition<Void> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", Integer.class);

@@ -4,7 +4,7 @@ import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.exception.UnreadableKeyException;
-import cn.ideabuffer.process.core.exception.KeyNotWritableException;
+import cn.ideabuffer.process.core.exception.UnwritableKeyException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -63,7 +63,7 @@ public class ContextWrapper implements Context {
     protected <V> V put(@NotNull Key<V> key, V value, boolean keyCheck) {
         Key<V> k = key;
         if (keyCheck && !writableKey(k)) {
-            throw new KeyNotWritableException(k + " is not writable, check the registration of the key!");
+            throw new UnwritableKeyException(k + " is not writable, check the registration of the key!");
         }
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
@@ -82,7 +82,7 @@ public class ContextWrapper implements Context {
 
     protected <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value, boolean keyCheck) {
         if (keyCheck && !writableKey(key)) {
-            throw new KeyNotWritableException(key + " is not writable, check the registration of the key!");
+            throw new UnwritableKeyException(key + " is not writable, check the registration of the key!");
         }
         Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
@@ -158,7 +158,7 @@ public class ContextWrapper implements Context {
             k = mappingKey;
         }
         if (keyCheck && !writableKey(k)) {
-            throw new KeyNotWritableException(k + " is not writable, check the registration of the key!");
+            throw new UnwritableKeyException(k + " is not writable, check the registration of the key!");
         }
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).remove(k, false);
