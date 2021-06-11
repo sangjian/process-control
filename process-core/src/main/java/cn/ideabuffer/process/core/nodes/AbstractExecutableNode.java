@@ -176,30 +176,33 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             doParallelExecute(ctx);
             return ProcessStatus.proceed();
         }
+
+        return doExecute(ctx);
+    }
+
+    protected ProcessStatus doExecute(Context context) throws Exception {
         try {
-            R result = getProcessor().process(ctx);
+            R result = getProcessor().process(context);
             if (resultKey != null) {
                 if (result != null) {
-                    ctx.put(resultKey, result);
+                    context.put(resultKey, result);
                 } else {
-                    ctx.remove(resultKey);
+                    context.remove(resultKey);
                 }
             }
-            notifyListeners(ctx, result, null, true);
+            notifyListeners(context, result, null, true);
             // 判断是否满足returnCondition
             if (returnCondition != null && returnCondition.onCondition(result)) {
                 return ProcessStatus.complete();
             }
         } catch (Exception e) {
-            notifyListeners(ctx, null, e, false);
+            notifyListeners(context, null, e, false);
             throw e;
         }
-
-
         return ProcessStatus.proceed();
     }
 
-    private void doParallelExecute(Context context) {
+    protected void doParallelExecute(Context context) {
         Executor e = executor == null ? NodeExecutors.DEFAULT_POOL : executor;
         e.execute(() -> {
             try {
@@ -212,7 +215,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         });
     }
 
-    protected void notifyListeners(Context context, @Nullable R result, Exception e, boolean success) {
+    protected void notifyListeners(Context context, @Nullable R result, @Nullable Exception e, boolean success) {
         if (listeners == null) {
             return;
         }
