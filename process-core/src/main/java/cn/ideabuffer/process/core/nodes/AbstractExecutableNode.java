@@ -13,10 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
@@ -80,12 +77,12 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
-        this.listeners = listeners;
+        this.listeners = listeners == null ? new ArrayList<>() : listeners;
         this.processor = processor;
         this.mapper = mapper;
         this.resultKey = resultKey;
         this.returnCondition = returnCondition;
-        this.readableKeys = readableKeys;
+        this.readableKeys = readableKeys == null ? new HashSet<>() : readableKeys;
         this.writableKeys = writableKeys == null ? new HashSet<>() : writableKeys;
         if (resultKey != null) {
             this.writableKeys.add(resultKey);
@@ -147,6 +144,9 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     public void setListeners(List<ProcessListener<R>> listeners) {
+        if (listeners == null || listeners.isEmpty()) {
+            return;
+        }
         this.listeners = listeners;
     }
 
@@ -171,16 +171,34 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         if (getProcessor() == null || !ruleCheck(ctx)) {
             return ProcessStatus.proceed();
         }
-
+        ProcessStatus status = ProcessStatus.proceed();
+        R result = null;
+        // 执行前置操作
+        preExecution(ctx);
         if (parallel) {
             doParallelExecute(ctx);
-            return ProcessStatus.proceed();
+        } else {
+            result = doSerialExecute(ctx);
         }
+        // 执行后置操作
+        postExecution(ctx, result);
+        // 判断是否满足returnCondition
+        if (!parallel && returnCondition != null && returnCondition.onCondition(result)) {
+            return ProcessStatus.complete();
+        }
+        return status;
 
-        return doExecute(ctx);
     }
 
-    protected ProcessStatus doExecute(Context context) throws Exception {
+    protected void preExecution(@NotNull Context context) {
+
+    }
+
+    protected void postExecution(@NotNull Context context, @Nullable R result) {
+
+    }
+
+    private R doSerialExecute(Context context) throws Exception {
         try {
             R result = getProcessor().process(context);
             if (resultKey != null) {
@@ -191,18 +209,14 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
                 }
             }
             notifyListeners(context, result, null, true);
-            // 判断是否满足returnCondition
-            if (returnCondition != null && returnCondition.onCondition(result)) {
-                return ProcessStatus.complete();
-            }
+            return result;
         } catch (Exception e) {
             notifyListeners(context, null, e, false);
             throw e;
         }
-        return ProcessStatus.proceed();
     }
 
-    protected void doParallelExecute(Context context) {
+    private void doParallelExecute(Context context) {
         Executor e = executor == null ? NodeExecutors.DEFAULT_POOL : executor;
         e.execute(() -> {
             try {
@@ -267,6 +281,9 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
 
     @Override
     public void setReadableKeys(Set<Key<?>> keys) {
+        if (keys == null || keys.isEmpty()) {
+            return;
+        }
         this.readableKeys = keys;
     }
 
@@ -277,7 +294,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
 
     @Override
     public void setWritableKeys(Set<Key<?>> keys) {
-        this.writableKeys = keys == null ? new HashSet<>() : keys;
+        if (keys == null || keys.isEmpty()) {
+            return;
+        }
+        this.writableKeys = keys;
         if (this.resultKey != null) {
             this.writableKeys.add(this.resultKey);
         }
