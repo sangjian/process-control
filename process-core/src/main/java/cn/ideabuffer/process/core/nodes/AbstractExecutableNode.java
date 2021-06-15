@@ -1,6 +1,9 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.*;
+import cn.ideabuffer.process.core.LifecycleState;
+import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
@@ -61,19 +64,24 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this(parallel, rule, executor, listeners, processor, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+        P processor, KeyMapper mapper) {
         this(parallel, rule, executor, listeners, processor, mapper, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+        P processor, KeyMapper mapper, Key<R> resultKey) {
         this(parallel, rule, executor, listeners, processor, mapper, resultKey, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+        P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition) {
         this(parallel, rule, executor, listeners, processor, mapper, resultKey, returnCondition, null, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners, P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+        P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition, Set<Key<?>> readableKeys,
+        Set<Key<?>> writableKeys) {
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
@@ -85,6 +93,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this.readableKeys = readableKeys == null ? new HashSet<>() : readableKeys;
         this.writableKeys = writableKeys == null ? new HashSet<>() : writableKeys;
         if (resultKey != null) {
+            this.readableKeys.add(resultKey);
             this.writableKeys.add(resultKey);
         }
     }
@@ -140,7 +149,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
 
     @Override
     public List<ProcessListener<R>> getListeners() {
-        return listeners;
+        return Collections.unmodifiableList(listeners);
     }
 
     public void setListeners(List<ProcessListener<R>> listeners) {
@@ -167,22 +176,25 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-        Context ctx = Contexts.wrap(context, context.getBlock(), mapper, readableKeys, writableKeys);
+        // 1. 包装context，主要是对key的一些映射和校验
+        Context ctx = Contexts.wrap(context, this);
+        // 2. 规则校验
         if (getProcessor() == null || !ruleCheck(ctx)) {
             return ProcessStatus.proceed();
         }
         ProcessStatus status = ProcessStatus.proceed();
         R result = null;
-        // 执行前置操作
+        // 3. 执行前置操作
         preExecution(ctx);
+        // 4. 执行
         if (parallel) {
             doParallelExecute(ctx);
         } else {
             result = doSerialExecute(ctx);
         }
-        // 执行后置操作
+        // 5. 执行后置操作
         postExecution(ctx, result);
-        // 判断是否满足returnCondition
+        // 6. 判断是否满足returnCondition
         if (!parallel && returnCondition != null && returnCondition.onCondition(result)) {
             return ProcessStatus.complete();
         }
@@ -260,6 +272,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     public void setResultKey(Key<R> resultKey) {
         this.resultKey = resultKey;
         if (resultKey != null) {
+            this.readableKeys.add(resultKey);
             this.writableKeys.add(resultKey);
         }
     }
@@ -285,11 +298,14 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             return;
         }
         this.readableKeys = keys;
+        if (this.resultKey != null) {
+            this.readableKeys.add(this.resultKey);
+        }
     }
 
     @Override
     public Set<Key<?>> getReadableKeys() {
-        return readableKeys;
+        return Collections.unmodifiableSet(readableKeys);
     }
 
     @Override
@@ -305,7 +321,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
 
     @Override
     public Set<Key<?>> getWritableKeys() {
-        return writableKeys;
+        return Collections.unmodifiableSet(writableKeys);
     }
 
     @Override
