@@ -22,7 +22,7 @@ public class DoWhileConditionNode extends WhileConditionNode {
 
     public DoWhileConditionNode(@NotNull Rule rule,
         @NotNull BranchNode branch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
-        super(rule, branch, keyMapper, readableKeys, writableKeys);
+        super(new DoWhileProcessorImpl(rule, branch, keyMapper, readableKeys, writableKeys));
     }
 
 }
