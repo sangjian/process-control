@@ -30,6 +30,9 @@ public class ContextTest {
         assertEquals(2, (int)context.get(key));
     }
 
+    /**
+     * 测试继承
+     */
     @Test
     public void testBlockInherit() {
         Context context = Contexts.newContext();

@@ -14,6 +14,8 @@ import cn.ideabuffer.process.core.test.nodes.executable.TestExecutableNodeProces
 import cn.ideabuffer.process.core.test.nodes.executable.TestExecutableNodeProcessor2;
 import org.awaitility.Duration;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -26,6 +28,8 @@ import static org.junit.Assert.assertEquals;
  * @date 2020/04/01
  */
 public class ExecutableNodeTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecutableNodeTest.class);
 
     @Test
     public void testSimpleExecutableNode() throws Exception {
@@ -51,8 +55,12 @@ public class ExecutableNodeTest {
         assertEquals(5, (int)context.get(key));
     }
 
+    /**
+     * 测试并行执行，执行抛异常不会中断
+     * @throws Exception
+     */
     @Test
-    public void testConfiguredExecutableNode() throws Exception {
+    public void testParallel() throws Exception {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         // 执行规则
         Rule rule = (ctx) -> true;
@@ -77,6 +85,7 @@ public class ExecutableNodeTest {
             .by(context -> {
                 // 设置key的值为5
                 context.put(key, 5);
+                LOGGER.info("in node2");
                 return ProcessStatus.proceed();
             })
             .writableKeys(key)

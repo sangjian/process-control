@@ -24,6 +24,10 @@ public class BlockTest {
 
     private static final Logger logger = LoggerFactory.getLogger(BlockTest.class);
 
+    /**
+     * 测试context与block隔离
+     * @throws Exception
+     */
     @Test
     public void testContextBlockIsolate() throws Exception {
         ProcessDefinition<Void> definition = new DefaultProcessDefinition<>();

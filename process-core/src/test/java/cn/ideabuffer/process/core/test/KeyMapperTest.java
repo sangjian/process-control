@@ -34,22 +34,31 @@ public class KeyMapperTest {
                     assertEquals(123, (int)context.get(to));
                     return null;
                 }).readableKeys(to).build(),
+                ProcessNodeBuilder.<Void>newBuilder()
+                    .by(context -> {
+                        // 指定了mapper，这里取from与取to相同
+                        assertEquals(123, (int)context.get(from));
+                        assertEquals(123, (int)context.get(to));
+                        // 设置from的值与设置to的值相同
+                        context.put(from, 456);
+                        assertEquals(456, (int)context.get(from));
+                        assertEquals(456, (int)context.get(to));
+                        return null;
+                    })
+                    .readableKeys(from, to)
+                    .writableKeys(from)
+                    .keyMapper(mapper)
+                    .build(),
                 ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                    // 指定了mapper，这里取from与取to相同
-                    assertEquals(123, (int)context.get(from));
-                    assertEquals(123, (int)context.get(to));
-                    // 设置from的值与设置to的值相同
-                    context.put(from, 456);
-                    assertEquals(456, (int)context.get(from));
-                    assertEquals(456, (int)context.get(to));
-                    return null;
-                }).readableKeys(from, to).writableKeys(from).keyMapper(mapper).build(),
-                ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                    // 没有指定mapper，找不到对应的key
-                    assertNull(context.get(from));
-                    context.put(from, 456);
-                    return null;
-                }).readableKeys(from).writableKeys(from).build());
+                        // 没有指定mapper，找不到对应的key
+                        assertNull(context.get(from));
+                        context.put(from, 456);
+                        return null;
+                    })
+                    .readableKeys(from)
+                    .writableKeys(from)
+                    .build()
+            );
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(to, 123);
