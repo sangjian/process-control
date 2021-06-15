@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.context;
 
 import cn.ideabuffer.process.core.block.Block;
+import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -54,5 +55,9 @@ public class Contexts {
 
     public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block, KeyMapper mapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         return new ContextWrapper(context, block, mapper, readableKeys, writableKeys);
+    }
+
+    public static ContextWrapper wrap(@NotNull Context context, @NotNull ExecutableNode<?, ?> node) {
+        return wrap(context, context.getBlock(), node.getKeyMapper(), node.getReadableKeys(), node.getWritableKeys());
     }
 }
