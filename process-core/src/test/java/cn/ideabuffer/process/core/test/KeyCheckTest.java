@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.test;
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
+import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.exception.UnwritableKeyException;
@@ -50,18 +51,18 @@ public class KeyCheckTest {
         ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(key);
         definition.addProcessNodes(ProcessNodeBuilder.<Integer>newBuilder()
             .by(context -> {
-                context.put(key, 67);
-                return context.get(key);
+                return 67;
             })
             .resultKey(key)
-            .readableKeys(key)
             .returnOn(result -> result != null && result % 2 == 1)
             .build()
         );
         ProcessInstance<Integer> instance = definition.newInstance();
-        instance.execute(Contexts.newContext());
+        Context context = Contexts.newContext();
+        instance.execute(context);
         Integer result = instance.getResult();
         assertEquals(Integer.valueOf(67), result);
+        assertEquals(Integer.valueOf(67), context.get(key));
     }
 
 }
