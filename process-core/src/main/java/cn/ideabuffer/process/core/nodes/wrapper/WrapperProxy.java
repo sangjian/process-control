@@ -37,6 +37,7 @@ public class WrapperProxy<R, P extends Processor<R>> implements ExecutableNode<R
         this.handler = handler;
     }
 
+    @SafeVarargs
     public static <R1, P1 extends Processor<R1>> ExecutableNode<R1, P1> wrap(@NotNull ExecutableNode<R1, P1> node,
         @NotNull WrapperHandler<R1>... handlers) {
         ExecutableNode<R1, P1> wrapped = node;
