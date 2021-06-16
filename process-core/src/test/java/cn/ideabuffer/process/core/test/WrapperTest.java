@@ -124,7 +124,7 @@ public class WrapperTest {
         instance.execute(context);
         // 输出执行结果
         assertEquals(2L, (long)instance.getResult());
-
+        // 保证顺序正确
         assertEquals(1L, (long)handler1BeforeOrder.get());
         assertEquals(2L, (long)handler2BeforeOrder.get());
         assertEquals(3L, (long)processor1Order.get());
