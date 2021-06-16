@@ -8,6 +8,8 @@ import cn.ideabuffer.process.core.strategy.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.Executor;
+
 /**
  * @author sangjian.sj
  * @date 2020/05/02
@@ -33,6 +35,8 @@ public interface ParallelBranchProcessor extends ComplexProcessor<ProcessStatus>
      * @return
      */
     void addBranch(@NotNull BranchNode branch);
+
+    void parallelBy(Executor executor);
 
     void proceedWhen(@NotNull ProceedStrategy strategy);
 

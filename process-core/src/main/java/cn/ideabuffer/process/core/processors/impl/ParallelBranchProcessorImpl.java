@@ -47,6 +47,11 @@ public class ParallelBranchProcessorImpl implements ParallelBranchProcessor {
     }
 
     @Override
+    public void parallelBy(Executor executor) {
+        this.executor = executor;
+    }
+
+    @Override
     public void proceedWhen(@NotNull ProceedStrategy strategy) {
         this.strategy = strategy;
     }

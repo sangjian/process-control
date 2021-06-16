@@ -7,6 +7,7 @@ import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
+import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.strategy.ProceedStrategy;
@@ -84,9 +85,13 @@ public class ParallelBranchNodeBuilder
 
     @Override
     public ParallelBranchNode build() {
+        if (processor == null) {
+            processor = new ParallelBranchProcessorImpl();
+        }
         ParallelBranchNode node = super.build();
         this.branches.forEach(processor::addBranch);
         processor.proceedWhen(strategy);
+        processor.parallelBy(executor);
         return node;
     }
 }
