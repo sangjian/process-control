@@ -8,9 +8,6 @@ import cn.ideabuffer.process.core.processors.DistributeProcessor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface DistributeMergeableNode<T, R> extends MergeableNode {
+public interface DistributeMergeableNode<T, R> extends MergeableNode<DistributeProcessor<T, R>, T> {
 
-    void registerProcessor(DistributeProcessor<T, R> processor);
-
-    DistributeProcessor<T, R> getProcessor();
 }

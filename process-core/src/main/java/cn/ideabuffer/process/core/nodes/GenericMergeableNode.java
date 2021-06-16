@@ -8,9 +8,6 @@ import cn.ideabuffer.process.core.Processor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface GenericMergeableNode<R> extends MergeableNode {
+public interface GenericMergeableNode<R> extends MergeableNode<Processor<R>, R> {
 
-    void registerProcessor(Processor<R> processor);
-
-    Processor<R> getProcessor();
 }
