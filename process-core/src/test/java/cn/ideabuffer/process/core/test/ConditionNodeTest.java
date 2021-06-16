@@ -192,20 +192,25 @@ public class ConditionNodeTest {
     /**
      * <pre>{@code
      *
+     * // k < 10 并且总执行次数 < 10
      * while(k < 10 && counter.getAndIncrement() < 10) {
      *      // node1
      *      {
+     *          // node1执行次数
      *          processor1Counter.incrementAndGet();
      *          ++k;
      *          if (k == 5) {
+     *              // continue次数
      *              continueCounter.getAndIncrement();
      *              continue;
      *         }
      *      }
      *      // node2
      *      {
+     *          // node2执行次数
      *          processor2Counter.incrementAndGet();
      *          if (k > processor2MaxK.get()) {
+     *              // node2执行最大的k
      *              processor2MaxK.set(k);
      *          }
      *      }
@@ -373,17 +378,20 @@ public class ConditionNodeTest {
      *     while(k < 10) {
      *          // node1
      *          {
+     *              // node1执行标记
      *              processor1Flag.set(true);
      *              k++;
      *          }
      *          // node2
      *          {
+     *              // node2执行标记
      *              processor2Flag.set(true);
      *              k++;
      *              break;
      *          }
      *          // node3
      *          {
+     *              // node3执行标记
      *              processor3Flag.set(true);
      *          }
      *

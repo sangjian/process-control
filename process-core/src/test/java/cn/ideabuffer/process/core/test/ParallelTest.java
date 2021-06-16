@@ -36,6 +36,7 @@ public class ParallelTest {
                 return null;
             }))
             .by(new ParallelBranchProcessorImpl())
+            // 所有分支返回继续，才可进行后续节点执行，否则后续节点不执行
             .proceedWhen(ProceedStrategies.ALL_PROCEEDED).build();
         definition.addProcessNodes(node);
         ProcessInstance<String> instance = definition.newInstance();
