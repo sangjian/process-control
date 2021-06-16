@@ -26,7 +26,7 @@ public interface ParallelExecutor {
      * @throws Exception
      */
     @NotNull
-    ProcessStatus execute(Executor executor, ProceedStrategy proceedStrategy, @NotNull Context context,
+    ProcessStatus execute(Executor executor, @NotNull ProceedStrategy proceedStrategy, @NotNull Context context,
         ExecutableNode<?, ?>... nodes)
         throws Exception;
 }

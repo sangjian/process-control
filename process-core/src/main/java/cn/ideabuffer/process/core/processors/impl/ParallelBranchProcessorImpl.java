@@ -23,7 +23,7 @@ public class ParallelBranchProcessorImpl implements ParallelBranchProcessor {
 
     private List<BranchNode> branches;
 
-    private ProceedStrategy strategy = ProceedStrategies.AT_LEAST_ONE_FINISHED;
+    private ProceedStrategy strategy = ProceedStrategies.ALL_PROCEEDED;
 
     private Executor executor;
 

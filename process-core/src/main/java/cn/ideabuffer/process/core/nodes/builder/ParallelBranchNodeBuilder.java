@@ -90,7 +90,9 @@ public class ParallelBranchNodeBuilder
         }
         ParallelBranchNode node = super.build();
         this.branches.forEach(processor::addBranch);
-        processor.proceedWhen(strategy);
+        if (strategy != null) {
+            processor.proceedWhen(strategy);
+        }
         processor.parallelBy(executor);
         return node;
     }
