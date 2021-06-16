@@ -2,7 +2,6 @@ package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Matchable;
 import cn.ideabuffer.process.core.Mergeable;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -17,30 +16,14 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractMergeableNode extends AbstractNode implements Mergeable, Matchable {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private Rule rule;
-    private ExceptionHandler exceptionHandler;
     private long timeout;
 
     public AbstractMergeableNode() {
     }
 
-    public AbstractMergeableNode(Rule rule, ExceptionHandler exceptionHandler, long timeout) {
+    public AbstractMergeableNode(Rule rule, long timeout) {
         this.rule = rule;
-        this.exceptionHandler = exceptionHandler;
         this.timeout = timeout;
-    }
-
-    @Override
-    public void exceptionHandler(ExceptionHandler handler) {
-        this.exceptionHandler = handler;
-    }
-
-    @Override
-    public ExceptionHandler getExceptionHandler() {
-        return exceptionHandler;
-    }
-
-    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
-        this.exceptionHandler = exceptionHandler;
     }
 
     @Override

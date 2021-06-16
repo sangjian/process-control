@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core;
 
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
@@ -12,10 +11,6 @@ import java.util.concurrent.TimeUnit;
  * @date 2020/03/07
  */
 public interface Mergeable {
-
-    void exceptionHandler(ExceptionHandler handler);
-
-    ExceptionHandler getExceptionHandler();
 
     void timeout(long timeout, @NotNull TimeUnit unit);
 

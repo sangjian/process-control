@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.processors.DistributeProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 
@@ -15,10 +14,8 @@ public class DistributeMergeNode<T, R> extends AbstractMergeableNode implements 
     public DistributeMergeNode() {
     }
 
-    public DistributeMergeNode(Rule rule,
-        ExceptionHandler exceptionHandler, long timeout,
-        DistributeProcessor<T, R> processor) {
-        super(rule, exceptionHandler, timeout);
+    public DistributeMergeNode(Rule rule, long timeout, DistributeProcessor<T, R> processor) {
+        super(rule, timeout);
         this.processor = processor;
     }
 

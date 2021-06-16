@@ -1,7 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.MergeNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 public class MergeNodeBuilder<T> implements Builder<MergeNode<T>> {
 
     private Rule rule;
-    private ExceptionHandler exceptionHandler;
     private long timeout;
     private TimeUnit timeUnit;
     private Processor<T> processor;
@@ -25,11 +23,6 @@ public class MergeNodeBuilder<T> implements Builder<MergeNode<T>> {
 
     public static <T> MergeNodeBuilder<T> newBuilder() {
         return new MergeNodeBuilder<>();
-    }
-
-    public MergeNodeBuilder<T> exceptionHandler(ExceptionHandler handler) {
-        this.exceptionHandler = handler;
-        return this;
     }
 
     public MergeNodeBuilder<T> processOn(Rule rule) {
@@ -51,6 +44,6 @@ public class MergeNodeBuilder<T> implements Builder<MergeNode<T>> {
     @Override
     public MergeNode<T> build() {
         long millis = timeUnit == null ? 0L : timeUnit.toMillis(timeout);
-        return new MergeNode<>(rule, exceptionHandler, millis, processor);
+        return new MergeNode<>(rule, millis, processor);
     }
 }

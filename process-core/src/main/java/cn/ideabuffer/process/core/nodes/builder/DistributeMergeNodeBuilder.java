@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.nodes.DistributeMergeNode;
 import cn.ideabuffer.process.core.processors.DistributeProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
@@ -15,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 public class DistributeMergeNodeBuilder<T, R> implements Builder<DistributeMergeNode<T, R>> {
 
     private Rule rule;
-    private ExceptionHandler exceptionHandler;
     private long timeout;
     private TimeUnit timeUnit;
     private DistributeProcessor<T, R> processor;
@@ -25,11 +23,6 @@ public class DistributeMergeNodeBuilder<T, R> implements Builder<DistributeMerge
 
     public static <T, R> DistributeMergeNodeBuilder<T, R> newBuilder() {
         return new DistributeMergeNodeBuilder<>();
-    }
-
-    public DistributeMergeNodeBuilder<T, R> exceptionHandler(ExceptionHandler handler) {
-        this.exceptionHandler = handler;
-        return this;
     }
 
     public DistributeMergeNodeBuilder<T, R> processOn(Rule rule) {
@@ -51,6 +44,6 @@ public class DistributeMergeNodeBuilder<T, R> implements Builder<DistributeMerge
     @Override
     public DistributeMergeNode<T, R> build() {
         long millis = timeUnit == null ? 0L : timeUnit.toMillis(timeout);
-        return new DistributeMergeNode<>(rule, exceptionHandler, millis, processor);
+        return new DistributeMergeNode<>(rule, millis, processor);
     }
 }

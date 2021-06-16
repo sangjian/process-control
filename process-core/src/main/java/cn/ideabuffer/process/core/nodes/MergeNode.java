@@ -1,7 +1,6 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.handler.ExceptionHandler;
 import cn.ideabuffer.process.core.rule.Rule;
 
 /**
@@ -15,10 +14,8 @@ public class MergeNode<R> extends AbstractMergeableNode implements GenericMergea
     public MergeNode() {
     }
 
-    public MergeNode(Rule rule,
-        ExceptionHandler exceptionHandler, long timeout,
-        Processor<R> processor) {
-        super(rule, exceptionHandler, timeout);
+    public MergeNode(Rule rule, long timeout, Processor<R> processor) {
+        super(rule, timeout);
         this.processor = processor;
     }
 
