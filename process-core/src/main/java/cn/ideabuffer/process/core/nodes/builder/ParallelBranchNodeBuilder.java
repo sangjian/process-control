@@ -8,6 +8,8 @@ import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
 import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.proxy.ParallelBranchProcessorProxy;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.strategy.ProceedStrategy;
@@ -84,10 +86,23 @@ public class ParallelBranchNodeBuilder
     }
 
     @Override
+    public ParallelBranchNodeBuilder wrap( @NotNull WrapperHandler<ProcessStatus>... handlers) {
+        super.wrap(handlers);
+        return this;
+    }
+
+    @Override
+    public ParallelBranchNodeBuilder wrap(@NotNull List<WrapperHandler<ProcessStatus>> wrapperHandlers) {
+        super.wrap(wrapperHandlers);
+        return this;
+    }
+
+    @Override
     public ParallelBranchNode build() {
         if (processor == null) {
             processor = new ParallelBranchProcessorImpl();
         }
+        processor = ParallelBranchProcessorProxy.wrap(processor, handlers);
         ParallelBranchNode node = super.build();
         this.branches.forEach(processor::addBranch);
         if (strategy != null) {

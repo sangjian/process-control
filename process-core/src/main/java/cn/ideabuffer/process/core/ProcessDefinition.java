@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -116,4 +117,6 @@ public interface ProcessDefinition<R> extends Lifecycle {
     void returnOn(ReturnCondition<R> condition);
 
     ReturnCondition<R> getReturnCondition();
+
+    ProcessDefinition<R> wrap(@NotNull WrapperHandler<R>... handlers);
 }

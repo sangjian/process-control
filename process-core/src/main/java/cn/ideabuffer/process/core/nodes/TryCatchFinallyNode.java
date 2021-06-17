@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.TryCatchFinallyProcessor;
 import cn.ideabuffer.process.core.processors.impl.TryCatchFinallyProcessorImpl;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +18,11 @@ public class TryCatchFinallyNode extends AbstractExecutableNode<ProcessStatus, T
 
     public TryCatchFinallyNode(BranchNode tryBranch,
         List<CatchMapper> catchMapper, BranchNode finallyBranch) {
-        super.registerProcessor(new TryCatchFinallyProcessorImpl(tryBranch, catchMapper, finallyBranch));
+        this(new TryCatchFinallyProcessorImpl(tryBranch, catchMapper, finallyBranch));
+    }
+
+    public TryCatchFinallyNode(@NotNull TryCatchFinallyProcessor processor) {
+        super.registerProcessor(processor);
     }
 
     @Override

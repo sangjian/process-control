@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.nodes.wrapper;
+package cn.ideabuffer.process.core.processors.wrapper;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -13,7 +13,7 @@ public interface WrapperHandler<R> {
 
     void before(@NotNull Context context);
 
-    void afterReturning(@NotNull Context context,  @Nullable R result, @NotNull ProcessStatus status);
+    void afterReturning(@NotNull Context context, @Nullable R result);
 
     void afterThrowing(@NotNull Context context, @NotNull Throwable t);
 

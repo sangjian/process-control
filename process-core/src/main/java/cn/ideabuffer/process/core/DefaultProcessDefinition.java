@@ -11,10 +11,12 @@ import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,6 +37,8 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     private Key<R> resultKey;
 
     private ReturnCondition<R> returnCondition;
+
+    private List<WrapperHandler<R>> handlers;
 
     public DefaultProcessDefinition() {
         this(null);
@@ -240,5 +244,17 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     @Override
     public ReturnCondition<R> getReturnCondition() {
         return this.returnCondition;
+    }
+
+    @Override
+    public ProcessDefinition<R> wrap(@NotNull WrapperHandler<R>... handlers) {
+        if (handlers.length == 0) {
+            return this;
+        }
+        if (this.handlers == null) {
+            this.handlers = new ArrayList<>();
+        }
+        this.handlers.addAll(Arrays.asList(handlers));
+        return this;
     }
 }

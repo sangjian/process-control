@@ -6,7 +6,6 @@ import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.strategy.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.Executor;
 

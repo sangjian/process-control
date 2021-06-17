@@ -9,6 +9,8 @@ import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
 import cn.ideabuffer.process.core.processors.impl.DistributeAggregateProcessorImpl;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.proxy.DistributeAggregateProcessorProxy;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -104,10 +106,23 @@ public class DistributeAggregatableNodeBuilder<R>
     }
 
     @Override
+    public DistributeAggregatableNodeBuilder<R> wrap(@NotNull WrapperHandler<R>... handlers) {
+        super.wrap(handlers);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> wrap(@NotNull List<WrapperHandler<R>> wrapperHandlers) {
+        super.wrap(wrapperHandlers);
+        return this;
+    }
+
+    @Override
     public DistributeAggregatableNode<R> build() {
         if (processor == null) {
             processor = new DistributeAggregateProcessorImpl<>();
         }
+        processor = DistributeAggregateProcessorProxy.wrap(processor, handlers);
         DistributeAggregatableNode<R> node = super.build();
         processor.aggregate(mergeableNodes);
         processor.aggregator(aggregator);

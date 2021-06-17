@@ -28,7 +28,11 @@ public class IfConditionNode extends AbstractExecutableNode<ProcessStatus, IfPro
     }
 
     public IfConditionNode(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
-        super.registerProcessor(new IfProcessorImpl(rule, trueBranch, falseBranch, keyMapper, readableKeys, writableKeys));
+        this(new IfProcessorImpl(rule, trueBranch, falseBranch, keyMapper, readableKeys, writableKeys));
+    }
+
+    public IfConditionNode(@NotNull IfProcessor processor) {
+        super.registerProcessor(processor);
     }
 
     @Override

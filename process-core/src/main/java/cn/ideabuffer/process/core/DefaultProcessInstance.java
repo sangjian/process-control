@@ -5,13 +5,12 @@ import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.processors.impl.ProcessInstanceProcessorImpl;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.proxy.ProcessInstanceProcessorProxy;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -22,7 +21,13 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
     implements ProcessInstance<R> {
 
     public DefaultProcessInstance(@NotNull ProcessDefinition<R> definition) {
-        super.registerProcessor(new ProcessInstanceProcessorImpl<>(definition));
+        this(definition, null);
+    }
+
+    public DefaultProcessInstance(@NotNull ProcessDefinition<R> definition, List<WrapperHandler<ProcessStatus>> handlers) {
+        ProcessInstanceProcessor<R> wrapped = new ProcessInstanceProcessorImpl<>(definition);
+        wrapped = ProcessInstanceProcessorProxy.wrap(wrapped, handlers);
+        super.registerProcessor(wrapped);
         super.setReadableKeys(getAllResultKeys(definition));
     }
 

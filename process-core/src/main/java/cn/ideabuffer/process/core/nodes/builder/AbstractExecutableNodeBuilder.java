@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,12 +34,14 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
     protected Set<Key<?>> readableKeys;
     protected Set<Key<?>> writableKeys;
     protected BooleanSupplier enableSupplier;
+    protected List<WrapperHandler<R>> handlers;
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
         this.listeners = new LinkedList<>();
         this.readableKeys = new HashSet<>();
         this.writableKeys = new HashSet<>();
+        this.handlers = new LinkedList<>();
     }
 
     public Builder<T> parallel() {
@@ -107,6 +110,20 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     public Builder<T> enabled(BooleanSupplier supplier) {
         this.enableSupplier = supplier;
+        return this;
+    }
+
+    public Builder<T> wrap(@NotNull WrapperHandler<R>... handlers) {
+        if (handlers.length > 0) {
+            this.handlers.addAll(Arrays.asList(handlers));
+        }
+        return this;
+    }
+
+    public Builder<T> wrap(@NotNull List<WrapperHandler<R>> handlers) {
+        if (!handlers.isEmpty()) {
+            this.handlers.addAll(handlers);
+        }
         return this;
     }
 
