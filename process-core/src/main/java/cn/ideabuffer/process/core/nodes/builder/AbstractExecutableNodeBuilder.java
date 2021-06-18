@@ -140,6 +140,9 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
             //noinspection unchecked
             node.addProcessListeners(listeners.toArray(new ProcessListener[0]));
         }
+        if (processor == null) {
+            throw new NullPointerException("processor cannot be null");
+        }
         node.registerProcessor(processor);
         node.setResultKey(resultKey);
         node.returnOn(returnCondition);

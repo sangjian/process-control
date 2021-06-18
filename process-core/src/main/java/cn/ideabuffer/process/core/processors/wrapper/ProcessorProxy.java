@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.processors.wrapper;
 
 import cn.ideabuffer.process.core.Processor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -10,8 +11,10 @@ import java.util.List;
  */
 public interface ProcessorProxy<P extends Processor<R>, R> {
 
+    @NotNull
     P getTarget();
 
+    @NotNull
     WrapperHandler<R> getHandler();
 
 }

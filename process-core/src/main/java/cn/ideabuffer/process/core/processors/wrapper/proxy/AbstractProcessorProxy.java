@@ -16,16 +16,18 @@ public abstract class AbstractProcessorProxy<P extends Processor<R>, R> implemen
 
     private WrapperHandler<R> handler;
 
-    public AbstractProcessorProxy(@NotNull P target, @NotNull WrapperHandler<R> handler) {
+    public AbstractProcessorProxy(@NotNull P target, WrapperHandler<R> handler) {
         this.target = target;
         this.handler = handler;
     }
 
+    @NotNull
     @Override
     public P getTarget() {
         return target;
     }
 
+    @NotNull
     @Override
     public WrapperHandler<R> getHandler() {
         return handler;
@@ -33,6 +35,15 @@ public abstract class AbstractProcessorProxy<P extends Processor<R>, R> implemen
 
     @Override
     public R process(@NotNull Context context) throws Exception {
-        return null;
+        R result = null;
+        try {
+            handler.before(context);
+            result = target.process(context);
+            handler.afterReturning(context, result);
+            return result;
+        } catch (Throwable t) {
+            handler.afterThrowing(context, t);
+        }
+        return result;
     }
 }

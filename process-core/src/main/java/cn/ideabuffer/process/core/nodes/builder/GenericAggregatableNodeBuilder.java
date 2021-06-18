@@ -9,6 +9,8 @@ import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
 import cn.ideabuffer.process.core.processors.AggregateProcessor;
 import cn.ideabuffer.process.core.processors.impl.GenericAggregateProcessorImpl;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.proxy.AggregateProcessorProxy;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
@@ -104,10 +106,23 @@ public class GenericAggregatableNodeBuilder<P, R>
     }
 
     @Override
+    public GenericAggregatableNodeBuilder<P, R> wrap(@NotNull WrapperHandler<R>... handlers) {
+        super.wrap(handlers);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> wrap(@NotNull List<WrapperHandler<R>> handlers) {
+        super.wrap(handlers);
+        return this;
+    }
+
+    @Override
     public GenericAggregatableNode<P, R> build() {
         if (processor == null) {
             processor = new GenericAggregateProcessorImpl<>();
         }
+        processor = AggregateProcessorProxy.wrap(processor, handlers);
         GenericAggregatableNode<P, R> node = super.build();
         processor.aggregator(aggregator);
         processor.aggregate(mergeableNodes);

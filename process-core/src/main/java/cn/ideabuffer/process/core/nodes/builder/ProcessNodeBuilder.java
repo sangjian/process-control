@@ -6,14 +6,15 @@ import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.proxy.DefaultProcessorProxy;
 import cn.ideabuffer.process.core.rule.Rule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
-import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -107,4 +108,23 @@ public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Proc
         return this;
     }
 
+    @Override
+    public ProcessNodeBuilder<R> wrap(@NotNull WrapperHandler<R>... handlers) {
+        super.wrap(handlers);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> wrap(@NotNull List<WrapperHandler<R>> wrapperHandlers) {
+        super.wrap(wrapperHandlers);
+        return this;
+    }
+
+    @Override
+    public ProcessNode<R> build() {
+        if (processor != null) {
+            processor = DefaultProcessorProxy.wrap(processor, handlers);
+        }
+        return super.build();
+    }
 }

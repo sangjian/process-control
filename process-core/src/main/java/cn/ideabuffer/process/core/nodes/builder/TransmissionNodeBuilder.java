@@ -5,8 +5,12 @@ import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.TransmissionNode;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.proxy.DefaultProcessorProxy;
 import cn.ideabuffer.process.core.rule.Rule;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
@@ -73,4 +77,23 @@ public class TransmissionNodeBuilder<R>
         return this;
     }
 
+    @Override
+    public TransmissionNodeBuilder<R> wrap(@NotNull WrapperHandler<R>... handlers) {
+        super.wrap(handlers);
+        return this;
+    }
+
+    @Override
+    public TransmissionNodeBuilder<R> wrap(@NotNull List<WrapperHandler<R>> handlers) {
+        super.wrap(handlers);
+        return this;
+    }
+
+    @Override
+    public TransmissionNode<R> build() {
+        if (processor != null) {
+            processor = DefaultProcessorProxy.wrap(processor, handlers);
+        }
+        return super.build();
+    }
 }
