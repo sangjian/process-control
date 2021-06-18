@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.strategy;
 
+import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class AtLeastOneProceededStrategy implements ProceedStrategy {
             });
         }
 
-        for (int i = 0; i < queue.size(); i++) {
+        for (int i = 0; i < futures.size(); i++) {
             if (ProcessStatus.isProceed(queue.take())) {
                 return true;
             }
