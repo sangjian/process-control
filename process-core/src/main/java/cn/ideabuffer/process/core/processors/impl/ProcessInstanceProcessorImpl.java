@@ -8,10 +8,6 @@ import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * @author sangjian.sj
  * @date 2020/05/03
@@ -30,32 +26,22 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
     public ProcessStatus process(@NotNull Context context) throws Exception {
         checkState();
 
-        Exception exception = null;
-
         Node[] nodes = definition.getNodes();
         ProcessStatus status = ProcessStatus.proceed();
-        int i = 0;
         context.setResultKey(definition);
-        for (; i < nodes.length; i++) {
+        for (int i = 0; i < nodes.length; i++) {
             Node node = nodes[i];
-
             if (!node.enabled()) {
                 continue;
             }
 
             if (node instanceof ExecutableNode) {
-                try {
-                    Context ctx = context;
-                    if (node instanceof ProcessInstance) {
-                        ctx = context.cloneContext();
-                    }
-                    status = ((ExecutableNode)node).execute(ctx);
-                    if (ProcessStatus.isComplete(status)) {
-                        break;
-                    }
-                } catch (Exception e) {
-                    exception = e;
-                    status = ProcessStatus.completeWithException(e);
+                Context ctx = context;
+                if (node instanceof ProcessInstance) {
+                    ctx = context.cloneContext();
+                }
+                status = ((ExecutableNode)node).execute(ctx);
+                if (ProcessStatus.isComplete(status)) {
                     break;
                 }
             }
@@ -63,19 +49,6 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
         }
         if (context.getResultKey() != null) {
             result = context.get(context.getResultKey());
-        }
-        if (i >= nodes.length) {
-            i--;
-        }
-
-        List<Node> postNodeList = Arrays.stream(nodes).collect(Collectors.toList()).subList(0, ++i);
-        boolean chainProcessed = postProcess(postNodeList, context, exception);
-
-        if (exception == null) {
-            return status;
-        }
-        if (!chainProcessed) {
-            throw exception;
         }
 
         return status;
@@ -89,34 +62,6 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
     @Override
     public ProcessDefinition<R> getProcessDefinition() {
         return definition;
-    }
-
-    private boolean postProcess(Node node, Context context, Exception exception) {
-        if (node == null) {
-            return false;
-        }
-        try {
-            if (!node.enabled()) {
-                return false;
-            }
-            if (node instanceof PostProcessor) {
-                return ((PostProcessor)node).postProcess(context, exception);
-            }
-
-        } catch (Exception e) {
-            // do something...
-        }
-        return false;
-    }
-
-    private boolean postProcess(List<Node> nodes, Context context, Exception exception) {
-        boolean processed = false;
-        for (int i = nodes.size() - 1; i >= 0; i--) {
-            if (postProcess(nodes.get(i), context, exception)) {
-                processed = true;
-            }
-        }
-        return processed;
     }
 
     private void checkState() {
