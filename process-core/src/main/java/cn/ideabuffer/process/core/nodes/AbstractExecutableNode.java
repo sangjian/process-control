@@ -93,7 +93,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this.readableKeys = readableKeys == null ? new HashSet<>() : readableKeys;
         this.writableKeys = writableKeys == null ? new HashSet<>() : writableKeys;
         if (resultKey != null) {
-            this.readableKeys.add(resultKey);
             this.writableKeys.add(resultKey);
         }
     }
@@ -277,7 +276,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     public void setResultKey(Key<R> resultKey) {
         this.resultKey = resultKey;
         if (resultKey != null) {
-            this.readableKeys.add(resultKey);
             this.writableKeys.add(resultKey);
         }
     }
@@ -303,9 +301,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             return;
         }
         this.readableKeys = keys;
-        if (this.resultKey != null) {
-            this.readableKeys.add(this.resultKey);
-        }
     }
 
     @Override
