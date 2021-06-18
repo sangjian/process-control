@@ -1,9 +1,8 @@
-package cn.ideabuffer.process.core.processors.wrapper;
+package cn.ideabuffer.process.core.processors.wrapper.proxy;
 
 import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * @author sangjian.sj
