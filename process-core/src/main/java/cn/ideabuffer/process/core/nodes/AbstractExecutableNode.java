@@ -210,6 +210,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
 
     }
 
+    @Nullable
     private R doSerialExecute(Context context) throws Exception {
         try {
             R result = getProcessor().process(context);
