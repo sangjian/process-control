@@ -172,7 +172,7 @@ public class ParallelTest {
             }))
             .addBranch(Nodes.newProcessNode(context -> {
                 Thread.sleep(1000);
-                LOGGER.info("in node1");
+                LOGGER.info("in node2");
                 node2Flag.set(true);
                 return ProcessStatus.complete();
             }))
