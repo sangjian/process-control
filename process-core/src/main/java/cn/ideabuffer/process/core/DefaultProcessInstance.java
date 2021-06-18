@@ -2,7 +2,6 @@ package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
-import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.processors.impl.ProcessInstanceProcessorImpl;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
@@ -10,8 +9,9 @@ import cn.ideabuffer.process.core.processors.wrapper.proxy.ProcessInstanceProces
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -28,26 +28,12 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
         ProcessInstanceProcessor<R> wrapped = new ProcessInstanceProcessorImpl<>(definition);
         wrapped = ProcessInstanceProcessorProxy.wrap(wrapped, handlers);
         super.registerProcessor(wrapped);
-        super.setReadableKeys(getAllResultKeys(definition));
-    }
-
-    /**
-     * 获取流程节点中的所有resultKey，
-     * @param definition
-     * @return
-     */
-    private Set<Key<?>> getAllResultKeys(@NotNull ProcessDefinition<R> definition) {
-        Node[] nodes = definition.getNodes();
-        Set<Key<?>> keys = new HashSet<>();
-        Arrays.stream(nodes).filter(node -> node instanceof ExecutableNode).forEach(node -> {
-            if (((ExecutableNode)node).getResultKey() != null) {
-                keys.add(((ExecutableNode)node).getResultKey());
-            }
-        });
         if (definition.getResultKey() != null) {
-            keys.add(definition.getResultKey());
+            Set<Key<?>> resultKeys = new HashSet<>();
+            resultKeys.add(definition.getResultKey());
+            super.setReadableKeys(resultKeys);
         }
-        return keys;
+
     }
 
     @Override
