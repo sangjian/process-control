@@ -178,7 +178,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     public ProcessStatus execute(Context context) throws Exception {
         // 1. 包装context，主要是对key的一些映射和校验
         Context ctx = Contexts.wrap(context, this);
-        // 2. 规则校验
+        // 2. 规则校验，校验不通过，不执行当前节点，继续执行下一节点
         if (getProcessor() == null || !ruleCheck(ctx)) {
             return ProcessStatus.proceed();
         }
@@ -194,7 +194,11 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         }
         // 5. 执行后置操作
         postExecution(ctx, result);
-        // 6. 判断是否满足returnCondition
+        // 6. 如果Processor的返回值类型是ProcessStatus，则直接返回result
+        if (result instanceof ProcessStatus) {
+            return (ProcessStatus)result;
+        }
+        // 7. 判断是否满足returnCondition
         if (!parallel && returnCondition != null && returnCondition.onCondition(result)) {
             return ProcessStatus.complete();
         }
