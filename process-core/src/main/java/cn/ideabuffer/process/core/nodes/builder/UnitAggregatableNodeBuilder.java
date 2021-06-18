@@ -105,8 +105,8 @@ public class UnitAggregatableNodeBuilder<R>
     }
 
     @Override
-    public UnitAggregatableNodeBuilder<R> wrap(@NotNull WrapperHandler<R>... handlers) {
-        super.wrap(handlers);
+    public UnitAggregatableNodeBuilder<R> wrap(@NotNull WrapperHandler<R> handler) {
+        super.wrap(handler);
         return this;
     }
 

@@ -113,10 +113,8 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
-    public Builder<T> wrap(@NotNull WrapperHandler<R>... handlers) {
-        if (handlers.length > 0) {
-            this.handlers.addAll(Arrays.asList(handlers));
-        }
+    public Builder<T> wrap(@NotNull WrapperHandler<R> handler) {
+        this.handlers.add(handler);
         return this;
     }
 

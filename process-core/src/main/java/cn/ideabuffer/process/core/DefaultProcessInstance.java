@@ -31,6 +31,11 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
         super.setReadableKeys(getAllResultKeys(definition));
     }
 
+    /**
+     * 获取流程节点中的所有resultKey，
+     * @param definition
+     * @return
+     */
     private Set<Key<?>> getAllResultKeys(@NotNull ProcessDefinition<R> definition) {
         Node[] nodes = definition.getNodes();
         Set<Key<?>> keys = new HashSet<>();
@@ -39,6 +44,9 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
                 keys.add(((ExecutableNode)node).getResultKey());
             }
         });
+        if (definition.getResultKey() != null) {
+            keys.add(definition.getResultKey());
+        }
         return keys;
     }
 

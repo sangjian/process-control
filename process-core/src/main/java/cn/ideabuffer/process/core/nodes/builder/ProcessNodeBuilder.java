@@ -109,8 +109,8 @@ public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Proc
     }
 
     @Override
-    public ProcessNodeBuilder<R> wrap(@NotNull WrapperHandler<R>... handlers) {
-        super.wrap(handlers);
+    public ProcessNodeBuilder<R> wrap(@NotNull WrapperHandler<R> handler) {
+        super.wrap(handler);
         return this;
     }
 

@@ -106,8 +106,8 @@ public class GenericAggregatableNodeBuilder<P, R>
     }
 
     @Override
-    public GenericAggregatableNodeBuilder<P, R> wrap(@NotNull WrapperHandler<R>... handlers) {
-        super.wrap(handlers);
+    public GenericAggregatableNodeBuilder<P, R> wrap(@NotNull WrapperHandler<R> handler) {
+        super.wrap(handler);
         return this;
     }
 

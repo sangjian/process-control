@@ -290,8 +290,12 @@ public class Nodes {
             this(rule, null, readableKeys);
         }
 
-        public WhileWhen wrap(@NotNull WrapperHandler<ProcessStatus>... handlers) {
-            return wrap(Arrays.asList(handlers));
+        public WhileWhen wrap(@NotNull WrapperHandler<ProcessStatus> handler) {
+            if (this.handlers == null) {
+                this.handlers = new LinkedList<>();
+            }
+            this.handlers.add(handler);
+            return this;
         }
 
         public WhileWhen wrap(@NotNull List<WrapperHandler<ProcessStatus>> handlers) {
@@ -340,8 +344,12 @@ public class Nodes {
             super(rule, keyMapper, readableKeys, writableKeys);
         }
         @Override
-        public DoWhileWhen wrap(@NotNull WrapperHandler<ProcessStatus>... handlers) {
-            return wrap(Arrays.asList(handlers));
+        public DoWhileWhen wrap(@NotNull WrapperHandler<ProcessStatus> handler) {
+            if (this.handlers == null) {
+                this.handlers = new LinkedList<>();
+            }
+            this.handlers.add(handler);
+            return this;
         }
 
         @Override

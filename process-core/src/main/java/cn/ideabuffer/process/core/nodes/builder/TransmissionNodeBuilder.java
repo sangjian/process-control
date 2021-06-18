@@ -78,8 +78,8 @@ public class TransmissionNodeBuilder<R>
     }
 
     @Override
-    public TransmissionNodeBuilder<R> wrap(@NotNull WrapperHandler<R>... handlers) {
-        super.wrap(handlers);
+    public TransmissionNodeBuilder<R> wrap(@NotNull WrapperHandler<R> handler) {
+        super.wrap(handler);
         return this;
     }
 

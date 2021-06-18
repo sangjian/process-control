@@ -106,8 +106,8 @@ public class DistributeAggregatableNodeBuilder<R>
     }
 
     @Override
-    public DistributeAggregatableNodeBuilder<R> wrap(@NotNull WrapperHandler<R>... handlers) {
-        super.wrap(handlers);
+    public DistributeAggregatableNodeBuilder<R> wrap(@NotNull WrapperHandler<R> handler) {
+        super.wrap(handler);
         return this;
     }
 

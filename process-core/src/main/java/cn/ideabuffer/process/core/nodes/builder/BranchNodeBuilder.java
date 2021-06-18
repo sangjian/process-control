@@ -74,8 +74,8 @@ public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStat
     }
 
     @Override
-    public BranchNodeBuilder wrap(@NotNull WrapperHandler<ProcessStatus>... handlers) {
-        super.wrap(handlers);
+    public BranchNodeBuilder wrap(@NotNull WrapperHandler<ProcessStatus> handler) {
+        super.wrap(handler);
         return this;
     }
 

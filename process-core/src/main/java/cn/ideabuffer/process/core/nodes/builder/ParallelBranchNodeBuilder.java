@@ -86,8 +86,8 @@ public class ParallelBranchNodeBuilder
     }
 
     @Override
-    public ParallelBranchNodeBuilder wrap( @NotNull WrapperHandler<ProcessStatus>... handlers) {
-        super.wrap(handlers);
+    public ParallelBranchNodeBuilder wrap( @NotNull WrapperHandler<ProcessStatus> handler) {
+        super.wrap(handler);
         return this;
     }
 
