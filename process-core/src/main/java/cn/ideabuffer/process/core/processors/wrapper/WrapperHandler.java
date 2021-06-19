@@ -12,8 +12,9 @@ public interface WrapperHandler<R> {
 
     void before(@NotNull Context context);
 
-    void afterReturning(@NotNull Context context, @Nullable R result);
+    @Nullable
+    R afterReturning(@NotNull Context context, @Nullable R result);
 
-    void afterThrowing(@NotNull Context context, @NotNull Throwable t);
+    void afterThrowing(@NotNull Context context, @NotNull Throwable t) throws Throwable;
 
 }

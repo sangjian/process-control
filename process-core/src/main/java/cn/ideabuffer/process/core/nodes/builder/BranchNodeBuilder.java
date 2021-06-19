@@ -6,7 +6,7 @@ import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.processors.impl.BranchProcessorImpl;
-import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.BranchProcessorProxy;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -20,7 +20,8 @@ import java.util.function.BooleanSupplier;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStatus, BranchProcessor, BranchNode> {
+public class BranchNodeBuilder
+    extends AbstractExecutableNodeBuilder<ProcessStatus, BranchProcessor, BranchNode, StatusWrapperHandler> {
 
     private ExecutableNode[] nodes;
 
@@ -74,13 +75,13 @@ public class BranchNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStat
     }
 
     @Override
-    public BranchNodeBuilder wrap(@NotNull WrapperHandler<ProcessStatus> handler) {
+    public BranchNodeBuilder wrap(@NotNull StatusWrapperHandler handler) {
         super.wrap(handler);
         return this;
     }
 
     @Override
-    public BranchNodeBuilder wrap(@NotNull List<WrapperHandler<ProcessStatus>> wrapperHandlers) {
+    public BranchNodeBuilder wrap(@NotNull List<StatusWrapperHandler> wrapperHandlers) {
         super.wrap(wrapperHandlers);
         return this;
     }

@@ -19,7 +19,7 @@ import java.util.function.BooleanSupplier;
  * @date 2020/04/24
  */
 public class TransmissionNodeBuilder<R>
-    extends AbstractExecutableNodeBuilder<R, Processor<R>, TransmissionNode<R>> {
+    extends AbstractExecutableNodeBuilder<R, Processor<R>, TransmissionNode<R>, WrapperHandler<R>> {
 
     private TransmissionNodeBuilder(TransmissionNode<R> node) {
         super(node);

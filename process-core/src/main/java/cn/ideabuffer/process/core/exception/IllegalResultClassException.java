@@ -6,6 +6,8 @@ package cn.ideabuffer.process.core.exception;
  */
 public class IllegalResultClassException extends RuntimeException {
 
+    private static final long serialVersionUID = 5888747105322976886L;
+
     public IllegalResultClassException() {
     }
 

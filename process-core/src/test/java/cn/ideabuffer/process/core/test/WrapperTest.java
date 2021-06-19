@@ -10,6 +10,7 @@ import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -64,13 +65,14 @@ public class WrapperTest {
                 }
 
                 @Override
-                public void afterReturning(@NotNull Context context, @Nullable Integer result) {
+                public Integer afterReturning(@NotNull Context context, @Nullable Integer result) {
                     handler1AfterReturningOrder.set(counter.incrementAndGet());
-                    LOGGER.info("in handler1 afterReturning");
+                    LOGGER.info("in handler1 afterReturning, result:{}", result);
+                    return result;
                 }
 
                 @Override
-                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) {
+                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) throws Throwable{
                     handler1AfterThrowingOrder.set(counter.incrementAndGet());
                     LOGGER.info("in handler1 afterThrowing");
                 }
@@ -83,13 +85,14 @@ public class WrapperTest {
                 }
 
                 @Override
-                public void afterReturning(@NotNull Context context, @Nullable Integer result) {
+                public Integer afterReturning(@NotNull Context context, @Nullable Integer result) {
                     handler2AfterReturningOrder.set(counter.incrementAndGet());
-                    LOGGER.info("in handler2 afterReturning");
+                    LOGGER.info("in handler2 afterReturning, result:{}", result);
+                    return result;
                 }
 
                 @Override
-                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) {
+                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) throws Throwable {
                     handler2AfterThrowingOrder.set(counter.incrementAndGet());
                     LOGGER.info("in handler2 afterThrowing");
                 }
@@ -161,15 +164,17 @@ public class WrapperTest {
                 }
 
                 @Override
-                public void afterReturning(@NotNull Context context, @Nullable Integer result) {
+                public Integer afterReturning(@NotNull Context context, @Nullable Integer result) {
                     handler1AfterReturningOrder.set(counter.incrementAndGet());
-                    LOGGER.info("in handler1 afterReturning");
+                    LOGGER.info("in handler1 afterReturning, result:{}", result);
+                    return result;
                 }
 
                 @Override
-                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) {
+                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) throws Throwable {
                     handler1AfterThrowingOrder.set(counter.incrementAndGet());
-                    LOGGER.info("in handler1 afterThrowing");
+                    LOGGER.info("in handler1 afterThrowing", t);
+                    throw t;
                 }
             })
             .wrap(new WrapperHandler<Integer>() {
@@ -180,15 +185,17 @@ public class WrapperTest {
                 }
 
                 @Override
-                public void afterReturning(@NotNull Context context, @Nullable Integer result) {
+                public Integer afterReturning(@NotNull Context context, @Nullable Integer result) {
                     handler2AfterReturningOrder.set(counter.incrementAndGet());
-                    LOGGER.info("in handler2 afterReturning");
+                    LOGGER.info("in handler2 afterReturning, result:{}", result);
+                    return result;
                 }
 
                 @Override
-                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) {
+                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) throws Throwable {
                     handler2AfterThrowingOrder.set(counter.incrementAndGet());
-                    LOGGER.info("in handler2 afterThrowing");
+                    LOGGER.info("in handler2 afterThrowing", t);
+                    throw t;
                 }
             })
             .build();
@@ -211,17 +218,19 @@ public class WrapperTest {
         ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
-        instance.execute(context);
-        // 输出执行结果
-        assertEquals(2L, (long)instance.getResult());
+        try {
+            instance.execute(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // 保证顺序正确
         assertEquals(1L, (long)handler1BeforeOrder.get());
         assertEquals(2L, (long)handler2BeforeOrder.get());
         assertEquals(3L, (long)processor1Order.get());
         assertEquals(0L, (long)handler2AfterReturningOrder.get());
         assertEquals(4L, (long)handler2AfterThrowingOrder.get());
-        assertEquals(5L, (long)handler1AfterReturningOrder.get());
-        assertEquals(0L, (long)handler1AfterThrowingOrder.get());
+        assertEquals(0L, (long)handler1AfterReturningOrder.get());
+        assertEquals(5L, (long)handler1AfterThrowingOrder.get());
     }
 
     @Test
@@ -244,40 +253,46 @@ public class WrapperTest {
         AtomicInteger handler2AfterThrowingOrder = new AtomicInteger();
 
         WhileConditionNode whileNode = Nodes.newWhile(context -> whileCounter.getAndIncrement() < 5)
-            .wrap(new WrapperHandler<ProcessStatus>() {
+            .wrap(new StatusWrapperHandler() {
                 @Override
                 public void before(@NotNull Context context) {
                     handler1BeforeOrder.set(counter.incrementAndGet());
                     LOGGER.info("in handler1 before, handler1BeforeOrder:{}", handler1BeforeOrder.get());
                 }
 
+                @NotNull
                 @Override
-                public void afterReturning(@NotNull Context context, @Nullable ProcessStatus result) {
+                public ProcessStatus afterReturning(@NotNull Context context, @NotNull ProcessStatus status) {
                     handler1AfterReturningOrder.set(counter.incrementAndGet());
-                    LOGGER.info("in handler1 afterReturning, handler1AfterReturningOrder:{}", handler1AfterReturningOrder.get());
+                    LOGGER.info("in handler1 afterReturning, handler1AfterReturningOrder:{}, status:{}", handler1AfterReturningOrder.get(), status);
+                    return status;
                 }
 
                 @Override
-                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) {
+                public void afterThrowing(@NotNull Context context, @NotNull Throwable t)
+                    throws Throwable {
                     handler1AfterThrowingOrder.set(counter.incrementAndGet());
                     LOGGER.info("in handler1 afterThrowing, handler1AfterThrowingOrder:{}", handler1AfterThrowingOrder.get());
                 }
             })
-            .wrap(new WrapperHandler<ProcessStatus>() {
+            .wrap(new StatusWrapperHandler() {
                 @Override
                 public void before(@NotNull Context context) {
                     handler2BeforeOrder.set(counter.incrementAndGet());
                     LOGGER.info("in handler2 before, handler2BeforeOrder:{}", handler2BeforeOrder.get());
                 }
 
+                @NotNull
                 @Override
-                public void afterReturning(@NotNull Context context, @Nullable ProcessStatus result) {
+                public ProcessStatus afterReturning(@NotNull Context context, @NotNull ProcessStatus status) {
                     handler2AfterReturningOrder.set(counter.incrementAndGet());
-                    LOGGER.info("in handler2 afterReturning, handler2AfterReturningOrder:{}", handler2AfterReturningOrder.get());
+                    LOGGER.info("in handler2 afterReturning, handler2AfterReturningOrder:{}, status:{}", handler2AfterReturningOrder.get(), status);
+                    return status;
                 }
 
                 @Override
-                public void afterThrowing(@NotNull Context context, @NotNull Throwable t) {
+                public void afterThrowing(@NotNull Context context, @NotNull Throwable t)
+                    throws Throwable {
                     handler2AfterThrowingOrder.set(counter.incrementAndGet());
                     LOGGER.info("in handler2 afterThrowing, handler2AfterThrowingOrder:{}", handler2AfterThrowingOrder.get());
                 }

@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.IfProcessor;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -21,11 +22,11 @@ public class IfProcessorProxy extends AbstractProcessorProxy<IfProcessor, Proces
 
     public IfProcessorProxy(
         @NotNull IfProcessor target,
-        @NotNull WrapperHandler<ProcessStatus> handler) {
+        @NotNull StatusWrapperHandler handler) {
         super(target, handler);
     }
 
-    public static IfProcessor wrap(@NotNull IfProcessor target, List<WrapperHandler<ProcessStatus>> handlers) {
+    public static IfProcessor wrap(@NotNull IfProcessor target, List<StatusWrapperHandler> handlers) {
         if (handlers == null || handlers.isEmpty()) {
             return target;
         }

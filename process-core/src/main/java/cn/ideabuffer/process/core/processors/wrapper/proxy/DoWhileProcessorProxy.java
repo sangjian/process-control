@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.DoWhileProcessor;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -19,12 +20,11 @@ import java.util.Set;
 public class DoWhileProcessorProxy extends AbstractProcessorProxy<DoWhileProcessor, ProcessStatus>
     implements DoWhileProcessor {
 
-    public DoWhileProcessorProxy(@NotNull DoWhileProcessor target, @NotNull WrapperHandler<ProcessStatus> handler) {
+    public DoWhileProcessorProxy(@NotNull DoWhileProcessor target, @NotNull StatusWrapperHandler handler) {
         super(target, handler);
     }
 
-    public static DoWhileProcessor wrap(@NotNull DoWhileProcessor target,
-        List<WrapperHandler<ProcessStatus>> handlers) {
+    public static DoWhileProcessor wrap(@NotNull DoWhileProcessor target, List<StatusWrapperHandler> handlers) {
         if (handlers == null || handlers.isEmpty()) {
             return target;
         }

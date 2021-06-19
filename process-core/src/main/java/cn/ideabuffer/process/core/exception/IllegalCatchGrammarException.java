@@ -6,6 +6,8 @@ package cn.ideabuffer.process.core.exception;
  */
 public class IllegalCatchGrammarException extends RuntimeException {
 
+    private static final long serialVersionUID = -8176155638196985794L;
+
     public IllegalCatchGrammarException() {
     }
 

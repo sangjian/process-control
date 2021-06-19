@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.processors.wrapper.proxy;
 import cn.ideabuffer.process.core.nodes.TryCatchFinallyNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.TryCatchFinallyProcessor;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -18,12 +19,12 @@ public class TryCatchFinallyProcessorProxy extends AbstractProcessorProxy<TryCat
 
     public TryCatchFinallyProcessorProxy(
         @NotNull TryCatchFinallyProcessor target,
-        @NotNull WrapperHandler<ProcessStatus> handler) {
+        @NotNull StatusWrapperHandler handler) {
         super(target, handler);
     }
 
     public static TryCatchFinallyProcessor wrap(@NotNull TryCatchFinallyProcessor target,
-        List<WrapperHandler<ProcessStatus>> handlers) {
+        List<StatusWrapperHandler> handlers) {
         if (handlers == null || handlers.isEmpty()) {
             return target;
         }

@@ -4,7 +4,7 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.WhileProcessor;
-import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -19,11 +19,11 @@ import java.util.Set;
 public class WhileProcessorProxy extends AbstractProcessorProxy<WhileProcessor, ProcessStatus>
     implements WhileProcessor {
 
-    public WhileProcessorProxy(@NotNull WhileProcessor target, @NotNull WrapperHandler<ProcessStatus> handler) {
+    public WhileProcessorProxy(@NotNull WhileProcessor target, @NotNull StatusWrapperHandler handler) {
         super(target, handler);
     }
 
-    public static WhileProcessor wrap(@NotNull WhileProcessor target, List<WrapperHandler<ProcessStatus>> handlers) {
+    public static WhileProcessor wrap(@NotNull WhileProcessor target, List<StatusWrapperHandler> handlers) {
         if (handlers == null || handlers.isEmpty()) {
             return target;
         }

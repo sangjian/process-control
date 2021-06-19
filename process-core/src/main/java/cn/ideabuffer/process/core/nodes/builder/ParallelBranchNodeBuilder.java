@@ -7,7 +7,7 @@ import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
 import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
-import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.ParallelBranchProcessorProxy;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -24,7 +24,8 @@ import java.util.function.BooleanSupplier;
  * @date 2020/04/24
  */
 public class ParallelBranchNodeBuilder
-    extends AbstractExecutableNodeBuilder<ProcessStatus, ParallelBranchProcessor, ParallelBranchNode> {
+    extends
+    AbstractExecutableNodeBuilder<ProcessStatus, ParallelBranchProcessor, ParallelBranchNode, StatusWrapperHandler> {
 
     private List<BranchNode> branches;
 
@@ -85,13 +86,13 @@ public class ParallelBranchNodeBuilder
     }
 
     @Override
-    public ParallelBranchNodeBuilder wrap( @NotNull WrapperHandler<ProcessStatus> handler) {
+    public ParallelBranchNodeBuilder wrap(@NotNull StatusWrapperHandler handler) {
         super.wrap(handler);
         return this;
     }
 
     @Override
-    public ParallelBranchNodeBuilder wrap(@NotNull List<WrapperHandler<ProcessStatus>> wrapperHandlers) {
+    public ParallelBranchNodeBuilder wrap(@NotNull List<StatusWrapperHandler> wrapperHandlers) {
         super.wrap(wrapperHandlers);
         return this;
     }

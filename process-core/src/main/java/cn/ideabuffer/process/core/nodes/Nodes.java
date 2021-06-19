@@ -14,6 +14,7 @@ import cn.ideabuffer.process.core.processors.IfProcessor;
 import cn.ideabuffer.process.core.processors.TryCatchFinallyProcessor;
 import cn.ideabuffer.process.core.processors.WhileProcessor;
 import cn.ideabuffer.process.core.processors.impl.*;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.DoWhileProcessorProxy;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.IfProcessorProxy;
@@ -176,7 +177,7 @@ public class Nodes {
         private KeyMapper keyMapper;
         private Set<Key<?>> readableKeys;
         private Set<Key<?>> writableKeys;
-        private List<WrapperHandler<ProcessStatus>> handlers;
+        private List<StatusWrapperHandler> handlers;
 
         IfWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys) {
             this(rule, keyMapper, readableKeys, null);
@@ -197,11 +198,15 @@ public class Nodes {
             }
         }
 
-        public IfWhen wrap(@NotNull WrapperHandler<ProcessStatus>... handlers) {
-            return wrap(Arrays.asList(handlers));
+        public IfWhen wrap(@NotNull StatusWrapperHandler handler) {
+            if (this.handlers == null) {
+                this.handlers = new LinkedList<>();
+            }
+            this.handlers.add(handler);
+            return this;
         }
 
-        public IfWhen wrap(@NotNull List<WrapperHandler<ProcessStatus>> handlers) {
+        public IfWhen wrap(@NotNull List<StatusWrapperHandler> handlers) {
             if (this.handlers == null) {
                 this.handlers = new LinkedList<>();
             }
@@ -228,9 +233,9 @@ public class Nodes {
             private KeyMapper keyMapper;
             private Set<Key<?>> readableKeys;
             private Set<Key<?>> writableKeys;
-            private List<WrapperHandler<ProcessStatus>> handlers;
+            private List<StatusWrapperHandler> handlers;
 
-            IfWhenBuilder(Rule rule, BranchNode thenBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys, List<WrapperHandler<ProcessStatus>> handlers) {
+            IfWhenBuilder(Rule rule, BranchNode thenBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys, List<StatusWrapperHandler> handlers) {
                 this.rule = rule;
                 this.thenBranch = thenBranch;
                 this.keyMapper = keyMapper;
@@ -265,7 +270,7 @@ public class Nodes {
         protected KeyMapper keyMapper;
         protected Set<Key<?>> readableKeys;
         protected Set<Key<?>> writableKeys;
-        protected List<WrapperHandler<ProcessStatus>> handlers;
+        protected List<StatusWrapperHandler> handlers;
 
         WhileWhen(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys) {
             this(rule, keyMapper, readableKeys, null);
@@ -290,7 +295,7 @@ public class Nodes {
             this(rule, null, readableKeys);
         }
 
-        public WhileWhen wrap(@NotNull WrapperHandler<ProcessStatus> handler) {
+        public WhileWhen wrap(@NotNull StatusWrapperHandler handler) {
             if (this.handlers == null) {
                 this.handlers = new LinkedList<>();
             }
@@ -298,7 +303,7 @@ public class Nodes {
             return this;
         }
 
-        public WhileWhen wrap(@NotNull List<WrapperHandler<ProcessStatus>> handlers) {
+        public WhileWhen wrap(@NotNull List<StatusWrapperHandler> handlers) {
             if (handlers.isEmpty()) {
                 return this;
             }
@@ -344,7 +349,7 @@ public class Nodes {
             super(rule, keyMapper, readableKeys, writableKeys);
         }
         @Override
-        public DoWhileWhen wrap(@NotNull WrapperHandler<ProcessStatus> handler) {
+        public DoWhileWhen wrap(@NotNull StatusWrapperHandler handler) {
             if (this.handlers == null) {
                 this.handlers = new LinkedList<>();
             }
@@ -353,7 +358,7 @@ public class Nodes {
         }
 
         @Override
-        public DoWhileWhen wrap(@NotNull List<WrapperHandler<ProcessStatus>> handlers) {
+        public DoWhileWhen wrap(@NotNull List<StatusWrapperHandler> handlers) {
             if (handlers.isEmpty()) {
                 return this;
             }
@@ -388,18 +393,22 @@ public class Nodes {
 
         private List<TryCatchFinallyNode.CatchMapper> catchMapperList;
 
-        private List<WrapperHandler<ProcessStatus>> handlers;
+        private List<StatusWrapperHandler> handlers;
 
         TryCatchFinally(BranchNode tryBranch) {
             this.tryBranch = tryBranch;
             this.catchMapperList = new LinkedList<>();
         }
 
-        public TryCatchFinally wrap(@NotNull WrapperHandler<ProcessStatus>... handlers) {
-            return wrap(Arrays.asList(handlers));
+        public TryCatchFinally wrap(@NotNull StatusWrapperHandler handler) {
+            if (this.handlers == null) {
+                this.handlers = new LinkedList<>();
+            }
+            this.handlers.add(handler);
+            return this;
         }
 
-        public TryCatchFinally wrap(@NotNull List<WrapperHandler<ProcessStatus>> handlers) {
+        public TryCatchFinally wrap(@NotNull List<StatusWrapperHandler> handlers) {
             if (handlers.isEmpty()) {
                 return this;
             }

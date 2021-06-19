@@ -25,7 +25,8 @@ import java.util.function.BooleanSupplier;
  * @date 2020/04/24
  */
 public class GenericAggregatableNodeBuilder<P, R>
-    extends AbstractExecutableNodeBuilder<R, AggregateProcessor<P, R>, GenericAggregatableNode<P, R>> {
+    extends
+    AbstractExecutableNodeBuilder<R, AggregateProcessor<P, R>, GenericAggregatableNode<P, R>, WrapperHandler<R>> {
 
     private List<GenericMergeableNode<P>> mergeableNodes;
 

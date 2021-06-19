@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.processors.wrapper.proxy;
 
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ public class ProcessInstanceProcessorProxy<R> extends AbstractProcessorProxy<Pro
     }
 
     public static <R> ProcessInstanceProcessor<R> wrap(@NotNull ProcessInstanceProcessor<R> target,
-        List<WrapperHandler<ProcessStatus>> handlers) {
+        List<StatusWrapperHandler> handlers) {
         if (handlers == null || handlers.isEmpty()) {
             return target;
         }

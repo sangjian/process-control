@@ -25,7 +25,9 @@ import java.util.function.BooleanSupplier;
  * @date 2020/04/24
  */
 public class DistributeAggregatableNodeBuilder<R>
-    extends AbstractExecutableNodeBuilder<R, DistributeAggregateProcessor<R>, DistributeAggregatableNode<R>> {
+    extends
+    AbstractExecutableNodeBuilder<R, DistributeAggregateProcessor<R>, DistributeAggregatableNode<R>,
+        WrapperHandler<R>> {
 
     private List<DistributeMergeableNode<?, R>> mergeableNodes;
 

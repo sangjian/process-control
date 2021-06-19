@@ -4,7 +4,7 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.processors.impl.ProcessInstanceProcessorImpl;
-import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.ProcessInstanceProcessorProxy;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
         this(definition, null);
     }
 
-    public DefaultProcessInstance(@NotNull ProcessDefinition<R> definition, List<WrapperHandler<ProcessStatus>> handlers) {
+    public DefaultProcessInstance(@NotNull ProcessDefinition<R> definition, List<StatusWrapperHandler> handlers) {
         ProcessInstanceProcessor<R> wrapped = new ProcessInstanceProcessorImpl<>(definition);
         wrapped = ProcessInstanceProcessorProxy.wrap(wrapped, handlers);
         super.registerProcessor(wrapped);

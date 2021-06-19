@@ -6,6 +6,8 @@ package cn.ideabuffer.process.core.exception;
  */
 public class UnwritableKeyException extends RuntimeException {
 
+    private static final long serialVersionUID = 8923976626467306690L;
+
     public UnwritableKeyException() {
     }
 

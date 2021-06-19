@@ -2,7 +2,9 @@ package cn.ideabuffer.process.core.processors.wrapper.proxy;
 
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.exception.WrapperHandlerProcessException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -38,10 +40,23 @@ public abstract class AbstractProcessorProxy<P extends Processor<R>, R> implemen
         try {
             handler.before(context);
             result = target.process(context);
-            handler.afterReturning(context, result);
-            return result;
         } catch (Throwable t) {
-            handler.afterThrowing(context, t);
+            try {
+                handler.afterThrowing(context, t);
+            } catch (Throwable at) {
+                // 如果抛出的异常是Processor抛出的异常，则使用ProcessException
+                // 否则是afterThrowing中执行抛出的异常，使用WrapperHandlerProcessException
+                if (at == t || at == t.getCause()) {
+                    throw new ProcessException("process error!", t);
+                } else {
+                    throw new WrapperHandlerProcessException("afterThrowing error!", t);
+                }
+            }
+        }
+        try {
+            result = handler.afterReturning(context, result);
+        } catch (Throwable t) {
+            throw new WrapperHandlerProcessException("afterReturning error!", t);
         }
         return result;
     }

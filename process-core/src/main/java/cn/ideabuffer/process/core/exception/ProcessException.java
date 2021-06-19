@@ -5,6 +5,8 @@ package cn.ideabuffer.process.core.exception;
  * @date 2020/04/06
  */
 public class ProcessException extends RuntimeException {
+    private static final long serialVersionUID = -6920149606131940717L;
+
     public ProcessException() {
     }
 

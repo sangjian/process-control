@@ -6,6 +6,8 @@ package cn.ideabuffer.process.core.exception;
  */
 public class LifecycleException extends RuntimeException {
 
+    private static final long serialVersionUID = 3150430169711976695L;
+
     public LifecycleException() {
     }
 

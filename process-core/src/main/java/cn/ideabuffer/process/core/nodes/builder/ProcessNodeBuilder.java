@@ -20,7 +20,8 @@ import java.util.function.BooleanSupplier;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class ProcessNodeBuilder<R> extends AbstractExecutableNodeBuilder<R, Processor<R>, ProcessNode<R>> {
+public class ProcessNodeBuilder<R>
+    extends AbstractExecutableNodeBuilder<R, Processor<R>, ProcessNode<R>, WrapperHandler<R>> {
 
     private ProcessNodeBuilder() {
         super(new ProcessNode<>());

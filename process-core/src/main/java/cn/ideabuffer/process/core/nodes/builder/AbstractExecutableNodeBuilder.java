@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T extends ExecutableNode<R, P>>
+public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T extends ExecutableNode<R, P>, W extends WrapperHandler<R>>
     implements Builder<T> {
 
     protected boolean parallel;
@@ -113,12 +113,12 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
-    public Builder<T> wrap(@NotNull WrapperHandler<R> handler) {
+    public Builder<T> wrap(@NotNull W handler) {
         this.handlers.add(handler);
         return this;
     }
 
-    public Builder<T> wrap(@NotNull List<WrapperHandler<R>> handlers) {
+    public Builder<T> wrap(@NotNull List<W> handlers) {
         if (!handlers.isEmpty()) {
             this.handlers.addAll(handlers);
         }
