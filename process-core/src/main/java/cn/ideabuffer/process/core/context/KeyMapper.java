@@ -6,7 +6,32 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 参数映射器，解决节点复用的问题。 如果一个节点在一个流程中使用的key的名称为'k1'，新流程想复用这个节点， 但对应的key的名称为'k2'，这时可以通过添加映射来解决参数名称不一致的问题。
+ * 参数映射器，解决节点复用的问题。 如果一个节点在一个流程中使用的key的名称为'oldKey'，新流程想复用这个节点， 但对应的key的名称为'newKey'，这时可以通过添加映射来解决参数名称不一致的问题。
+ * <pre>
+ *                                           ┌---—-------------------------┐
+ *                                           |            Mapper           |
+ *                                           |-----------------------------|
+ *       ┌—————————————————————————┐         | ┌————————┐       ┌——————-—┐ |
+ *       |   get value by 'newKey' |---------+>| newKey |------>| oldKey |-+--------┐
+ *       └—————————————————————————┘         | └————————┘       └————————┘ |        |
+ *                                           |      .               .      |        |
+ *                                           |      .               .      |        |
+ *                                           |      .               .      |        |
+ *                                           |                             |        |
+ *                                           └————————————————————————---——┘        |
+ *                                  ┌-----------------------------------------------┘
+ *                                  |        ┌---—-------------------------┐
+ *                                  |        |        ParameterMap         |
+ *                                  |        |-----------------------------|
+ *                                  |        | ┌————————┐       ┌——————-—┐ |
+ *                                  └--------+>| oldKey |------>|  value | |
+ *                                           | └————————┘       └————————┘ |
+ *                                           |      .               .      |
+ *                                           |      .               .      |
+ *                                           |      .               .      |
+ *                                           |                             |
+ *                                           └————————————————————————---——┘
+ *  </pre>
  *
  * @author sangjian.sj
  * @date 2020/05/20
@@ -22,16 +47,16 @@ public class KeyMapper {
     /**
      * 参数key映射，将原有的key：from映射至新的key：to
      *
-     * @param from 原有key
-     * @param to   新key
-     * @param <V>  值类型
+     * @param newKey 待映射的key
+     * @param oldKey 原有key
+     * @param <V>    值类型
      */
-    public <V> void map(@NotNull Key<V> from, @NotNull Key<V> to) {
-        this.mapper.put(from, to);
+    public <V> void map(@NotNull Key<V> newKey, @NotNull Key<V> oldKey) {
+        this.mapper.put(newKey, oldKey);
     }
 
     /**
-     * 获取key的映射
+     * 获取key的映射。
      *
      * @param key 待获取映射的key
      * @param <V> 值类型
