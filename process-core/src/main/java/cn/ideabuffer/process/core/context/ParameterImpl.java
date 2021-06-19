@@ -58,7 +58,6 @@ public class ParameterImpl implements Parameter {
         return (V)value;
     }
 
-    @Nullable
     @Override
     public <V> V get(@NotNull Key<V> key, V defaultValue) {
         V value = get(key);

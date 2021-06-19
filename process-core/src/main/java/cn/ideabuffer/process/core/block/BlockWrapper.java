@@ -113,7 +113,6 @@ public class BlockWrapper implements Block {
         return block.get(key);
     }
 
-    @Nullable
     @Override
     public <V> V get(@NotNull Key<V> key, V defaultValue) {
         Key<V> mappingKey = getMappingKey(key);

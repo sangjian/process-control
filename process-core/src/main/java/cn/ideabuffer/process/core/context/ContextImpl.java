@@ -125,7 +125,6 @@ public class ContextImpl extends ParameterImpl implements Context {
             return context.get(key);
         }
 
-        @Nullable
         @Override
         public <V> V get(@NotNull Key<V> key, V defaultValue) {
             return context.get(key, defaultValue);

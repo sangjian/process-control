@@ -58,7 +58,6 @@ public interface Parameter {
      * @return 指定类型的值，如果没有映射，返回<tt>defaultValue</tt>
      * @see Map#getOrDefault(Object, Object)
      */
-    @Nullable
     <V> V get(@NotNull Key<V> key, V defaultValue);
 
     /**

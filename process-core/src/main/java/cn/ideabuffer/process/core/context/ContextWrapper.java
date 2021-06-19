@@ -136,13 +136,11 @@ public class ContextWrapper implements Context {
         return get(key, null, keyCheck);
     }
 
-    @Nullable
     @Override
     public <V> V get(@NotNull Key<V> key, V defaultValue) {
         return get(key, defaultValue, true);
     }
 
-    @Nullable
     protected <V> V get(@NotNull Key<V> key, V defaultValue, boolean keyCheck) {
         if (keyCheck && !readableKey(key)) {
             throw new UnreadableKeyException(key + " is not readable, check the registration of the key!");
