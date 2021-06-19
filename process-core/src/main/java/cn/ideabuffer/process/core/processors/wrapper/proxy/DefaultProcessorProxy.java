@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class DefaultProcessorProxy<R> extends AbstractProcessorProxy<Processor<R>, R> {
 
-    public DefaultProcessorProxy(@NotNull Processor<R> target, WrapperHandler<R> handler) {
+    public DefaultProcessorProxy(@NotNull Processor<R> target, @NotNull WrapperHandler<R> handler) {
         super(target, handler);
     }
 

@@ -17,7 +17,7 @@ public abstract class AbstractProcessorProxy<P extends Processor<R>, R> implemen
 
     private WrapperHandler<R> handler;
 
-    public AbstractProcessorProxy(@NotNull P target, WrapperHandler<R> handler) {
+    public AbstractProcessorProxy(@NotNull P target, @NotNull WrapperHandler<R> handler) {
         this.target = target;
         this.handler = handler;
     }

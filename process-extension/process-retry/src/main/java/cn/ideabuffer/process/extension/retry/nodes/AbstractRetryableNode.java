@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.rule.Rule;
 import cn.ideabuffer.process.extension.retry.processors.RetryProcessor;
+import cn.ideabuffer.process.extension.retry.processors.impl.RetryProcessorImpl;
 import com.github.rholder.retry.Retryer;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +49,7 @@ public abstract class AbstractRetryableNode<R> extends AbstractExecutableNode<R,
         Retryer<R> retryer) {
         super(parallel, rule, executor, listeners, processor);
         this.retryer = retryer;
-        this.retryProcessor = new RetryProcessor<>(retryer, processor);
+        this.retryProcessor = new RetryProcessorImpl<>(retryer, processor);
     }
 
     @Override
