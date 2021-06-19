@@ -14,16 +14,18 @@ public class DefaultSerialExecutor implements SerialExecutor {
 
     @NotNull
     @Override
-    public ProcessStatus execute(Context context, ExecutableNode<?, ?>... nodes) throws Exception {
+    public ProcessStatus execute(@NotNull Context context, ExecutableNode<?, ?>... nodes) throws Exception {
         if (nodes == null || nodes.length == 0) {
             return ProcessStatus.proceed();
         }
         Block block = context.getBlock();
         for (ExecutableNode<?, ?> node : nodes) {
             ProcessStatus status = node.execute(context);
+            // 如果节点返回了complete，直接返回
             if (ProcessStatus.isComplete(status)) {
                 return status;
             }
+            // 如果执行过break或continue操作，退出当前循环
             if (block.hasBroken() || block.hasContinued()) {
                 break;
             }

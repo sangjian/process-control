@@ -18,9 +18,9 @@ public interface SerialExecutor {
      *
      * @param context 流程上下文
      * @param nodes   可执行节点列表
-     * @return
+     * @return 流程状态
      * @throws Exception
      */
     @NotNull
-    ProcessStatus execute(Context context, ExecutableNode<?, ?>... nodes) throws Exception;
+    ProcessStatus execute(@NotNull Context context, ExecutableNode<?, ?>... nodes) throws Exception;
 }

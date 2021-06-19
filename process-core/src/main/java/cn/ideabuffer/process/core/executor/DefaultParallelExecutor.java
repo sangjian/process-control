@@ -27,6 +27,7 @@ public class DefaultParallelExecutor implements ParallelExecutor {
         if (nodes == null || nodes.length == 0) {
             return ProcessStatus.proceed();
         }
+        // 生成执行对应的futures
         List<CompletableFuture<ProcessStatus>> futures = Stream.of(nodes).map(node -> {
             Supplier<ProcessStatus> supplier = () -> {
                 try {
@@ -39,6 +40,7 @@ public class DefaultParallelExecutor implements ParallelExecutor {
                 executor);
         }).collect(Collectors.toList());
 
+        // 根据策略判断是否返回
         return ProcessStatus.create(proceedStrategy.proceed(futures));
     }
 }
