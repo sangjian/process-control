@@ -12,7 +12,18 @@ import java.util.concurrent.TimeUnit;
  */
 public interface Mergeable {
 
+    /**
+     * 设置执行超时时间
+     *
+     * @param timeout 超时时间
+     * @param unit    超时时间单位
+     */
     void timeout(long timeout, @NotNull TimeUnit unit);
 
+    /**
+     * 获取超时时间，单位：毫秒
+     *
+     * @return
+     */
     long getTimeout();
 }

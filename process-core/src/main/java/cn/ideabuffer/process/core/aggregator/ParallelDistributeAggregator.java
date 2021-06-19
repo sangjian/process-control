@@ -12,15 +12,27 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
+ * 并行分布式聚合器
+ *
+ * @param <R> 聚合结果类型
  * @author sangjian.sj
  * @date 2020/03/08
+ * @see DistributeAggregator
  */
 public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Executor executor;
+
+    /**
+     * 返回结果类型，该类型必须有无参构造器
+     */
     private Class<R> resultClass;
+
+    /**
+     * 聚合器执行超时时间
+     */
     private long timeout;
 
     public ParallelDistributeAggregator(@NotNull Executor executor, @NotNull Class<R> resultClass) {
@@ -45,6 +57,7 @@ public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> 
     @Override
     public R aggregate(@NotNull Context context, List<DistributeMergeableNode<?, R>> nodes) throws Exception {
         R result;
+        // 创建结果对象
         try {
             result = resultClass.newInstance();
         } catch (Exception e) {

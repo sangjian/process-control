@@ -7,14 +7,14 @@ import cn.ideabuffer.process.core.rule.Rule;
  * @author sangjian.sj
  * @date 2020/05/09
  */
-public class MergeNode<R> extends AbstractMergeableNode implements GenericMergeableNode<R> {
+public class DefaultGenericMergeableNode<R> extends AbstractMergeableNode implements GenericMergeableNode<R> {
 
     private Processor<R> processor;
 
-    public MergeNode() {
+    public DefaultGenericMergeableNode() {
     }
 
-    public MergeNode(Rule rule, long timeout, Processor<R> processor) {
+    public DefaultGenericMergeableNode(Rule rule, long timeout, Processor<R> processor) {
         super(rule, timeout);
         this.processor = processor;
     }

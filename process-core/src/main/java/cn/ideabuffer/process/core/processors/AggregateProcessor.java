@@ -2,13 +2,16 @@ package cn.ideabuffer.process.core.processors;
 
 import cn.ideabuffer.process.core.aggregator.GenericAggregator;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
+import cn.ideabuffer.process.core.nodes.MergeableNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 /**
- * 聚合处理器
+ * 聚合处理器，用于聚合 {@link MergeableNode} 中处理器的返回结果。
  *
+ * @param <I> 输入类型
+ * @param <O> 输出类型
  * @author sangjian.sj
  * @date 2020/05/02
  */

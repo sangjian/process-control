@@ -14,15 +14,28 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
+ * 并行通用聚合器
+ *
+ * @param <I> 输入类型
+ * @param <O> 输出类型
  * @author sangjian.sj
  * @date 2020/03/08
+ * @see GenericAggregator
  */
 public class ParallelGenericAggregator<I, O> implements GenericAggregator<I, O> {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Executor executor;
+
+    /**
+     * 结果合并器
+     */
     private Merger<I, O> merger;
+
+    /**
+     * 聚合器执行超时时间
+     */
     private long timeout;
 
     public ParallelGenericAggregator(@NotNull Executor executor, @NotNull Merger<I, O> merger) {

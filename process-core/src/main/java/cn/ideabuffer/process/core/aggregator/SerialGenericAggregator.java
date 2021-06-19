@@ -13,8 +13,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
+ * 串行通用聚合器
+ *
+ * @param <I> 输入类型
+ * @param <O> 输出类型
  * @author sangjian.sj
  * @date 2020/03/09
+ * @see GenericAggregator
  */
 public class SerialGenericAggregator<I, O> implements GenericAggregator<I, O> {
 

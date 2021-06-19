@@ -4,7 +4,7 @@ import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
+import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;

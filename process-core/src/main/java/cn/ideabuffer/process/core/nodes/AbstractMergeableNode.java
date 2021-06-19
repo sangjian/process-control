@@ -15,7 +15,15 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractMergeableNode extends AbstractNode implements Mergeable, Matchable {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    /**
+     * 执行规则
+     */
     private Rule rule;
+
+    /**
+     * 当前节点处理器执行超时时间
+     */
     private long timeout;
 
     public AbstractMergeableNode() {

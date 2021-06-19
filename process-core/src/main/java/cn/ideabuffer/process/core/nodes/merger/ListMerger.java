@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * List类型合并器
+ *
+ * @param <T> List元素类型
  * @author sangjian.sj
  * @date 2020/03/09
  */

@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.nodes.DistributeMergeNode;
+import cn.ideabuffer.process.core.nodes.DefaultDistributeMergeableNode;
+import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.processors.DistributeProcessor;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.DistributeProcessorProxy;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public class DistributeMergeNodeBuilder<T, R> implements Builder<DistributeMergeNode<T, R>> {
+public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeMergeableNode<T, R>> {
 
     private Rule rule;
     private long timeout;
@@ -24,34 +25,34 @@ public class DistributeMergeNodeBuilder<T, R> implements Builder<DistributeMerge
     private DistributeProcessor<T, R> processor;
     private List<WrapperHandler<T>> handlers;
 
-    private DistributeMergeNodeBuilder() {
+    private DistributeMergeableNodeBuilder() {
     }
 
-    public static <T, R> DistributeMergeNodeBuilder<T, R> newBuilder() {
-        return new DistributeMergeNodeBuilder<>();
+    public static <T, R> DistributeMergeableNodeBuilder<T, R> newBuilder() {
+        return new DistributeMergeableNodeBuilder<>();
     }
 
-    public DistributeMergeNodeBuilder<T, R> processOn(Rule rule) {
+    public DistributeMergeableNodeBuilder<T, R> processOn(Rule rule) {
         this.rule = rule;
         return this;
     }
 
-    public DistributeMergeNodeBuilder<T, R> timeout(long timeout, @NotNull TimeUnit unit) {
+    public DistributeMergeableNodeBuilder<T, R> timeout(long timeout, @NotNull TimeUnit unit) {
         this.timeout = timeout;
         this.timeUnit = unit;
         return this;
     }
 
-    public DistributeMergeNodeBuilder<T, R> by(DistributeProcessor<T, R> processor) {
+    public DistributeMergeableNodeBuilder<T, R> by(DistributeProcessor<T, R> processor) {
         this.processor = processor;
         return this;
     }
 
-    public DistributeMergeNodeBuilder<T, R> wrap(@NotNull WrapperHandler<T>... handlers) {
+    public DistributeMergeableNodeBuilder<T, R> wrap(@NotNull WrapperHandler<T>... handlers) {
         return wrap(Arrays.asList(handlers));
     }
 
-    public DistributeMergeNodeBuilder<T, R> wrap(@NotNull List<WrapperHandler<T>> handlers) {
+    public DistributeMergeableNodeBuilder<T, R> wrap(@NotNull List<WrapperHandler<T>> handlers) {
         if (handlers.isEmpty()) {
             return this;
         }
@@ -63,9 +64,9 @@ public class DistributeMergeNodeBuilder<T, R> implements Builder<DistributeMerge
     }
 
     @Override
-    public DistributeMergeNode<T, R> build() {
+    public DistributeMergeableNode<T, R> build() {
         long millis = timeUnit == null ? 0L : timeUnit.toMillis(timeout);
         processor = DistributeProcessorProxy.wrap(processor, handlers);
-        return new DistributeMergeNode<>(rule, millis, processor);
+        return new DefaultDistributeMergeableNode<>(rule, millis, processor);
     }
 }

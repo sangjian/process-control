@@ -1,8 +1,8 @@
 package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.nodes.AggregatableNode;
-import cn.ideabuffer.process.core.nodes.DistributeAggregatableNode;
+import cn.ideabuffer.process.core.nodes.aggregate.AggregatableNode;
+import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.NodeGroup;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;

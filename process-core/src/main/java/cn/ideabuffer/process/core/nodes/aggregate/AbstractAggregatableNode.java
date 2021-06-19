@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
-import cn.ideabuffer.process.core.nodes.AggregatableNode;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.core.processors.AggregateProcessor;

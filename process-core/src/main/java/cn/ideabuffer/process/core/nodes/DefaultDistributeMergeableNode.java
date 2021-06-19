@@ -4,17 +4,19 @@ import cn.ideabuffer.process.core.processors.DistributeProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 
 /**
+ * 分布式可合并节点
+ *
  * @author sangjian.sj
  * @date 2020/05/09
  */
-public class DistributeMergeNode<T, R> extends AbstractMergeableNode implements DistributeMergeableNode<T, R> {
+public class DefaultDistributeMergeableNode<T, R> extends AbstractMergeableNode implements DistributeMergeableNode<T, R> {
 
     private DistributeProcessor<T, R> processor;
 
-    public DistributeMergeNode() {
+    public DefaultDistributeMergeableNode() {
     }
 
-    public DistributeMergeNode(Rule rule, long timeout, DistributeProcessor<T, R> processor) {
+    public DefaultDistributeMergeableNode(Rule rule, long timeout, DistributeProcessor<T, R> processor) {
         super(rule, timeout);
         this.processor = processor;
     }

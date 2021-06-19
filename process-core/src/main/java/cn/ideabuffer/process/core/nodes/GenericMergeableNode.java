@@ -3,8 +3,9 @@ package cn.ideabuffer.process.core.nodes;
 import cn.ideabuffer.process.core.Processor;
 
 /**
- * 可合并结果的节点
+ * 通用可合并结果的节点
  *
+ * @param <R> 处理器返回结果类型
  * @author sangjian.sj
  * @date 2020/03/07
  */

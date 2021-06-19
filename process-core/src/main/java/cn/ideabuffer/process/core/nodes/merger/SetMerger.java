@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
+ * Set类型合并器
+ *
+ * @param <T> Set元素类型
  * @author sangjian.sj
  * @date 2020/03/09
  */
