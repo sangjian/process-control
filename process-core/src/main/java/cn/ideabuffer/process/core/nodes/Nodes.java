@@ -44,11 +44,13 @@ public class Nodes {
         return newProcessNode(processor, null, null);
     }
 
-    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, Set<Key<?>> readableKeys,
+        Set<Key<?>> writableKeys) {
         return newProcessNode(processor, null, readableKeys, writableKeys);
     }
 
-    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, KeyMapper mapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public static <R> ProcessNode<R> newProcessNode(Processor<R> processor, KeyMapper mapper, Set<Key<?>> readableKeys,
+        Set<Key<?>> writableKeys) {
         return new ProcessNode<>(processor, mapper, readableKeys, writableKeys);
     }
 
@@ -133,7 +135,8 @@ public class Nodes {
         return newWhile(rule, null, readableKeys, writableKeys);
     }
 
-    public static WhileWhen newWhile(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public static WhileWhen newWhile(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys,
+        Set<Key<?>> writableKeys) {
         return new WhileWhen(rule, keyMapper, readableKeys, writableKeys);
     }
 
@@ -153,7 +156,8 @@ public class Nodes {
         return newDoWhile(rule, null, readableKeys, writableKeys);
     }
 
-    public static WhileWhen newDoWhile(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public static WhileWhen newDoWhile(Rule rule, KeyMapper keyMapper, Set<Key<?>> readableKeys,
+        Set<Key<?>> writableKeys) {
         return new DoWhileWhen(rule, keyMapper, readableKeys, writableKeys);
     }
 
@@ -188,7 +192,7 @@ public class Nodes {
             this.writableKeys = writableKeys;
         }
 
-        IfWhen(Rule rule,KeyMapper keyMapper, Key<?>... readableKeys) {
+        IfWhen(Rule rule, KeyMapper keyMapper, Key<?>... readableKeys) {
             this.rule = rule;
             this.keyMapper = keyMapper;
             if (readableKeys != null) {
@@ -233,7 +237,8 @@ public class Nodes {
             private Set<Key<?>> writableKeys;
             private List<StatusWrapperHandler> handlers;
 
-            IfWhenBuilder(Rule rule, BranchNode thenBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys, List<StatusWrapperHandler> handlers) {
+            IfWhenBuilder(Rule rule, BranchNode thenBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys,
+                Set<Key<?>> writableKeys, List<StatusWrapperHandler> handlers) {
                 this.rule = rule;
                 this.thenBranch = thenBranch;
                 this.keyMapper = keyMapper;
@@ -243,7 +248,8 @@ public class Nodes {
             }
 
             public IfConditionNode otherwise(BranchNode falseBranch) {
-                IfProcessor wrapped = new IfProcessorImpl(rule, thenBranch, falseBranch, keyMapper, readableKeys, writableKeys);
+                IfProcessor wrapped = new IfProcessorImpl(rule, thenBranch, falseBranch, keyMapper, readableKeys,
+                    writableKeys);
                 wrapped = IfProcessorProxy.wrap(wrapped, handlers);
                 return new IfConditionNode(wrapped);
             }
@@ -253,7 +259,8 @@ public class Nodes {
             }
 
             public IfConditionNode end() {
-                IfProcessor wrapped = new IfProcessorImpl(rule, thenBranch, null, keyMapper, readableKeys, writableKeys);
+                IfProcessor wrapped = new IfProcessorImpl(rule, thenBranch, null, keyMapper, readableKeys,
+                    writableKeys);
                 wrapped = IfProcessorProxy.wrap(wrapped, handlers);
                 return new IfConditionNode(wrapped);
             }
@@ -346,6 +353,7 @@ public class Nodes {
             Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
             super(rule, keyMapper, readableKeys, writableKeys);
         }
+
         @Override
         public DoWhileWhen wrap(@NotNull StatusWrapperHandler handler) {
             if (this.handlers == null) {
@@ -366,6 +374,7 @@ public class Nodes {
             this.handlers.addAll(handlers);
             return this;
         }
+
         @Override
         public DoWhileConditionNode then(BranchNode branch) {
             DoWhileProcessor wrapped = new DoWhileProcessorImpl(rule, branch, keyMapper, readableKeys, writableKeys);
@@ -443,7 +452,8 @@ public class Nodes {
         }
 
         public TryCatchFinallyNode doFinally(BranchNode finallyBranch) {
-            TryCatchFinallyProcessor wrapped = new TryCatchFinallyProcessorImpl(tryBranch, catchMapperList, finallyBranch);
+            TryCatchFinallyProcessor wrapped = new TryCatchFinallyProcessorImpl(tryBranch, catchMapperList,
+                finallyBranch);
             wrapped = TryCatchFinallyProcessorProxy.wrap(wrapped, this.handlers);
             return new TryCatchFinallyNode(wrapped);
         }

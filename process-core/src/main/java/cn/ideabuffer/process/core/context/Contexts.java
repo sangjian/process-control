@@ -53,7 +53,8 @@ public class Contexts {
         return wrap(context, block, mapper, null, null);
     }
 
-    public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block, KeyMapper mapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block, KeyMapper mapper,
+        Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         return new ContextWrapper(context, block, mapper, readableKeys, writableKeys);
     }
 

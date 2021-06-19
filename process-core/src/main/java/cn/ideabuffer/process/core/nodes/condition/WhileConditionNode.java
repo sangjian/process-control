@@ -23,7 +23,8 @@ public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus, Wh
         this(rule, branch, null, null, null);
     }
 
-    public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch, KeyMapper keyMapper,
+        Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         this(new WhileProcessorImpl(rule, branch, keyMapper, readableKeys, writableKeys));
     }
 
@@ -42,23 +43,23 @@ public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus, Wh
     }
 
     @Override
-    public void setReadableKeys(Set<Key<?>> keys) {
-        getProcessor().setReadableKeys(keys);
-    }
-
-    @Override
     public Set<Key<?>> getReadableKeys() {
         return getProcessor().getReadableKeys();
     }
 
     @Override
-    public void setWritableKeys(Set<Key<?>> keys) {
-        getProcessor().setWritableKeys(keys);
+    public void setReadableKeys(Set<Key<?>> keys) {
+        getProcessor().setReadableKeys(keys);
     }
 
     @Override
     public Set<Key<?>> getWritableKeys() {
         return getProcessor().getWritableKeys();
+    }
+
+    @Override
+    public void setWritableKeys(Set<Key<?>> keys) {
+        getProcessor().setWritableKeys(keys);
     }
 
     @Override

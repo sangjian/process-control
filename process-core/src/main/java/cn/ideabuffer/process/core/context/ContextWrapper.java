@@ -30,7 +30,8 @@ public class ContextWrapper implements Context {
         this(context, block, mapper, null, null);
     }
 
-    public ContextWrapper(Context context, Block block, KeyMapper mapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public ContextWrapper(Context context, Block block, KeyMapper mapper, Set<Key<?>> readableKeys,
+        Set<Key<?>> writableKeys) {
         this.context = context;
         this.block = new BlockFacade(block, mapper);
         this.mapper = mapper;
@@ -176,13 +177,13 @@ public class ContextWrapper implements Context {
     public void clear() {context.clear();}
 
     @Override
-    public void setResultKey(ProcessDefinition<?> definition) {
-        context.setResultKey(definition);
+    public <V> Key<V> getResultKey() {
+        return context.getResultKey();
     }
 
     @Override
-    public <V> Key<V> getResultKey() {
-        return context.getResultKey();
+    public void setResultKey(ProcessDefinition<?> definition) {
+        context.setResultKey(definition);
     }
 
     @Override

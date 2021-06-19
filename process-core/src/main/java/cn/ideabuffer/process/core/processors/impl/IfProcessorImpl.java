@@ -31,7 +31,8 @@ public class IfProcessorImpl implements IfProcessor {
         this(rule, trueBranch, falseBranch, null, null, null);
     }
 
-    public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch,
+        KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         this.rule = rule;
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;

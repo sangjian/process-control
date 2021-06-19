@@ -28,19 +28,19 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
 
     void setKeyMapper(KeyMapper mapper);
 
-    void setResultKey(Key<R> resultKey);
-
     Key<R> getResultKey();
+
+    void setResultKey(Key<R> resultKey);
 
     void returnOn(ReturnCondition<R> condition);
 
     ReturnCondition<R> getReturnCondition();
 
-    void setReadableKeys(Set<Key<?>> keys);
-
     Set<Key<?>> getReadableKeys();
 
-    void setWritableKeys(Set<Key<?>> keys);
+    void setReadableKeys(Set<Key<?>> keys);
 
     Set<Key<?>> getWritableKeys();
+
+    void setWritableKeys(Set<Key<?>> keys);
 }

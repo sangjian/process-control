@@ -33,11 +33,12 @@ import java.util.List;
  *                                                       |    result(type:O)    |
  *                                                       └——————————————————————┘
  * </pre>
+ *
  * @param <R> 聚合结果类型
- * @see DistributeMergeableNode
- * @see DistributeProcessor
  * @author sangjian.sj
  * @date 2020/03/27
+ * @see DistributeMergeableNode
+ * @see DistributeProcessor
  */
 public interface DistributeAggregator<R> extends Aggregator<R, DistributeMergeableNode<?, R>> {
 

@@ -20,8 +20,6 @@ public interface Context extends Parameter {
 
     Context cloneContext();
 
-    void setResultKey(ProcessDefinition<?> definition);
-
     /**
      * 获取结果key
      *
@@ -29,6 +27,8 @@ public interface Context extends Parameter {
      * @return
      */
     <V> Key<V> getResultKey();
+
+    void setResultKey(ProcessDefinition<?> definition);
 
     /**
      * 当前key是否可读

@@ -22,7 +22,8 @@ public class WhileProcessorImpl implements WhileProcessor {
     private Set<Key<?>> readableKeys;
     private Set<Key<?>> writableKeys;
 
-    public WhileProcessorImpl(Rule rule, BranchNode branch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public WhileProcessorImpl(Rule rule, BranchNode branch, KeyMapper keyMapper, Set<Key<?>> readableKeys,
+        Set<Key<?>> writableKeys) {
         this.rule = rule;
         this.branch = branch;
         this.keyMapper = keyMapper;

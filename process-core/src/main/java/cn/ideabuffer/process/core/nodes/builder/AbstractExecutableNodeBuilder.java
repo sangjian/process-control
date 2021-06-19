@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
  * @author sangjian.sj
  * @date 2020/04/24
  */
-public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T extends ExecutableNode<R, P>, W extends WrapperHandler<R>>
+public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T extends ExecutableNode<R, P>, W
+    extends WrapperHandler<R>>
     implements Builder<T> {
 
     protected boolean parallel;

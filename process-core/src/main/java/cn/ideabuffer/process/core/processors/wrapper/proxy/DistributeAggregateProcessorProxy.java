@@ -21,7 +21,8 @@ public class DistributeAggregateProcessorProxy<O> extends AbstractProcessorProxy
         super(target, handler);
     }
 
-    public static <O> DistributeAggregateProcessor<O> wrap(@NotNull DistributeAggregateProcessor<O> target, List<WrapperHandler<O>> handlers) {
+    public static <O> DistributeAggregateProcessor<O> wrap(@NotNull DistributeAggregateProcessor<O> target,
+        List<WrapperHandler<O>> handlers) {
         if (handlers == null || handlers.isEmpty()) {
             return target;
         }

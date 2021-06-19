@@ -19,7 +19,8 @@ public class DistributeProcessorProxy<T, R> extends AbstractProcessorProxy<Distr
         super(target, handler);
     }
 
-    public static <T, R> DistributeProcessor<T, R> wrap(@NotNull DistributeProcessor<T, R> target, List<WrapperHandler<T>> handlers) {
+    public static <T, R> DistributeProcessor<T, R> wrap(@NotNull DistributeProcessor<T, R> target,
+        List<WrapperHandler<T>> handlers) {
         if (handlers == null || handlers.isEmpty()) {
             return target;
         }

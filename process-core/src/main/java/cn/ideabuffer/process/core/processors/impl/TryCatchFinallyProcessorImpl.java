@@ -77,7 +77,8 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
         Set<Class<? extends Throwable>> expClassSet = new HashSet<>();
         for (TryCatchFinallyNode.CatchMapper mapper : catchMapperList) {
             if (expClassSet.contains(mapper.getExceptionClass())) {
-                throw new IllegalCatchGrammarException(String.format("Exception \"%s\" is duplicated", mapper.getExceptionClass().getName()));
+                throw new IllegalCatchGrammarException(
+                    String.format("Exception \"%s\" is duplicated", mapper.getExceptionClass().getName()));
             }
             expClassSet.add(mapper.getExceptionClass());
             if (lastMapper == null) {

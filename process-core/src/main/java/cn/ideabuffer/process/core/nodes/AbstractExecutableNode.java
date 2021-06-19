@@ -273,16 +273,16 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
+    public Key<R> getResultKey() {
+        return resultKey;
+    }
+
+    @Override
     public void setResultKey(Key<R> resultKey) {
         this.resultKey = resultKey;
         if (resultKey != null) {
             this.writableKeys.add(resultKey);
         }
-    }
-
-    @Override
-    public Key<R> getResultKey() {
-        return resultKey;
     }
 
     @Override
@@ -296,6 +296,11 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
+    public Set<Key<?>> getReadableKeys() {
+        return Collections.unmodifiableSet(readableKeys);
+    }
+
+    @Override
     public void setReadableKeys(Set<Key<?>> keys) {
         if (keys == null || keys.isEmpty()) {
             return;
@@ -304,8 +309,8 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
-    public Set<Key<?>> getReadableKeys() {
-        return Collections.unmodifiableSet(readableKeys);
+    public Set<Key<?>> getWritableKeys() {
+        return Collections.unmodifiableSet(writableKeys);
     }
 
     @Override
@@ -317,11 +322,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         if (this.resultKey != null) {
             this.writableKeys.add(this.resultKey);
         }
-    }
-
-    @Override
-    public Set<Key<?>> getWritableKeys() {
-        return Collections.unmodifiableSet(writableKeys);
     }
 
     @Override

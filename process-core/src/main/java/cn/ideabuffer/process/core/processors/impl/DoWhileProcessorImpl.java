@@ -32,7 +32,8 @@ public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileP
         }
 
         InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
-        ContextWrapper whileContext = Contexts.wrap(context, whileBlock, getKeyMapper(), getReadableKeys(), getWritableKeys());
+        ContextWrapper whileContext = Contexts.wrap(context, whileBlock, getKeyMapper(), getReadableKeys(),
+            getWritableKeys());
 
         do {
             whileBlock.resetBreak();

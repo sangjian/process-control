@@ -108,7 +108,6 @@ public interface ProcessDefinition<R> extends Lifecycle {
     @NotNull
     Node[] getNodes();
 
-
     InitializeMode getInitializeMode();
 
     ProcessInstance<R> newInstance();

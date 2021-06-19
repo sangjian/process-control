@@ -43,13 +43,13 @@ public class ContextImpl extends ParameterImpl implements Context {
     }
 
     @Override
-    public void setResultKey(@NotNull ProcessDefinition<?> definition) {
-        this.resultKey = definition.getResultKey();
+    public <V> Key<V> getResultKey() {
+        return (Key<V>)this.resultKey;
     }
 
     @Override
-    public <V> Key<V> getResultKey() {
-        return (Key<V>)this.resultKey;
+    public void setResultKey(@NotNull ProcessDefinition<?> definition) {
+        this.resultKey = definition.getResultKey();
     }
 
     @Override

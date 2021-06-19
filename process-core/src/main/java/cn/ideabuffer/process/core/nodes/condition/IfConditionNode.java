@@ -27,7 +27,8 @@ public class IfConditionNode extends AbstractExecutableNode<ProcessStatus, IfPro
         this(rule, trueBranch, falseBranch, null, null, null);
     }
 
-    public IfConditionNode(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public IfConditionNode(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch,
+        KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
         this(new IfProcessorImpl(rule, trueBranch, falseBranch, keyMapper, readableKeys, writableKeys));
     }
 
@@ -46,23 +47,23 @@ public class IfConditionNode extends AbstractExecutableNode<ProcessStatus, IfPro
     }
 
     @Override
-    public void setReadableKeys(Set<Key<?>> keys) {
-        getProcessor().setReadableKeys(keys);
-    }
-
-    @Override
     public Set<Key<?>> getReadableKeys() {
         return getProcessor().getReadableKeys();
     }
 
     @Override
-    public void setWritableKeys(Set<Key<?>> keys) {
-        getProcessor().setWritableKeys(keys);
+    public void setReadableKeys(Set<Key<?>> keys) {
+        getProcessor().setReadableKeys(keys);
     }
 
     @Override
     public Set<Key<?>> getWritableKeys() {
         return getProcessor().getWritableKeys();
+    }
+
+    @Override
+    public void setWritableKeys(Set<Key<?>> keys) {
+        getProcessor().setWritableKeys(keys);
     }
 
     @Override
