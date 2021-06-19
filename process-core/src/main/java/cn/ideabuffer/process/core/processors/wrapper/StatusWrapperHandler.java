@@ -3,7 +3,6 @@ package cn.ideabuffer.process.core.processors.wrapper;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author sangjian.sj
