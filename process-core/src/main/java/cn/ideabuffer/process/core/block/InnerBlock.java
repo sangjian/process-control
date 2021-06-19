@@ -2,11 +2,13 @@ package cn.ideabuffer.process.core.block;
 
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ParameterImpl;
+import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
+import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
 
 import java.util.Objects;
 
 /**
- * 用于表示一组节点所在的范围，通过Context获取，同一block内，数据可共享，与当前context数据隔离
+ * 内部使用的{@link Block}，用于在进入需要增加作用域的节点（例如{@link WhileConditionNode}，{@link IfConditionNode}等）时，会构建此对象来实现新的作用域。
  *
  * @author sangjian.sj
  * @date 2020/02/22

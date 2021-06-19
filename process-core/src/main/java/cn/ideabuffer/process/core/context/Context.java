@@ -4,10 +4,12 @@ import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
 
 /**
- * 流程上下文
+ * 流程上下文，用于保存流程参数以及获取当前作用域{@link Block}。
  *
  * @author sangjian.sj
  * @date 2020/01/18
+ * @see Parameter
+ * @see Block
  */
 public interface Context extends Parameter {
 
@@ -18,45 +20,57 @@ public interface Context extends Parameter {
      */
     Block getBlock();
 
+    /**
+     * 克隆流程上下文，新建流程上下文，并复制当前上下文中的参数至新的上下文对象。
+     *
+     * @return 克隆后的新流程上下文
+     */
     Context cloneContext();
 
     /**
-     * 获取结果key
+     * 获取resultKey。
      *
-     * @param <V>
-     * @return
+     * @param <V> resultKey对应的值的类型
+     * @return resultKey
+     * @see Context#setResultKey(ProcessDefinition)
      */
     <V> Key<V> getResultKey();
 
+    /**
+     * 根据流程定义设置resultKey，一个流程只对应一个resultKey。
+     *
+     * @param definition 流程定义
+     * @see ProcessDefinition#getResultKey()
+     */
     void setResultKey(ProcessDefinition<?> definition);
 
     /**
-     * 当前key是否可读
+     * 当前key是否可读。
      *
-     * @param key
-     * @return
+     * @param key 参数key
+     * @return 当前key可读，返回true，否则返回false
      */
     boolean readableKey(Key<?> key);
 
     /**
-     * 当前key是否可写
+     * 当前key是否可写。
      *
-     * @param key
-     * @return
+     * @param key 参数key
+     * @return 当前key可写，返回true，否则返回false
      */
     boolean writableKey(Key<?> key);
 
     /**
      * 获取当前异常对象
      *
-     * @return
+     * @return 当前异常对象
      */
     Exception getCurrentException();
 
     /**
      * 设置当前异常对象
      *
-     * @param e
+     * @param e 当前异常对象
      */
     void setCurrentException(Exception e);
 }

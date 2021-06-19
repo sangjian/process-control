@@ -1,13 +1,17 @@
 package cn.ideabuffer.process.core.context;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * {@link Parameter}的实现。
+ *
  * @author sangjian.sj
  * @date 2020/03/26
+ * @see Parameter
  */
 public class ParameterImpl implements Parameter {
 
@@ -21,6 +25,7 @@ public class ParameterImpl implements Parameter {
         this.params = params == null ? new ConcurrentHashMap<>() : params;
     }
 
+    @Nullable
     @Override
     public <V> V put(@NotNull Key<V> key, @NotNull V value) {
         Object v = params.put(key, value);
@@ -31,6 +36,7 @@ public class ParameterImpl implements Parameter {
         return (V)v;
     }
 
+    @Nullable
     @Override
     public <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value) {
         Object v = params.putIfAbsent(key, value);
@@ -41,6 +47,7 @@ public class ParameterImpl implements Parameter {
         return (V)v;
     }
 
+    @Nullable
     @Override
     public <V> V get(@NotNull Key<V> key) {
         Object value = params.get(key);
@@ -51,6 +58,7 @@ public class ParameterImpl implements Parameter {
         return (V)value;
     }
 
+    @Nullable
     @Override
     public <V> V get(@NotNull Key<V> key, V defaultValue) {
         V value = get(key);
@@ -85,6 +93,7 @@ public class ParameterImpl implements Parameter {
         return params.containsValue(value);
     }
 
+    @Nullable
     @Override
     public <V> V remove(@NotNull Key<V> key) {
         Object v = params.remove(key);

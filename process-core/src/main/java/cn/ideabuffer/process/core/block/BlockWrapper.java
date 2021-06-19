@@ -3,24 +3,34 @@ package cn.ideabuffer.process.core.block;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 /**
+ * {@link Block}对象的一个包装，增加了key映射的功能。
+ *
  * @author sangjian.sj
  * @date 2020/02/22
+ * @see KeyMapper
  */
-public class BlockFacade implements Block {
+public class BlockWrapper implements Block {
 
+    /**
+     * 被包装的block
+     */
     private Block block;
 
+    /**
+     * 映射器
+     */
     private KeyMapper mapper;
 
-    public BlockFacade(Block block) {
+    public BlockWrapper(Block block) {
         this(block, null);
     }
 
-    public BlockFacade(Block block, KeyMapper mapper) {
+    public BlockWrapper(Block block, KeyMapper mapper) {
         this.block = block;
         this.mapper = mapper;
     }
@@ -73,6 +83,7 @@ public class BlockFacade implements Block {
         return mapper.getMappingKey(key);
     }
 
+    @Nullable
     @Override
     public <V> V put(@NotNull Key<V> key, @NotNull V value) {
         Key<V> mappingKey = getMappingKey(key);
@@ -82,6 +93,7 @@ public class BlockFacade implements Block {
         return block.put(key, value);
     }
 
+    @Nullable
     @Override
     public <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value) {
         Key<V> mappingKey = getMappingKey(key);
@@ -91,6 +103,7 @@ public class BlockFacade implements Block {
         return block.putIfAbsent(key, value);
     }
 
+    @Nullable
     @Override
     public <V> V get(@NotNull Key<V> key) {
         Key<V> mappingKey = getMappingKey(key);
@@ -100,6 +113,7 @@ public class BlockFacade implements Block {
         return block.get(key);
     }
 
+    @Nullable
     @Override
     public <V> V get(@NotNull Key<V> key, V defaultValue) {
         Key<V> mappingKey = getMappingKey(key);
@@ -138,6 +152,7 @@ public class BlockFacade implements Block {
         return block.containsValue(value);
     }
 
+    @Nullable
     @Override
     public <V> V remove(@NotNull Key<V> key) {
         Key<V> mappingKey = getMappingKey(key);

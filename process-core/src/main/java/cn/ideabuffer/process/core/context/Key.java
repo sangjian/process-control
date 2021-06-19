@@ -2,18 +2,24 @@ package cn.ideabuffer.process.core.context;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
+ * 参数的键，以此来进行参数的映射。
+ *
+ * @param <V> 值的类型
  * @author sangjian.sj
  * @date 2020/03/26
  */
-public class Key<V> {
+public class Key<V> implements Serializable {
+
+    private static final long serialVersionUID = 6760427218917294279L;
 
     /**
      * 参数key
      */
-    private Object key;
+    private Serializable key;
 
     /**
      * value类型
@@ -25,17 +31,17 @@ public class Key<V> {
      */
     private String description;
 
-    public Key(@NotNull Object key, @NotNull Class<? super V> valueType) {
+    public Key(@NotNull Serializable key, @NotNull Class<? super V> valueType) {
         this(key, valueType, null);
     }
 
-    public Key(@NotNull Object key, @NotNull Class<? super V> valueType, String description) {
+    public Key(@NotNull Serializable key, @NotNull Class<? super V> valueType, String description) {
         this.key = key;
         this.valueType = valueType;
         this.description = description;
     }
 
-    public Object getKey() {
+    public Serializable getKey() {
         return key;
     }
 
@@ -51,15 +57,16 @@ public class Key<V> {
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
-        Key<?> that = (Key<?>)o;
-        return Objects.equals(key, that.key) &&
-            Objects.equals(valueType, that.valueType);
+        Key<?> key1 = (Key<?>)o;
+        return Objects.equals(key, key1.key) &&
+            Objects.equals(valueType, key1.valueType) &&
+            Objects.equals(description, key1.description);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(key, valueType);
+        return Objects.hash(key, valueType, description);
     }
 
     @Override

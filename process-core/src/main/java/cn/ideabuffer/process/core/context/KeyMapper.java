@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 参数映射器，解决节点复用的问题。 如果一个节点在一个流程中使用的key的名称为'k1'，新流程想复用这个节点， 但对应的key的名称为'k2'，这时可以通过添加映射来解决参数名称不一致的问题。
+ *
  * @author sangjian.sj
  * @date 2020/05/20
  */
@@ -17,10 +19,24 @@ public class KeyMapper {
         this.mapper = new ConcurrentHashMap<>();
     }
 
+    /**
+     * 参数key映射，将原有的key：from映射至新的key：to
+     *
+     * @param from 原有key
+     * @param to   新key
+     * @param <V>  值类型
+     */
     public <V> void map(@NotNull Key<V> from, @NotNull Key<V> to) {
         this.mapper.put(from, to);
     }
 
+    /**
+     * 获取key的映射
+     *
+     * @param key 待获取映射的key
+     * @param <V> 值类型
+     * @return 如果有映射，返回映射的key，否则返回null
+     */
     public <V> Key<V> getMappingKey(@NotNull Key<V> key) {
         //noinspection unchecked
         return (Key<V>)this.mapper.get(key);

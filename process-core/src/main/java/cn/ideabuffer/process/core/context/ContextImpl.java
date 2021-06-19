@@ -3,18 +3,27 @@ package cn.ideabuffer.process.core.context;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
 
 /**
+ * 流程上下文的实现。
+ *
  * @author sangjian.sj
  * @date 2020/02/07
  */
 public class ContextImpl extends ParameterImpl implements Context {
 
+    /**
+     * 当前block
+     */
     private Block block;
 
+    /**
+     * 结果key
+     */
     private Key<?> resultKey;
 
     private Exception exception;
@@ -86,24 +95,37 @@ public class ContextImpl extends ParameterImpl implements Context {
         return Objects.hash(block);
     }
 
+    /**
+     * 当前context的一个视图。
+     * <ul>
+     * <li>context和block其实没有本质上的区别，只是context作用域是整个流程</li>
+     * <li>可以认为context也是一个block</li>
+     * <li>由于在初始创建context时可能不会创建block，这时需要创建一个block，该block的作用域与context相同</li>
+     * <li>本质上，该block与context是等价的，所有对参数的操作也会同步至context中</li>
+     * </ul>
+     */
     private final class ContextViewBlock implements Block {
         private Context context = ContextImpl.this;
 
+        @Nullable
         @Override
         public <V> V put(@NotNull Key<V> key, @NotNull V value) {
             return context.put(key, value);
         }
 
+        @Nullable
         @Override
         public <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value) {
             return context.putIfAbsent(key, value);
         }
 
+        @Nullable
         @Override
         public <V> V get(@NotNull Key<V> key) {
             return context.get(key);
         }
 
+        @Nullable
         @Override
         public <V> V get(@NotNull Key<V> key, V defaultValue) {
             return context.get(key, defaultValue);
@@ -134,6 +156,7 @@ public class ContextImpl extends ParameterImpl implements Context {
             return context.containsValue(value);
         }
 
+        @Nullable
         @Override
         public <V> V remove(@NotNull Key<V> key) {
             return context.remove(key);

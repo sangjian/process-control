@@ -2,24 +2,49 @@ package cn.ideabuffer.process.core.context;
 
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
-import cn.ideabuffer.process.core.block.BlockFacade;
+import cn.ideabuffer.process.core.block.BlockWrapper;
 import cn.ideabuffer.process.core.exception.UnreadableKeyException;
 import cn.ideabuffer.process.core.exception.UnwritableKeyException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Set;
 
 /**
+ * context包装类，在新创建作用域时，将当前context与新创建的block进行包装，这样可以实现不同作用域的功能。同时还会有参数映射、权限校验的功能。
+ *
  * @author sangjian.sj
  * @date 2020/02/15
+ * @see Context
+ * @see Block
+ * @see KeyMapper
  */
 public class ContextWrapper implements Context {
 
+    /**
+     * 被包装的context
+     */
     private Context context;
+
+    /**
+     * 新作用域的block
+     */
     private Block block;
+
+    /**
+     * 参数映射器
+     */
     private KeyMapper mapper;
+
+    /**
+     * 可读key
+     */
     private Set<Key<?>> readableKeys;
+
+    /**
+     * 可写key
+     */
     private Set<Key<?>> writableKeys;
 
     public ContextWrapper(Context context, Block block) {
@@ -33,7 +58,7 @@ public class ContextWrapper implements Context {
     public ContextWrapper(Context context, Block block, KeyMapper mapper, Set<Key<?>> readableKeys,
         Set<Key<?>> writableKeys) {
         this.context = context;
-        this.block = new BlockFacade(block, mapper);
+        this.block = new BlockWrapper(block, mapper);
         this.mapper = mapper;
         this.readableKeys = readableKeys;
         this.writableKeys = writableKeys;
@@ -56,11 +81,13 @@ public class ContextWrapper implements Context {
         return mapper.getMappingKey(key);
     }
 
+    @Nullable
     @Override
     public <V> V put(@NotNull Key<V> key, @NotNull V value) {
         return put(key, value, true);
     }
 
+    @Nullable
     protected <V> V put(@NotNull Key<V> key, V value, boolean keyCheck) {
         Key<V> k = key;
         if (keyCheck && !writableKey(k)) {
@@ -76,11 +103,13 @@ public class ContextWrapper implements Context {
         return context.put(k, value);
     }
 
+    @Nullable
     @Override
     public <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value) {
         return putIfAbsent(key, value, true);
     }
 
+    @Nullable
     protected <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value, boolean keyCheck) {
         if (keyCheck && !writableKey(key)) {
             throw new UnwritableKeyException(key + " is not writable, check the registration of the key!");
@@ -96,20 +125,24 @@ public class ContextWrapper implements Context {
         return context.putIfAbsent(key, value);
     }
 
+    @Nullable
     @Override
     public <V> V get(@NotNull Key<V> key) {
         return get(key, true);
     }
 
+    @Nullable
     protected <V> V get(@NotNull Key<V> key, boolean keyCheck) {
         return get(key, null, keyCheck);
     }
 
+    @Nullable
     @Override
     public <V> V get(@NotNull Key<V> key, V defaultValue) {
         return get(key, defaultValue, true);
     }
 
+    @Nullable
     protected <V> V get(@NotNull Key<V> key, V defaultValue, boolean keyCheck) {
         if (keyCheck && !readableKey(key)) {
             throw new UnreadableKeyException(key + " is not readable, check the registration of the key!");
@@ -147,11 +180,13 @@ public class ContextWrapper implements Context {
     @Override
     public boolean containsValue(@NotNull Object value) {return context.containsValue(value);}
 
+    @Nullable
     @Override
     public <V> V remove(@NotNull Key<V> key) {
         return remove(key, true);
     }
 
+    @Nullable
     protected <V> V remove(Key<V> key, boolean keyCheck) {
         Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);

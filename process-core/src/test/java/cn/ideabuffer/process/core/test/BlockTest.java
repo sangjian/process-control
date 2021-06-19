@@ -1,8 +1,7 @@
 package cn.ideabuffer.process.core.test;
 
 import cn.ideabuffer.process.core.*;
-import cn.ideabuffer.process.core.block.Block;
-import cn.ideabuffer.process.core.block.BlockFacade;
+import cn.ideabuffer.process.core.block.BlockWrapper;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -38,7 +37,7 @@ public class BlockTest {
         Key<Integer> key = Contexts.newKey("k", int.class);
         context.put(key, 50);
         // 创建新的block，实现block与congtext隔离
-        Context wrapper = Contexts.wrap(context, new BlockFacade(new InnerBlock(context.getBlock())));
+        Context wrapper = Contexts.wrap(context, new BlockWrapper(new InnerBlock(context.getBlock())));
         instance.execute(wrapper);
         // Processor操作block不影响context
         assertEquals(50, (int)context.get(key));
