@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
+import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
 import cn.ideabuffer.process.core.processors.impl.DistributeAggregateProcessorImpl;
 
 /**
@@ -13,7 +14,7 @@ public class DefaultDistributeAggregatableNode<R> extends AbstractDistributeAggr
         this(new DistributeAggregateProcessorImpl<>());
     }
 
-    public DefaultDistributeAggregatableNode(DistributeAggregateProcessorImpl<R> processor) {
+    public DefaultDistributeAggregatableNode(DistributeAggregateProcessor<R> processor) {
         super(processor);
     }
 

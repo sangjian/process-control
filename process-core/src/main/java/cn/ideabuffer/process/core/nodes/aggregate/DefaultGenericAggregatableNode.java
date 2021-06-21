@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
+import cn.ideabuffer.process.core.processors.AggregateProcessor;
 import cn.ideabuffer.process.core.processors.impl.GenericAggregateProcessorImpl;
 
 /**
@@ -13,7 +14,7 @@ public class DefaultGenericAggregatableNode<I, O> extends AbstractAggregatableNo
         this(new GenericAggregateProcessorImpl<>());
     }
 
-    public DefaultGenericAggregatableNode(GenericAggregateProcessorImpl<I, O> processor) {
+    public DefaultGenericAggregatableNode(AggregateProcessor<I, O> processor) {
         super(processor);
     }
 }
