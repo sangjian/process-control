@@ -90,12 +90,12 @@ public class ContextWrapper implements Context {
     @Nullable
     protected <V> V put(@NotNull Key<V> key, V value, boolean keyCheck) {
         Key<V> k = key;
-        if (keyCheck && !writableKey(k)) {
-            throw new UnwritableKeyException(k + " is not writable, check the registration of the key!");
-        }
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             k = mappingKey;
+        }
+        if (keyCheck && !writableKey(k)) {
+            throw new UnwritableKeyException(k + " is not writable, check the registration of the key!");
         }
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).put(k, value, false);
@@ -111,18 +111,18 @@ public class ContextWrapper implements Context {
 
     @Nullable
     protected <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value, boolean keyCheck) {
-        if (keyCheck && !writableKey(key)) {
-            throw new UnwritableKeyException(key + " is not writable, check the registration of the key!");
-        }
         Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             k = mappingKey;
         }
+        if (keyCheck && !writableKey(k)) {
+            throw new UnwritableKeyException(k + " is not writable, check the registration of the key!");
+        }
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).putIfAbsent(k, value, false);
         }
-        return context.putIfAbsent(key, value);
+        return context.putIfAbsent(k, value);
     }
 
     @Nullable
@@ -142,13 +142,13 @@ public class ContextWrapper implements Context {
     }
 
     protected <V> V get(@NotNull Key<V> key, V defaultValue, boolean keyCheck) {
-        if (keyCheck && !readableKey(key)) {
-            throw new UnreadableKeyException(key + " is not readable, check the registration of the key!");
-        }
         Key<V> k = key;
         Key<V> mappingKey = getMappingKey(key);
         if (mappingKey != null) {
             k = mappingKey;
+        }
+        if (keyCheck && !readableKey(k)) {
+            throw new UnreadableKeyException(k + " is not readable, check the registration of the key!");
         }
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).get(k, defaultValue, false);
@@ -197,7 +197,7 @@ public class ContextWrapper implements Context {
         if (context instanceof ContextWrapper) {
             return ((ContextWrapper)context).remove(k, false);
         }
-        return context.remove(key);
+        return context.remove(k);
     }
 
     @Override

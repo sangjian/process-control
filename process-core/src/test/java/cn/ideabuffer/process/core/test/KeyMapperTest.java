@@ -24,47 +24,48 @@ public class KeyMapperTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
 
         KeyMapper mapper = new KeyMapper();
-        Key<Integer> from = Contexts.newKey("newK", int.class);
-        Key<Integer> to = Contexts.newKey("k", int.class);
-        mapper.map(from, to);
+        Key<Integer> newKey = Contexts.newKey("newKey", int.class);
+        Key<Integer> oldKey = Contexts.newKey("oldKey", int.class);
+        mapper.map(oldKey, newKey);
 
         definition
             // 注册执行节点
             .addProcessNodes(ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                    assertEquals(123, (int)context.get(to));
+                    assertNull(null, context.get(oldKey));
                     return null;
-                }).readableKeys(to).build(),
+                }).readableKeys(oldKey).build(),
                 ProcessNodeBuilder.<Void>newBuilder()
                     .by(context -> {
-                        // 指定了mapper，这里取from与取to相同
-                        assertEquals(123, (int)context.get(from));
-                        assertEquals(123, (int)context.get(to));
-                        // 设置from的值与设置to的值相同
-                        context.put(from, 456);
-                        assertEquals(456, (int)context.get(from));
-                        assertEquals(456, (int)context.get(to));
+                        // 指定了mapper，这里取newKey与取oldK相同
+                        assertEquals(123, (int)context.get(newKey));
+                        assertEquals(123, (int)context.get(oldKey));
+                        // 设置newKey的值与设置old的值相同
+                        context.put(newKey, 456);
+                        assertEquals(456, (int)context.get(newKey));
+                        assertEquals(456, (int)context.get(oldKey));
                         return null;
                     })
-                    .readableKeys(from, to)
-                    .writableKeys(from)
+                    .readableKeys(newKey, oldKey)
+                    .writableKeys(newKey, oldKey)
                     .keyMapper(mapper)
                     .build(),
                 ProcessNodeBuilder.<Void>newBuilder().by(context -> {
                         // 没有指定mapper，找不到对应的key
-                        assertNull(context.get(from));
-                        context.put(from, 456);
+                        assertNull(context.get(oldKey));
+                        context.put(oldKey, 500);
                         return null;
                     })
-                    .readableKeys(from)
-                    .writableKeys(from)
+                    .readableKeys(oldKey)
+                    .writableKeys(oldKey)
                     .build()
             );
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
-        context.put(to, 123);
+        context.put(newKey, 123);
 
         instance.execute(context);
-        assertEquals(456, (int)context.get(to));
+        assertEquals(456, (int)context.get(newKey));
+        assertEquals(500, (int)context.get(oldKey));
     }
 
 }
