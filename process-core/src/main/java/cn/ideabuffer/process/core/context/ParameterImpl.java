@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -69,6 +68,7 @@ public class ParameterImpl implements Parameter {
         return value;
     }
 
+    @NotNull
     @Override
     public Map<Key<?>, Object> getParameters() {
         return Collections.unmodifiableMap(params);

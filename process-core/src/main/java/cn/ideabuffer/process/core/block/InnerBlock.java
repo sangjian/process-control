@@ -92,6 +92,7 @@ public class InnerBlock implements Block {
             p.doContinue();
         }
     }
+
     @Override
     public boolean hasBroken() {
         return hasBroken;

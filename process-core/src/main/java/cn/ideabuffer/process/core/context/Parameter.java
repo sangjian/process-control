@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 参数接口，定义对参数的操作
@@ -23,8 +22,7 @@ public interface Parameter {
      * @return 上一次当前<tt>key</tt>对应的<tt>value</tt>，如果之前没有<tt>key</tt>对应的value，返回<tt>null</tt>
      * @see Map#put(Object, Object)
      */
-    @Nullable
-    <V> V put(@NotNull Key<V> key, @NotNull V value);
+    @Nullable <V> V put(@NotNull Key<V> key, @NotNull V value);
 
     /**
      * 如果当前<tt>key</tt>对应的<tt>value</tt>不存在，添加映射，否则不添加。
@@ -36,8 +34,7 @@ public interface Parameter {
      * >，返回<tt>null</tt>
      * @see Map#putIfAbsent(Object, Object)
      */
-    @Nullable
-    <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value);
+    @Nullable <V> V putIfAbsent(@NotNull Key<V> key, @NotNull V value);
 
     /**
      * 获取指定类型的值。
@@ -47,8 +44,7 @@ public interface Parameter {
      * @return 指定类型的值，如果没有映射，返回<tt>null</tt>
      * @see Map#get(Object)
      */
-    @Nullable
-    <V> V get(@NotNull Key<V> key);
+    @Nullable <V> V get(@NotNull Key<V> key);
 
     /**
      * 获取指定key的值，如果为null，则取默认值。
@@ -113,8 +109,7 @@ public interface Parameter {
      * @return 如果存在映射，返回之前<tt>key</tt>对应的<tt>value</tt>，否则返回<tt>null</tt>
      * @see Map#remove(Object)
      */
-    @Nullable
-    <V> V remove(@NotNull Key<V> key);
+    @Nullable <V> V remove(@NotNull Key<V> key);
 
     /**
      * 将<tt>params</tt>中的所有映射添加至当前map。

@@ -2,9 +2,7 @@ package cn.ideabuffer.process.core.context;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *                                           |            Mapper           |
  *                                           |-----------------------------|
  *       ┌—————————————————————————┐         | ┌————————┐       ┌————————┐ |
- *       |   get value by 'oldKey' |---------+>| oldKey |------>| newKey |-+--------┐
+ *       |   get value by 'origin' |---------+>| origin |------>| mapped |-+--------┐
  *       └—————————————————————————┘         | └————————┘       └————————┘ |        |
  *                                           |      .               .      |        |
  *                                           |      .               .      |        |
@@ -26,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *                                  |        |        ParameterMap         |
  *                                  |        |-----------------------------|
  *                                  |        | ┌————————┐       ┌————————┐ |
- *                                  └--------+>| newKey |------>|  value | |
+ *                                  └--------+>| mapped |------>|  value | |
  *                                           | └————————┘       └————————┘ |
  *                                           |      .               .      |
  *                                           |      .               .      |
@@ -56,12 +54,12 @@ public class KeyMapper {
     /**
      * 参数key映射，将原有的key：from映射至新的key：to
      *
-     * @param oldKey 原有key
-     * @param newKey 待映射的key
+     * @param origin 原有key
+     * @param mapped 待映射的key
      * @param <V>    值类型
      */
-    public <V> void map(@NotNull Key<V> oldKey, @NotNull Key<V> newKey) {
-        this.mapper.put(oldKey, newKey);
+    public <V> void map(@NotNull Key<V> origin, @NotNull Key<V> mapped) {
+        this.mapper.put(origin, mapped);
     }
 
     /**

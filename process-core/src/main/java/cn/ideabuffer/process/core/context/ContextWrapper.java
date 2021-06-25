@@ -7,7 +7,9 @@ import cn.ideabuffer.process.core.exception.UnwritableKeyException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * context包装类，在新创建作用域时，将当前context与新创建的block进行包装，这样可以实现不同作用域的功能。同时还会有参数映射、权限校验的功能。
@@ -55,7 +57,8 @@ public class ContextWrapper implements Context {
         this(context, block, mapper, null, null);
     }
 
-    public ContextWrapper(@NotNull Context context, @NotNull Block block, KeyMapper mapper, @Nullable Set<Key<?>> readableKeys,
+    public ContextWrapper(@NotNull Context context, @NotNull Block block, KeyMapper mapper,
+        @Nullable Set<Key<?>> readableKeys,
         @Nullable Set<Key<?>> writableKeys) {
         this.context = context;
         this.mapper = mapper;
@@ -147,8 +150,9 @@ public class ContextWrapper implements Context {
         return get(key, defaultValue, true, true);
     }
 
+    @NotNull
     @Override
-    public @NotNull Map<Key<?>, Object> getParameters() {
+    public Map<Key<?>, Object> getParameters() {
         return context.getParameters();
     }
 
