@@ -3,7 +3,9 @@ package cn.ideabuffer.process.core.context;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,7 +23,7 @@ public class ParameterImpl implements Parameter {
         this(null);
     }
 
-    public ParameterImpl(Map<Key<?>, Object> params) {
+    public ParameterImpl(@Nullable Map<Key<?>, Object> params) {
         this.params = params == null ? new ConcurrentHashMap<>() : params;
     }
 
@@ -68,8 +70,8 @@ public class ParameterImpl implements Parameter {
     }
 
     @Override
-    public Map<Key<?>, Object> getParams() {
-        return params;
+    public Map<Key<?>, Object> getParameters() {
+        return Collections.unmodifiableMap(params);
     }
 
     @Override
@@ -106,11 +108,6 @@ public class ParameterImpl implements Parameter {
     @Override
     public void putAll(@NotNull Map<? extends Key<?>, ?> params) {
         this.params.putAll(params);
-    }
-
-    @Override
-    public void clear() {
-        params.clear();
     }
 
 }

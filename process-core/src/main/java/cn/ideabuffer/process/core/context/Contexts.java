@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.context;
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -55,14 +56,12 @@ public class Contexts {
         return new Key<>(key, valueType, description);
     }
 
-    /**
-     * 克隆流程上下文。
-     *
-     * @param context 被克隆的流程上下文
-     * @return 克隆后的流程上下文
-     */
-    public static Context clone(@NotNull Context context) {
-        return context.cloneContext();
+    @Nullable
+    public static <V> Key<V> getMappingKey(Key<V> key, KeyMapper mapper) {
+        if (mapper == null || mapper.isEmpty()) {
+            return null;
+        }
+        return mapper.getMappedKey(key);
     }
 
     /**

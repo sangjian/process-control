@@ -1,9 +1,9 @@
 package cn.ideabuffer.process.core.block;
 
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.context.ParameterImpl;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ import java.util.Objects;
  * @date 2020/02/22
  * @see Context#getBlock()
  */
-public class InnerBlock extends ParameterImpl implements Block {
+public class InnerBlock implements Block {
 
     private boolean breakable;
 
@@ -24,23 +24,21 @@ public class InnerBlock extends ParameterImpl implements Block {
 
     private boolean hasContinued;
 
+    @Nullable
     private Block parent;
 
     public InnerBlock() {
         this(null);
     }
 
-    public InnerBlock(Block parent) {
+    public InnerBlock(@Nullable Block parent) {
         this(false, false, parent);
     }
 
-    public InnerBlock(boolean breakable, boolean continuable, Block parent) {
+    public InnerBlock(boolean breakable, boolean continuable, @Nullable Block parent) {
         this.breakable = breakable;
         this.continuable = continuable;
         this.parent = parent;
-        if (parent != null) {
-            this.putAll(parent.getParams());
-        }
     }
 
     @Override
@@ -94,15 +92,6 @@ public class InnerBlock extends ParameterImpl implements Block {
             p.doContinue();
         }
     }
-
-    public boolean breakable() {
-        return breakable;
-    }
-
-    public boolean continuable() {
-        return continuable;
-    }
-
     @Override
     public boolean hasBroken() {
         return hasBroken;

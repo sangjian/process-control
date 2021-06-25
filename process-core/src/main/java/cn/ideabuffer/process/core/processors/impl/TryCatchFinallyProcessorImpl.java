@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
@@ -105,7 +106,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
                 return ProcessStatus.proceed();
             }
             InnerBlock tryBlock = new InnerBlock(context.getBlock());
-            ContextWrapper contextWrapper = Contexts.wrap(context, tryBlock);
+            ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(tryBlock));
             return tryBranch.execute(contextWrapper);
         } catch (Exception e) {
             ProcessStatus status = runCatchBranch(context, e);
@@ -132,7 +133,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
                 continue;
             }
             InnerBlock catchBlock = new InnerBlock(context.getBlock());
-            ContextWrapper contextWrapper = Contexts.wrap(context, catchBlock);
+            ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(catchBlock));
             contextWrapper.setCurrentException(e);
             return catchBranch.execute(contextWrapper);
         }
@@ -144,7 +145,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
             return;
         }
         InnerBlock finallyBlock = new InnerBlock(context.getBlock());
-        ContextWrapper contextWrapper = Contexts.wrap(context, finallyBlock);
+        ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(finallyBlock));
         finallyBranch.execute(contextWrapper);
     }
 }

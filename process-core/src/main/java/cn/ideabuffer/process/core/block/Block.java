@@ -1,9 +1,15 @@
 package cn.ideabuffer.process.core.block;
 
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.context.Parameter;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Set;
 
 /**
  * <ul>
@@ -16,7 +22,7 @@ import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
  * @date 2020/02/22
  * @see Context#getBlock()
  */
-public interface Block extends Parameter {
+public interface Block {
 
     /**
      * 是否允许break，改方法先判断当前block是否支持break，如果当前block不支持，向上遍历block。
@@ -61,6 +67,7 @@ public interface Block extends Parameter {
      *
      * @return parent
      */
+    @Nullable
     Block getParent();
 
 }

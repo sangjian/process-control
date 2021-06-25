@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.*;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
@@ -90,7 +91,7 @@ public class WhileProcessorImpl implements WhileProcessor {
         }
 
         InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
-        ContextWrapper whileContext = Contexts.wrap(context, whileBlock, keyMapper, readableKeys, writableKeys);
+        ContextWrapper whileContext = Contexts.wrap(context, new BlockFacade(whileBlock), keyMapper, readableKeys, writableKeys);
 
         while (getRule().match(whileContext)) {
             ProcessStatus status = branch.execute(whileContext);

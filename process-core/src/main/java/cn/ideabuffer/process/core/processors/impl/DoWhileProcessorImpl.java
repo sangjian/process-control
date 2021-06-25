@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.*;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
@@ -32,7 +33,7 @@ public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileP
         }
 
         InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
-        ContextWrapper whileContext = Contexts.wrap(context, whileBlock, getKeyMapper(), getReadableKeys(),
+        ContextWrapper whileContext = Contexts.wrap(context, new BlockFacade(whileBlock), getKeyMapper(), getReadableKeys(),
             getWritableKeys());
 
         do {

@@ -7,6 +7,7 @@ import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author sangjian.sj
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor<R> {
 
     private ProcessDefinition<R> definition;
+    @Nullable
     private R result = null;
 
     public ProcessInstanceProcessorImpl(ProcessDefinition<R> definition) {
@@ -28,7 +30,6 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
 
         Node[] nodes = definition.getNodes();
         ProcessStatus status = ProcessStatus.proceed();
-        context.setResultKey(definition);
         for (int i = 0; i < nodes.length; i++) {
             Node node = nodes[i];
             if (!node.enabled()) {
@@ -47,8 +48,8 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
             }
 
         }
-        if (context.getResultKey() != null) {
-            result = context.get(context.getResultKey());
+        if (definition.getResultKey() != null) {
+            result = context.get(definition.getResultKey());
         }
 
         return status;

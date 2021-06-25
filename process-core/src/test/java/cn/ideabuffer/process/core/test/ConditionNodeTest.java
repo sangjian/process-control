@@ -84,7 +84,7 @@ public class ConditionNodeTest {
          * }
          */
         Rule rule = context -> {
-            int k = context.getBlock().get(key, 0);
+            int k = context.get(key, 0);
             // 规则执行次数
             ruleCounter.incrementAndGet();
             return k < 10;
@@ -95,10 +95,9 @@ public class ConditionNodeTest {
                     .by(context -> {
                         // 节点执行次数
                         counter1.incrementAndGet();
-                        Block block = context.getBlock();
-                        int k = block.get(key, 0);
+                        int k = context.get(key, 0);
                         // 每次执行++k
-                        block.put(key, ++k);
+                        context.put(key, ++k);
                         return ProcessStatus.proceed();
                     })
                     .readableKeys(key)
@@ -108,10 +107,9 @@ public class ConditionNodeTest {
                     .by(context -> {
                         // 节点执行次数
                         counter2.incrementAndGet();
-                        Block block = context.getBlock();
-                        int k = block.get(key, 0);
+                        int k = context.get(key, 0);
                         // 每次执行++k
-                        block.put(key, ++k);
+                        context.put(key, ++k);
                         return ProcessStatus.proceed();
                     })
                     .readableKeys(key)
@@ -144,7 +142,7 @@ public class ConditionNodeTest {
          * } while(k < 10)
          */
         Rule rule = context -> {
-            int k = context.getBlock().get(key, 0);
+            int k = context.get(key, 0);
             // 规则执行次数
             ruleCounter.incrementAndGet();
             return k < 10;
@@ -155,10 +153,9 @@ public class ConditionNodeTest {
                     .by(context -> {
                         // 节点执行次数
                         counter1.incrementAndGet();
-                        Block block = context.getBlock();
-                        int k = block.get(key, 0);
+                        int k = context.get(key, 0);
                         // 每次执行++k
-                        block.put(key, ++k);
+                        context.put(key, ++k);
                         return ProcessStatus.proceed();
                     })
                     .readableKeys(key)
@@ -168,10 +165,9 @@ public class ConditionNodeTest {
                     .by(context -> {
                         // 节点执行次数
                         counter2.incrementAndGet();
-                        Block block = context.getBlock();
-                        int k = block.get(key, 0);
+                        int k = context.get(key, 0);
                         // 每次执行++k
-                        block.put(key, ++k);
+                        context.put(key, ++k);
                         return ProcessStatus.proceed();
                     })
                     .readableKeys(key)
@@ -235,37 +231,42 @@ public class ConditionNodeTest {
         AtomicInteger processor2MaxK = new AtomicInteger();
 
         Rule rule = context -> {
-            LOGGER.info("in rule k={}, counter:{}", context.getBlock().get(key, 0), counter.get());
-            return context.getBlock().get(key, 0) < 10 && counter.getAndIncrement() < 10;
+            LOGGER.info("in rule k={}, counter:{}", context.get(key, 0), counter.get());
+            return context.get(key, 0) < 10 && counter.getAndIncrement() < 10;
         };
-        definition.addWhile(Nodes.newWhile(rule)
+        definition.addWhile(Nodes.newWhile(rule, key)
             .then(
                 ProcessNodeBuilder.<ProcessStatus>newBuilder()
                     .by(context -> {
                         processor1Counter.incrementAndGet();
                         Block block = context.getBlock();
-                        int k = block.get(key, 0);
+                        int k = context.get(key, 0);
                         LOGGER.info("in node1 k={}", k);
-                        block.put(key, ++k);
+                        context.put(key, ++k);
                         if (k == 5 && block.allowContinue()) {
                             LOGGER.info("in node1 k == 5, continued");
                             continueCounter.getAndIncrement();
-                            block.put(key, 0);
+                            context.put(key, 0);
                             block.doContinue();
                         }
                         return ProcessStatus.proceed();
-                    }).build(),
+                    })
+                    .readableKeys(key)
+                    .writableKeys(key)
+                    .build(),
                 ProcessNodeBuilder.<ProcessStatus>newBuilder()
                     .by(context -> {
                         processor2Counter.incrementAndGet();
-                        Block block = context.getBlock();
-                        int k = block.get(key, 0);
+                        int k = context.get(key, 0);
                         if (k > processor2MaxK.get()) {
                             processor2MaxK.set(k);
                         }
                         LOGGER.info("in node2 k={}, processor2MaxK:{}", k, processor2MaxK);
                         return ProcessStatus.proceed();
-                    }).build()
+                    })
+                    .readableKeys(key)
+                    .writableKeys(key)
+                    .build()
             )
         );
         ProcessInstance<String> instance = definition.newInstance();
@@ -324,37 +325,42 @@ public class ConditionNodeTest {
         AtomicInteger processor2MaxK = new AtomicInteger();
 
         Rule rule = context -> {
-            LOGGER.info("in rule k={}, counter:{}", context.getBlock().get(key, 0), counter.get());
-            return context.getBlock().get(key, 0) < 10 && counter.getAndIncrement() < 10;
+            LOGGER.info("in rule k={}, counter:{}", context.get(key, 0), counter.get());
+            return context.get(key, 0) < 10 && counter.getAndIncrement() < 10;
         };
-        definition.addDoWhile(Nodes.newDoWhile(rule)
+        definition.addDoWhile(Nodes.newDoWhile(rule, key)
             .then(
                 ProcessNodeBuilder.<ProcessStatus>newBuilder()
                     .by(context -> {
                         processor1Counter.incrementAndGet();
                         Block block = context.getBlock();
-                        int k = block.get(key, 0);
+                        int k = context.get(key, 0);
                         LOGGER.info("in node1 k={}", k);
-                        block.put(key, ++k);
+                        context.put(key, ++k);
                         if (k == 5 && block.allowContinue()) {
                             LOGGER.info("in node1 k == 5, continued");
                             continueCounter.getAndIncrement();
-                            block.put(key, 0);
+                            context.put(key, 0);
                             block.doContinue();
                         }
                         return ProcessStatus.proceed();
-                    }).build(),
+                    })
+                    .readableKeys(key)
+                    .writableKeys(key)
+                    .build(),
                 ProcessNodeBuilder.<ProcessStatus>newBuilder()
                     .by(context -> {
                         processor2Counter.incrementAndGet();
-                        Block block = context.getBlock();
-                        int k = block.get(key, 0);
+                        int k = context.get(key, 0);
                         if (k > processor2MaxK.get()) {
                             processor2MaxK.set(k);
                         }
                         LOGGER.info("in node2 k={}, processor2MaxK:{}", k, processor2MaxK);
                         return ProcessStatus.proceed();
-                    }).build()
+                    })
+                    .readableKeys(key)
+                    .writableKeys(key)
+                    .build()
             )
         );
         ProcessInstance<String> instance = definition.newInstance();

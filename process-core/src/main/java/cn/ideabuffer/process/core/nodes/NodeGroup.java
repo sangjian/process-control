@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes;
 
+import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
@@ -18,7 +19,7 @@ public class NodeGroup extends DefaultBranchNode {
     @Override
     public ProcessStatus execute(Context context) throws Exception {
         InnerBlock block = new InnerBlock(context.getBlock());
-        ContextWrapper contextWrapper = Contexts.wrap(context, block);
+        ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(block));
         return super.execute(contextWrapper);
     }
 

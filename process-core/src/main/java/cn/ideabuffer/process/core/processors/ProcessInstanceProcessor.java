@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.processors;
 
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author sangjian.sj
@@ -21,6 +22,7 @@ public interface ProcessInstanceProcessor<R> extends ComplexProcessor<ProcessSta
      *
      * @return 结果
      */
+    @Nullable
     R getResult();
 
 }

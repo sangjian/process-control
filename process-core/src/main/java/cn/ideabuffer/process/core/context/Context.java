@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.context;
 
-import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.block.Block;
 
 /**
@@ -26,23 +25,6 @@ public interface Context extends Parameter {
      * @return 克隆后的新流程上下文
      */
     Context cloneContext();
-
-    /**
-     * 获取resultKey。
-     *
-     * @param <V> resultKey对应的值的类型
-     * @return resultKey
-     * @see Context#setResultKey(ProcessDefinition)
-     */
-    <V> Key<V> getResultKey();
-
-    /**
-     * 根据流程定义设置resultKey，一个流程只对应一个resultKey。
-     *
-     * @param definition 流程定义
-     * @see ProcessDefinition#getResultKey()
-     */
-    void setResultKey(ProcessDefinition<?> definition);
 
     /**
      * 当前key是否可读。
@@ -73,4 +55,10 @@ public interface Context extends Parameter {
      * @param e 当前异常对象
      */
     void setCurrentException(Exception e);
+
+    /**
+     * 获取参数映射器
+     * @return 参数映射器
+     */
+    KeyMapper getMapper();
 }

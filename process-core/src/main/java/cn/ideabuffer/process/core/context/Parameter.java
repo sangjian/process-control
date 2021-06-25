@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 参数接口，定义对参数的操作
@@ -61,11 +62,14 @@ public interface Parameter {
     <V> V get(@NotNull Key<V> key, V defaultValue);
 
     /**
-     * 获取所有的参数
+     * 获取所有的参数Key，返回结果不可修改
      *
-     * @return 所有参数映射
+     * @return 所有参数Key
+     * @see java.util.Collections#unmodifiableMap(Map)
+     * @see KeyMapper
      */
-    Map<Key<?>, Object> getParams();
+    @NotNull
+    Map<Key<?>, Object> getParameters();
 
     /**
      * 获取当前参数映射的大小。
@@ -120,8 +124,4 @@ public interface Parameter {
      */
     void putAll(@NotNull Map<? extends Key<?>, ?> params);
 
-    /**
-     * 删除所有映射。
-     */
-    void clear();
 }

@@ -2,7 +2,9 @@ package cn.ideabuffer.process.core.context;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -40,8 +42,15 @@ public class KeyMapper {
 
     private Map<Key<?>, Key<?>> mapper;
 
+    private KeyMapper parent;
+
     public KeyMapper() {
+        this(null);
+    }
+
+    public KeyMapper(KeyMapper parent) {
         this.mapper = new ConcurrentHashMap<>();
+        this.parent = parent;
     }
 
     /**
@@ -62,9 +71,16 @@ public class KeyMapper {
      * @param <V> 值类型
      * @return 如果有映射，返回映射的key，否则返回null
      */
-    public <V> Key<V> getMappingKey(@NotNull Key<V> key) {
-        //noinspection unchecked
-        return (Key<V>)this.mapper.get(key);
+    public <V> Key<V> getMappedKey(@NotNull Key<V> key) {
+        Key<V> mappedKey = key;
+        KeyMapper p = this;
+        // 逐级查找，最终找到原始key
+        do {
+            //noinspection unchecked
+            mappedKey = (Key<V>)p.mapper.get(mappedKey);
+            p = p.parent;
+        } while (p != null);
+        return mappedKey;
     }
 
     public boolean isEmpty() {

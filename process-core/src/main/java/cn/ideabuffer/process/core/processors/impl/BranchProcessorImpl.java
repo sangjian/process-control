@@ -7,8 +7,8 @@ import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,7 +24,7 @@ public class BranchProcessorImpl implements BranchProcessor {
     }
 
     public BranchProcessorImpl(ExecutableNode<?, ?>... nodes) {
-        this.nodes = new ArrayList<>();
+        this.nodes = new LinkedList<>();
         if (nodes != null && nodes.length > 0) {
             this.nodes.addAll(Arrays.asList(nodes));
         }
