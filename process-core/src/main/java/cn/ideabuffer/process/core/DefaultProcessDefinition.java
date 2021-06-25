@@ -3,22 +3,22 @@ package cn.ideabuffer.process.core;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.exception.IllegalResultKeyException;
 import cn.ideabuffer.process.core.exception.LifecycleException;
-import cn.ideabuffer.process.core.nodes.aggregate.AggregatableNode;
-import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.NodeGroup;
+import cn.ideabuffer.process.core.nodes.aggregate.AggregatableNode;
+import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author sangjian.sj
@@ -34,17 +34,18 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private Node[] nodes = new Node[0];
 
+    @Nullable
     private Key<R> resultKey;
 
     private ReturnCondition<R> returnCondition;
 
-    private List<WrapperHandler<R>> handlers;
+    private List<StatusWrapperHandler> handlers;
 
     public DefaultProcessDefinition() {
         this(null);
     }
 
-    public DefaultProcessDefinition(Key<R> resultKey) {
+    public DefaultProcessDefinition(@Nullable Key<R> resultKey) {
         if (initializeMode == InitializeMode.ON_REGISTER) {
             state = LifecycleState.INITIALIZED;
         }
@@ -220,6 +221,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         return initializeMode;
     }
 
+    @NotNull
     @Override
     public ProcessInstance<R> newInstance() {
         return new DefaultProcessInstance<>(this);
@@ -231,6 +233,7 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         return this;
     }
 
+    @Nullable
     @Override
     public Key<R> getResultKey() {
         return this.resultKey;
@@ -247,14 +250,23 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     }
 
     @Override
-    public ProcessDefinition<R> wrap(@NotNull WrapperHandler<R>... handlers) {
+    public ProcessDefinition<R> wrap(@NotNull StatusWrapperHandler... handlers) {
         if (handlers.length == 0) {
             return this;
         }
         if (this.handlers == null) {
-            this.handlers = new ArrayList<>();
+            this.handlers = new LinkedList<>();
         }
         this.handlers.addAll(Arrays.asList(handlers));
         return this;
+    }
+
+    @NotNull
+    @Override
+    public List<StatusWrapperHandler> getHandlers() {
+        if (this.handlers == null) {
+            this.handlers = Collections.emptyList();
+        }
+        return Collections.unmodifiableList(this.handlers);
     }
 }

@@ -1,16 +1,17 @@
 package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.nodes.aggregate.AggregatableNode;
-import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.NodeGroup;
+import cn.ideabuffer.process.core.nodes.aggregate.AggregatableNode;
+import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
-import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -110,15 +111,32 @@ public interface ProcessDefinition<R> extends Lifecycle {
 
     InitializeMode getInitializeMode();
 
+    @NotNull
     ProcessInstance<R> newInstance();
 
     ProcessDefinition<R> resultKey(@NotNull Key<R> key);
 
+    @Nullable
     Key<R> getResultKey();
 
     void returnOn(ReturnCondition<R> condition);
 
     ReturnCondition<R> getReturnCondition();
 
-    ProcessDefinition<R> wrap(@NotNull WrapperHandler<R>... handlers);
+    /**
+     * 注册包装处理器
+     *
+     * @param handlers 包装处理器
+     * @return 当前流程定义
+     */
+    ProcessDefinition<R> wrap(@NotNull StatusWrapperHandler... handlers);
+
+    /**
+     * 返回包装处理器
+     *
+     * @return 包装处理器列表
+     * @see java.util.Collections#unmodifiableList(List)
+     */
+    @NotNull
+    List<StatusWrapperHandler> getHandlers();
 }

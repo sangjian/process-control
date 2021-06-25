@@ -8,6 +8,7 @@ import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.ProcessInstanceProcessorProxy;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -21,12 +22,8 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
     implements ProcessInstance<R> {
 
     public DefaultProcessInstance(@NotNull ProcessDefinition<R> definition) {
-        this(definition, null);
-    }
-
-    public DefaultProcessInstance(@NotNull ProcessDefinition<R> definition, List<StatusWrapperHandler> handlers) {
         ProcessInstanceProcessor<R> wrapped = new ProcessInstanceProcessorImpl<>(definition);
-        wrapped = ProcessInstanceProcessorProxy.wrap(wrapped, handlers);
+        wrapped = ProcessInstanceProcessorProxy.wrap(wrapped, definition.getHandlers());
         super.registerProcessor(wrapped);
         if (definition.getResultKey() != null) {
             Set<Key<?>> resultKeys = new HashSet<>();
@@ -36,6 +33,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
 
     }
 
+    @Nullable
     @Override
     public R getResult() {
         return getProcessor().getResult();
