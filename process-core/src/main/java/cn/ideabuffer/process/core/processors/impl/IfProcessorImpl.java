@@ -106,7 +106,8 @@ public class IfProcessorImpl implements IfProcessor {
             throw new NullPointerException("rule can't be null");
         }
         InnerBlock ifBlock = new InnerBlock(context.getBlock());
-        ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(ifBlock), keyMapper, readableKeys, writableKeys);
+        ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(ifBlock), keyMapper, readableKeys,
+            writableKeys);
         BranchNode branch = rule.match(contextWrapper) ? trueBranch : falseBranch;
         if (branch == null) {
             return ProcessStatus.proceed();

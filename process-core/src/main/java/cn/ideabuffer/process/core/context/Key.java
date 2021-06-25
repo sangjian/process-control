@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.context;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -29,13 +30,14 @@ public class Key<V> implements Serializable {
     /**
      * 描述
      */
+    @Nullable
     private String description;
 
     public Key(@NotNull Serializable key, @NotNull Class<? super V> valueType) {
         this(key, valueType, null);
     }
 
-    public Key(@NotNull Serializable key, @NotNull Class<? super V> valueType, String description) {
+    public Key(@NotNull Serializable key, @NotNull Class<? super V> valueType, @Nullable String description) {
         this.key = key;
         this.valueType = valueType;
         this.description = description;
@@ -49,6 +51,7 @@ public class Key<V> implements Serializable {
         return valueType;
     }
 
+    @Nullable
     public String getDescription() {
         return description;
     }

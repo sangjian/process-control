@@ -9,7 +9,8 @@ import cn.ideabuffer.process.core.rule.Rule;
  * @author sangjian.sj
  * @date 2020/05/09
  */
-public class DefaultDistributeMergeableNode<T, R> extends AbstractMergeableNode implements DistributeMergeableNode<T, R> {
+public class DefaultDistributeMergeableNode<T, R> extends AbstractMergeableNode
+    implements DistributeMergeableNode<T, R> {
 
     private DistributeProcessor<T, R> processor;
 
