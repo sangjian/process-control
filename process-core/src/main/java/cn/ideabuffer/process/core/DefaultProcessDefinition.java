@@ -2,7 +2,6 @@ package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.exception.IllegalResultKeyException;
-import cn.ideabuffer.process.core.exception.LifecycleException;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.NodeGroup;
 import cn.ideabuffer.process.core.nodes.aggregate.AggregatableNode;
@@ -29,7 +28,6 @@ import java.util.List;
 public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 
     private InitializeMode initializeMode = InitializeMode.ON_REGISTER;
 

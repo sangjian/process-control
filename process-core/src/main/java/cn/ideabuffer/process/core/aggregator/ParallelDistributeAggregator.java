@@ -112,6 +112,13 @@ public class ParallelDistributeAggregator<R> extends AbstractAggregator implemen
         return AggregateUtils.within(future, node.getTimeout(), TimeUnit.MILLISECONDS);
     }
 
+    @Override
+    public void destroy() {
+        if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
+            ((ExecutorService)executor).shutdown();
+        }
+    }
+
     private class MergerNode<V, R> {
         private DistributeMergeableNode<V, R> node;
         private V value;
@@ -127,13 +134,6 @@ public class ParallelDistributeAggregator<R> extends AbstractAggregator implemen
             if (node.getProcessor() != null) {
                 node.getProcessor().merge(value, result);
             }
-        }
-    }
-
-    @Override
-    public void destroy() {
-        if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
-            ((ExecutorService)executor).shutdown();
         }
     }
 }

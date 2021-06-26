@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.processors.impl;
 
-import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
 import cn.ideabuffer.process.core.context.Context;

@@ -2,7 +2,6 @@ package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.exception.ProcessException;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;

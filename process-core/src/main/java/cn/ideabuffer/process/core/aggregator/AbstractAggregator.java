@@ -8,7 +8,6 @@ import cn.ideabuffer.process.core.Lifecycle;
  */
 public abstract class AbstractAggregator implements Lifecycle {
 
-
     @Override
     public void initialize() {
 
