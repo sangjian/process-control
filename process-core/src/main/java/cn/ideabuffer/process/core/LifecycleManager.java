@@ -27,7 +27,7 @@ public class LifecycleManager {
     }
 
     public static void initialize(@NotNull Lifecycle component) {
-        Object value = INITIALIZING_MAP.putIfAbsent(component, NEW);
+        LifecycleState value = INITIALIZING_MAP.putIfAbsent(component, NEW);
         if (value != null) {
             return;
         }
@@ -47,7 +47,7 @@ public class LifecycleManager {
     }
 
     public static void destroy(@NotNull Lifecycle component) {
-        Object value = DESTROYING_MAP.putIfAbsent(component, DESTROYING);
+        LifecycleState value = DESTROYING_MAP.putIfAbsent(component, DESTROYING);
         if (value != null) {
             return;
         }

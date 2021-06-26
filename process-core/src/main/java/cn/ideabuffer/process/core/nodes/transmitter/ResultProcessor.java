@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes.transmitter;
 
 import cn.ideabuffer.process.core.context.Context;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author sangjian.sj
@@ -9,6 +10,6 @@ import cn.ideabuffer.process.core.context.Context;
 @FunctionalInterface
 public interface ResultProcessor<R, P> {
 
-    R apply(Context context, P result);
+    R apply(Context context, @Nullable P result);
 
 }

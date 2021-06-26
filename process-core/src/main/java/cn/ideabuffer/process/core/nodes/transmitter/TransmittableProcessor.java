@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.context.Context;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -74,7 +75,7 @@ public class TransmittableProcessor<P> implements ResultStream<P>, Lifecycle {
         return then;
     }
 
-    public void fire(Context context, P value) {
+    public void fire(Context context, @Nullable P value) {
         if (parallel) {
             Executor e = executor == null ? DEFAULT_POOL : executor;
             e.execute(() -> doFire(context, value));
@@ -84,7 +85,7 @@ public class TransmittableProcessor<P> implements ResultStream<P>, Lifecycle {
     }
 
     @SuppressWarnings("unchecked")
-    private void doFire(Context context, P value) {
+    private void doFire(Context context, @Nullable P value) {
         Object r = value;
         if (processor != null) {
             r = processor.apply(context, value);
