@@ -7,7 +7,7 @@ import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.IfProcessor;
 import cn.ideabuffer.process.core.processors.impl.IfProcessorImpl;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 

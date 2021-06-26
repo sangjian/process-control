@@ -3,7 +3,7 @@ package cn.ideabuffer.process.core.nodes;
 import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.processors.DistributeProcessor;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 
 /**
  * 分布式可合并节点

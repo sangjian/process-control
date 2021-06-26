@@ -2,7 +2,7 @@ package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.ReturnCondition;
-import cn.ideabuffer.process.core.aggregator.GenericAggregator;
+import cn.ideabuffer.process.core.aggregators.GenericAggregator;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
@@ -11,7 +11,7 @@ import cn.ideabuffer.process.core.processors.AggregateProcessor;
 import cn.ideabuffer.process.core.processors.impl.GenericAggregateProcessorImpl;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.AggregateProcessorProxy;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

@@ -7,8 +7,8 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
-import cn.ideabuffer.process.core.rule.Rule;
-import cn.ideabuffer.process.core.rule.Rules;
+import cn.ideabuffer.process.core.rules.Rule;
+import cn.ideabuffer.process.core.rules.Rules;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.junit.Test;
 

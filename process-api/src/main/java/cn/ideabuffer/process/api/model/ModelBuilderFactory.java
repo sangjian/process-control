@@ -10,7 +10,7 @@ import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
 import cn.ideabuffer.process.core.processors.*;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

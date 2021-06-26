@@ -5,7 +5,7 @@ import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.DoWhileProcessor;
 import cn.ideabuffer.process.core.processors.impl.DoWhileProcessorImpl;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;

@@ -4,7 +4,7 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-import cn.ideabuffer.process.core.strategy.ProceedStrategy;
+import cn.ideabuffer.process.core.strategies.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;

@@ -3,7 +3,7 @@ package cn.ideabuffer.process.extension.retry.nodes;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.extension.retry.processors.RetryProcessor;
 import cn.ideabuffer.process.extension.retry.processors.impl.RetryProcessorImpl;
 import com.github.rholder.retry.Retryer;

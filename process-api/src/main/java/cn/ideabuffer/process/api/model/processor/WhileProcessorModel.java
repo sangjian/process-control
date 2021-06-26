@@ -7,7 +7,7 @@ import cn.ideabuffer.process.api.model.builder.RuleModelBuilder;
 import cn.ideabuffer.process.api.model.node.BranchNodeModel;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.WhileProcessor;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 /**

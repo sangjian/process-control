@@ -13,9 +13,9 @@ import java.util.Collection;
  * @param <R> 合并结果类型
  * @author sangjian.sj
  * @date 2020/03/07
- * @see cn.ideabuffer.process.core.aggregator.Aggregator
- * @see cn.ideabuffer.process.core.aggregator.GenericAggregator
- * @see cn.ideabuffer.process.core.aggregator.UnitAggregator
+ * @see cn.ideabuffer.process.core.aggregators.Aggregator
+ * @see cn.ideabuffer.process.core.aggregators.GenericAggregator
+ * @see cn.ideabuffer.process.core.aggregators.UnitAggregator
  */
 public interface Merger<P, R> {
 

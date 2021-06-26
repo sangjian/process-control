@@ -7,7 +7,7 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.TransmissionNode;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.DefaultProcessorProxy;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

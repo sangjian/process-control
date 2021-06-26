@@ -5,7 +5,7 @@ import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.DoWhileProcessor;
 import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 

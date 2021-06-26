@@ -4,7 +4,7 @@ import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.DefaultProcessInstance;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessInstance;
-import cn.ideabuffer.process.core.aggregator.Aggregators;
+import cn.ideabuffer.process.core.aggregators.Aggregators;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;

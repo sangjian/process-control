@@ -2,7 +2,7 @@ package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Matchable;
 import cn.ideabuffer.process.core.Mergeable;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

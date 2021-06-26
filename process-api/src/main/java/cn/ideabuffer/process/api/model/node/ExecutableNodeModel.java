@@ -10,7 +10,7 @@ import cn.ideabuffer.process.api.model.processor.ProcessorModel;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

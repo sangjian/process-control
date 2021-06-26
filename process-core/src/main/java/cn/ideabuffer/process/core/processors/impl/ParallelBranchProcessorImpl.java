@@ -2,14 +2,14 @@ package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.executor.NodeExecutors;
+import cn.ideabuffer.process.core.executors.NodeExecutors;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.branch.DefaultBranchNode;
 import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-import cn.ideabuffer.process.core.strategy.ProceedStrategies;
-import cn.ideabuffer.process.core.strategy.ProceedStrategy;
+import cn.ideabuffer.process.core.strategies.ProceedStrategies;
+import cn.ideabuffer.process.core.strategies.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

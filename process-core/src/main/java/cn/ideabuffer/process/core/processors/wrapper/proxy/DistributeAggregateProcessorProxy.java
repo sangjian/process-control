@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.processors.wrapper.proxy;
 
-import cn.ideabuffer.process.core.aggregator.DistributeAggregator;
+import cn.ideabuffer.process.core.aggregators.DistributeAggregator;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;

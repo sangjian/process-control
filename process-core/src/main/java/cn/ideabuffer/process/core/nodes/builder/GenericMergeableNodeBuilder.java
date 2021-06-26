@@ -3,7 +3,7 @@ package cn.ideabuffer.process.core.nodes.builder;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.DefaultGenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
 
-import static cn.ideabuffer.process.core.executor.NodeExecutors.DEFAULT_POOL;
+import static cn.ideabuffer.process.core.executors.NodeExecutors.DEFAULT_POOL;
 
 /**
  * @author sangjian.sj

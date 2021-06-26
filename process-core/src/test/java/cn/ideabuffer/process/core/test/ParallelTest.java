@@ -6,20 +6,14 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
-import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.nodes.builder.ParallelBranchNodeBuilder;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
-import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-import cn.ideabuffer.process.core.strategy.ProceedStrategies;
-import cn.ideabuffer.process.core.test.nodes.parallel.TestParallelNodeProcessor1;
-import cn.ideabuffer.process.core.test.nodes.parallel.TestParallelNodeProcessor2;
-import org.awaitility.Duration;
+import cn.ideabuffer.process.core.strategies.ProceedStrategies;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.awaitility.Awaitility.await;

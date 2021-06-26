@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.LifecycleManager;
-import cn.ideabuffer.process.core.aggregator.GenericAggregator;
+import cn.ideabuffer.process.core.aggregators.GenericAggregator;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.processors.AggregateProcessor;

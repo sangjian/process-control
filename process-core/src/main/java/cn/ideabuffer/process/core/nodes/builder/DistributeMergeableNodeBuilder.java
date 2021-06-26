@@ -5,7 +5,7 @@ import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.processors.DistributeProcessor;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.DistributeProcessorProxy;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

@@ -1,9 +1,7 @@
 package cn.ideabuffer.process.api.model.builder;
 
 import cn.ideabuffer.process.api.model.RuleModel;
-import cn.ideabuffer.process.api.model.processor.ProcessorModel;
-import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 
 /**
  * @author sangjian.sj

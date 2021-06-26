@@ -8,7 +8,7 @@ import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.test.nodes.executable.TestExecutableNodeProcessor1;
 import cn.ideabuffer.process.core.test.nodes.executable.TestExecutableNodeProcessor2;

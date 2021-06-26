@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.api.model;
 
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 /**

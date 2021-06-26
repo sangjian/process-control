@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core;
 
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 
 /**
  * 可执行规则接口

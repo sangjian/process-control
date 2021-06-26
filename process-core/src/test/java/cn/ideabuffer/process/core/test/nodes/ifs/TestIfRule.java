@@ -3,7 +3,7 @@ package cn.ideabuffer.process.core.test.nodes.ifs;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 
 /**
  * @author sangjian.sj

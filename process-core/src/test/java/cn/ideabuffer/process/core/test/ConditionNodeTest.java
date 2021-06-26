@@ -11,7 +11,7 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.junit.Test;
 import org.slf4j.Logger;

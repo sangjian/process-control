@@ -2,7 +2,7 @@ package cn.ideabuffer.process.extension.retry.nodes;
 
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import com.github.rholder.retry.Retryer;
 
 import java.util.List;

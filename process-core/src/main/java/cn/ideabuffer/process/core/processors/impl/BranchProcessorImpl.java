@@ -2,7 +2,7 @@ package cn.ideabuffer.process.core.processors.impl;
 
 import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.executor.NodeExecutors;
+import cn.ideabuffer.process.core.executors.NodeExecutors;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;

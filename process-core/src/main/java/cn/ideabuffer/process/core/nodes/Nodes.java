@@ -19,7 +19,7 @@ import cn.ideabuffer.process.core.processors.wrapper.proxy.DoWhileProcessorProxy
 import cn.ideabuffer.process.core.processors.wrapper.proxy.IfProcessorProxy;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.TryCatchFinallyProcessorProxy;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.WhileProcessorProxy;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

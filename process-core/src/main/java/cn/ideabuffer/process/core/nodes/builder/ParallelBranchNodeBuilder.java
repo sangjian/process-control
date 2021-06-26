@@ -9,9 +9,9 @@ import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
 import cn.ideabuffer.process.core.processors.impl.ParallelBranchProcessorImpl;
 import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.ParallelBranchProcessorProxy;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-import cn.ideabuffer.process.core.strategy.ProceedStrategy;
+import cn.ideabuffer.process.core.strategies.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

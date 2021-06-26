@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.processors;
 
-import cn.ideabuffer.process.core.aggregator.GenericAggregator;
+import cn.ideabuffer.process.core.aggregators.GenericAggregator;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.MergeableNode;
 import org.jetbrains.annotations.NotNull;

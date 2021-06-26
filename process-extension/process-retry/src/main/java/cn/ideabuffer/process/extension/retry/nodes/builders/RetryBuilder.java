@@ -7,7 +7,7 @@ import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.builder.AbstractExecutableNodeBuilder;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.DefaultProcessorProxy;
-import cn.ideabuffer.process.core.rule.Rule;
+import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.extension.retry.nodes.DefaultRetryNode;
 import cn.ideabuffer.process.extension.retry.nodes.RetryableNode;
 import com.github.rholder.retry.Retryer;
