@@ -85,21 +85,4 @@ public class TestApi {
         System.out.println(s);
     }
 
-    @org.junit.Test
-    public void testSuper() {
-        System.out.println(long.class.getName());
-        ProcessNode<ProcessStatus> node = ProcessNodeBuilder.<ProcessStatus>newBuilder().build();
-        Class<?> clazz = node.getClass();
-
-        while (clazz != null) {
-            System.out.println(clazz.getName());
-            System.out.println("========= interface start");
-            for (Class<?> c : clazz.getInterfaces()) {
-                System.out.println(c);
-            }
-            System.out.println("========= interface end");
-            clazz = clazz.getSuperclass();
-        }
-    }
-
 }
