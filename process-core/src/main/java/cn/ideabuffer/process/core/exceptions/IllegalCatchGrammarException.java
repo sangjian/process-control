@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.exception;
+package cn.ideabuffer.process.core.exceptions;
 
 /**
  * @author sangjian.sj

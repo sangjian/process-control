@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core;
 
-import cn.ideabuffer.process.core.exception.LifecycleException;
+import cn.ideabuffer.process.core.exceptions.LifecycleException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

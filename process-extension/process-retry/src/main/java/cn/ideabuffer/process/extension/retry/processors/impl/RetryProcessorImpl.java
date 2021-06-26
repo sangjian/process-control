@@ -2,7 +2,7 @@ package cn.ideabuffer.process.extension.retry.processors.impl;
 
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.exception.ProcessException;
+import cn.ideabuffer.process.core.exceptions.ProcessException;
 import cn.ideabuffer.process.extension.retry.processors.RetryProcessor;
 import com.github.rholder.retry.RetryException;
 import com.github.rholder.retry.Retryer;

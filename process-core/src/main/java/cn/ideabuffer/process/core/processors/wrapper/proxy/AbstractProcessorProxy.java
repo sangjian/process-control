@@ -4,7 +4,7 @@ import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.exception.ProcessException;
+import cn.ideabuffer.process.core.exceptions.ProcessException;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.exception.WrapperHandlerProcessException;
 import org.jetbrains.annotations.NotNull;

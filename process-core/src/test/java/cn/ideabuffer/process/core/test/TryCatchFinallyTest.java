@@ -1,6 +1,6 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.exception.IllegalCatchGrammarException;
+import cn.ideabuffer.process.core.exceptions.IllegalCatchGrammarException;
 import cn.ideabuffer.process.core.nodes.TryCatchFinallyNode;
 import cn.ideabuffer.process.core.processors.impl.TryCatchFinallyProcessorImpl;
 import org.junit.Test;
@@ -9,8 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * @author sangjian.sj

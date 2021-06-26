@@ -6,7 +6,7 @@ import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.ContextWrapper;
 import cn.ideabuffer.process.core.context.Contexts;
-import cn.ideabuffer.process.core.exception.IllegalCatchGrammarException;
+import cn.ideabuffer.process.core.exceptions.IllegalCatchGrammarException;
 import cn.ideabuffer.process.core.nodes.TryCatchFinallyNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.TryCatchFinallyProcessor;

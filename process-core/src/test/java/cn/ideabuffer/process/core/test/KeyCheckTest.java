@@ -6,8 +6,8 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.exception.UnwritableKeyException;
-import cn.ideabuffer.process.core.exception.UnreadableKeyException;
+import cn.ideabuffer.process.core.exceptions.UnwritableKeyException;
+import cn.ideabuffer.process.core.exceptions.UnreadableKeyException;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
 import org.junit.Test;
 

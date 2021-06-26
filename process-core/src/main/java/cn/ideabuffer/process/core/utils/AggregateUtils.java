@@ -2,7 +2,7 @@ package cn.ideabuffer.process.core.utils;
 
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.exception.ProcessException;
+import cn.ideabuffer.process.core.exceptions.ProcessException;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import org.jetbrains.annotations.NotNull;

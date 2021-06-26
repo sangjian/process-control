@@ -2,8 +2,8 @@ package cn.ideabuffer.process.core.context;
 
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockFacade;
-import cn.ideabuffer.process.core.exception.UnreadableKeyException;
-import cn.ideabuffer.process.core.exception.UnwritableKeyException;
+import cn.ideabuffer.process.core.exceptions.UnreadableKeyException;
+import cn.ideabuffer.process.core.exceptions.UnwritableKeyException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
