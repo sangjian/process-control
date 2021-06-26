@@ -111,6 +111,8 @@ public interface ProcessDefinition<R> extends Lifecycle {
 
     InitializeMode getInitializeMode();
 
+    ProcessDefinition<R> initializeMode(@NotNull InitializeMode mode);
+
     @NotNull
     ProcessInstance<R> newInstance();
 

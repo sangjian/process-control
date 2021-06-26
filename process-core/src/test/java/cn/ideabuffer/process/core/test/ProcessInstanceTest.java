@@ -70,6 +70,7 @@ public class ProcessInstanceTest {
         instance.execute(context);
         // 输出执行结果
         assertEquals(2L, (long)instance.getResult());
+        definition.destroy();
     }
 
     @Test

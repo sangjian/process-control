@@ -27,7 +27,6 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
     @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
-        checkMode();
 
         Node[] nodes = definition.getNodes();
         ProcessStatus status = ProcessStatus.proceed();
@@ -38,6 +37,7 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
             }
 
             if (node instanceof ExecutableNode) {
+                checkMode(node);
                 Context ctx = context;
                 if (node instanceof ProcessInstance) {
                     ctx = context.cloneContext();
@@ -67,10 +67,10 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
         return definition;
     }
 
-    private void checkMode() {
+    private void checkMode(Node node) {
         InitializeMode mode = this.definition.getInitializeMode();
         if (mode == InitializeMode.LAZY) {
-            LifecycleManager.initialize(Arrays.asList(definition.getNodes()));
+            LifecycleManager.initialize(node);
         }
     }
 

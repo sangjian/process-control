@@ -163,6 +163,12 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         return initializeMode;
     }
 
+    @Override
+    public ProcessDefinition<R> initializeMode(@NotNull InitializeMode mode) {
+        this.initializeMode = mode;
+        return this;
+    }
+
     @NotNull
     @Override
     public ProcessInstance<R> newInstance() {
