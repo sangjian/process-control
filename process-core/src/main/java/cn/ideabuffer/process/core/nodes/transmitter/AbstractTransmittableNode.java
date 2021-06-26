@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.transmitter;
 
+import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -102,4 +103,19 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
         });
     }
 
+    @Override
+    public void initialize() {
+        super.initialize();
+        if (transmittableProcessor != null) {
+            LifecycleManager.initialize(transmittableProcessor);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if (transmittableProcessor != null) {
+            LifecycleManager.destroy(transmittableProcessor);
+        }
+    }
 }

@@ -70,20 +70,4 @@ public class IfConditionNode extends AbstractExecutableNode<ProcessStatus, IfPro
     protected boolean ruleCheck(@NotNull Context context) {
         return true;
     }
-
-    @Override
-    protected void onDestroy() {
-        try {
-            if (getProcessor().getTrueBranch() != null) {
-                getProcessor().getTrueBranch().destroy();
-            }
-            if (getProcessor().getFalseBranch() != null) {
-                getProcessor().getFalseBranch().destroy();
-            }
-        } catch (Exception e) {
-            logger.error("destroy encountered problem!", e);
-            throw e;
-        }
-
-    }
 }

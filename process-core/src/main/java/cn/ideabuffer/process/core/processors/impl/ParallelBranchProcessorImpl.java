@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.Lifecycle;
+import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -14,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author sangjian.sj
@@ -61,5 +64,23 @@ public class ParallelBranchProcessorImpl implements ParallelBranchProcessor {
     public ProcessStatus process(@NotNull Context context) throws Exception {
         return NodeExecutors.PARALLEL_EXECUTOR.execute(executor, strategy, context,
             branches.toArray(new ExecutableNode[0]));
+    }
+
+    @Override
+    public void initialize() {
+        if (branches == null || branches.isEmpty()) {
+            return;
+        }
+        LifecycleManager.initialize(branches);
+    }
+
+    @Override
+    public void destroy() {
+        if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
+            ((ExecutorService)executor).shutdown();
+        }
+        if (branches != null && !branches.isEmpty()) {
+            LifecycleManager.destroy(branches);
+        }
     }
 }

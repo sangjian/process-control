@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @date 2020/03/09
  * @see GenericAggregator
  */
-public class SerialGenericAggregator<I, O> implements GenericAggregator<I, O> {
+public class SerialGenericAggregator<I, O> extends AbstractAggregator implements GenericAggregator<I, O> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

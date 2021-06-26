@@ -120,6 +120,9 @@ public class DistributeAggregatableNodeBuilder<R>
 
     @Override
     public DistributeAggregatableNode<R> build() {
+        if (aggregator == null) {
+            throw new NullPointerException("aggregator cannot be null!");
+        }
         if (processor == null) {
             processor = new DistributeAggregateProcessorImpl<>();
         }

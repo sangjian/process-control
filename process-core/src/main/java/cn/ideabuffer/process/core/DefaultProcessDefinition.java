@@ -12,13 +12,15 @@ import cn.ideabuffer.process.core.nodes.condition.DoWhileConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
 import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
-import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author sangjian.sj
@@ -28,7 +30,6 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private volatile LifecycleState state = LifecycleState.NEW;
 
     private InitializeMode initializeMode = InitializeMode.ON_REGISTER;
 
@@ -46,9 +47,6 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     }
 
     public DefaultProcessDefinition(@Nullable Key<R> resultKey) {
-        if (initializeMode == InitializeMode.ON_REGISTER) {
-            state = LifecycleState.INITIALIZED;
-        }
         this.resultKey = resultKey;
     }
 
@@ -58,11 +56,8 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         }
         returnableCheck(nodes);
         if (initializeMode == InitializeMode.ON_REGISTER) {
-            try {
-                Arrays.stream(nodes).forEach(Lifecycle::initialize);
-            } catch (Exception e) {
-                throw new LifecycleException("initialize failed on register", e);
-            }
+            // 初始化节点
+            LifecycleManager.initialize(Arrays.asList(nodes));
         }
 
         int oldLen = this.nodes.length;
@@ -166,57 +161,6 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
     }
 
     @Override
-    public void initialize() {
-        if (initializeMode == InitializeMode.ON_REGISTER) {
-            return;
-        }
-
-        if (state != LifecycleState.NEW) {
-            return;
-        }
-
-        synchronized (this) {
-            if (state != LifecycleState.NEW) {
-                return;
-            }
-            try {
-                state = LifecycleState.INITIALIZING;
-                Arrays.stream(nodes).forEach(Lifecycle::initialize);
-                state = LifecycleState.INITIALIZED;
-            } catch (Exception e) {
-                logger.error("initialize failed", e);
-                throw e;
-            }
-        }
-    }
-
-    @Override
-    public void destroy() {
-        if (state != LifecycleState.INITIALIZED) {
-            return;
-        }
-        synchronized (this) {
-            if (state != LifecycleState.INITIALIZED) {
-                return;
-            }
-            try {
-                state = LifecycleState.DESTROYING;
-                Arrays.stream(nodes).forEach(Lifecycle::destroy);
-                state = LifecycleState.DESTROYED;
-            } catch (Exception e) {
-                logger.error("destroy failed", e);
-                throw e;
-            }
-        }
-
-    }
-
-    @Override
-    public @NotNull LifecycleState getState() {
-        return state;
-    }
-
-    @Override
     public InitializeMode getInitializeMode() {
         return initializeMode;
     }
@@ -268,5 +212,17 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
             this.handlers = Collections.emptyList();
         }
         return Collections.unmodifiableList(this.handlers);
+    }
+
+    @Override
+    public void initialize() {
+
+    }
+
+    @Override
+    public void destroy() {
+        if (nodes != null) {
+            LifecycleManager.destroy(Arrays.asList(nodes));
+        }
     }
 }

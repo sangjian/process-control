@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes;
 
+import cn.ideabuffer.process.core.Lifecycle;
+import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.processors.DistributeProcessor;
 import cn.ideabuffer.process.core.rule.Rule;
 
@@ -30,5 +32,24 @@ public class DefaultDistributeMergeableNode<T, R> extends AbstractMergeableNode
     @Override
     public DistributeProcessor<T, R> getProcessor() {
         return processor;
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if (processor instanceof Lifecycle) {
+            LifecycleManager.destroy((Lifecycle)processor);
+        }
+    }
+
+    @Override
+    public void initialize() {
+        if (processor == null) {
+            throw new NullPointerException("processor cannot be null!");
+        }
+        super.initialize();
+        if (processor instanceof Lifecycle) {
+            LifecycleManager.initialize((Lifecycle)processor);
+        }
     }
 }

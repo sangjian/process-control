@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.Context;
@@ -147,5 +148,39 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
         InnerBlock finallyBlock = new InnerBlock(context.getBlock());
         ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(finallyBlock));
         finallyBranch.execute(contextWrapper);
+    }
+
+    @Override
+    public void initialize() {
+        if (tryBranch != null) {
+            LifecycleManager.initialize(tryBranch);
+        }
+        if (catchMapperList != null) {
+            for (TryCatchFinallyNode.CatchMapper catchMapper : catchMapperList) {
+                if (catchMapper.getBranchNode() != null) {
+                    LifecycleManager.initialize(catchMapper.getBranchNode());
+                }
+            }
+        }
+        if (finallyBranch != null) {
+            LifecycleManager.initialize(finallyBranch);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (tryBranch != null) {
+            LifecycleManager.destroy(tryBranch);
+        }
+        if (catchMapperList != null) {
+            for (TryCatchFinallyNode.CatchMapper catchMapper : catchMapperList) {
+                if (catchMapper.getBranchNode() != null) {
+                    LifecycleManager.destroy(catchMapper.getBranchNode());
+                }
+            }
+        }
+        if (finallyBranch != null) {
+            LifecycleManager.destroy(finallyBranch);
+        }
     }
 }

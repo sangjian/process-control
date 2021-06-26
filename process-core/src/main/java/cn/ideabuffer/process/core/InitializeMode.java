@@ -6,6 +6,5 @@ package cn.ideabuffer.process.core;
  */
 public enum InitializeMode {
     ON_REGISTER,
-    ON_CALL,
     LAZY
 }

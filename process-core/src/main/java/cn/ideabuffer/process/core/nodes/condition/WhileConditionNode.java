@@ -66,17 +66,4 @@ public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus, Wh
     protected boolean ruleCheck(@NotNull Context context) {
         return true;
     }
-
-    @Override
-    protected void onDestroy() {
-        try {
-            if (getProcessor().getBranch() != null) {
-                getProcessor().getBranch().destroy();
-            }
-        } catch (Exception e) {
-            logger.error("destroy encountered problem!", e);
-            throw e;
-        }
-
-    }
 }

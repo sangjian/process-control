@@ -10,7 +10,8 @@ public enum LifecycleState {
     INITIALIZED(true),
     DESTROYING(false),
     DESTROYED(false),
-    FAILED(false);
+    INITIALIZING_FAILED(false),
+    DESTROYING_FAILED(false);
 
     private final boolean available;
 

@@ -1,9 +1,6 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.LifecycleState;
-import cn.ideabuffer.process.core.ProcessListener;
-import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.ReturnCondition;
+import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
@@ -27,7 +24,6 @@ import java.util.concurrent.ExecutorService;
 public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends AbstractNode
     implements ExecutableNode<R, P> {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private boolean parallel = false;
     private Rule rule;
     private Executor executor;
@@ -325,24 +321,23 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
-    public final void destroy() {
-        if (getState() != LifecycleState.INITIALIZED) {
-            return;
+    public void initialize() {
+        super.initialize();
+        P processor = getProcessor();
+        if (processor instanceof Lifecycle) {
+            LifecycleManager.initialize((Lifecycle)processor);
         }
-        synchronized (this) {
-            if (getState() != LifecycleState.INITIALIZED) {
-                return;
-            }
-            try {
-                setState(LifecycleState.DESTROYING);
-                if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
-                    ((ExecutorService)executor).shutdown();
-                }
-                onDestroy();
-                setState(LifecycleState.DESTROYED);
-            } catch (Exception e) {
-                handleException(e, "destroy failed!");
-            }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
+            ((ExecutorService)executor).shutdown();
+        }
+        P processor = getProcessor();
+        if (processor instanceof Lifecycle) {
+            LifecycleManager.destroy((Lifecycle)processor);
         }
     }
 

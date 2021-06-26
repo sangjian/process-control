@@ -19,7 +19,7 @@ import java.util.concurrent.*;
  * @date 2020/03/08
  * @see DistributeAggregator
  */
-public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> {
+public class ParallelDistributeAggregator<R> extends AbstractAggregator implements DistributeAggregator<R> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -127,6 +127,13 @@ public class ParallelDistributeAggregator<R> implements DistributeAggregator<R> 
             if (node.getProcessor() != null) {
                 node.getProcessor().merge(value, result);
             }
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
+            ((ExecutorService)executor).shutdown();
         }
     }
 }

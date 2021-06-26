@@ -9,6 +9,8 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 /**
  * @author sangjian.sj
  * @date 2020/05/03
@@ -26,7 +28,7 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
     @NotNull
     @Override
     public ProcessStatus process(@NotNull Context context) throws Exception {
-        checkState();
+        checkMode();
 
         Node[] nodes = definition.getNodes();
         ProcessStatus status = ProcessStatus.proceed();
@@ -55,6 +57,7 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
         return status;
     }
 
+    @Nullable
     @Override
     public R getResult() {
         return result;
@@ -65,19 +68,20 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
         return definition;
     }
 
-    private void checkState() {
-        LifecycleState state = this.definition.getState();
+    private void checkMode() {
         InitializeMode mode = this.definition.getInitializeMode();
         if (mode == InitializeMode.LAZY) {
-            try {
-                this.definition.initialize();
-            } catch (Exception e) {
-                throw new ProcessException("initialize failed", e);
-            }
+            LifecycleManager.initialize(Arrays.asList(definition.getNodes()));
+        }
+    }
 
-        }
-        if (!state.isAvailable()) {
-            throw new ProcessException(String.format("current state [%s] is not available", state));
-        }
+    @Override
+    public void initialize() {
+
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }

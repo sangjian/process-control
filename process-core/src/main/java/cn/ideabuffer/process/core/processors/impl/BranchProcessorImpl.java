@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.executor.NodeExecutors;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -54,5 +55,21 @@ public class BranchProcessorImpl implements BranchProcessor {
             return;
         }
         this.nodes.addAll(Arrays.asList(nodes));
+    }
+
+    @Override
+    public void initialize() {
+        if (nodes == null || nodes.isEmpty()) {
+            return;
+        }
+        LifecycleManager.initialize(nodes);
+    }
+
+    @Override
+    public void destroy() {
+        if (nodes == null || nodes.isEmpty()) {
+            return;
+        }
+        LifecycleManager.destroy(nodes);
     }
 }

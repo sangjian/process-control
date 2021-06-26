@@ -56,8 +56,10 @@ public class AggregateTest {
         nodes.add(node2);
 
         // 创建单元化聚合节点
-        UnitAggregatableNode<List<String>> node = UnitAggregatableNodeBuilder.<List<String>>newBuilder().aggregator(
-            Aggregators.newParallelUnitAggregator(executor, new ArrayListMerger<>()))
+        UnitAggregatableNode<List<String>> node = UnitAggregatableNodeBuilder.<List<String>>newBuilder()
+            .aggregator(
+                Aggregators.newParallelUnitAggregator(executor, new ArrayListMerger<>())
+            )
             .aggregate(nodes)
             .addListeners(new TestUnitAggregatableNodeListener1(), new TestUnitAggregatableNodeListener2())
             .by(new UnitAggregateProcessorImpl<>())

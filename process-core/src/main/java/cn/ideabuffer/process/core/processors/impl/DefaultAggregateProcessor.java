@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.Lifecycle;
+import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.aggregator.GenericAggregator;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
@@ -59,5 +61,25 @@ public class DefaultAggregateProcessor<I, O> implements AggregateProcessor<I, O>
     @Override
     public O process(@NotNull Context context) throws Exception {
         return aggregator.aggregate(context, mergeableNodes);
+    }
+
+    @Override
+    public void initialize() {
+        if (aggregator != null) {
+            LifecycleManager.initialize(aggregator);
+        }
+        if (mergeableNodes != null && !mergeableNodes.isEmpty()) {
+            LifecycleManager.initialize(mergeableNodes);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (aggregator != null) {
+            LifecycleManager.destroy(aggregator);
+        }
+        if (mergeableNodes != null && !mergeableNodes.isEmpty()) {
+            LifecycleManager.destroy(mergeableNodes);
+        }
     }
 }

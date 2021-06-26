@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.*;
@@ -113,5 +114,25 @@ public class IfProcessorImpl implements IfProcessor {
             return ProcessStatus.proceed();
         }
         return branch.execute(contextWrapper);
+    }
+
+    @Override
+    public void initialize() {
+        if (trueBranch != null) {
+            LifecycleManager.initialize(trueBranch);
+        }
+        if (falseBranch != null) {
+            LifecycleManager.initialize(falseBranch);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (trueBranch != null) {
+            LifecycleManager.destroy(trueBranch);
+        }
+        if (falseBranch != null) {
+            LifecycleManager.destroy(falseBranch);
+        }
     }
 }

@@ -22,7 +22,7 @@ import java.util.concurrent.*;
  * @date 2020/03/08
  * @see GenericAggregator
  */
-public class ParallelGenericAggregator<I, O> implements GenericAggregator<I, O> {
+public class ParallelGenericAggregator<I, O> extends AbstractAggregator implements GenericAggregator<I, O> {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -108,4 +108,10 @@ public class ParallelGenericAggregator<I, O> implements GenericAggregator<I, O> 
         return AggregateUtils.within(future, node.getTimeout(), TimeUnit.MILLISECONDS);
     }
 
+    @Override
+    public void destroy() {
+        if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
+            ((ExecutorService)executor).shutdown();
+        }
+    }
 }

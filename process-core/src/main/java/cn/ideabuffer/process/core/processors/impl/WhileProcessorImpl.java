@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.*;
@@ -108,5 +109,21 @@ public class WhileProcessorImpl implements WhileProcessor {
         }
 
         return ProcessStatus.proceed();
+    }
+
+    @Override
+    public void initialize() {
+        if (branch == null) {
+            return;
+        }
+        LifecycleManager.initialize(branch);
+    }
+
+    @Override
+    public void destroy() {
+        if (branch == null) {
+            return;
+        }
+        LifecycleManager.destroy(branch);
     }
 }

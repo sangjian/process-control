@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.TryCatchFinallyProcessor;
 import cn.ideabuffer.process.core.processors.impl.TryCatchFinallyProcessorImpl;
@@ -8,7 +7,6 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author sangjian.sj
@@ -23,27 +21,6 @@ public class TryCatchFinallyNode extends AbstractExecutableNode<ProcessStatus, T
 
     public TryCatchFinallyNode(@NotNull TryCatchFinallyProcessor processor) {
         super.registerProcessor(processor);
-    }
-
-    @Override
-    protected final void onDestroy() {
-        try {
-            if (getProcessor().getTryBranch() != null) {
-                getProcessor().getTryBranch().destroy();
-            }
-            if (getProcessor().getCatchMapperList() != null) {
-                getProcessor().getCatchMapperList().stream().filter(Objects::nonNull).map(CatchMapper::getBranchNode)
-                    .filter(Objects::nonNull)
-                    .forEach(Lifecycle::destroy);
-            }
-            if (getProcessor().getFinallyBranch() != null) {
-                getProcessor().getFinallyBranch().destroy();
-            }
-        } catch (Exception e) {
-            logger.error("destroy encountered problem!", e);
-            throw e;
-        }
-
     }
 
     public static class CatchMapper {

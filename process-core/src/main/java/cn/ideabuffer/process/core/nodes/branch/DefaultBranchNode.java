@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.nodes.branch;
 
-import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -48,18 +47,5 @@ public class DefaultBranchNode extends AbstractExecutableNode<ProcessStatus, Bra
     public DefaultBranchNode(Rule rule, ExecutableNode<?, ?>... nodes) {
         super(rule);
         super.registerProcessor(new BranchProcessorImpl(nodes));
-    }
-
-    @Override
-    protected void onDestroy() {
-        try {
-            List<ExecutableNode<?, ?>> nodes = getProcessor().getNodes();
-            if (nodes != null) {
-                nodes.forEach(Lifecycle::destroy);
-            }
-        } catch (Exception e) {
-            logger.error("destroy encountered problem!", e);
-            throw e;
-        }
     }
 }

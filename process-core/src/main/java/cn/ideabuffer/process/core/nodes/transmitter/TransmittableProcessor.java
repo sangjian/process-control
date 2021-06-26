@@ -1,9 +1,12 @@
 package cn.ideabuffer.process.core.nodes.transmitter;
 
+import cn.ideabuffer.process.core.Lifecycle;
+import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.context.Context;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import static cn.ideabuffer.process.core.executor.NodeExecutors.DEFAULT_POOL;
 
@@ -11,7 +14,7 @@ import static cn.ideabuffer.process.core.executor.NodeExecutors.DEFAULT_POOL;
  * @author sangjian.sj
  * @date 2020/03/10
  */
-public class TransmittableProcessor<P> implements ResultStream<P> {
+public class TransmittableProcessor<P> implements ResultStream<P>, Lifecycle {
 
     private ResultProcessor processor;
 
@@ -91,6 +94,23 @@ public class TransmittableProcessor<P> implements ResultStream<P> {
         }
         if (next != null) {
             next.fire(context, r);
+        }
+    }
+
+    @Override
+    public void initialize() {
+        if (next != null) {
+            LifecycleManager.initialize(next);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
+            ((ExecutorService)executor).shutdown();
+        }
+        if (next != null) {
+            LifecycleManager.destroy(next);
         }
     }
 }
