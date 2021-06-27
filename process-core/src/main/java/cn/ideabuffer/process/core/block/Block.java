@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 /**
  * <ul>
  * <li>用于表示当前节点所在的范围，通过Context获取</li>
- * <li>同一block内，数据可共享，与当前context数据隔离</li>
  * <li>同时，如果block在{@link WhileConditionNode}或{@link DoWhileConditionNode}节点中，可以执行break和continue操作</li>
  * </ul>
  *

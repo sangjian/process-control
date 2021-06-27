@@ -17,7 +17,7 @@ import cn.ideabuffer.process.core.nodes.builder.*;
 import cn.ideabuffer.process.core.nodes.merger.*;
 import cn.ideabuffer.process.core.processors.impl.UnitAggregateProcessorImpl;
 import cn.ideabuffer.process.core.test.merger.TestStringListMerger;
-import cn.ideabuffer.process.core.test.nodes.aggregate.*;
+import cn.ideabuffer.process.core.test.processors.aggregate.*;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
