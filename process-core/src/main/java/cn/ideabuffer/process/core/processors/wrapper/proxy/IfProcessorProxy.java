@@ -40,10 +40,25 @@ public class IfProcessorProxy extends AbstractProcessorProxy<IfProcessor, Proces
     public Rule getRule() {return getTarget().getRule();}
 
     @Override
+    public void setRule(Rule rule) {
+        getTarget().setRule(rule);
+    }
+
+    @Override
     public BranchNode getTrueBranch() {return getTarget().getTrueBranch();}
 
     @Override
+    public void setTrueBranch(BranchNode trueBranch) {
+        getTarget().setTrueBranch(trueBranch);
+    }
+
+    @Override
     public BranchNode getFalseBranch() {return getTarget().getFalseBranch();}
+
+    @Override
+    public void setFalseBranch(BranchNode falseBranch) {
+        getTarget().setFalseBranch(falseBranch);
+    }
 
     @Override
     public KeyMapper getKeyMapper() {return getTarget().getKeyMapper();}

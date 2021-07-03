@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.Nodes;
+import cn.ideabuffer.process.core.nodes.builder.IfNodeBuilder;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
 import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.rules.Rules;
@@ -86,14 +87,18 @@ public class RuleTest {
         ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean processor1Flag = new AtomicBoolean(false);
         AtomicBoolean processor2Flag = new AtomicBoolean(false);
-        definition.addIf(Nodes.newIf(Rules.and((ctx) -> true, (ctx) -> false))
-            .then(Nodes.newProcessNode(context -> {
-                processor1Flag.set(true);
-                return null;
-            })).otherwise(Nodes.newProcessNode(context -> {
-                processor2Flag.set(true);
-                return null;
-            })));
+        definition.addIf(
+            IfNodeBuilder.newBuilder()
+                .processOn(Rules.and((ctx) -> true, (ctx) -> false))
+                .then(Nodes.newProcessNode(context -> {
+                    processor1Flag.set(true);
+                    return null;
+                }))
+                .otherwise(Nodes.newProcessNode(context -> {
+                    processor2Flag.set(true);
+                    return null;
+                }))
+                .build());
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -109,14 +114,17 @@ public class RuleTest {
         AtomicBoolean processor1Flag = new AtomicBoolean(false);
         AtomicBoolean processor2Flag = new AtomicBoolean(false);
         definition.addIf(
-            Nodes.newIf(Rules.or((ctx) -> true, (ctx) -> false))
+            IfNodeBuilder.newBuilder().processOn(Rules.or((ctx) -> true, (ctx) -> false))
                 .then(Nodes.newProcessNode(context -> {
                     processor1Flag.set(true);
                     return null;
-                })).otherwise(Nodes.newProcessNode(context -> {
-                processor2Flag.set(true);
-                return null;
-            })));
+                }))
+                .otherwise(Nodes.newProcessNode(context -> {
+                    processor2Flag.set(true);
+                    return null;
+                }))
+                .build()
+        );
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -132,7 +140,7 @@ public class RuleTest {
         AtomicBoolean processor1Flag = new AtomicBoolean(false);
         AtomicBoolean processor2Flag = new AtomicBoolean(false);
         definition.addIf(
-            Nodes.newIf(Rules.not((ctx) -> true))
+            IfNodeBuilder.newBuilder().processOn(Rules.not((ctx) -> true))
                 .then(Nodes.newProcessNode(context -> {
                     processor1Flag.set(true);
                     return null;
@@ -140,7 +148,9 @@ public class RuleTest {
                 .otherwise(Nodes.newProcessNode(context -> {
                     processor2Flag.set(true);
                     return null;
-                })));
+                }))
+                .build()
+        );
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();

@@ -16,9 +16,15 @@ public interface IfProcessor extends ComplexProcessor<ProcessStatus> {
 
     Rule getRule();
 
+    void setRule(Rule rule);
+
     BranchNode getTrueBranch();
 
+    void setTrueBranch(BranchNode trueBranch);
+
     BranchNode getFalseBranch();
+
+    void setFalseBranch(BranchNode falseBranch);
 
     KeyMapper getKeyMapper();
 

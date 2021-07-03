@@ -9,6 +9,7 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
+import cn.ideabuffer.process.core.nodes.builder.WhileNodeBuilder;
 import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
 import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
@@ -252,7 +253,7 @@ public class WrapperTest {
         AtomicInteger handler2AfterReturningOrder = new AtomicInteger();
         AtomicInteger handler2AfterThrowingOrder = new AtomicInteger();
 
-        WhileConditionNode whileNode = Nodes.newWhile(context -> whileCounter.getAndIncrement() < 5)
+        WhileConditionNode whileNode = WhileNodeBuilder.newBuilder().processOn(context -> whileCounter.getAndIncrement() < 5)
             .wrap(new StatusWrapperHandler() {
                 @Override
                 public void before(@NotNull Context context) {
@@ -314,7 +315,8 @@ public class WrapperTest {
                         })
                         .build()
                 )
-            );
+            )
+            .build();
 
 
         definition

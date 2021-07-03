@@ -38,7 +38,17 @@ public class WhileProcessorProxy extends AbstractProcessorProxy<WhileProcessor, 
     public Rule getRule() {return getTarget().getRule();}
 
     @Override
+    public void setRule(Rule rule) {
+        getTarget().setRule(rule);
+    }
+
+    @Override
     public BranchNode getBranch() {return getTarget().getBranch();}
+
+    @Override
+    public void setBranch(BranchNode branch) {
+        getTarget().setBranch(branch);
+    }
 
     @Override
     public KeyMapper getKeyMapper() {return getTarget().getKeyMapper();}

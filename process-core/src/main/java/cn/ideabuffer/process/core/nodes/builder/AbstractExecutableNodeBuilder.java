@@ -35,7 +35,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
     protected Set<Key<?>> readableKeys;
     protected Set<Key<?>> writableKeys;
     protected BooleanSupplier enableSupplier;
-    protected List<WrapperHandler<R>> handlers;
+    protected List<W> handlers;
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;

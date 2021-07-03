@@ -38,6 +38,7 @@ public class WhileProcessorImpl implements WhileProcessor {
         return rule;
     }
 
+    @Override
     public void setRule(Rule rule) {
         this.rule = rule;
     }
@@ -47,6 +48,7 @@ public class WhileProcessorImpl implements WhileProcessor {
         return branch;
     }
 
+    @Override
     public void setBranch(BranchNode branch) {
         this.branch = branch;
     }

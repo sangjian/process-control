@@ -14,8 +14,14 @@ public interface TryCatchFinallyProcessor extends ComplexProcessor<ProcessStatus
 
     BranchNode getTryBranch();
 
+    void setTryBranch(BranchNode tryBranch);
+
     List<TryCatchFinallyNode.CatchMapper> getCatchMapperList();
+
+    void setCatchMapperList(
+        List<TryCatchFinallyNode.CatchMapper> catchMapperList);
 
     BranchNode getFinallyBranch();
 
+    void setFinallyBranch(BranchNode finallyBranch);
 }

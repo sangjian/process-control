@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.processors.wrapper.proxy;
 
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.BranchProcessor;
+import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +22,7 @@ public class BranchProcessorProxy extends AbstractProcessorProxy<BranchProcessor
         super(target, handler);
     }
 
-    public static BranchProcessor wrap(@NotNull BranchProcessor target, List<WrapperHandler<ProcessStatus>> handlers) {
+    public static BranchProcessor wrap(@NotNull BranchProcessor target, List<StatusWrapperHandler> handlers) {
         if (handlers == null || handlers.isEmpty()) {
             return target;
         }

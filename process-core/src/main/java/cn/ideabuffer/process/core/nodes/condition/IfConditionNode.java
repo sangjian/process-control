@@ -36,6 +36,10 @@ public class IfConditionNode extends AbstractExecutableNode<ProcessStatus, IfPro
         super.registerProcessor(processor);
     }
 
+    public IfConditionNode() {
+
+    }
+
     @Override
     public KeyMapper getKeyMapper() {
         return getProcessor().getKeyMapper();

@@ -16,7 +16,11 @@ public interface WhileProcessor extends ComplexProcessor<ProcessStatus> {
 
     Rule getRule();
 
+    void setRule(Rule rule);
+
     BranchNode getBranch();
+
+    void setBranch(BranchNode branch);
 
     KeyMapper getKeyMapper();
 

@@ -14,6 +14,9 @@ import java.util.List;
  */
 public class TryCatchFinallyNode extends AbstractExecutableNode<ProcessStatus, TryCatchFinallyProcessor> {
 
+    public TryCatchFinallyNode() {
+    }
+
     public TryCatchFinallyNode(BranchNode tryBranch,
         List<CatchMapper> catchMapper, BranchNode finallyBranch) {
         this(new TryCatchFinallyProcessorImpl(tryBranch, catchMapper, finallyBranch));

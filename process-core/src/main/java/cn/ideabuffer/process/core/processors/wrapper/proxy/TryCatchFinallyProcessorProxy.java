@@ -38,8 +38,23 @@ public class TryCatchFinallyProcessorProxy extends AbstractProcessorProxy<TryCat
     public BranchNode getTryBranch() {return getTarget().getTryBranch();}
 
     @Override
+    public void setTryBranch(BranchNode tryBranch) {
+        getTarget().setTryBranch(tryBranch);
+    }
+
+    @Override
     public List<TryCatchFinallyNode.CatchMapper> getCatchMapperList() {return getTarget().getCatchMapperList();}
 
     @Override
+    public void setCatchMapperList(List<TryCatchFinallyNode.CatchMapper> catchMapperList) {
+        getTarget().setCatchMapperList(catchMapperList);
+    }
+
+    @Override
     public BranchNode getFinallyBranch() {return getTarget().getFinallyBranch();}
+
+    @Override
+    public void setFinallyBranch(BranchNode finallyBranch) {
+        getTarget().setFinallyBranch(finallyBranch);
+    }
 }

@@ -19,6 +19,9 @@ import java.util.Set;
  */
 public class WhileConditionNode extends AbstractExecutableNode<ProcessStatus, WhileProcessor> {
 
+    public WhileConditionNode() {
+    }
+
     public WhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
         this(rule, branch, null, null, null);
     }

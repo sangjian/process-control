@@ -40,6 +40,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
         return tryBranch;
     }
 
+    @Override
     public void setTryBranch(BranchNode tryBranch) {
         this.tryBranch = tryBranch;
     }
@@ -49,6 +50,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
         return catchMapperList;
     }
 
+    @Override
     public void setCatchMapperList(
         List<TryCatchFinallyNode.CatchMapper> catchMapperList) {
         checkCatchGrammar(catchMapperList);
@@ -60,6 +62,7 @@ public class TryCatchFinallyProcessorImpl implements TryCatchFinallyProcessor {
         return finallyBranch;
     }
 
+    @Override
     public void setFinallyBranch(BranchNode finallyBranch) {
         this.finallyBranch = finallyBranch;
     }

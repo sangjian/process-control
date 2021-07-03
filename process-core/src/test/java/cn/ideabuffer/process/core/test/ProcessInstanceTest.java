@@ -9,7 +9,9 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
+import cn.ideabuffer.process.core.nodes.builder.IfNodeBuilder;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
+import cn.ideabuffer.process.core.nodes.builder.TryCatchFinallyNodeBuilder;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.test.processors.TestProcessor1;
@@ -173,31 +175,34 @@ public class ProcessInstanceTest {
         AtomicBoolean finallyProcessor1Flag = new AtomicBoolean();
         AtomicBoolean finallyProcessor2Flag = new AtomicBoolean();
         definition.addProcessNodes(
-            Nodes.newTry(Nodes.newProcessNode(context -> {
-                    processor1Flag.set(true);
-                    return null;
-                }),
-                Nodes.newProcessNode(context -> {
-                    processor2Flag.set(true);
-                    throw new NullPointerException();
-                }),
-                Nodes.newProcessNode(context -> {
-                    processor3Flag.set(true);
-                    return null;
-                }))
+            TryCatchFinallyNodeBuilder.newBuilder()
+                .tryOn(Nodes.newProcessNode(context -> {
+                        processor1Flag.set(true);
+                        return null;
+                    }),
+                    Nodes.newProcessNode(context -> {
+                        processor2Flag.set(true);
+                        throw new NullPointerException();
+                    }),
+                    Nodes.newProcessNode(context -> {
+                        processor3Flag.set(true);
+                        return null;
+                    }))
                 .catchOn(Exception.class, Nodes.newProcessNode(context -> {
                     catchProcessor1Flag.set(true);
                     return null;
                 }), Nodes.newProcessNode(context -> {
                     catchProcessor2Flag.set(true);
                     return null;
-                })).doFinally(Nodes.newProcessNode(context -> {
-                finallyProcessor1Flag.set(true);
-                return null;
-            }), Nodes.newProcessNode(context -> {
-                finallyProcessor2Flag.set(true);
-                return null;
-            })));
+                }))
+                .doFinally(Nodes.newProcessNode(context -> {
+                    finallyProcessor1Flag.set(true);
+                    return null;
+                }), Nodes.newProcessNode(context -> {
+                    finallyProcessor2Flag.set(true);
+                    return null;
+                }))
+                .build());
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -222,8 +227,12 @@ public class ProcessInstanceTest {
         Key<Integer> key = Contexts.newKey("k", int.class);
         ProcessDefinition<String> subDefine = new DefaultProcessDefinition<>();
         TestIfRule rule = new TestIfRule();
-        IfConditionNode ifConditionNode = Nodes.newIf(rule, key).then(new TestTrueBranch())
-            .otherwise(new TestFalseBranch());
+        IfConditionNode ifConditionNode = IfNodeBuilder.newBuilder()
+            .processOn(rule)
+            .readableKeys(key)
+            .then(new TestTrueBranch())
+            .otherwise(new TestFalseBranch())
+            .build();
         subDefine.addIf(ifConditionNode);
         ProcessInstance<String> subInstance = subDefine.newInstance();
         definition.addProcessNodes(

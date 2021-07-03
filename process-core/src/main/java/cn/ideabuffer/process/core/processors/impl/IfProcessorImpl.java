@@ -48,6 +48,7 @@ public class IfProcessorImpl implements IfProcessor {
         return this.rule;
     }
 
+    @Override
     public void setRule(Rule rule) {
         this.rule = rule;
     }
@@ -57,6 +58,7 @@ public class IfProcessorImpl implements IfProcessor {
         return this.trueBranch;
     }
 
+    @Override
     public void setTrueBranch(BranchNode trueBranch) {
         this.trueBranch = trueBranch;
     }
@@ -66,6 +68,7 @@ public class IfProcessorImpl implements IfProcessor {
         return this.falseBranch;
     }
 
+    @Override
     public void setFalseBranch(BranchNode falseBranch) {
         this.falseBranch = falseBranch;
     }

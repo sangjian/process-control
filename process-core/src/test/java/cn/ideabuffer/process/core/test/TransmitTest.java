@@ -6,6 +6,7 @@ import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.TransmissionNode;
 import cn.ideabuffer.process.core.nodes.builder.TransmissionNodeBuilder;
+import cn.ideabuffer.process.core.test.processors.transmitter.TestTransmittableProcessor;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -23,7 +24,7 @@ public class TransmitTest {
         Key<String> key = Contexts.newKey("k", String.class);
         Key<String> resultKey = Contexts.newKey("rk", String.class);
         TransmissionNode<String> node = TransmissionNodeBuilder.<String>newBuilder()
-            .by(context -> context.get(key, "hello"))
+            .by(new TestTransmittableProcessor())
             .resultKey(resultKey)
             .readableKeys(key, resultKey)
             .build();
@@ -42,6 +43,7 @@ public class TransmitTest {
         Context context = Contexts.newContext();
 
         instance.execute(context);
+        definition.destroy();
     }
 
 }
