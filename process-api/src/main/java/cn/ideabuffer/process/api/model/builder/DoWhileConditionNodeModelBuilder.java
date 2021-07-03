@@ -9,7 +9,7 @@ import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
  * @author sangjian.sj
  * @date 2020/06/23
  */
-public class DoWhileConditionNodeModelBuilder<R extends DoWhileConditionNode> extends WhileConditionNodeModelBuilder<R> {
+public class DoWhileConditionNodeModelBuilder<R extends DoWhileConditionNode> extends ExecutableNodeModelBuilder<R> {
 
     @Override
     public DoWhileConditionNodeModel<R> build(R resource) {
