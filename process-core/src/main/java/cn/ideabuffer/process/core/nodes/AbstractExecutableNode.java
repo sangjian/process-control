@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
+import cn.ideabuffer.process.core.exceptions.ProcessException;
 import cn.ideabuffer.process.core.executors.NodeExecutors;
 import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -220,9 +221,9 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             }
             notifyListeners(context, result, null, true);
             return result;
-        } catch (Exception e) {
-            notifyListeners(context, null, e, false);
-            throw e;
+        } catch (Throwable t) {
+            notifyListeners(context, null, t, false);
+            throw new ProcessException(t);
         }
     }
 
@@ -232,14 +233,14 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             try {
                 R result = getProcessor().process(context);
                 notifyListeners(context, result, null, true);
-            } catch (Exception ex) {
-                logger.error("doParallelExecute error, node:{}", this, ex);
-                notifyListeners(context, null, ex, false);
+            } catch (Throwable t) {
+                logger.error("doParallelExecute error, node:{}", this, t);
+                notifyListeners(context, null, t, false);
             }
         });
     }
 
-    protected void notifyListeners(Context context, @Nullable R result, @Nullable Exception e, boolean success) {
+    protected void notifyListeners(Context context, @Nullable R result, @Nullable Throwable t, boolean success) {
         if (listeners == null) {
             return;
         }
@@ -248,10 +249,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
                 if (success) {
                     processListener.onComplete(context, result);
                 } else {
-                    processListener.onFailure(context, e);
+                    processListener.onFailure(context, t);
                 }
-            } catch (Exception ex) {
-                logger.error("listener execute error, context:{}, result:{}, exception:{}", context, result, e, ex);
+            } catch (Throwable ex) {
+                logger.error("listener execute error, context:{}, result:{}, exception:{}", context, result, t, ex);
                 // ignore
             }
         });

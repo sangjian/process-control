@@ -12,7 +12,7 @@ import java.util.Set;
  * @author sangjian.sj
  * @date 2020/01/19
  */
-public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executable, Parallelizable, Matchable {
+public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executable, Parallelizable, Matchable, KeyManager {
 
     boolean isParallel();
 
@@ -24,10 +24,6 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
 
     List<ProcessListener<R>> getListeners();
 
-    KeyMapper getKeyMapper();
-
-    void setKeyMapper(KeyMapper mapper);
-
     Key<R> getResultKey();
 
     void setResultKey(Key<R> resultKey);
@@ -35,12 +31,4 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
     void returnOn(ReturnCondition<R> condition);
 
     ReturnCondition<R> getReturnCondition();
-
-    Set<Key<?>> getReadableKeys();
-
-    void setReadableKeys(Set<Key<?>> keys);
-
-    Set<Key<?>> getWritableKeys();
-
-    void setWritableKeys(Set<Key<?>> keys);
 }

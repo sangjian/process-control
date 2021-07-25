@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.test.processors.aggregate;
 
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.context.Key;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ public class TestListMergeNodeProcessor1 implements Processor<List<String>> {
     @Override
     public List<String> process(@NotNull Context context) throws Exception {
         logger.info("in TestListMergeNodeProcessor1");
+        context.get(new Key<>("123", Integer.class));
         List<String> list = new ArrayList<>();
         Thread.sleep(2000);
         list.add("test1");

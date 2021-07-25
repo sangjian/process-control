@@ -46,8 +46,10 @@ public class AggregateTest {
         ProcessDefinition<List<String>> definition = new DefaultProcessDefinition<>(resultKey);
         Executor executor = Executors.newFixedThreadPool(3);
 
-        GenericMergeableNode<List<String>> node1 = GenericMergeableNodeBuilder.<List<String>>newBuilder().by(
-            new TestListMergeNodeProcessor1()).build();
+        GenericMergeableNode<List<String>> node1 = GenericMergeableNodeBuilder.<List<String>>newBuilder()
+            .by(new TestListMergeNodeProcessor1())
+            .readableKeys(new Key<>("123", Integer.class))
+            .build();
         GenericMergeableNode<List<String>> node2 = GenericMergeableNodeBuilder.<List<String>>newBuilder().by(
             new TestListMergeNodeProcessor2()).build();
 
@@ -62,12 +64,14 @@ public class AggregateTest {
             )
             .aggregate(nodes)
             .addListeners(new TestUnitAggregatableNodeListener1(), new TestUnitAggregatableNodeListener2())
-            .by(new UnitAggregateProcessorImpl<>())
             .resultKey(resultKey)
             .build();
 
         // 链式结果处理
-        node.thenApply(((ctx, result) -> {
+        node.exceptionally(t -> {
+            logger.info("in exceptionally.", t);
+            return null;
+        }).thenApply(((ctx, result) -> {
             boolean condition = result != null && result.size() == 2;
             condition = condition && result.stream().filter(r -> r.equals("test1") || r.equals("test2")).collect(
                 Collectors.toList()).size() == 2;

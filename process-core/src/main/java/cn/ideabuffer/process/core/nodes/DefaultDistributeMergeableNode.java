@@ -2,8 +2,12 @@ package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.LifecycleManager;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.processors.DistributeProcessor;
 import cn.ideabuffer.process.core.rules.Rule;
+
+import java.util.Set;
 
 /**
  * 分布式可合并节点
@@ -21,6 +25,14 @@ public class DefaultDistributeMergeableNode<T, R> extends AbstractMergeableNode
 
     public DefaultDistributeMergeableNode(Rule rule, long timeout, DistributeProcessor<T, R> processor) {
         super(rule, timeout);
+        this.processor = processor;
+    }
+
+    public DefaultDistributeMergeableNode(Rule rule, long timeout, DistributeProcessor<T, R> processor,
+        Set<Key<?>> readableKeys,
+        Set<Key<?>> writableKeys,
+        KeyMapper keyMapper) {
+        super(rule, timeout, readableKeys, writableKeys, keyMapper);
         this.processor = processor;
     }
 

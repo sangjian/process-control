@@ -3,7 +3,11 @@ package cn.ideabuffer.process.core.nodes;
 import cn.ideabuffer.process.core.Lifecycle;
 import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.rules.Rule;
+
+import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -17,7 +21,12 @@ public class DefaultGenericMergeableNode<R> extends AbstractMergeableNode implem
     }
 
     public DefaultGenericMergeableNode(Rule rule, long timeout, Processor<R> processor) {
-        super(rule, timeout);
+        this(rule, timeout, processor, null, null, null);
+    }
+
+    public DefaultGenericMergeableNode(Rule rule, long timeout, Processor<R> processor, Set<Key<?>> readableKeys,
+        Set<Key<?>> writableKeys, KeyMapper keyMapper) {
+        super(rule, timeout, readableKeys, writableKeys, keyMapper);
         this.processor = processor;
     }
 

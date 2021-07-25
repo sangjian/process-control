@@ -1,5 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.DefaultDistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.processors.DistributeProcessor;
@@ -8,10 +10,9 @@ import cn.ideabuffer.process.core.processors.wrapper.proxy.DistributeProcessorPr
 import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -24,8 +25,13 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
     private TimeUnit timeUnit;
     private DistributeProcessor<T, R> processor;
     private List<WrapperHandler<T>> handlers;
+    private KeyMapper keyMapper;
+    private Set<Key<?>> readableKeys;
+    private Set<Key<?>> writableKeys;
 
     private DistributeMergeableNodeBuilder() {
+        this.readableKeys = new HashSet<>();
+        this.writableKeys = new HashSet<>();
     }
 
     public static <T, R> DistributeMergeableNodeBuilder<T, R> newBuilder() {
@@ -63,10 +69,35 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
         return this;
     }
 
+    public DistributeMergeableNodeBuilder<T, R> keyMapper(KeyMapper keyMapper) {
+        this.keyMapper = keyMapper;
+        return this;
+    }
+
+    public DistributeMergeableNodeBuilder<T, R> readableKeys(@NotNull Key<?>... keys) {
+        this.readableKeys.addAll(Arrays.stream(keys).collect(Collectors.toSet()));
+        return this;
+    }
+
+    public DistributeMergeableNodeBuilder<T, R> readableKeys(@NotNull Set<Key<?>> keys) {
+        this.readableKeys = keys;
+        return this;
+    }
+
+    public DistributeMergeableNodeBuilder<T, R> writableKeys(@NotNull Key<?>... keys) {
+        this.writableKeys.addAll(Arrays.stream(keys).collect(Collectors.toSet()));
+        return this;
+    }
+
+    public DistributeMergeableNodeBuilder<T, R> writableKeys(@NotNull Set<Key<?>> keys) {
+        this.writableKeys = keys;
+        return this;
+    }
+
     @Override
     public DistributeMergeableNode<T, R> build() {
         long millis = timeUnit == null ? 0L : timeUnit.toMillis(timeout);
         processor = DistributeProcessorProxy.wrap(processor, handlers);
-        return new DefaultDistributeMergeableNode<>(rule, millis, processor);
+        return new DefaultDistributeMergeableNode<>(rule, millis, processor, readableKeys, writableKeys, keyMapper);
     }
 }
