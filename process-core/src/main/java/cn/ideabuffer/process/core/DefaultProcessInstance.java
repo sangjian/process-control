@@ -42,4 +42,8 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
         return true;
     }
 
+    private void checkDeclaringKeys(ProcessDefinition<R> definition) {
+
+    }
+
 }

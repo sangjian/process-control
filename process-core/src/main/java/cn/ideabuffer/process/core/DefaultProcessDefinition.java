@@ -40,12 +40,15 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private List<StatusWrapperHandler> handlers;
 
+    private List<Key<?>> declaringKeys;
+
     public DefaultProcessDefinition() {
         this(null);
     }
 
     public DefaultProcessDefinition(@Nullable Key<R> resultKey) {
         this.resultKey = resultKey;
+        this.declaringKeys = new LinkedList<>();
     }
 
     protected ProcessDefinition<R> addNode(@NotNull Node... nodes) {
@@ -216,6 +219,22 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
             this.handlers = Collections.emptyList();
         }
         return Collections.unmodifiableList(this.handlers);
+    }
+
+    @Override
+    public ProcessDefinition<R> declaringKeys(Key<?>... keys) {
+        if (keys != null && keys.length > 0) {
+            this.declaringKeys.addAll(Arrays.asList(keys));
+        }
+        return this;
+    }
+
+    @Override
+    public ProcessDefinition<R> declaringKeys(List<Key<?>> keys) {
+        if (keys != null) {
+            this.declaringKeys.addAll(keys);
+        }
+        return this;
     }
 
     @Override

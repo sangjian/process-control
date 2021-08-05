@@ -141,4 +141,8 @@ public interface ProcessDefinition<R> extends Lifecycle {
      */
     @NotNull
     List<StatusWrapperHandler> getHandlers();
+
+    ProcessDefinition<R> declaringKeys(Key<?>... keys);
+
+    ProcessDefinition<R> declaringKeys(List<Key<?>> keys);
 }

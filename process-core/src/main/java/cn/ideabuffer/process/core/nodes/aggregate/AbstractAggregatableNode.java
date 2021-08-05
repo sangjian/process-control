@@ -1,8 +1,12 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.core.processors.AggregateProcessor;
+import cn.ideabuffer.process.core.utils.ProcessUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * @author sangjian.sj
@@ -41,5 +45,16 @@ public abstract class AbstractAggregatableNode<I, O>
 
     public void setTimeout(long timeout) {
         this.timeout = timeout;
+    }
+
+    @Override
+    public List<GenericMergeableNode<I>> getMergeableNodes() {
+        return getProcessor().getMergeableNodes();
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        ProcessUtils.checkRegisteredKeys(this, this.getMergeableNodes());
     }
 }

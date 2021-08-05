@@ -8,6 +8,7 @@ import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.processors.impl.BranchProcessorImpl;
 import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import cn.ideabuffer.process.core.utils.ProcessUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,5 +48,14 @@ public class DefaultBranchNode extends AbstractExecutableNode<ProcessStatus, Bra
     public DefaultBranchNode(Rule rule, ExecutableNode<?, ?>... nodes) {
         super(rule);
         super.registerProcessor(new BranchProcessorImpl(nodes));
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        List<ExecutableNode<?, ?>> nodes = this.getProcessor().getNodes();
+        ProcessUtils.checkRegisteredKeys(this, nodes);
+
+
     }
 }

@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
@@ -13,6 +15,7 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
@@ -71,6 +74,36 @@ public class BranchNodeBuilder
     @Override
     public BranchNodeBuilder enabled(BooleanSupplier supplier) {
         super.enabled(supplier);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder writableKeys(@NotNull Key<?>... keys) {
+        super.writableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder writableKeys(@NotNull Set<Key<?>> keys) {
+        super.writableKeys(keys);
         return this;
     }
 

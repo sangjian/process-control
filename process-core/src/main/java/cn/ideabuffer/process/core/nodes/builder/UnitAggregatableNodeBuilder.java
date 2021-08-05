@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.aggregators.UnitAggregator;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
@@ -101,6 +103,36 @@ public class UnitAggregatableNodeBuilder<R>
     @Override
     public UnitAggregatableNodeBuilder<R> enabled(BooleanSupplier supplier) {
         super.enabled(supplier);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> writableKeys(@NotNull Key<?>... keys) {
+        super.writableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> writableKeys(@NotNull Set<Key<?>> keys) {
+        super.writableKeys(keys);
         return this;
     }
 

@@ -1,8 +1,11 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
 import cn.ideabuffer.process.core.Parallelizable;
+import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.TransmittableNode;
 import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
+
+import java.util.List;
 
 /**
  * 分布式可聚合节点
@@ -16,5 +19,7 @@ public interface DistributeAggregatableNode<O>
     void timeout(long timeout);
 
     long getTimeout();
+
+    List<DistributeMergeableNode<?, O>> getMergeableNodes();
 
 }

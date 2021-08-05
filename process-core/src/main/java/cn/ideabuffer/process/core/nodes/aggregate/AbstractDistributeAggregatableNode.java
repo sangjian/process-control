@@ -1,8 +1,16 @@
 package cn.ideabuffer.process.core.nodes.aggregate;
 
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.exceptions.UnregisteredKeyException;
+import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.transmitter.AbstractTransmittableNode;
 import cn.ideabuffer.process.core.processors.DistributeAggregateProcessor;
+import cn.ideabuffer.process.core.utils.ProcessUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -38,4 +46,17 @@ public abstract class AbstractDistributeAggregatableNode<O>
     public long getTimeout() {
         return timeout;
     }
+
+    @Override
+    public List<DistributeMergeableNode<?, O>> getMergeableNodes() {
+        return getProcessor().getMergeableNodes();
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        ProcessUtils.checkRegisteredKeys(this, this.getMergeableNodes());
+    }
+
+
 }
