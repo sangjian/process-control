@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.KeyManager;
 import cn.ideabuffer.process.core.LifecycleManager;
 import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
@@ -10,8 +11,6 @@ import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
-
 /**
  * @author sangjian.sj
  * @date 2020/05/02
@@ -21,26 +20,17 @@ public class IfProcessorImpl implements IfProcessor {
     private Rule rule;
     private BranchNode trueBranch;
     private BranchNode falseBranch;
-    private KeyMapper keyMapper;
-    private Set<Key<?>> readableKeys;
-    private Set<Key<?>> writableKeys;
-
-    public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch) {
-        this(rule, trueBranch, null);
-    }
+    private KeyManager keyManager;
 
     public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch) {
-        this(rule, trueBranch, falseBranch, null, null, null);
+        this(rule, trueBranch, falseBranch, null);
     }
 
-    public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch,
-        KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
+    public IfProcessorImpl(@NotNull Rule rule, @NotNull BranchNode trueBranch, BranchNode falseBranch, KeyManager keyManager) {
         this.rule = rule;
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;
-        this.keyMapper = keyMapper;
-        this.readableKeys = readableKeys;
-        this.writableKeys = writableKeys;
+        this.keyManager = keyManager;
     }
 
     @Override
@@ -74,33 +64,13 @@ public class IfProcessorImpl implements IfProcessor {
     }
 
     @Override
-    public KeyMapper getKeyMapper() {
-        return keyMapper;
+    public void setKeyManager(KeyManager keyManager) {
+        this.keyManager = keyManager;
     }
 
     @Override
-    public void setKeyMapper(KeyMapper keyMapper) {
-        this.keyMapper = keyMapper;
-    }
-
-    @Override
-    public Set<Key<?>> getReadableKeys() {
-        return readableKeys;
-    }
-
-    @Override
-    public void setReadableKeys(Set<Key<?>> readableKeys) {
-        this.readableKeys = readableKeys;
-    }
-
-    @Override
-    public Set<Key<?>> getWritableKeys() {
-        return writableKeys;
-    }
-
-    @Override
-    public void setWritableKeys(Set<Key<?>> writableKeys) {
-        this.writableKeys = writableKeys;
+    public KeyManager getKeyManager() {
+        return this.keyManager;
     }
 
     @NotNull
@@ -110,8 +80,7 @@ public class IfProcessorImpl implements IfProcessor {
             throw new NullPointerException("rule can't be null");
         }
         InnerBlock ifBlock = new InnerBlock(context.getBlock());
-        ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(ifBlock), keyMapper, readableKeys,
-            writableKeys);
+        ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(ifBlock), keyManager);
         BranchNode branch = rule.match(contextWrapper) ? trueBranch : falseBranch;
         if (branch == null) {
             return ProcessStatus.proceed();

@@ -7,6 +7,7 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.strategies.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 /**
@@ -39,4 +40,5 @@ public interface ParallelBranchProcessor extends ComplexProcessor<ProcessStatus>
 
     void proceedWhen(@NotNull ProceedStrategy strategy);
 
+    List<BranchNode> getBranches();
 }

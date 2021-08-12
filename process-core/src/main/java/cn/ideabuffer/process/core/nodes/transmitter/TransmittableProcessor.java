@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Function;
 
 import static cn.ideabuffer.process.core.executors.NodeExecutors.DEFAULT_POOL;
 
@@ -20,6 +21,8 @@ public class TransmittableProcessor<P> implements ResultStream<P>, Lifecycle {
     private ResultProcessor processor;
 
     private ResultConsumer consumer;
+
+    private Function<Throwable, ? extends P> exceptionFn;
 
     private boolean parallel;
 
@@ -47,32 +50,42 @@ public class TransmittableProcessor<P> implements ResultStream<P>, Lifecycle {
         this.executor = executor;
     }
 
+    public TransmittableProcessor(Function<Throwable, ? extends P> fn) {
+        this.exceptionFn = exceptionFn;
+    }
+
     @Override
-    public <R> TransmittableProcessor<R> thenApply(@NotNull ResultProcessor<R, P> processor) {
+    public <R> ResultStream<R> thenApply(@NotNull ResultProcessor<R, ? extends P> processor) {
         TransmittableProcessor<R> then = new TransmittableProcessor<>(processor);
         this.next = then;
         return then;
     }
 
     @Override
-    public <R> ResultStream<R> thenApplyAsync(@NotNull ResultProcessor<R, P> processor) {
+    public <R> ResultStream<R> thenApplyAsync(@NotNull ResultProcessor<R, ? extends P> processor) {
         TransmittableProcessor<R> then = new TransmittableProcessor<>(processor, true, executor);
         this.next = then;
         return then;
     }
 
     @Override
-    public ResultStream<Void> thenAccept(@NotNull ResultConsumer<P> consumer) {
+    public ResultStream<Void> thenAccept(@NotNull ResultConsumer<? extends P> consumer) {
         TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer);
         this.next = then;
         return then;
     }
 
     @Override
-    public ResultStream<Void> thenAcceptAsync(@NotNull ResultConsumer<P> consumer) {
+    public ResultStream<Void> thenAcceptAsync(@NotNull ResultConsumer<? extends P> consumer) {
         TransmittableProcessor<Void> then = new TransmittableProcessor<>(consumer, true, executor);
         this.next = then;
         return then;
+    }
+
+    @Override
+    public ResultStream<P> exceptionally(Function<Throwable, ? extends P> fn) {
+        this.exceptionFn = fn;
+        return this;
     }
 
     public void fire(Context context, @Nullable P value) {
@@ -87,12 +100,19 @@ public class TransmittableProcessor<P> implements ResultStream<P>, Lifecycle {
     @SuppressWarnings("unchecked")
     private void doFire(Context context, @Nullable P value) {
         Object r = value;
-        if (processor != null) {
-            r = processor.apply(context, value);
+        try {
+            if (processor != null) {
+                r = processor.apply(context, value);
+            }
+            if (consumer != null) {
+                consumer.accept(context, value);
+            }
+        } catch (Throwable t) {
+            if (exceptionFn != null) {
+                r = exceptionFn.apply(t);
+            }
         }
-        if (consumer != null) {
-            consumer.accept(context, value);
-        }
+
         if (next != null) {
             next.fire(context, r);
         }

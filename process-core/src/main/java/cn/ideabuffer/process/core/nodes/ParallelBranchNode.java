@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes;
 
+import cn.ideabuffer.process.core.ComplexNodes;
 import cn.ideabuffer.process.core.processors.ParallelBranchProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 
@@ -9,6 +10,6 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
  * @author sangjian.sj
  * @date 2020/03/01
  */
-public interface ParallelBranchNode extends ExecutableNode<ProcessStatus, ParallelBranchProcessor> {
+public interface ParallelBranchNode extends ExecutableNode<ProcessStatus, ParallelBranchProcessor>, ComplexNodes<ExecutableNode<?, ?>> {
 
 }

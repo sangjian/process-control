@@ -1,9 +1,10 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.Matchable;
-import cn.ideabuffer.process.core.Mergeable;
-import cn.ideabuffer.process.core.Node;
-import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.*;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
+
+import java.util.Set;
 
 /**
  * 可合并结果的节点
@@ -13,7 +14,7 @@ import cn.ideabuffer.process.core.Processor;
  * @author sangjian.sj
  * @date 2020/03/07
  */
-public interface MergeableNode<P extends Processor<R>, R> extends Node, Mergeable, Matchable {
+public interface MergeableNode<P extends Processor<R>, R> extends Node, Mergeable, Matchable, KeyManager {
 
     /**
      * 注册处理器

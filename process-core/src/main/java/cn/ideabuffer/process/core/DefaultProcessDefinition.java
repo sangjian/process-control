@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.exceptions.IllegalResultKeyException;
+import cn.ideabuffer.process.core.exceptions.UnregisteredKeyException;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.NodeGroup;
 import cn.ideabuffer.process.core.nodes.aggregate.AggregatableNode;
@@ -16,10 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author sangjian.sj
@@ -40,17 +38,26 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private List<StatusWrapperHandler> handlers;
 
+    private List<Key<?>> declaringKeys;
+
+    private boolean declaredRestrict;
+
     public DefaultProcessDefinition() {
         this(null);
     }
 
     public DefaultProcessDefinition(@Nullable Key<R> resultKey) {
         this.resultKey = resultKey;
+        this.declaringKeys = new LinkedList<>();
     }
 
     protected ProcessDefinition<R> addNode(@NotNull Node... nodes) {
         if (nodes.length == 0) {
             return this;
+        }
+        // 检查key的注册
+        for (Node node : nodes) {
+            checkKeyRegistry(node);
         }
         returnableCheck(nodes);
         if (initializeMode == InitializeMode.ON_REGISTER) {
@@ -95,6 +102,52 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
                     ((ExecutableNode)node).returnOn(returnCondition);
                 }
             }
+        }
+    }
+
+    private void checkKeyRegistry() {
+        for (Node node : this.nodes) {
+            checkKeyRegistry(node);
+        }
+    }
+
+    private void checkKeyRegistry(Node node) {
+        if (!this.declaredRestrict) {
+            return;
+        }
+        List<Node> currentNodes = new LinkedList<>();
+        if (node instanceof ComplexNodes) {
+            List<Node> nodes = ((ComplexNodes) node).getNodes();
+            if (nodes != null) {
+                currentNodes.addAll(nodes);
+            }
+        } else {
+            currentNodes.add(node);
+        }
+        List<Key<?>> unDeclaredKeys = new LinkedList<>();
+        for (Node currentNode : currentNodes) {
+            if (currentNode instanceof KeyManager) {
+                Set<Key<?>> readableKeys = ((KeyManager) currentNode).getReadableKeys();
+                Set<Key<?>> writableKeys = ((KeyManager) currentNode).getWritableKeys();
+                if (readableKeys != null) {
+                    for (Key<?> readableKey : readableKeys) {
+                        if (!this.declaringKeys.contains(readableKey)) {
+                            unDeclaredKeys.add(readableKey);
+                        }
+                    }
+                }
+                if (writableKeys != null) {
+                    for (Key<?> writableKey : writableKeys) {
+                        if (!this.declaringKeys.contains(writableKey)) {
+                            unDeclaredKeys.add(writableKey);
+                        }
+                    }
+                }
+            }
+        }
+        // TODO 如果有未注册key，抛异常
+        if (!unDeclaredKeys.isEmpty()) {
+            throw new UnregisteredKeyException(String.format("unregistered keys:%s was found in node:%s", unDeclaredKeys, node));
         }
     }
 
@@ -216,6 +269,31 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
             this.handlers = Collections.emptyList();
         }
         return Collections.unmodifiableList(this.handlers);
+    }
+
+    @Override
+    public ProcessDefinition<R> declaredRestrict(boolean restrict) {
+        this.declaredRestrict = restrict;
+        checkKeyRegistry();
+        return this;
+    }
+
+    @Override
+    public ProcessDefinition<R> declaringKeys(Key<?>... keys) {
+        if (keys != null && keys.length > 0) {
+            this.declaringKeys.addAll(Arrays.asList(keys));
+            checkKeyRegistry();
+        }
+        return this;
+    }
+
+    @Override
+    public ProcessDefinition<R> declaringKeys(List<Key<?>> keys) {
+        if (keys != null) {
+            this.declaringKeys.addAll(keys);
+            checkKeyRegistry();
+        }
+        return this;
     }
 
     @Override

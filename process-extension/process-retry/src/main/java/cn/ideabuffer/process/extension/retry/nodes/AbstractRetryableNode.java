@@ -79,7 +79,7 @@ public abstract class AbstractRetryableNode<R> extends AbstractExecutableNode<R,
     }
 
     @Override
-    public void registerProcessor(Processor<R> processor) {
+    public void registerProcessor(@NotNull Processor<R> processor) {
         this.retryProcessor.setProcessor(processor);
         super.registerProcessor(retryProcessor);
     }

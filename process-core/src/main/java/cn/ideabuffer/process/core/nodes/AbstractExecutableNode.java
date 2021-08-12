@@ -5,6 +5,7 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
+import cn.ideabuffer.process.core.exceptions.ProcessException;
 import cn.ideabuffer.process.core.executors.NodeExecutors;
 import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
@@ -19,19 +20,16 @@ import java.util.concurrent.ExecutorService;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends AbstractNode
+public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends AbstractKeyManagerNode
     implements ExecutableNode<R, P> {
 
-    private boolean parallel = false;
+    private boolean parallel;
     private Rule rule;
     private Executor executor;
     private P processor;
     private List<ProcessListener<R>> listeners;
-    private KeyMapper mapper;
     private Key<R> resultKey;
     private ReturnCondition<R> returnCondition;
-    private Set<Key<?>> readableKeys;
-    private Set<Key<?>> writableKeys;
 
     public AbstractExecutableNode() {
         this(false);
@@ -76,18 +74,16 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
         P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition, Set<Key<?>> readableKeys,
         Set<Key<?>> writableKeys) {
+        super(mapper, readableKeys, writableKeys);
         this.parallel = parallel;
         this.rule = rule;
         this.executor = executor;
         this.listeners = listeners == null ? new ArrayList<>() : listeners;
         this.processor = processor;
-        this.mapper = mapper;
         this.resultKey = resultKey;
         this.returnCondition = returnCondition;
-        this.readableKeys = readableKeys == null ? new HashSet<>() : readableKeys;
-        this.writableKeys = writableKeys == null ? new HashSet<>() : writableKeys;
         if (resultKey != null) {
-            this.writableKeys.add(resultKey);
+            addWritableKeys(resultKey);
         }
     }
 
@@ -117,7 +113,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     }
 
     @Override
-    public void registerProcessor(P processor) {
+    public void registerProcessor(@NotNull P processor) {
         this.processor = processor;
     }
 
@@ -152,16 +148,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         this.listeners = listeners;
     }
 
-    @Override
-    public KeyMapper getKeyMapper() {
-        return mapper;
-    }
-
-    @Override
-    public void setKeyMapper(KeyMapper mapper) {
-        this.mapper = mapper;
-    }
-
     protected boolean ruleCheck(@NotNull Context context) {
         return rule == null || rule.match(context);
     }
@@ -169,6 +155,9 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
+        if (!enabled()) {
+            return ProcessStatus.proceed();
+        }
         // 1. 包装context，主要是对key的一些映射和校验
         Context ctx = Contexts.wrap(context, this);
         // 2. 规则校验，校验不通过，不执行当前节点，继续执行下一节点
@@ -220,9 +209,13 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             }
             notifyListeners(context, result, null, true);
             return result;
-        } catch (Exception e) {
-            notifyListeners(context, null, e, false);
-            throw e;
+        } catch (Throwable t) {
+            notifyListeners(context, null, t, false);
+            if (t instanceof Exception) {
+                throw t;
+            } else {
+                throw new ProcessException(t);
+            }
         }
     }
 
@@ -232,14 +225,14 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             try {
                 R result = getProcessor().process(context);
                 notifyListeners(context, result, null, true);
-            } catch (Exception ex) {
-                logger.error("doParallelExecute error, node:{}", this, ex);
-                notifyListeners(context, null, ex, false);
+            } catch (Throwable t) {
+                logger.error("doParallelExecute error, node:{}", this, t);
+                notifyListeners(context, null, t, false);
             }
         });
     }
 
-    protected void notifyListeners(Context context, @Nullable R result, @Nullable Exception e, boolean success) {
+    protected void notifyListeners(Context context, @Nullable R result, @Nullable Throwable t, boolean success) {
         if (listeners == null) {
             return;
         }
@@ -248,10 +241,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
                 if (success) {
                     processListener.onComplete(context, result);
                 } else {
-                    processListener.onFailure(context, e);
+                    processListener.onFailure(context, t);
                 }
-            } catch (Exception ex) {
-                logger.error("listener execute error, context:{}, result:{}, exception:{}", context, result, e, ex);
+            } catch (Throwable ex) {
+                logger.error("listener execute error, context:{}, result:{}, exception:{}", context, result, t, ex);
                 // ignore
             }
         });
@@ -275,7 +268,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     public void setResultKey(Key<R> resultKey) {
         this.resultKey = resultKey;
         if (resultKey != null) {
-            this.writableKeys.add(resultKey);
+            super.addWritableKeys(resultKey);
         }
     }
 
@@ -287,35 +280,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @Override
     public ReturnCondition<R> getReturnCondition() {
         return returnCondition;
-    }
-
-    @Override
-    public Set<Key<?>> getReadableKeys() {
-        return Collections.unmodifiableSet(readableKeys);
-    }
-
-    @Override
-    public void setReadableKeys(Set<Key<?>> keys) {
-        if (keys == null || keys.isEmpty()) {
-            return;
-        }
-        this.readableKeys = keys;
-    }
-
-    @Override
-    public Set<Key<?>> getWritableKeys() {
-        return Collections.unmodifiableSet(writableKeys);
-    }
-
-    @Override
-    public void setWritableKeys(Set<Key<?>> keys) {
-        if (keys == null || keys.isEmpty()) {
-            return;
-        }
-        this.writableKeys = keys;
-        if (this.resultKey != null) {
-            this.writableKeys.add(this.resultKey);
-        }
     }
 
     @Override

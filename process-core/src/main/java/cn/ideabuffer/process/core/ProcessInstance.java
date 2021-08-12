@@ -10,7 +10,7 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public interface ProcessInstance<R> extends ExecutableNode<ProcessStatus, ProcessInstanceProcessor<R>> {
+public interface ProcessInstance<R> extends ExecutableNode<ProcessStatus, ProcessInstanceProcessor<R>>, ComplexNodes<Node> {
 
     R getResult();
 

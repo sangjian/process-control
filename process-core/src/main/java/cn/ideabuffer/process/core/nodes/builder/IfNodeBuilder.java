@@ -144,19 +144,18 @@ public class IfNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStatus, 
     @Override
     public IfConditionNode build() {
         if (processor == null) {
-            processor = new IfProcessorImpl(rule, trueBranch, falseBranch, keyMapper, readableKeys, writableKeys);
+            processor = new IfProcessorImpl(rule, trueBranch, falseBranch);
         } else {
             processor.setRule(rule);
             processor.setTrueBranch(trueBranch);
             processor.setFalseBranch(falseBranch);
-            processor.setKeyMapper(keyMapper);
-            processor.setReadableKeys(readableKeys);
-            processor.setWritableKeys(writableKeys);
         }
 
         processor = IfProcessorProxy.wrap(processor, handlers);
 
-        return super.build();
+        IfConditionNode node = super.build();
+        processor.setKeyManager(node);
+        return node;
     }
 
     public static class IfWhenBuilder {

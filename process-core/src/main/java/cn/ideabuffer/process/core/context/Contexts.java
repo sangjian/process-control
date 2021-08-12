@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.context;
 
+import cn.ideabuffer.process.core.KeyManager;
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import org.jetbrains.annotations.NotNull;
@@ -103,7 +104,7 @@ public class Contexts {
      * @return 包装后的程上下文
      */
     public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block) {
-        return wrap(context, block, null);
+        return wrap(context, block, (KeyManager)null);
     }
 
     /**
@@ -136,12 +137,24 @@ public class Contexts {
     /**
      * 包装新的流程上下文
      *
+     * @param context      被包装的context
+     * @param block        被包装的block
+     * @param keyManager   key管理器
+     * @return 包装后的程上下文
+     */
+    public static ContextWrapper wrap(@NotNull Context context, @NotNull Block block, KeyManager keyManager) {
+        return new ContextWrapper(context, block, keyManager);
+    }
+
+    /**
+     * 包装新的流程上下文
+     *
      * @param context 被包装的context
      * @param node    流程节点
      * @return 包装后的程上下文
      * @see Contexts#wrap(Context, Block, KeyMapper, Set, Set)
      */
     public static ContextWrapper wrap(@NotNull Context context, @NotNull ExecutableNode<?, ?> node) {
-        return wrap(context, context.getBlock(), node.getKeyMapper(), node.getReadableKeys(), node.getWritableKeys());
+        return wrap(context, context.getBlock(), node);
     }
 }

@@ -2,6 +2,9 @@ package cn.ideabuffer.process.core.utils;
 
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.context.Contexts;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.exceptions.ProcessException;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
@@ -10,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,21 +35,22 @@ public class AggregateUtils {
 
     @Nullable
     public static <V> V process(@NotNull Context context, @NotNull GenericMergeableNode<V> node) {
-        return process(node.getProcessor(), context);
+        return process(node.getProcessor(), context, node.getReadableKeys(), node.getWritableKeys(), node.getKeyMapper());
     }
 
     @Nullable
     public static <I, V> I process(@NotNull Context context, @NotNull DistributeMergeableNode<I, V> node) {
-        return process(node.getProcessor(), context);
+        return process(node.getProcessor(), context, node.getReadableKeys(), node.getWritableKeys(), node.getKeyMapper());
     }
 
     @Nullable
-    public static <V> V process(Processor<V> processor, Context context) {
+    public static <V> V process(Processor<V> processor, Context context, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys, KeyMapper keyMapper) {
         if (processor == null) {
             return null;
         }
         try {
-            return processor.process(context);
+            Context ctx = Contexts.wrap(context, context.getBlock(), keyMapper, readableKeys, writableKeys);
+            return processor.process(ctx);
         } catch (Exception e) {
             LOGGER.error("invoke process error", e);
             throw new ProcessException(e);

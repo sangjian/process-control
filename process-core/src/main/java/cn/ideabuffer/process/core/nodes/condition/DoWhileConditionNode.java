@@ -1,9 +1,12 @@
 package cn.ideabuffer.process.core.nodes.condition;
 
+import cn.ideabuffer.process.core.ComplexNodes;
+import cn.ideabuffer.process.core.KeyManager;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
+import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.DoWhileProcessor;
 import cn.ideabuffer.process.core.processors.impl.DoWhileProcessorImpl;
@@ -11,24 +14,26 @@ import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public class DoWhileConditionNode extends AbstractExecutableNode<ProcessStatus, DoWhileProcessor> {
+public class DoWhileConditionNode extends AbstractExecutableNode<ProcessStatus, DoWhileProcessor> implements ComplexNodes<ExecutableNode<?, ?>> {
 
     public DoWhileConditionNode() {
     }
 
     public DoWhileConditionNode(@NotNull Rule rule, @NotNull BranchNode branch) {
-        this(new DoWhileProcessorImpl(rule, branch, null, null, null));
+        this(new DoWhileProcessorImpl(rule, branch, null));
     }
 
     public DoWhileConditionNode(@NotNull Rule rule,
-        @NotNull BranchNode branch, KeyMapper keyMapper, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
-        this(new DoWhileProcessorImpl(rule, branch, keyMapper, readableKeys, writableKeys));
+                                @NotNull BranchNode branch, KeyManager keyManager) {
+        registerProcessor(new DoWhileProcessorImpl(rule, branch, this));
     }
 
     public DoWhileConditionNode(@NotNull DoWhileProcessor processor) {
@@ -36,38 +41,20 @@ public class DoWhileConditionNode extends AbstractExecutableNode<ProcessStatus, 
     }
 
     @Override
-    public KeyMapper getKeyMapper() {
-        return getProcessor().getKeyMapper();
-    }
-
-    @Override
-    public void setKeyMapper(KeyMapper mapper) {
-        getProcessor().setKeyMapper(mapper);
-    }
-
-    @Override
-    public Set<Key<?>> getReadableKeys() {
-        return getProcessor().getReadableKeys();
-    }
-
-    @Override
-    public void setReadableKeys(Set<Key<?>> keys) {
-        getProcessor().setReadableKeys(keys);
-    }
-
-    @Override
-    public Set<Key<?>> getWritableKeys() {
-        return getProcessor().getWritableKeys();
-    }
-
-    @Override
-    public void setWritableKeys(Set<Key<?>> keys) {
-        getProcessor().setWritableKeys(keys);
-    }
-
-    @Override
     protected boolean ruleCheck(@NotNull Context context) {
         return true;
     }
 
+    @Override
+    public List<ExecutableNode<?, ?>> getNodes() {
+        List<ExecutableNode<?, ?>> nodes = new LinkedList<>();
+        if (getProcessor().getBranch() != null) {
+            nodes.add(getProcessor().getBranch());
+            List<ExecutableNode<?, ?>> branchNodes = getProcessor().getBranch().getNodes();
+            if (branchNodes != null) {
+                nodes.addAll(branchNodes);
+            }
+        }
+        return nodes;
+    }
 }

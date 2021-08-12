@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.impl;
 
+import cn.ideabuffer.process.core.KeyManager;
 import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.block.InnerBlock;
 import cn.ideabuffer.process.core.context.*;
@@ -17,9 +18,8 @@ import java.util.Set;
  */
 public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileProcessor {
 
-    public DoWhileProcessorImpl(Rule rule, BranchNode branch, KeyMapper keyMapper,
-        Set<Key<?>> readableKeys, Set<Key<?>> writableKeys) {
-        super(rule, branch, keyMapper, readableKeys, writableKeys);
+    public DoWhileProcessorImpl(Rule rule, BranchNode branch, KeyManager keyManager) {
+        super(rule, branch, keyManager);
     }
 
     @NotNull
@@ -33,8 +33,7 @@ public class DoWhileProcessorImpl extends WhileProcessorImpl implements DoWhileP
         }
 
         InnerBlock whileBlock = new InnerBlock(true, true, context.getBlock());
-        ContextWrapper whileContext = Contexts.wrap(context, new BlockFacade(whileBlock), getKeyMapper(),
-            getReadableKeys(), getWritableKeys());
+        ContextWrapper whileContext = Contexts.wrap(context, new BlockFacade(whileBlock), getKeyManager());
 
         do {
             whileBlock.resetBreak();

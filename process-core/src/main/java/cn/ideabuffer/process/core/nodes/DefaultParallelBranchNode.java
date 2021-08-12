@@ -9,6 +9,7 @@ import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -31,11 +32,29 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode<ProcessSta
     @NotNull
     @Override
     public ProcessStatus execute(Context context) throws Exception {
-        Context ctx = Contexts.wrap(context, context.getBlock(), getKeyMapper(), getReadableKeys(), getWritableKeys());
+        if (!enabled()) {
+            return ProcessStatus.proceed();
+        }
+        Context ctx = Contexts.wrap(context, context.getBlock(), this);
         if (getProcessor() == null || !ruleCheck(ctx)) {
             return ProcessStatus.proceed();
         }
         return getProcessor().process(ctx);
     }
 
+    @Override
+    public List<ExecutableNode<?, ?>> getNodes() {
+        List<ExecutableNode<?, ?>> nodes = new LinkedList<>();
+        if (getProcessor() == null || getProcessor().getBranches() == null) {
+            return nodes;
+        }
+        for (BranchNode branch : getProcessor().getBranches()) {
+            nodes.add(branch);
+            List<ExecutableNode<?, ?>> branchNodes = branch.getNodes();
+            if (branchNodes != null) {
+                nodes.addAll(branchNodes);
+            }
+        }
+        return nodes;
+    }
 }

@@ -48,4 +48,9 @@ public class ParallelBranchProcessorProxy extends AbstractProcessorProxy<Paralle
 
     @Override
     public void proceedWhen(@NotNull ProceedStrategy strategy) {getTarget().proceedWhen(strategy);}
+
+    @Override
+    public List<BranchNode> getBranches() {
+        return getTarget().getBranches();
+    }
 }

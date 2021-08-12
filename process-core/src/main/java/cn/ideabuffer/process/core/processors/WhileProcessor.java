@@ -1,12 +1,9 @@
 package cn.ideabuffer.process.core.processors;
 
-import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.context.KeyMapper;
+import cn.ideabuffer.process.core.KeyManager;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-
-import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -22,15 +19,7 @@ public interface WhileProcessor extends ComplexProcessor<ProcessStatus> {
 
     void setBranch(BranchNode branch);
 
-    KeyMapper getKeyMapper();
+    void setKeyManager(KeyManager keyManager);
 
-    void setKeyMapper(KeyMapper keyMapper);
-
-    Set<Key<?>> getReadableKeys();
-
-    void setReadableKeys(Set<Key<?>> readableKeys);
-
-    Set<Key<?>> getWritableKeys();
-
-    void setWritableKeys(Set<Key<?>> writableKeys);
+    KeyManager getKeyManager();
 }

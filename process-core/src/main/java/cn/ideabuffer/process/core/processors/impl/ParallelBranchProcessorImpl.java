@@ -12,7 +12,8 @@ import cn.ideabuffer.process.core.strategies.ProceedStrategies;
 import cn.ideabuffer.process.core.strategies.ProceedStrategy;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -35,7 +36,7 @@ public class ParallelBranchProcessorImpl implements ParallelBranchProcessor {
 
     public ParallelBranchProcessorImpl(List<BranchNode> branches, Executor executor) {
         this.executor = executor;
-        this.branches = branches == null ? new ArrayList<>() : branches;
+        this.branches = branches == null ? new LinkedList<>() : branches;
     }
 
     @Override
@@ -56,6 +57,11 @@ public class ParallelBranchProcessorImpl implements ParallelBranchProcessor {
     @Override
     public void proceedWhen(@NotNull ProceedStrategy strategy) {
         this.strategy = strategy;
+    }
+
+    @Override
+    public List<BranchNode> getBranches() {
+        return Collections.unmodifiableList(this.branches);
     }
 
     @NotNull

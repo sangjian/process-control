@@ -147,15 +147,14 @@ public class WhileNodeBuilder
             throw new NullPointerException("rule cannot be null!");
         }
         if (processor == null) {
-            processor = new WhileProcessorImpl(rule, branch, keyMapper, readableKeys, writableKeys);
+            processor = new WhileProcessorImpl(rule, branch, null);
         } else {
             processor.setRule(rule);
             processor.setBranch(branch);
-            processor.setKeyMapper(keyMapper);
-            processor.setReadableKeys(readableKeys);
-            processor.setWritableKeys(writableKeys);
         }
         processor = WhileProcessorProxy.wrap(processor, handlers);
-        return super.build();
+        WhileConditionNode node = super.build();
+        processor.setKeyManager(node);
+        return node;
     }
 }

@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.context;
 
+import cn.ideabuffer.process.core.KeyManager;
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.block.BlockFacade;
 import cn.ideabuffer.process.core.exceptions.UnreadableKeyException;
@@ -35,6 +36,7 @@ public class ContextWrapper implements Context {
     /**
      * 参数映射器
      */
+    @Nullable
     private KeyMapper mapper;
 
     /**
@@ -53,11 +55,21 @@ public class ContextWrapper implements Context {
         this(context, block, null);
     }
 
-    public ContextWrapper(@NotNull Context context, @NotNull Block block, KeyMapper mapper) {
-        this(context, block, mapper, null, null);
+    public ContextWrapper(@NotNull Context context, @NotNull Block block, @Nullable KeyManager keyManager) {
+        KeyMapper mapper = keyManager == null ? null : keyManager.getKeyMapper();
+
+        this.context = context;
+        this.mapper = mapper;
+        // 如果没有设置mapper，取上一级的mapper
+        if (mapper == null) {
+            this.mapper = context.getMapper();
+        }
+        this.block = new BlockFacade(block);
+        this.readableKeys = keyManager == null ? null : keyManager.getReadableKeys();
+        this.writableKeys = keyManager == null ? null : keyManager.getWritableKeys();
     }
 
-    public ContextWrapper(@NotNull Context context, @NotNull Block block, KeyMapper mapper,
+    public ContextWrapper(@NotNull Context context, @NotNull Block block, @Nullable KeyMapper mapper,
         @Nullable Set<Key<?>> readableKeys,
         @Nullable Set<Key<?>> writableKeys) {
         this.context = context;

@@ -147,15 +147,14 @@ public class DoWhileNodeBuilder
             throw new NullPointerException("rule cannot be null!");
         }
         if (processor == null) {
-            processor = new DoWhileProcessorImpl(rule, branch, keyMapper, readableKeys, writableKeys);
+            processor = new DoWhileProcessorImpl(rule, branch, null);
         } else {
             processor.setRule(rule);
             processor.setBranch(branch);
-            processor.setKeyMapper(keyMapper);
-            processor.setReadableKeys(readableKeys);
-            processor.setWritableKeys(writableKeys);
         }
         processor = DoWhileProcessorProxy.wrap(processor, handlers);
-        return super.build();
+        DoWhileConditionNode node = super.build();
+        processor.setKeyManager(node);
+        return node;
     }
 }

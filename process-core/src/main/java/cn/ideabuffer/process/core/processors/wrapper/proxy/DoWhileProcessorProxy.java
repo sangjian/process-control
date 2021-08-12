@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.processors.wrapper.proxy;
 
+import cn.ideabuffer.process.core.KeyManager;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
@@ -50,21 +51,11 @@ public class DoWhileProcessorProxy extends AbstractProcessorProxy<DoWhileProcess
         getTarget().setBranch(branch);
     }
 
-    @Override
-    public KeyMapper getKeyMapper() {return getTarget().getKeyMapper();}
+    public void setKeyManager(KeyManager keyManager) {
+        getTarget().setKeyManager(keyManager);
+    }
 
-    @Override
-    public void setKeyMapper(KeyMapper keyMapper) {getTarget().setKeyMapper(keyMapper);}
-
-    @Override
-    public Set<Key<?>> getReadableKeys() {return getTarget().getReadableKeys();}
-
-    @Override
-    public void setReadableKeys(Set<Key<?>> readableKeys) {getTarget().setReadableKeys(readableKeys);}
-
-    @Override
-    public Set<Key<?>> getWritableKeys() {return getTarget().getWritableKeys();}
-
-    @Override
-    public void setWritableKeys(Set<Key<?>> writableKeys) {getTarget().setWritableKeys(writableKeys);}
+    public KeyManager getKeyManager() {
+        return getTarget().getKeyManager();
+    }
 }
