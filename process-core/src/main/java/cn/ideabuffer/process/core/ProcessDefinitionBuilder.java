@@ -33,7 +33,7 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
 
     private List<StatusWrapperHandler> handlers;
 
-    private List<Key<?>> declaringKeys;
+    private Set<Key<?>> declaringKeys;
 
     private boolean declaredRestrict;
 
@@ -309,6 +309,7 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
     public ProcessDefinition<R> build() {
         returnableCheck(nodes);
         checkKeyRegistry();
-        return new DefaultProcessDefinition<>(initializeMode, nodes, resultKey, returnCondition, handlers, declaringKeys, declaredRestrict);
+        return new DefaultProcessDefinition<>(initializeMode, nodes, resultKey, returnCondition, handlers,
+            declaringKeys, declaredRestrict);
     }
 }

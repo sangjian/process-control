@@ -7,6 +7,7 @@ import cn.ideabuffer.process.api.model.node.ExecutableNodeModel;
 import cn.ideabuffer.process.api.model.node.ProcessDefinitionModel;
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.Nodes;
@@ -71,12 +72,14 @@ public class TestApi {
         WhileConditionNode whileConditionNode = WhileNodeBuilder.newBuilder().processOn(ctx -> true).then(Nodes.newProcessNode(context -> null)).build();
         DoWhileConditionNode doWhileConditionNode = DoWhileNodeBuilder.newBuilder().processOn(ctx -> true).then((Nodes.newProcessNode(context -> null))).build();
 
-        ProcessDefinition<ProcessStatus> definition = new DefaultProcessDefinition<>();
-        definition.addBranchNode(BranchNodeBuilder.newBuilder()
+//        ProcessDefinition<ProcessStatus> definition = new DefaultProcessDefinition<>();
+        ProcessDefinition<ProcessStatus> definition = ProcessDefinitionBuilder.<ProcessStatus>newBuilder()
+            .addBranchNode(BranchNodeBuilder.newBuilder()
             .addNodes(node).build()).addIf(ifConditionNode)
             .addProcessNodes(tryCatchFinallyNode)
             .addWhile(whileConditionNode)
-            .addDoWhile(doWhileConditionNode);
+            .addDoWhile(doWhileConditionNode)
+            .build();
 
         ProcessDefinitionModel<ProcessDefinition> model = ModelBuilderFactory
             .getInstance().<ProcessDefinitionModelBuilder<ProcessDefinition>>getModelBuilder(definition).build(
