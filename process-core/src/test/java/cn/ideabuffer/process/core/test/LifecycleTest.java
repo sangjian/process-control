@@ -1,9 +1,6 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.DefaultProcessDefinition;
-import cn.ideabuffer.process.core.ProcessDefinition;
-import cn.ideabuffer.process.core.ProcessInstance;
-import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
@@ -28,11 +25,12 @@ public class LifecycleTest {
     @Test
     public void testLifecycle1() throws Exception {
         Key<String> resultKey = new Key<>("resultKey", String.class);
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>(resultKey);
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>(resultKey);
 
         Processor<String> processor1 = new TestLifecycleProcessor1();
         Processor<String> processor2 = new TestLifecycleProcessor2();
-        definition
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .resultKey(resultKey)
             // 注册执行节点
             .addProcessNodes(
                 ProcessNodeBuilder.<String>newBuilder()
@@ -47,7 +45,8 @@ public class LifecycleTest {
                     .resultKey(resultKey)
                     .by(processor2)
                     .returnOn(result -> false)
-                    .build());
+                    .build())
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 

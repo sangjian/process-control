@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.test;
 
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -33,9 +34,9 @@ public class ExecutableNodeTest {
 
     @Test
     public void testSimpleExecutableNode() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
-        definition
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
             .addProcessNodes(
                 ProcessNodeBuilder.<ProcessStatus>newBuilder()
                     .by(new TestExecutableNodeProcessor1())
@@ -46,7 +47,8 @@ public class ExecutableNodeTest {
                     .by(new TestExecutableNodeProcessor2())
                     .readableKeys(key)
                     .writableKeys(key)
-                    .build());
+                    .build())
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(key, 1);
@@ -61,7 +63,7 @@ public class ExecutableNodeTest {
      */
     @Test
     public void testParallel() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         // 执行规则
         Rule rule = (ctx) -> true;
         Executor executor = Executors.newFixedThreadPool(2);
@@ -90,8 +92,9 @@ public class ExecutableNodeTest {
             })
             .writableKeys(key)
             .build();
-        definition
-            .addProcessNodes(node1, node2);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node1, node2)
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         // 初始化key的值为1

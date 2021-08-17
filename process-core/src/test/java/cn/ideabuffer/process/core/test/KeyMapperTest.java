@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.test;
 
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -21,14 +22,14 @@ public class KeyMapperTest {
 
     @Test
     public void testMapping() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
 
         KeyMapper mapper = new KeyMapper();
         Key<Integer> newKey = Contexts.newKey("newKey", int.class);
         Key<Integer> oldKey = Contexts.newKey("oldKey", int.class);
         mapper.map(oldKey, newKey);
 
-        definition
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
             // 注册执行节点
             .addProcessNodes(ProcessNodeBuilder.<Void>newBuilder().by(context -> {
                     assertNull(null, context.get(oldKey));
@@ -58,7 +59,8 @@ public class KeyMapperTest {
                     .readableKeys(oldKey)
                     .writableKeys(oldKey)
                     .build()
-            );
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(newKey, 123);

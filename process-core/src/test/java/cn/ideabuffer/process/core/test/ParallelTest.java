@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.test;
 
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.Nodes;
@@ -34,7 +35,7 @@ public class ParallelTest {
      */
     @Test
     public void testParallelNode() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Thread mainThread = Thread.currentThread();
         ParallelBranchNode node = ParallelBranchNodeBuilder.newBuilder()
             .addBranch(Nodes.newProcessNode(context -> {
@@ -49,15 +50,17 @@ public class ParallelTest {
             }))
             // 所有分支返回继续，才可进行后续节点执行，否则后续节点不执行
             .proceedWhen(ProceedStrategies.ALL_PROCEEDED).build();
-        definition.addProcessNodes(node);
-        definition.addProcessNodes(ProcessNodeBuilder.newBuilder()
-            .by(context -> {
-                LOGGER.info("in node3");
-                assertEquals(mainThread, Thread.currentThread());
-                return null;
-            })
-            .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node)
+            .addProcessNodes(ProcessNodeBuilder.newBuilder()
+                .by(context -> {
+                    LOGGER.info("in node3");
+                    assertEquals(mainThread, Thread.currentThread());
+                    return null;
+                })
+                .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(Contexts.newContext());
@@ -70,7 +73,7 @@ public class ParallelTest {
      */
     @Test
     public void testAllProceeded() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean node1Flag = new AtomicBoolean();
         AtomicBoolean node2Flag = new AtomicBoolean();
         AtomicBoolean node3Flag = new AtomicBoolean();
@@ -89,17 +92,19 @@ public class ParallelTest {
             // 所有分支返回继续，才可进行后续节点执行，否则后续节点不执行
             .proceedWhen(ProceedStrategies.ALL_PROCEEDED)
             .build();
-        definition.addProcessNodes(node);
-        definition.addProcessNodes(ProcessNodeBuilder.newBuilder()
-            .by(context -> {
-                LOGGER.info("in node3");
-                // 检查并行执行的两个节点，确保都已执行完毕
-                assertTrue(node1Flag.get() && node2Flag.get());
-                node3Flag.set(true);
-                return null;
-            })
-            .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node)
+            .addProcessNodes(ProcessNodeBuilder.newBuilder()
+                .by(context -> {
+                    LOGGER.info("in node3");
+                    // 检查并行执行的两个节点，确保都已执行完毕
+                    assertTrue(node1Flag.get() && node2Flag.get());
+                    node3Flag.set(true);
+                    return null;
+                })
+                .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(Contexts.newContext());
@@ -113,7 +118,7 @@ public class ParallelTest {
      */
     @Test
     public void testAtLeastOneProceeded() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean node1Flag = new AtomicBoolean();
         AtomicBoolean node2Flag = new AtomicBoolean();
         ParallelBranchNode node = ParallelBranchNodeBuilder.newBuilder()
@@ -131,17 +136,19 @@ public class ParallelTest {
             // 所有分支返回继续，才可进行后续节点执行，否则后续节点不执行
             .proceedWhen(ProceedStrategies.AT_LEAST_ONE_PROCEEDED)
             .build();
-        definition.addProcessNodes(node);
-        definition.addProcessNodes(ProcessNodeBuilder.newBuilder()
-            .by(context -> {
-                LOGGER.info("in node3");
-                // 至少有一个分支返回继续，才可进行后续节点执行，否则后续节点不执行
-                // 判断node1执行完毕，但node2还未执行完毕
-                assertTrue(node1Flag.get() && !node2Flag.get());
-                return null;
-            })
-            .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node)
+            .addProcessNodes(ProcessNodeBuilder.newBuilder()
+                .by(context -> {
+                    LOGGER.info("in node3");
+                    // 至少有一个分支返回继续，才可进行后续节点执行，否则后续节点不执行
+                    // 判断node1执行完毕，但node2还未执行完毕
+                    assertTrue(node1Flag.get() && !node2Flag.get());
+                    return null;
+                })
+                .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(Contexts.newContext());
@@ -154,7 +161,7 @@ public class ParallelTest {
      */
     @Test
     public void testAtLeastOneProceeded2() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean node1Flag = new AtomicBoolean();
         AtomicBoolean node2Flag = new AtomicBoolean();
         AtomicBoolean node3Flag = new AtomicBoolean();
@@ -173,15 +180,17 @@ public class ParallelTest {
             // 至少有一个分支返回继续，才可进行后续节点执行，否则后续节点不执行
             .proceedWhen(ProceedStrategies.AT_LEAST_ONE_PROCEEDED)
             .build();
-        definition.addProcessNodes(node);
-        definition.addProcessNodes(ProcessNodeBuilder.newBuilder()
-            .by(context -> {
-                LOGGER.info("in node3");
-                node3Flag.set(true);
-                return null;
-            })
-            .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node)
+            .addProcessNodes(ProcessNodeBuilder.newBuilder()
+                .by(context -> {
+                    LOGGER.info("in node3");
+                    node3Flag.set(true);
+                    return null;
+                })
+                .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(Contexts.newContext());
@@ -196,7 +205,7 @@ public class ParallelTest {
      */
     @Test
     public void testAtLeastOneFinished() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean node1Flag = new AtomicBoolean();
         AtomicBoolean node2Flag = new AtomicBoolean();
         AtomicBoolean node3Flag = new AtomicBoolean();
@@ -216,17 +225,19 @@ public class ParallelTest {
             // 执行完毕不关心是proceed还是complete
             .proceedWhen(ProceedStrategies.AT_LEAST_ONE_FINISHED)
             .build();
-        definition.addProcessNodes(node);
-        definition.addProcessNodes(ProcessNodeBuilder.newBuilder()
-            .by(context -> {
-                LOGGER.info("in node3");
-                node3Flag.set(true);
-                // 判断node1执行完毕，但node2还未执行完毕
-                assertTrue(node1Flag.get() && !node2Flag.get());
-                return null;
-            })
-            .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node)
+            .addProcessNodes(ProcessNodeBuilder.newBuilder()
+                .by(context -> {
+                    LOGGER.info("in node3");
+                    node3Flag.set(true);
+                    // 判断node1执行完毕，但node2还未执行完毕
+                    assertTrue(node1Flag.get() && !node2Flag.get());
+                    return null;
+                })
+                .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(Contexts.newContext());
@@ -241,7 +252,7 @@ public class ParallelTest {
      */
     @Test
     public void testAllFinished() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean node1Flag = new AtomicBoolean();
         AtomicBoolean node2Flag = new AtomicBoolean();
         AtomicBoolean node3Flag = new AtomicBoolean();
@@ -260,17 +271,19 @@ public class ParallelTest {
             // 所有分支返回继续，才可进行后续节点执行，否则后续节点不执行
             .proceedWhen(ProceedStrategies.ALL_FINISHED)
             .build();
-        definition.addProcessNodes(node);
-        definition.addProcessNodes(ProcessNodeBuilder.newBuilder()
-            .by(context -> {
-                LOGGER.info("in node3");
-                node3Flag.set(true);
-                // 检查并行执行的两个节点，判断所有节点并行执行结束
-                assertTrue(node1Flag.get() && node2Flag.get());
-                return null;
-            })
-            .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node)
+            .addProcessNodes(ProcessNodeBuilder.newBuilder()
+                .by(context -> {
+                    LOGGER.info("in node3");
+                    node3Flag.set(true);
+                    // 检查并行执行的两个节点，判断所有节点并行执行结束
+                    assertTrue(node1Flag.get() && node2Flag.get());
+                    return null;
+                })
+                .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(Contexts.newContext());
@@ -284,7 +297,7 @@ public class ParallelTest {
      */
     @Test
     public void testSubmitted() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean node1Flag = new AtomicBoolean();
         AtomicBoolean node2Flag = new AtomicBoolean();
         AtomicBoolean node3Flag = new AtomicBoolean();
@@ -304,17 +317,19 @@ public class ParallelTest {
             // 所有分支返回继续，才可进行后续节点执行，否则后续节点不执行
             .proceedWhen(ProceedStrategies.SUBMITTED)
             .build();
-        definition.addProcessNodes(node);
-        definition.addProcessNodes(ProcessNodeBuilder.newBuilder()
-            .by(context -> {
-                LOGGER.info("in node3");
-                node3Flag.set(true);
-                // 检查并行执行的两个节点，只关心节点已提交至并行执行，不关心执行进度
-                assertTrue(!node1Flag.get() && !node2Flag.get());
-                return null;
-            })
-            .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node)
+            .addProcessNodes(ProcessNodeBuilder.newBuilder()
+                .by(context -> {
+                    LOGGER.info("in node3");
+                    node3Flag.set(true);
+                    // 检查并行执行的两个节点，只关心节点已提交至并行执行，不关心执行进度
+                    assertTrue(!node1Flag.get() && !node2Flag.get());
+                    return null;
+                })
+                .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
 
         instance.execute(Contexts.newContext());

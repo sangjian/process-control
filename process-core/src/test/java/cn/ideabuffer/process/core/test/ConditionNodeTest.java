@@ -1,9 +1,6 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.DefaultProcessDefinition;
-import cn.ideabuffer.process.core.ProcessDefinition;
-import cn.ideabuffer.process.core.ProcessInstance;
-import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.block.Block;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -35,7 +32,7 @@ public class ConditionNodeTest {
 
     @Test
     public void testIf() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
         // 创建true分支
         BranchNode trueBranch = Nodes.newBranch(ProcessNodeBuilder.<ProcessStatus>newBuilder()
@@ -57,15 +54,17 @@ public class ConditionNodeTest {
         // 判断条件，判断key对应的值是否小于5
         Rule rule = ctx -> ctx.get(key, 0) < 5;
 
-        // 如果满足条件，执行true分支，否则执行false分支
-        definition.addIf(
-            IfNodeBuilder.newBuilder()
-                .processOn(rule)
-                .readableKeys(key)
-                .then(trueBranch)
-                .otherwise(falseBranch)
-                .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            // 如果满足条件，执行true分支，否则执行false分支
+            .addIf(
+                IfNodeBuilder.newBuilder()
+                    .processOn(rule)
+                    .readableKeys(key)
+                    .then(trueBranch)
+                    .otherwise(falseBranch)
+                    .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(key, 0);
@@ -77,7 +76,7 @@ public class ConditionNodeTest {
 
     @Test
     public void testWhile() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicInteger counter1 = new AtomicInteger();
         AtomicInteger counter2 = new AtomicInteger();
         AtomicInteger ruleCounter = new AtomicInteger();
@@ -95,38 +94,40 @@ public class ConditionNodeTest {
             ruleCounter.incrementAndGet();
             return k < 10;
         };
-        definition.addWhile(
-            WhileNodeBuilder.newBuilder()
-                .processOn(rule)
-                .readableKeys(key)
-                .then(
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder()
-                        .by(context -> {
-                            // 节点执行次数
-                            counter1.incrementAndGet();
-                            int k = context.get(key, 0);
-                            // 每次执行++k
-                            context.put(key, ++k);
-                            return ProcessStatus.proceed();
-                        })
-                        .readableKeys(key)
-                        .writableKeys(key)
-                        .build(),
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder()
-                        .by(context -> {
-                            // 节点执行次数
-                            counter2.incrementAndGet();
-                            int k = context.get(key, 0);
-                            // 每次执行++k
-                            context.put(key, ++k);
-                            return ProcessStatus.proceed();
-                        })
-                        .readableKeys(key)
-                        .writableKeys(key)
-                        .build()
-                )
-                .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addWhile(
+                WhileNodeBuilder.newBuilder()
+                    .processOn(rule)
+                    .readableKeys(key)
+                    .then(
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                            .by(context -> {
+                                // 节点执行次数
+                                counter1.incrementAndGet();
+                                int k = context.get(key, 0);
+                                // 每次执行++k
+                                context.put(key, ++k);
+                                return ProcessStatus.proceed();
+                            })
+                            .readableKeys(key)
+                            .writableKeys(key)
+                            .build(),
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                            .by(context -> {
+                                // 节点执行次数
+                                counter2.incrementAndGet();
+                                int k = context.get(key, 0);
+                                // 每次执行++k
+                                context.put(key, ++k);
+                                return ProcessStatus.proceed();
+                            })
+                            .readableKeys(key)
+                            .writableKeys(key)
+                            .build()
+                    )
+                    .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(key, 0);
@@ -139,7 +140,7 @@ public class ConditionNodeTest {
 
     @Test
     public void testDoWhile() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicInteger counter1 = new AtomicInteger();
         AtomicInteger counter2 = new AtomicInteger();
         AtomicInteger ruleCounter = new AtomicInteger();
@@ -157,37 +158,39 @@ public class ConditionNodeTest {
             ruleCounter.incrementAndGet();
             return k < 10;
         };
-        definition.addDoWhile(
-            DoWhileNodeBuilder.newBuilder().processOn(rule)
-                .readableKeys(key)
-                .then(
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder()
-                        .by(context -> {
-                            // 节点执行次数
-                            counter1.incrementAndGet();
-                            int k = context.get(key, 0);
-                            // 每次执行++k
-                            context.put(key, ++k);
-                            return ProcessStatus.proceed();
-                        })
-                        .readableKeys(key)
-                        .writableKeys(key)
-                        .build(),
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder()
-                        .by(context -> {
-                            // 节点执行次数
-                            counter2.incrementAndGet();
-                            int k = context.get(key, 0);
-                            // 每次执行++k
-                            context.put(key, ++k);
-                            return ProcessStatus.proceed();
-                        })
-                        .readableKeys(key)
-                        .writableKeys(key)
-                        .build()
-                )
-                .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addDoWhile(
+                DoWhileNodeBuilder.newBuilder().processOn(rule)
+                    .readableKeys(key)
+                    .then(
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                            .by(context -> {
+                                // 节点执行次数
+                                counter1.incrementAndGet();
+                                int k = context.get(key, 0);
+                                // 每次执行++k
+                                context.put(key, ++k);
+                                return ProcessStatus.proceed();
+                            })
+                            .readableKeys(key)
+                            .writableKeys(key)
+                            .build(),
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                            .by(context -> {
+                                // 节点执行次数
+                                counter2.incrementAndGet();
+                                int k = context.get(key, 0);
+                                // 每次执行++k
+                                context.put(key, ++k);
+                                return ProcessStatus.proceed();
+                            })
+                            .readableKeys(key)
+                            .writableKeys(key)
+                            .build()
+                    )
+                    .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
         context.put(key, 0);
@@ -230,7 +233,7 @@ public class ConditionNodeTest {
      */
     @Test
     public void testWhileContinue() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
         // 整体循环计数器
         AtomicInteger counter = new AtomicInteger();
@@ -247,7 +250,8 @@ public class ConditionNodeTest {
             LOGGER.info("in rule k={}, counter:{}", context.get(key, 0), counter.get());
             return context.get(key, 0) < 10 && counter.getAndIncrement() < 10;
         };
-        definition.addWhile(
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addWhile(
             WhileNodeBuilder.newBuilder()
                 .processOn(rule)
                 .readableKeys(key)
@@ -285,7 +289,8 @@ public class ConditionNodeTest {
                         .build()
                 )
                 .build()
-        );
+        )
+                .build();
         ProcessInstance<String> instance = definition.newInstance();
 
         Context context = Contexts.newContext();
@@ -328,7 +333,7 @@ public class ConditionNodeTest {
      */
     @Test
     public void testDoWhileContinue() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
         // 整体循环计数器
         AtomicInteger counter = new AtomicInteger();
@@ -345,44 +350,46 @@ public class ConditionNodeTest {
             LOGGER.info("in rule k={}, counter:{}", context.get(key, 0), counter.get());
             return context.get(key, 0) < 10 && counter.getAndIncrement() < 10;
         };
-        definition.addDoWhile(
-            DoWhileNodeBuilder.newBuilder().processOn(rule)
-                .readableKeys(key)
-                .then(
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder()
-                        .by(context -> {
-                            processor1Counter.incrementAndGet();
-                            Block block = context.getBlock();
-                            int k = context.get(key, 0);
-                            LOGGER.info("in node1 k={}", k);
-                            context.put(key, ++k);
-                            if (k == 5 && block.allowContinue()) {
-                                LOGGER.info("in node1 k == 5, continued");
-                                continueCounter.getAndIncrement();
-                                context.put(key, 0);
-                                block.doContinue();
-                            }
-                            return ProcessStatus.proceed();
-                        })
-                        .readableKeys(key)
-                        .writableKeys(key)
-                        .build(),
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder()
-                        .by(context -> {
-                            processor2Counter.incrementAndGet();
-                            int k = context.get(key, 0);
-                            if (k > processor2MaxK.get()) {
-                                processor2MaxK.set(k);
-                            }
-                            LOGGER.info("in node2 k={}, processor2MaxK:{}", k, processor2MaxK);
-                            return ProcessStatus.proceed();
-                        })
-                        .readableKeys(key)
-                        .writableKeys(key)
-                        .build()
-                )
-                .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addDoWhile(
+                DoWhileNodeBuilder.newBuilder().processOn(rule)
+                    .readableKeys(key)
+                    .then(
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                            .by(context -> {
+                                processor1Counter.incrementAndGet();
+                                Block block = context.getBlock();
+                                int k = context.get(key, 0);
+                                LOGGER.info("in node1 k={}", k);
+                                context.put(key, ++k);
+                                if (k == 5 && block.allowContinue()) {
+                                    LOGGER.info("in node1 k == 5, continued");
+                                    continueCounter.getAndIncrement();
+                                    context.put(key, 0);
+                                    block.doContinue();
+                                }
+                                return ProcessStatus.proceed();
+                            })
+                            .readableKeys(key)
+                            .writableKeys(key)
+                            .build(),
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                            .by(context -> {
+                                processor2Counter.incrementAndGet();
+                                int k = context.get(key, 0);
+                                if (k > processor2MaxK.get()) {
+                                    processor2MaxK.set(k);
+                                }
+                                LOGGER.info("in node2 k={}, processor2MaxK:{}", k, processor2MaxK);
+                                return ProcessStatus.proceed();
+                            })
+                            .readableKeys(key)
+                            .writableKeys(key)
+                            .build()
+                    )
+                    .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
 
         Context context = Contexts.newContext();
@@ -429,7 +436,7 @@ public class ConditionNodeTest {
      */
     @Test
     public void testWhileBreak() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
         Rule rule = context -> context.get(key, 0) < 10;
         AtomicBoolean processor1Flag = new AtomicBoolean();
@@ -437,31 +444,33 @@ public class ConditionNodeTest {
         AtomicBoolean processor3Flag = new AtomicBoolean();
         AtomicBoolean breakFlag = new AtomicBoolean();
 
-        // 循环分支包含3个节点，前两个节点每次对k进行加1，第二个节点进行break
-        definition.addWhile(
-            WhileNodeBuilder.newBuilder()
-                .processOn(rule)
-                .readableKeys(key)
-                .then(ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
-                        processor1Flag.set(true);
-                        context.put(key, context.get(key, 0) + 1);
-                        return ProcessStatus.proceed();
-                    }).readableKeys(key).writableKeys(key).build(),
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
-                        processor2Flag.set(true);
-                        context.put(key, context.get(key, 0) + 1);
-                        if (context.getBlock().allowBreak()) {
-                            breakFlag.set(true);
-                            context.getBlock().doBreak();
-                        }
-                        return ProcessStatus.proceed();
-                    }).readableKeys(key).writableKeys(key).build(),
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
-                        processor3Flag.set(true);
-                        return ProcessStatus.proceed();
-                    }).build())
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            // 循环分支包含3个节点，前两个节点每次对k进行加1，第二个节点进行break
+            .addWhile(
+                WhileNodeBuilder.newBuilder()
+                    .processOn(rule)
+                    .readableKeys(key)
+                    .then(ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
+                            processor1Flag.set(true);
+                            context.put(key, context.get(key, 0) + 1);
+                            return ProcessStatus.proceed();
+                        }).readableKeys(key).writableKeys(key).build(),
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
+                            processor2Flag.set(true);
+                            context.put(key, context.get(key, 0) + 1);
+                            if (context.getBlock().allowBreak()) {
+                                breakFlag.set(true);
+                                context.getBlock().doBreak();
+                            }
+                            return ProcessStatus.proceed();
+                        }).readableKeys(key).writableKeys(key).build(),
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
+                            processor3Flag.set(true);
+                            return ProcessStatus.proceed();
+                        }).build())
                     .build()
-        );
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -508,7 +517,7 @@ public class ConditionNodeTest {
      */
     @Test
     public void testDoWhileBreak() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
         Rule rule = context -> context.get(key, 0) < 10;
         AtomicBoolean processor1Flag = new AtomicBoolean();
@@ -516,30 +525,32 @@ public class ConditionNodeTest {
         AtomicBoolean processor3Flag = new AtomicBoolean();
         AtomicBoolean breakFlag = new AtomicBoolean();
 
-        // 循环分支包含3个节点，前两个节点每次对k进行加1，第二个节点进行break
-        definition.addDoWhile(
-            DoWhileNodeBuilder.newBuilder().processOn(rule)
-                .readableKeys(key)
-                .then(ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
-                        processor1Flag.set(true);
-                        context.put(key, context.get(key, 0) + 1);
-                        return ProcessStatus.proceed();
-                    }).readableKeys(key).writableKeys(key).build(),
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
-                        processor2Flag.set(true);
-                        context.put(key, context.get(key, 0) + 1);
-                        if (context.getBlock().allowBreak()) {
-                            breakFlag.set(true);
-                            context.getBlock().doBreak();
-                        }
-                        return ProcessStatus.proceed();
-                    }).readableKeys(key).writableKeys(key).build(),
-                    ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
-                        processor3Flag.set(true);
-                        return ProcessStatus.proceed();
-                    }).build())
-                .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            // 循环分支包含3个节点，前两个节点每次对k进行加1，第二个节点进行break
+            .addDoWhile(
+                DoWhileNodeBuilder.newBuilder().processOn(rule)
+                    .readableKeys(key)
+                    .then(ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
+                            processor1Flag.set(true);
+                            context.put(key, context.get(key, 0) + 1);
+                            return ProcessStatus.proceed();
+                        }).readableKeys(key).writableKeys(key).build(),
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
+                            processor2Flag.set(true);
+                            context.put(key, context.get(key, 0) + 1);
+                            if (context.getBlock().allowBreak()) {
+                                breakFlag.set(true);
+                                context.getBlock().doBreak();
+                            }
+                            return ProcessStatus.proceed();
+                        }).readableKeys(key).writableKeys(key).build(),
+                        ProcessNodeBuilder.<ProcessStatus>newBuilder().by(context -> {
+                            processor3Flag.set(true);
+                            return ProcessStatus.proceed();
+                        }).build())
+                    .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -587,81 +598,81 @@ public class ConditionNodeTest {
      */
     @Test
     public void testNesting() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
         Key<Integer> counter = Contexts.newKey("counter", int.class);
         Rule rule = context -> context.get(key, 0) < 10;
 
         AtomicBoolean afterContinueFlag = new AtomicBoolean(false);
         AtomicBoolean afterBreakFlag = new AtomicBoolean(false);
-
-        definition.addWhile(
-            WhileNodeBuilder.newBuilder().processOn((ctx) -> true)
-                .then(
-                    WhileNodeBuilder.newBuilder().processOn(rule)
-                        .readableKeys(key)
-                        .then(
-                            ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                                context.put(key, context.get(key, 0) + 1);
-                                return null;
-                            }).readableKeys(key).writableKeys(key).build(),
-                            IfNodeBuilder.newBuilder()
-                                .processOn(context -> context.get(key, 0) % 2 == 1)
-                                .readableKeys(key)
-                                .then(
-                                    IfNodeBuilder.newBuilder()
-                                        .processOn(context -> context.get(key, 0) == 5)
-                                        .readableKeys(key)
-                                        .then(
-                                            ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                                                if (context.getBlock().allowContinue()) {
-                                                    context.getBlock().doContinue();
-                                                }
-                                                return null;
-                                            }).build(),
-                                            ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                                                afterContinueFlag.set(true);
-                                                System.out.println("after if continue");
-                                                return null;
-                                            }).build()
-                                        ).build()
-                                ).build(),
-                            IfNodeBuilder.newBuilder()
-                                .processOn(context -> context.get(key, 0) % 2 == 0)
-                                .readableKeys(key)
-                                .then(
-                                    IfNodeBuilder.newBuilder().processOn(context -> context.get(key, 0) == 8)
-                                        .readableKeys(key)
-                                        .then(
-                                            ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                                                if (context.getBlock().allowBreak()) {
-                                                    context.getBlock().doBreak();
-                                                }
-                                                return null;
-                                            }).build(),
-                                            ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                                                afterBreakFlag.set(true);
-                                                System.out.println("after if break");
-                                                return null;
-                                            }).build()).build()
-                                ).build(),
-                            ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                                context.put(counter, context.get(counter, 0) + 1);
-                                return null;
-                            }).readableKeys(counter).writableKeys(counter).build())
-                        .build(),
-            ProcessNodeBuilder.<Void>newBuilder().by(context -> {
-                LOGGER.info("k = {}, counter = {}", context.get(key), context.get(counter));
-                return null;
-            }).readableKeys(key, counter).build(),
-            Nodes.newProcessNode((Processor<Void>)context -> {
-                if (context.getBlock().allowBreak()) {
-                    context.getBlock().doBreak();
-                }
-                return null;
-            })
-        )
-        .build());
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addWhile(
+                WhileNodeBuilder.newBuilder().processOn((ctx) -> true)
+                    .then(
+                        WhileNodeBuilder.newBuilder().processOn(rule)
+                            .readableKeys(key)
+                            .then(
+                                ProcessNodeBuilder.<Void>newBuilder().by(context -> {
+                                    context.put(key, context.get(key, 0) + 1);
+                                    return null;
+                                }).readableKeys(key).writableKeys(key).build(),
+                                IfNodeBuilder.newBuilder()
+                                    .processOn(context -> context.get(key, 0) % 2 == 1)
+                                    .readableKeys(key)
+                                    .then(
+                                        IfNodeBuilder.newBuilder()
+                                            .processOn(context -> context.get(key, 0) == 5)
+                                            .readableKeys(key)
+                                            .then(
+                                                ProcessNodeBuilder.<Void>newBuilder().by(context -> {
+                                                    if (context.getBlock().allowContinue()) {
+                                                        context.getBlock().doContinue();
+                                                    }
+                                                    return null;
+                                                }).build(),
+                                                ProcessNodeBuilder.<Void>newBuilder().by(context -> {
+                                                    afterContinueFlag.set(true);
+                                                    System.out.println("after if continue");
+                                                    return null;
+                                                }).build()
+                                            ).build()
+                                    ).build(),
+                                IfNodeBuilder.newBuilder()
+                                    .processOn(context -> context.get(key, 0) % 2 == 0)
+                                    .readableKeys(key)
+                                    .then(
+                                        IfNodeBuilder.newBuilder().processOn(context -> context.get(key, 0) == 8)
+                                            .readableKeys(key)
+                                            .then(
+                                                ProcessNodeBuilder.<Void>newBuilder().by(context -> {
+                                                    if (context.getBlock().allowBreak()) {
+                                                        context.getBlock().doBreak();
+                                                    }
+                                                    return null;
+                                                }).build(),
+                                                ProcessNodeBuilder.<Void>newBuilder().by(context -> {
+                                                    afterBreakFlag.set(true);
+                                                    System.out.println("after if break");
+                                                    return null;
+                                                }).build()).build()
+                                    ).build(),
+                                ProcessNodeBuilder.<Void>newBuilder().by(context -> {
+                                    context.put(counter, context.get(counter, 0) + 1);
+                                    return null;
+                                }).readableKeys(counter).writableKeys(counter).build())
+                            .build(),
+                        ProcessNodeBuilder.<Void>newBuilder().by(context -> {
+                            LOGGER.info("k = {}, counter = {}", context.get(key), context.get(counter));
+                            return null;
+                        }).readableKeys(key, counter).build(),
+                        Nodes.newProcessNode((Processor<Void>) context -> {
+                            if (context.getBlock().allowBreak()) {
+                                context.getBlock().doBreak();
+                            }
+                            return null;
+                        })
+                    ).build())
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 

@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.test;
 
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -21,42 +22,49 @@ public class KeyCheckTest {
 
     @Test(expected = UnreadableKeyException.class)
     public void unreadableKeyTest() throws Exception {
-        ProcessDefinition<Void> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<Void> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", Integer.class);
-        definition.addProcessNodes(ProcessNodeBuilder.<Void>newBuilder()
-            .by(context -> {
-                context.get(key);
-                return null;
-            }).build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(ProcessNodeBuilder.<Void>newBuilder()
+                .by(context -> {
+                    context.get(key);
+                    return null;
+                }).build()
+            )
+            .build();
         definition.newInstance().execute(Contexts.newContext());
     }
 
     @Test(expected = UnwritableKeyException.class)
     public void keyNotWritableTest() throws Exception {
-        ProcessDefinition<Void> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<Void> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", Integer.class);
-        definition.addProcessNodes(ProcessNodeBuilder.<Void>newBuilder()
-            .by(context -> {
-                context.put(key, 67);
-                return null;
-            }).build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(ProcessNodeBuilder.<Void>newBuilder()
+                .by(context -> {
+                    context.put(key, 67);
+                    return null;
+                }).build()
+            )
+            .build();
         definition.newInstance().execute(Contexts.newContext());
     }
 
     @Test
     public void resultKeyTest() throws Exception {
         Key<Integer> key = Contexts.newKey("k", Integer.class);
-        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(key);
-        definition.addProcessNodes(ProcessNodeBuilder.<Integer>newBuilder()
-            .by(context -> {
-                return 67;
-            })
+//        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(key);
+        ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
             .resultKey(key)
-            .returnOn(result -> result != null && result % 2 == 1)
-            .build()
-        );
+            .addProcessNodes(ProcessNodeBuilder.<Integer>newBuilder()
+                .by(context -> {
+                    return 67;
+                })
+                .resultKey(key)
+                .returnOn(result -> result != null && result % 2 == 1)
+                .build()
+            )
+            .build();
         ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
         instance.execute(context);

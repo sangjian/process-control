@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.test;
 
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.ProcessNode;
@@ -24,7 +25,7 @@ public class EnabledTest {
 
     @Test
     public void testEnable() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean flag = new AtomicBoolean();
         ProcessNode<ProcessStatus> node = ProcessNodeBuilder.<ProcessStatus>newBuilder()
             .by(context -> {
@@ -33,7 +34,9 @@ public class EnabledTest {
             })
             .enabled(() -> ENABLE)
             .build();
-        definition.addProcessNodes(node);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node)
+            .build();
         Context context = Contexts.newContext();
         definition.newInstance().execute(context);
         assertFalse(flag.get());

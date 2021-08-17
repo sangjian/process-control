@@ -1,4 +1,4 @@
-package cn.ideabuffer.process.core.nodes.builder;
+package cn.ideabuffer.process.core;
 
 /**
  * @author sangjian.sj

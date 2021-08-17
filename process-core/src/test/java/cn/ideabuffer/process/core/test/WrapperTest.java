@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.test;
 
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -35,7 +36,7 @@ public class WrapperTest {
     @Test
     public void testDefaultProcessorProxy() throws Exception {
         Key<Integer> resultKey = new Key<>("resultKey", int.class);
-        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
+//        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
 
         AtomicInteger counter = new AtomicInteger();
         AtomicInteger processor1Order = new AtomicInteger();
@@ -112,9 +113,11 @@ public class WrapperTest {
 
 
 
-        definition
+        ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
+            .resultKey(resultKey)
             // 注册执行节点
-            .addProcessNodes(node1, node2);
+            .addProcessNodes(node1, node2)
+            .build();
         ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -134,7 +137,7 @@ public class WrapperTest {
     @Test
     public void testDefaultProcessorProxyThrowing() throws Exception {
         Key<Integer> resultKey = new Key<>("resultKey", int.class);
-        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
+//        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
 
         AtomicInteger counter = new AtomicInteger();
         AtomicInteger processor1Order = new AtomicInteger();
@@ -213,9 +216,11 @@ public class WrapperTest {
 
 
 
-        definition
+        ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
+            .resultKey(resultKey)
             // 注册执行节点
-            .addProcessNodes(node1, node2);
+            .addProcessNodes(node1, node2)
+            .build();
         ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -237,7 +242,7 @@ public class WrapperTest {
     @Test
     public void testWhileProcessorProxy() throws Exception {
         Key<Integer> resultKey = new Key<>("resultKey", int.class);
-        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
+//        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(resultKey);
 
         AtomicInteger counter = new AtomicInteger();
         // 循环次数
@@ -319,9 +324,11 @@ public class WrapperTest {
             .build();
 
 
-        definition
+        ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
+            .resultKey(resultKey)
             // 注册执行节点
-            .addWhile(whileNode);
+            .addWhile(whileNode)
+            .build();
         ProcessInstance<Integer> instance = definition.newInstance();
         Context context = Contexts.newContext();
 

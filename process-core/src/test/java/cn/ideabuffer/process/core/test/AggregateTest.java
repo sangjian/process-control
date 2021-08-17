@@ -1,9 +1,6 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.DefaultProcessDefinition;
-import cn.ideabuffer.process.core.DefaultProcessInstance;
-import cn.ideabuffer.process.core.ProcessDefinition;
-import cn.ideabuffer.process.core.ProcessInstance;
+import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.aggregators.Aggregators;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -43,7 +40,6 @@ public class AggregateTest {
     public void testUnitAggregateList() throws Exception {
 
         Key<List<String>> resultKey = Contexts.newKey("resultKey", List.class);
-        ProcessDefinition<List<String>> definition = new DefaultProcessDefinition<>(resultKey);
         Executor executor = Executors.newFixedThreadPool(3);
 
         GenericMergeableNode<List<String>> node1 = GenericMergeableNodeBuilder.<List<String>>newBuilder()
@@ -82,7 +78,10 @@ public class AggregateTest {
             assertEquals("size must be 2", 2, (int)size);
             logger.info("result:{}", size);
         });
-        definition.addAggregateNode(node);
+        ProcessDefinition<List<String>> definition = ProcessDefinitionBuilder.<List<String>>newBuilder()
+                .resultKey(resultKey)
+                .addAggregateNode(node)
+                .build();
 
         ProcessInstance<List<String>> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -93,7 +92,7 @@ public class AggregateTest {
     @Test
     public void testGenericAggregateList() throws Exception {
         Key<List<String>> resultKey = Contexts.newKey("resultKey", List.class);
-        ProcessDefinition<List<String>> definition = new DefaultProcessDefinition<>(resultKey);
+//        ProcessDefinition<List<String>> definition = new DefaultProcessDefinition<>(resultKey);
 
         Executor executor = Executors.newFixedThreadPool(3);
 
@@ -127,7 +126,10 @@ public class AggregateTest {
             assertEquals("size must be 2", 2, (int)size);
             logger.info("result:{}", size);
         });
-        definition.addAggregateNode(node);
+        ProcessDefinition<List<String>> definition = ProcessDefinitionBuilder.<List<String>>newBuilder()
+                .resultKey(resultKey)
+                .addAggregateNode(node)
+                .build();
 
         ProcessInstance<List<String>> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -142,7 +144,7 @@ public class AggregateTest {
 
     @Test
     public void testTimeoutGenericAggregateList() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
 
         Executor executor = Executors.newFixedThreadPool(3);
 
@@ -172,7 +174,9 @@ public class AggregateTest {
             assertEquals("size must be 1", 1, (int)size);
             logger.info("result:{}", size);
         });
-        definition.addAggregateNode(node);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addAggregateNode(node)
+            .build();
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -185,7 +189,7 @@ public class AggregateTest {
 
     @Test
     public void testGenericAggregateListWithException() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
 
         Executor executor = Executors.newFixedThreadPool(3);
 
@@ -214,7 +218,9 @@ public class AggregateTest {
             assertEquals("size must be 1", 1, (int)size);
             logger.info("result:{}", size);
         });
-        definition.addAggregateNode(node);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addAggregateNode(node)
+            .build();
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -227,7 +233,7 @@ public class AggregateTest {
 
     @Test
     public void testIntSum() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         GenericMergeableNode<Integer> node1 = GenericMergeableNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor1())
             .build();
         GenericMergeableNode<Integer> node2 = GenericMergeableNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor2())
@@ -244,7 +250,9 @@ public class AggregateTest {
             assertEquals(25, (int)result);
             return result;
         }));
-        definition.addAggregateNode(node);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addAggregateNode(node)
+            .build();
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -254,7 +262,7 @@ public class AggregateTest {
 
     @Test
     public void testIntAvg() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         GenericMergeableNode<Integer> node1 = GenericMergeableNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor1())
             .build();
         GenericMergeableNode<Integer> node2 = GenericMergeableNodeBuilder.<Integer>newBuilder().by(new IntMergeNodeProcessor2())
@@ -271,7 +279,9 @@ public class AggregateTest {
             assertEquals(12, (int)result);
             return result;
         }));
-        definition.addAggregateNode(node);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addAggregateNode(node)
+                .build();
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -281,7 +291,7 @@ public class AggregateTest {
 
     @Test
     public void testDoubleSum() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         GenericMergeableNode<Double> node1 = GenericMergeableNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor1())
             .build();
         GenericMergeableNode<Double> node2 = GenericMergeableNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor2())
@@ -297,7 +307,9 @@ public class AggregateTest {
             assertEquals("double sum must be 25d", 25d, result, 0.001d);
             return result;
         }));
-        definition.addAggregateNode(node);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addAggregateNode(node)
+                .build();
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -307,7 +319,7 @@ public class AggregateTest {
 
     @Test
     public void testDoubleAvg() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         GenericMergeableNode<Double> node1 = GenericMergeableNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor1())
             .build();
         GenericMergeableNode<Double> node2 = GenericMergeableNodeBuilder.<Double>newBuilder().by(new DoubleMergeNodeProcessor2())
@@ -323,7 +335,9 @@ public class AggregateTest {
             assertEquals("double avg must be 12.5d", 12.5d, result, 0.001d);
             return result;
         }));
-        definition.addAggregateNode(node);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addAggregateNode(node)
+                .build();
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -333,7 +347,7 @@ public class AggregateTest {
 
     @Test
     public void testIntArray() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         GenericMergeableNode<int[]> node1 = GenericMergeableNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor1())
             .build();
         GenericMergeableNode<int[]> node2 = GenericMergeableNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor2())
@@ -347,7 +361,9 @@ public class AggregateTest {
             assertArrayEquals(new int[] {1, 2, 6, 3, 5, 8}, result);
             return result;
         }));
-        definition.addAggregateNode(node);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addAggregateNode(node)
+                .build();
         ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
         Context context = Contexts.newContext();
 
@@ -359,7 +375,7 @@ public class AggregateTest {
     public void testDistributeAggregate() throws Exception {
         Executor executor = Executors.newFixedThreadPool(3);
         Key<Person> resultKey = Contexts.newKey("resultKey", Person.class);
-        ProcessDefinition<Person> definition = new DefaultProcessDefinition<>(resultKey);
+//        ProcessDefinition<Person> definition = new DefaultProcessDefinition<>(resultKey);
 
         DistributeMergeableNode<Integer, Person> node1 = DistributeMergeableNodeBuilder.<Integer, Person>newBuilder().by(
             new TestDistributeMergeNodeProcessor1()).build();
@@ -381,9 +397,11 @@ public class AggregateTest {
             assertEquals(p, result);
             return result;
         });
-
-        // 注册分布式聚合节点
-        definition.addDistributeAggregateNode(node);
+        ProcessDefinition<Person> definition = ProcessDefinitionBuilder.<Person>newBuilder()
+            .resultKey(resultKey)
+            // 注册分布式聚合节点
+            .addDistributeAggregateNode(node)
+                .build();
         ProcessInstance<Person> instance = definition.newInstance();
         instance.execute(Contexts.newContext());
     }

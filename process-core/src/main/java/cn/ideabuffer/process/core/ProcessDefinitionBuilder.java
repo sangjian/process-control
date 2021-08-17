@@ -14,18 +14,13 @@ import cn.ideabuffer.process.core.nodes.condition.WhileConditionNode;
 import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
-/**
- * @author sangjian.sj
- * @date 2020/01/18
- */
-public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>> {
 
     private InitializeMode initializeMode = InitializeMode.ON_REGISTER;
 
@@ -42,34 +37,22 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private boolean declaredRestrict;
 
-    public DefaultProcessDefinition(InitializeMode initializeMode, Node[] nodes, @Nullable Key<R> resultKey, ReturnCondition<R> returnCondition, List<StatusWrapperHandler> handlers, List<Key<?>> declaringKeys, boolean declaredRestrict) {
-        this.initializeMode = initializeMode;
-        this.nodes = nodes;
-        this.resultKey = resultKey;
-        this.returnCondition = returnCondition;
-        this.handlers = handlers;
-        this.declaringKeys = declaringKeys;
-        this.declaredRestrict = declaredRestrict;
+    private ProcessDefinitionBuilder() {
     }
 
-//    public DefaultProcessDefinition() {
-//        this(null);
-//    }
-//
-//    public DefaultProcessDefinition(@Nullable Key<R> resultKey) {
-//        this.resultKey = resultKey;
-//        this.declaringKeys = new LinkedList<>();
-//    }
+    public static <R> ProcessDefinitionBuilder<R> newBuilder() {
+        return new ProcessDefinitionBuilder<>();
+    }
 
-    protected ProcessDefinition<R> addNode(@NotNull Node... nodes) {
+    private void addNode(@NotNull Node... nodes) {
         if (nodes.length == 0) {
-            return this;
+            return;
         }
-        // 检查key的注册
-        for (Node node : nodes) {
-            checkKeyRegistry(node);
-        }
-        returnableCheck(nodes);
+//        // 检查key的注册
+//        for (Node node : nodes) {
+//            checkKeyRegistry(node);
+//        }
+//        returnableCheck(nodes);
         if (initializeMode == InitializeMode.ON_REGISTER) {
             // 初始化节点
             LifecycleManager.initialize(Arrays.asList(nodes));
@@ -82,34 +65,33 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         System.arraycopy(nodes, 0, newArr, oldLen, nodes.length);
 
         this.nodes = newArr;
-        return this;
     }
 
     private void returnableCheck(Node... nodes) {
         for (Node node : nodes) {
             if (node instanceof ExecutableNode) {
-                Key<?> nodeResultKey = ((ExecutableNode)node).getResultKey();
-                if (((ExecutableNode)node).getReturnCondition() != null) {
+                Key<?> nodeResultKey = ((ExecutableNode) node).getResultKey();
+                if (((ExecutableNode) node).getReturnCondition() != null) {
                     // 没有设置结果key
                     if (nodeResultKey == null) {
                         throw new NullPointerException(String.format("resultKey must be set for node:%s.", node));
                     }
                     if (resultKey == null) {
                         throw new NullPointerException(
-                            String.format("the resultKey:[%s] must be set for the definition.", nodeResultKey));
+                                String.format("the resultKey:[%s] must be set for the definition.", nodeResultKey));
                     }
                     // 结果Key不一致
                     if (!nodeResultKey.equals(resultKey)) {
                         throw new IllegalResultKeyException(String
-                            .format("resultKey[%s] of returnable node is not equals resultKey:[%s] of definition",
-                                nodeResultKey, resultKey));
+                                .format("resultKey[%s] of returnable node is not equals resultKey:[%s] of definition",
+                                        nodeResultKey, resultKey));
                     }
                 }
                 // 没有返回条件，使用默认的返回条件
                 if (nodeResultKey != null && nodeResultKey.equals(resultKey)
-                    && ((ExecutableNode)node).getReturnCondition() == null) {
+                        && ((ExecutableNode) node).getReturnCondition() == null) {
                     //noinspection unchecked
-                    ((ExecutableNode)node).returnOn(returnCondition);
+                    ((ExecutableNode) node).returnOn(returnCondition);
                 }
             }
         }
@@ -161,107 +143,138 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         }
     }
 
-    @Override
-    public ProcessDefinition<R> addProcessNode(@NotNull ExecutableNode<?, ?> node) {
-        return addNode(node);
+    /**
+     * 增加执行节点
+     *
+     * @param node 可执行节点
+     * @return 当前实例
+     */
+    public ProcessDefinitionBuilder<R> addProcessNode(@NotNull ExecutableNode<?, ?> node) {
+        addNode(node);
+        return this;
     }
 
-    @Override
-    public ProcessDefinition<R> addProcessNodes(@NotNull List<ExecutableNode<?, ?>> nodes) {
-        return addNode(nodes.toArray(new ExecutableNode[0]));
-    }
-
-    @Override
-    public ProcessDefinition<R> addProcessNodes(@NotNull ExecutableNode<?, ?>... nodes) {
-        return addNode(nodes);
-    }
-
-    @Override
-    public ProcessDefinition<R> addIf(@NotNull IfConditionNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessDefinition<R> addWhile(@NotNull WhileConditionNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessDefinition<R> addDoWhile(@NotNull DoWhileConditionNode node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessDefinition<R> addGroup(@NotNull NodeGroup group) {
-        return addNode(group);
-    }
-
-    @Override
-    public <I, O> ProcessDefinition<R> addAggregateNode(@NotNull AggregatableNode<I, O> node) {
-        return addNode(node);
-    }
-
-    @Override
-    public <O> ProcessDefinition<R> addDistributeAggregateNode(@NotNull DistributeAggregatableNode<O> node) {
-        return addNode(node);
-    }
-
-    @Override
-    public ProcessDefinition<R> addBranchNode(@NotNull BranchNode node) {
-        return addNode(node);
-    }
-
-    @NotNull
-    @Override
-    public Node[] getNodes() {
-        return nodes;
-    }
-
-    public void setNodes(@NotNull Node[] nodes) {
+    /**
+     * 增加执行节点
+     *
+     * @param nodes 可执行节点
+     * @return 当前实例
+     */
+    public ProcessDefinitionBuilder<R> addProcessNodes(@NotNull ExecutableNode<?, ?>... nodes) {
         addNode(nodes);
+        return this;
     }
 
-    @Override
-    public InitializeMode getInitializeMode() {
-        return initializeMode;
+    /**
+     * 增加执行节点
+     *
+     * @param nodes 可执行节点
+     * @return 当前实例
+     */
+    public ProcessDefinitionBuilder<R> addProcessNodes(@NotNull List<ExecutableNode<?, ?>> nodes) {
+        addNode(nodes.toArray(new ExecutableNode[0]));
+        return this;
     }
 
-    @Override
-    public ProcessDefinition<R> initializeMode(@NotNull InitializeMode mode) {
+    /**
+     * 增加if节点
+     *
+     * @param node 条件节点
+     * @return 当前实例
+     */
+    public ProcessDefinitionBuilder<R> addIf(@NotNull IfConditionNode node) {
+        addNode(node);
+        return this;
+    }
+
+    /**
+     * 增加while节点
+     *
+     * @param node 条件节点
+     * @return 当前实例
+     */
+    public ProcessDefinitionBuilder<R> addWhile(@NotNull WhileConditionNode node) {
+        addNode(node);
+        return this;
+    }
+
+    /**
+     * 增加dowhile节点
+     *
+     * @param node 条件节点
+     * @return 当前实例
+     */
+    public ProcessDefinitionBuilder<R> addDoWhile(@NotNull DoWhileConditionNode node) {
+        addNode(node);
+        return this;
+    }
+
+    /**
+     * 增加节点组
+     *
+     * @param group 节点组
+     * @return 当前实例
+     */
+    public ProcessDefinitionBuilder<R> addGroup(@NotNull NodeGroup group) {
+        addNode(group);
+        return this;
+    }
+
+    /**
+     * 增加聚合节点
+     *
+     * @param node 聚合节点
+     * @return 当前实例
+     */
+    public <I, O> ProcessDefinitionBuilder<R> addAggregateNode(@NotNull AggregatableNode<I, O> node) {
+        addNode(node);
+        return this;
+    }
+
+    /**
+     * 增加聚合节点
+     *
+     * @param node 聚合节点
+     * @return 当前实例
+     */
+    public <O> ProcessDefinitionBuilder<R> addDistributeAggregateNode(@NotNull DistributeAggregatableNode<O> node) {
+        addNode(node);
+        return this;
+    }
+
+    /**
+     * 增加分支节点
+     *
+     * @param node 分支节点
+     * @return
+     */
+    public ProcessDefinitionBuilder<R> addBranchNode(@NotNull BranchNode node) {
+        addNode(node);
+        return this;
+    }
+
+    public ProcessDefinitionBuilder<R> initializeMode(@NotNull InitializeMode mode) {
         this.initializeMode = mode;
         return this;
     }
 
-    @NotNull
-    @Override
-    public ProcessInstance<R> newInstance() {
-        return new DefaultProcessInstance<>(this);
-    }
-
-    @Override
-    public ProcessDefinition<R> resultKey(@NotNull Key<R> key) {
+    public ProcessDefinitionBuilder<R> resultKey(@NotNull Key<R> key) {
         this.resultKey = key;
         return this;
     }
 
-    @Nullable
-    @Override
-    public Key<R> getResultKey() {
-        return this.resultKey;
-    }
-
-    @Override
-    public void returnOn(ReturnCondition<R> condition) {
+    public ProcessDefinitionBuilder<R> returnOn(ReturnCondition<R> condition) {
         this.returnCondition = condition;
+        return this;
     }
 
-    @Override
-    public ReturnCondition<R> getReturnCondition() {
-        return this.returnCondition;
-    }
-
-    @Override
-    public ProcessDefinition<R> wrap(@NotNull StatusWrapperHandler... handlers) {
+    /**
+     * 注册包装处理器
+     *
+     * @param handlers 包装处理器
+     * @return 当前流程定义
+     */
+    public ProcessDefinitionBuilder<R> wrap(@NotNull StatusWrapperHandler... handlers) {
         if (handlers.length == 0) {
             return this;
         }
@@ -272,49 +285,30 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         return this;
     }
 
-    @NotNull
-    @Override
-    public List<StatusWrapperHandler> getHandlers() {
-        if (this.handlers == null) {
-            this.handlers = Collections.emptyList();
-        }
-        return Collections.unmodifiableList(this.handlers);
-    }
-
-    @Override
-    public ProcessDefinition<R> declaredRestrict(boolean restrict) {
+    public ProcessDefinitionBuilder<R> declaredRestrict(boolean restrict) {
         this.declaredRestrict = restrict;
-        checkKeyRegistry();
         return this;
     }
 
-    @Override
-    public ProcessDefinition<R> declaringKeys(Key<?>... keys) {
+    public ProcessDefinitionBuilder<R> declaringKeys(Key<?>... keys) {
         if (keys != null && keys.length > 0) {
             this.declaringKeys.addAll(Arrays.asList(keys));
-            checkKeyRegistry();
         }
         return this;
     }
 
-    @Override
-    public ProcessDefinition<R> declaringKeys(List<Key<?>> keys) {
+    public ProcessDefinitionBuilder<R> declaringKeys(List<Key<?>> keys) {
         if (keys != null) {
             this.declaringKeys.addAll(keys);
-            checkKeyRegistry();
         }
         return this;
     }
 
-    @Override
-    public void initialize() {
-
-    }
 
     @Override
-    public void destroy() {
-        if (nodes != null) {
-            LifecycleManager.destroy(Arrays.asList(nodes));
-        }
+    public ProcessDefinition<R> build() {
+        returnableCheck(nodes);
+        checkKeyRegistry();
+        return new DefaultProcessDefinition<>(initializeMode, nodes, resultKey, returnCondition, handlers, declaringKeys, declaredRestrict);
     }
 }

@@ -2,6 +2,7 @@ package cn.ideabuffer.process.core.test;
 
 import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -29,14 +30,16 @@ public class RuleTest {
 
     @Test
     public void testTrueRule() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean executed = new AtomicBoolean(false);
-        // 注册一个执行节点，并设置规则
-        definition.addProcessNodes(ProcessNodeBuilder.<ProcessStatus>newBuilder().processOn((ctx) -> true)
-            .by(context -> {
-                executed.set(true);
-                return null;
-            }).build());
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            // 注册一个执行节点，并设置规则
+            .addProcessNodes(ProcessNodeBuilder.<ProcessStatus>newBuilder().processOn((ctx) -> true)
+                .by(context -> {
+                    executed.set(true);
+                    return null;
+                }).build())
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -47,14 +50,16 @@ public class RuleTest {
 
     @Test
     public void testFalseRule() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean executed = new AtomicBoolean(false);
-        // 注册一个执行节点，并设置规则
-        definition.addProcessNodes(ProcessNodeBuilder.<ProcessStatus>newBuilder().processOn((ctx) -> false)
-            .by(context -> {
-                executed.set(true);
-                return null;
-            }).build());
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            // 注册一个执行节点，并设置规则
+            .addProcessNodes(ProcessNodeBuilder.<ProcessStatus>newBuilder().processOn((ctx) -> false)
+                .by(context -> {
+                    executed.set(true);
+                    return null;
+                }).build())
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -64,16 +69,18 @@ public class RuleTest {
 
     @Test
     public void testAndRule() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Rule tRule = (ctx) -> true;
         Rule fRule = (ctx) -> false;
         AtomicBoolean executed = new AtomicBoolean(false);
-        // 注册一个执行节点，并设置规则
-        definition.addProcessNodes(ProcessNodeBuilder.<ProcessStatus>newBuilder().processOn(Rules.and(tRule, fRule))
-            .by(context -> {
-                executed.set(true);
-                return null;
-            }).build());
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            // 注册一个执行节点，并设置规则
+            .addProcessNodes(ProcessNodeBuilder.<ProcessStatus>newBuilder().processOn(Rules.and(tRule, fRule))
+                .by(context -> {
+                    executed.set(true);
+                    return null;
+                }).build())
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -84,21 +91,23 @@ public class RuleTest {
 
     @Test
     public void testIfAndRule() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean processor1Flag = new AtomicBoolean(false);
         AtomicBoolean processor2Flag = new AtomicBoolean(false);
-        definition.addIf(
-            IfNodeBuilder.newBuilder()
-                .processOn(Rules.and((ctx) -> true, (ctx) -> false))
-                .then(Nodes.newProcessNode(context -> {
-                    processor1Flag.set(true);
-                    return null;
-                }))
-                .otherwise(Nodes.newProcessNode(context -> {
-                    processor2Flag.set(true);
-                    return null;
-                }))
-                .build());
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addIf(
+                IfNodeBuilder.newBuilder()
+                    .processOn(Rules.and((ctx) -> true, (ctx) -> false))
+                    .then(Nodes.newProcessNode(context -> {
+                        processor1Flag.set(true);
+                        return null;
+                    }))
+                    .otherwise(Nodes.newProcessNode(context -> {
+                        processor2Flag.set(true);
+                        return null;
+                    }))
+                    .build())
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -110,21 +119,23 @@ public class RuleTest {
 
     @Test
     public void testOrRule() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean processor1Flag = new AtomicBoolean(false);
         AtomicBoolean processor2Flag = new AtomicBoolean(false);
-        definition.addIf(
-            IfNodeBuilder.newBuilder().processOn(Rules.or((ctx) -> true, (ctx) -> false))
-                .then(Nodes.newProcessNode(context -> {
-                    processor1Flag.set(true);
-                    return null;
-                }))
-                .otherwise(Nodes.newProcessNode(context -> {
-                    processor2Flag.set(true);
-                    return null;
-                }))
-                .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addIf(
+                IfNodeBuilder.newBuilder().processOn(Rules.or((ctx) -> true, (ctx) -> false))
+                    .then(Nodes.newProcessNode(context -> {
+                        processor1Flag.set(true);
+                        return null;
+                    }))
+                    .otherwise(Nodes.newProcessNode(context -> {
+                        processor2Flag.set(true);
+                        return null;
+                    }))
+                    .build()
+            )
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
@@ -136,21 +147,23 @@ public class RuleTest {
 
     @Test
     public void testNotRule() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         AtomicBoolean processor1Flag = new AtomicBoolean(false);
         AtomicBoolean processor2Flag = new AtomicBoolean(false);
-        definition.addIf(
-            IfNodeBuilder.newBuilder().processOn(Rules.not((ctx) -> true))
-                .then(Nodes.newProcessNode(context -> {
-                    processor1Flag.set(true);
-                    return null;
-                }))
-                .otherwise(Nodes.newProcessNode(context -> {
-                    processor2Flag.set(true);
-                    return null;
-                }))
-                .build()
-        );
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addIf(
+                IfNodeBuilder.newBuilder().processOn(Rules.not((ctx) -> true))
+                    .then(Nodes.newProcessNode(context -> {
+                        processor1Flag.set(true);
+                        return null;
+                    }))
+                    .otherwise(Nodes.newProcessNode(context -> {
+                        processor2Flag.set(true);
+                        return null;
+                    }))
+                    .build()
+            )
+            .build();
 
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();

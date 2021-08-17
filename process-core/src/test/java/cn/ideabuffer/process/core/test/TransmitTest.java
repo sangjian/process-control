@@ -20,7 +20,7 @@ public class TransmitTest {
 
     @Test
     public void testTransmitNode() throws Exception {
-        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
+//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<String> key = Contexts.newKey("k", String.class);
         Key<String> resultKey = Contexts.newKey("rk", String.class);
         TransmissionNode<String> node = TransmissionNodeBuilder.<String>newBuilder()
@@ -38,7 +38,9 @@ public class TransmitTest {
             ctx.get(key);
             return r.length();
         }).thenAccept((ctx, r) -> assertEquals(11, (int)r));
-        definition.addProcessNodes(node);
+        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .addProcessNodes(node)
+            .build();
         ProcessInstance<String> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
