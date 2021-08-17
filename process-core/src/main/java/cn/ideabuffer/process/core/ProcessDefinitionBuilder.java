@@ -48,16 +48,6 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
         if (nodes.length == 0) {
             return;
         }
-//        // 检查key的注册
-//        for (Node node : nodes) {
-//            checkKeyRegistry(node);
-//        }
-//        returnableCheck(nodes);
-        if (initializeMode == InitializeMode.ON_REGISTER) {
-            // 初始化节点
-            LifecycleManager.initialize(Arrays.asList(nodes));
-        }
-
         int oldLen = this.nodes.length;
         int newLen = this.nodes.length + nodes.length;
         Node[] newArr = new Node[newLen];
@@ -309,6 +299,10 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
     public ProcessDefinition<R> build() {
         returnableCheck(nodes);
         checkKeyRegistry();
+        if (initializeMode == InitializeMode.ON_REGISTER) {
+            // 初始化节点
+            LifecycleManager.initialize(Arrays.asList(nodes));
+        }
         return new DefaultProcessDefinition<>(initializeMode, nodes, resultKey, returnCondition, handlers,
             declaringKeys, declaredRestrict);
     }
