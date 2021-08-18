@@ -98,6 +98,18 @@ public class ParallelBranchNodeBuilder
     }
 
     @Override
+    public ParallelBranchNodeBuilder name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public ParallelBranchNodeBuilder description(String description) {
+        super.description(description);
+        return this;
+    }
+
+    @Override
     public ParallelBranchNode build() {
         if (processor == null) {
             processor = new ParallelBranchProcessorImpl();

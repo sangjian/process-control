@@ -12,7 +12,7 @@ import java.util.Set;
  * @author sangjian.sj
  * @date 2020/03/24
  */
-public interface ProcessDefinition<R> extends Lifecycle {
+public interface ProcessDefinition<R> extends Lifecycle, Describable {
 
     /**
      * 获取所有节点

@@ -142,6 +142,18 @@ public class IfNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStatus, 
     }
 
     @Override
+    public IfNodeBuilder name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public IfNodeBuilder description(String description) {
+        super.description(description);
+        return this;
+    }
+
+    @Override
     public IfConditionNode build() {
         if (processor == null) {
             processor = new IfProcessorImpl(rule, trueBranch, falseBranch);

@@ -142,6 +142,18 @@ public class WhileNodeBuilder
     }
 
     @Override
+    public WhileNodeBuilder name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public WhileNodeBuilder description(String description) {
+        super.description(description);
+        return this;
+    }
+
+    @Override
     public WhileConditionNode build() {
         if (rule == null) {
             throw new NullPointerException("rule cannot be null!");

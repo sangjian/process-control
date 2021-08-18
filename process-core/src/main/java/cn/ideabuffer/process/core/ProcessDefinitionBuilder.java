@@ -15,10 +15,7 @@ import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>> {
 
@@ -33,9 +30,13 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
 
     private List<StatusWrapperHandler> handlers;
 
-    private Set<Key<?>> declaringKeys;
+    private Set<Key<?>> declaringKeys = new HashSet<>();
 
     private boolean declaredRestrict;
+
+    private String name;
+
+    private String description;
 
     private ProcessDefinitionBuilder() {
     }
@@ -106,7 +107,7 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
         } else {
             currentNodes.add(node);
         }
-        List<Key<?>> unDeclaredKeys = new LinkedList<>();
+        Map<Node, Key<?>> unDeclaredKeys = new HashMap<>();
         for (Node currentNode : currentNodes) {
             if (currentNode instanceof KeyManager) {
                 Set<Key<?>> readableKeys = ((KeyManager) currentNode).getReadableKeys();
@@ -114,14 +115,14 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
                 if (readableKeys != null) {
                     for (Key<?> readableKey : readableKeys) {
                         if (!this.declaringKeys.contains(readableKey)) {
-                            unDeclaredKeys.add(readableKey);
+                            unDeclaredKeys.put(currentNode, readableKey);
                         }
                     }
                 }
                 if (writableKeys != null) {
                     for (Key<?> writableKey : writableKeys) {
                         if (!this.declaringKeys.contains(writableKey)) {
-                            unDeclaredKeys.add(writableKey);
+                            unDeclaredKeys.put(currentNode, writableKey);
                         }
                     }
                 }
@@ -129,7 +130,14 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
         }
         // TODO 如果有未注册key，抛异常
         if (!unDeclaredKeys.isEmpty()) {
-            throw new UnregisteredKeyException(String.format("unregistered keys:%s was found in node:%s", unDeclaredKeys, node));
+            String lineSeparator = System.getProperty("line.separator");
+            StringBuilder builder = new StringBuilder();
+            builder.append("unregistered keys check failed:");
+            unDeclaredKeys.forEach((n, key) -> {
+                builder.append(lineSeparator);
+                builder.append(String.format("unregistered keys:%s was found in node:%s", unDeclaredKeys, n.getName()));
+            });
+            throw new UnregisteredKeyException(builder.toString());
         }
     }
 
@@ -294,6 +302,16 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
         return this;
     }
 
+    public ProcessDefinitionBuilder<R> name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public ProcessDefinitionBuilder<R> description(String description) {
+        this.description = description;
+        return this;
+    }
+
 
     @Override
     public ProcessDefinition<R> build() {
@@ -304,6 +322,6 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
             LifecycleManager.initialize(Arrays.asList(nodes));
         }
         return new DefaultProcessDefinition<>(initializeMode, nodes, resultKey, returnCondition, handlers,
-            declaringKeys, declaredRestrict);
+            declaringKeys, declaredRestrict, name, description);
     }
 }

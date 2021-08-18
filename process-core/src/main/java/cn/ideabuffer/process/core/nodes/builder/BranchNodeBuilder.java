@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
@@ -116,6 +117,18 @@ public class BranchNodeBuilder
     @Override
     public BranchNodeBuilder wrap(@NotNull List<StatusWrapperHandler> wrapperHandlers) {
         super.wrap(wrapperHandlers);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder description(String description) {
+        super.description(description);
         return this;
     }
 

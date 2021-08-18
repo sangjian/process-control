@@ -118,6 +118,18 @@ public class GenericAggregatableNodeBuilder<P, R>
     }
 
     @Override
+    public GenericAggregatableNodeBuilder<P, R> name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> description(String description) {
+        super.description(description);
+        return this;
+    }
+
+    @Override
     public GenericAggregatableNode<P, R> build() {
         if (processor == null) {
             processor = new GenericAggregateProcessorImpl<>();

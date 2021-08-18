@@ -150,6 +150,18 @@ public class TryCatchFinallyNodeBuilder extends
     }
 
     @Override
+    public TryCatchFinallyNodeBuilder name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public TryCatchFinallyNodeBuilder description(String description) {
+        super.description(description);
+        return this;
+    }
+
+    @Override
     public TryCatchFinallyNode build() {
         if (processor == null) {
             processor = new TryCatchFinallyProcessorImpl(tryBranch, catchMapperList, finallyBranch);

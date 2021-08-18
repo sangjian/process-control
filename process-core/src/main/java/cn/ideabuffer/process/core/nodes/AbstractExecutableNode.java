@@ -303,4 +303,8 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         }
     }
 
+    @Override
+    public String getName() {
+        return name != null ? name : this.getClass().getSimpleName() + "-" + getProcessor().getClass().getSimpleName();
+    }
 }

@@ -28,6 +28,8 @@ public class GenericMergeableNodeBuilder<T> implements Builder<GenericMergeableN
     private KeyMapper keyMapper;
     private Set<Key<?>> readableKeys;
     private Set<Key<?>> writableKeys;
+    private String name;
+    private String description;
 
     private GenericMergeableNodeBuilder() {
         this.readableKeys = new HashSet<>();
@@ -79,9 +81,22 @@ public class GenericMergeableNodeBuilder<T> implements Builder<GenericMergeableN
         return this;
     }
 
+    public GenericMergeableNodeBuilder<T> name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public GenericMergeableNodeBuilder<T> description(String description) {
+        this.description = description;
+        return this;
+    }
+
     @Override
     public GenericMergeableNode<T> build() {
         long millis = timeUnit == null ? 0L : timeUnit.toMillis(timeout);
-        return new DefaultGenericMergeableNode<>(rule, millis, processor, readableKeys, writableKeys, keyMapper);
+        GenericMergeableNode<T> node = new DefaultGenericMergeableNode<>(rule, millis, processor, readableKeys, writableKeys, keyMapper);
+        node.setName(name);
+        node.setDescription(description);
+        return node;
     }
 }

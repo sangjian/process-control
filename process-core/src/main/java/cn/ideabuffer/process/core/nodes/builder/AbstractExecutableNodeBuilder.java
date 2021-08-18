@@ -37,6 +37,8 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
     protected Set<Key<?>> writableKeys;
     protected BooleanSupplier enableSupplier;
     protected List<W> handlers;
+    protected String name;
+    protected String description;
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
@@ -127,6 +129,16 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
+    public Builder<T> name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Builder<T> description(String description) {
+        this.description = description;
+        return this;
+    }
+
     @Override
     public T build() {
         if (parallel) {
@@ -152,6 +164,10 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         if (enableSupplier != null) {
             node.setEnabled(enableSupplier);
         }
+        if (name != null) {
+            node.setName(name);
+        }
+        node.setDescription(description);
         return node;
     }
 

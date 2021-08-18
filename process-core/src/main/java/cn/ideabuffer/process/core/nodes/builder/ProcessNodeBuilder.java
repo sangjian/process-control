@@ -122,6 +122,18 @@ public class ProcessNodeBuilder<R>
     }
 
     @Override
+    public ProcessNodeBuilder<R> name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> description(String description) {
+        super.description(description);
+        return this;
+    }
+
+    @Override
     public ProcessNode<R> build() {
         if (processor != null) {
             processor = DefaultProcessorProxy.wrap(processor, handlers);

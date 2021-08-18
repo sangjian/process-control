@@ -142,6 +142,18 @@ public class DoWhileNodeBuilder
     }
 
     @Override
+    public DoWhileNodeBuilder name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public DoWhileNodeBuilder description(String description) {
+        super.description(description);
+        return this;
+    }
+
+    @Override
     public DoWhileConditionNode build() {
         if (rule == null) {
             throw new NullPointerException("rule cannot be null!");

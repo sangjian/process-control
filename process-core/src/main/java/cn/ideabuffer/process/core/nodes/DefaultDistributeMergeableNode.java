@@ -64,4 +64,9 @@ public class DefaultDistributeMergeableNode<T, R> extends AbstractMergeableNode
             LifecycleManager.initialize((Lifecycle)processor);
         }
     }
+
+    @Override
+    public String getName() {
+        return name != null ? name : this.getClass().getSimpleName() + "-" + getProcessor().getClass().getSimpleName();
+    }
 }

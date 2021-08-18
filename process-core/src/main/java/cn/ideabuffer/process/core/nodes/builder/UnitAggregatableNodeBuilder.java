@@ -149,6 +149,18 @@ public class UnitAggregatableNodeBuilder<R>
     }
 
     @Override
+    public UnitAggregatableNodeBuilder<R> name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> description(String description) {
+        super.description(description);
+        return this;
+    }
+
+    @Override
     public UnitAggregatableNode<R> build() {
         if (processor == null) {
             processor = new UnitAggregateProcessorImpl<>();

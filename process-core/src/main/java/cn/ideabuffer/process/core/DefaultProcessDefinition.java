@@ -32,9 +32,13 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     private boolean declaredRestrict;
 
+    private String name;
+
+    private String description;
+
     DefaultProcessDefinition(InitializeMode initializeMode, Node[] nodes, @Nullable Key<R> resultKey,
                                     ReturnCondition<R> returnCondition, List<StatusWrapperHandler> handlers,
-                                    Set<Key<?>> declaringKeys, boolean declaredRestrict) {
+                                    Set<Key<?>> declaringKeys, boolean declaredRestrict, String name, String description) {
         this.initializeMode = initializeMode;
         this.nodes = nodes;
         this.resultKey = resultKey;
@@ -42,6 +46,8 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         this.handlers = handlers;
         this.declaringKeys = declaringKeys == null ? new HashSet<>() : declaringKeys;
         this.declaredRestrict = declaredRestrict;
+        this.name = name;
+        this.description = description;
     }
 
     @NotNull
@@ -101,5 +107,15 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
         if (nodes != null) {
             LifecycleManager.destroy(Arrays.asList(nodes));
         }
+    }
+
+    @Override
+    public String getName() {
+        return name != null ? name : this.getClass().getSimpleName();
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 }

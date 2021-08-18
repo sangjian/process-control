@@ -8,7 +8,7 @@ import java.util.function.BooleanSupplier;
  * @author sangjian.sj
  * @date 2020/01/18
  */
-public interface Node extends Lifecycle {
+public interface Node extends Lifecycle, Describable {
 
     /**
      * 是否启用
@@ -20,5 +20,9 @@ public interface Node extends Lifecycle {
     void setEnabled(boolean enable);
 
     void setEnabled(BooleanSupplier supplier);
+
+    void setName(String name);
+
+    void setDescription(String description);
 
 }

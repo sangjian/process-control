@@ -119,6 +119,18 @@ public class DistributeAggregatableNodeBuilder<R>
     }
 
     @Override
+    public DistributeAggregatableNodeBuilder<R> name(String name) {
+        super.name(name);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> description(String description) {
+        super.description(description);
+        return this;
+    }
+
+    @Override
     public DistributeAggregatableNode<R> build() {
         if (aggregator == null) {
             throw new NullPointerException("aggregator cannot be null!");

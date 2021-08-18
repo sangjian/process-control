@@ -29,6 +29,8 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
     private KeyMapper keyMapper;
     private Set<Key<?>> readableKeys;
     private Set<Key<?>> writableKeys;
+    private String name;
+    private String description;
 
     private DistributeMergeableNodeBuilder() {
         this.readableKeys = new HashSet<>();
@@ -95,10 +97,23 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
         return this;
     }
 
+    public DistributeMergeableNodeBuilder<T, R> name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public DistributeMergeableNodeBuilder<T, R> description(String description) {
+        this.description = description;
+        return this;
+    }
+
     @Override
     public DistributeMergeableNode<T, R> build() {
         long millis = timeUnit == null ? 0L : timeUnit.toMillis(timeout);
         processor = DistributeProcessorProxy.wrap(processor, handlers);
-        return new DefaultDistributeMergeableNode<>(rule, millis, processor, readableKeys, writableKeys, keyMapper);
+        DistributeMergeableNode<T, R> node = new DefaultDistributeMergeableNode<>(rule, millis, processor, readableKeys, writableKeys, keyMapper);
+        node.setName(name);
+        node.setDescription(description);
+        return node;
     }
 }

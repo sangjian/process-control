@@ -18,6 +18,10 @@ public abstract class AbstractNode implements Node {
      */
     private BooleanSupplier enableSupplier = () -> true;
 
+    protected String name;
+
+    protected String description;
+
     @Override
     public boolean enabled() {
         if (enableSupplier != null) {
@@ -44,5 +48,25 @@ public abstract class AbstractNode implements Node {
     @Override
     public void initialize() {
 
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String getName() {
+        return name != null ? name : this.getClass().getSimpleName();
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 }
