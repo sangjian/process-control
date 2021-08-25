@@ -25,4 +25,13 @@ public class ProcessException extends RuntimeException {
     public ProcessException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
+    @Override
+    public synchronized Throwable getCause() {
+        Throwable cause = super.getCause();
+        if (!(cause instanceof ProcessException)) {
+            return cause;
+        }
+        return cause.getCause();
+    }
 }
