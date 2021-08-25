@@ -289,13 +289,13 @@ public class ContextWrapper implements Context {
     }
 
     @Override
-    public Exception getCurrentException() {
+    public Throwable getCurrentException() {
         return context.getCurrentException();
     }
 
     @Override
-    public void setCurrentException(Exception e) {
-        context.setCurrentException(e);
+    public void setCurrentException(Throwable t) {
+        context.setCurrentException(t);
     }
 
     @Override

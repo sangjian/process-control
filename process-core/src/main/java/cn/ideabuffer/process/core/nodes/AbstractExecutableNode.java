@@ -210,6 +210,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
             notifyListeners(context, result, null, true);
             return result;
         } catch (Throwable t) {
+            context.setCurrentException(t);
             notifyListeners(context, null, t, false);
             if (t instanceof Exception) {
                 throw t;

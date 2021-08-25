@@ -20,7 +20,7 @@ public class ContextImpl extends ParameterImpl implements Context {
      */
     private Block block;
 
-    private Exception exception;
+    private Throwable exception;
 
     public ContextImpl() {
         this(null, null);
@@ -56,13 +56,13 @@ public class ContextImpl extends ParameterImpl implements Context {
     }
 
     @Override
-    public Exception getCurrentException() {
+    public Throwable getCurrentException() {
         return this.exception;
     }
 
     @Override
-    public void setCurrentException(Exception e) {
-        this.exception = e;
+    public void setCurrentException(Throwable t) {
+        this.exception = t;
     }
 
     @Override

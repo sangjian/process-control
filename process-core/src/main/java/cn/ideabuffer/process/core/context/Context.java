@@ -47,14 +47,14 @@ public interface Context extends Parameter {
      *
      * @return 当前异常对象
      */
-    Exception getCurrentException();
+    Throwable getCurrentException();
 
     /**
      * 设置当前异常对象
      *
-     * @param e 当前异常对象
+     * @param t 当前异常对象
      */
-    void setCurrentException(Exception e);
+    void setCurrentException(Throwable t);
 
     /**
      * 获取参数映射器
