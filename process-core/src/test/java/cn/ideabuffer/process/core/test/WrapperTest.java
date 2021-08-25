@@ -114,7 +114,8 @@ public class WrapperTest {
 
 
         ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
-            .resultKey(resultKey)
+            .declaringKeys(resultKey)
+            .resultHandler(context -> context.get(resultKey))
             // 注册执行节点
             .addProcessNodes(node1, node2)
             .build();
@@ -217,7 +218,8 @@ public class WrapperTest {
 
 
         ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
-            .resultKey(resultKey)
+            .declaringKeys(resultKey)
+            .resultHandler(context -> context.get(resultKey))
             // 注册执行节点
             .addProcessNodes(node1, node2)
             .build();
@@ -325,7 +327,8 @@ public class WrapperTest {
 
 
         ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
-            .resultKey(resultKey)
+            .declaringKeys(resultKey)
+            .resultHandler(context -> context.get(resultKey))
             // 注册执行节点
             .addWhile(whileNode)
             .build();

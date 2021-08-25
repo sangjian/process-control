@@ -29,12 +29,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
         ProcessInstanceProcessor<R> wrapped = new ProcessInstanceProcessorImpl<>(definition);
         wrapped = ProcessInstanceProcessorProxy.wrap(wrapped, definition.getHandlers());
         super.registerProcessor(wrapped);
-        if (definition.getResultKey() != null) {
-            Set<Key<?>> resultKeys = new HashSet<>();
-            resultKeys.add(definition.getResultKey());
-            super.setReadableKeys(resultKeys);
-        }
-
+        super.setReadableKeys(definition.getDeclaredKeys());
     }
 
     @Nullable

@@ -4,8 +4,6 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -15,37 +13,33 @@ import java.util.*;
  */
 public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private InitializeMode initializeMode = InitializeMode.ON_REGISTER;
 
     private Node[] nodes = new Node[0];
 
     @Nullable
-    private Key<R> resultKey;
-
-    private ReturnCondition<R> returnCondition;
+    private ResultHandler<R> resultHandler;
 
     private List<StatusWrapperHandler> handlers;
 
     private Set<Key<?>> declaringKeys;
 
-    private boolean declaredRestrict;
-
     private String name;
 
     private String description;
 
-    DefaultProcessDefinition(InitializeMode initializeMode, Node[] nodes, @Nullable Key<R> resultKey,
-                                    ReturnCondition<R> returnCondition, List<StatusWrapperHandler> handlers,
-                                    Set<Key<?>> declaringKeys, boolean declaredRestrict, String name, String description) {
-        this.initializeMode = initializeMode;
-        this.nodes = nodes;
-        this.resultKey = resultKey;
-        this.returnCondition = returnCondition;
+    DefaultProcessDefinition(InitializeMode initializeMode, Node[] nodes, @Nullable ResultHandler<R> resultHandler,
+                             List<StatusWrapperHandler> handlers,
+                             Set<Key<?>> declaringKeys, String name, String description) {
+        if (initializeMode != null) {
+            this.initializeMode = initializeMode;
+        }
+        if (nodes != null) {
+            this.nodes = nodes;
+        }
+        this.resultHandler = resultHandler;
         this.handlers = handlers;
         this.declaringKeys = declaringKeys == null ? new HashSet<>() : declaringKeys;
-        this.declaredRestrict = declaredRestrict;
         this.name = name;
         this.description = description;
     }
@@ -69,13 +63,8 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
 
     @Nullable
     @Override
-    public Key<R> getResultKey() {
-        return this.resultKey;
-    }
-
-    @Override
-    public ReturnCondition<R> getReturnCondition() {
-        return this.returnCondition;
+    public ResultHandler<R> getResultHandler() {
+        return this.resultHandler;
     }
 
     @NotNull
@@ -85,11 +74,6 @@ public class DefaultProcessDefinition<R> implements ProcessDefinition<R> {
             this.handlers = Collections.emptyList();
         }
         return Collections.unmodifiableList(this.handlers);
-    }
-
-    @Override
-    public boolean isDeclaredRestrict() {
-        return this.declaredRestrict;
     }
 
     @Override

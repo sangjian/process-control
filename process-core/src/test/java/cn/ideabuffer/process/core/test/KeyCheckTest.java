@@ -55,7 +55,8 @@ public class KeyCheckTest {
         Key<Integer> key = Contexts.newKey("k", Integer.class);
 //        ProcessDefinition<Integer> definition = new DefaultProcessDefinition<>(key);
         ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
-            .resultKey(key)
+            .declaringKeys(key)
+            .resultHandler(context -> context.get(key))
             .addProcessNodes(ProcessNodeBuilder.<Integer>newBuilder()
                 .by(context -> {
                     return 67;

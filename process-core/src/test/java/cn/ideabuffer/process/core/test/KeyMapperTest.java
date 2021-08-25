@@ -30,6 +30,7 @@ public class KeyMapperTest {
         mapper.map(oldKey, newKey);
 
         ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .declaringKeys(newKey, oldKey)
             // 注册执行节点
             .addProcessNodes(ProcessNodeBuilder.<Void>newBuilder().by(context -> {
                     assertNull(null, context.get(oldKey));

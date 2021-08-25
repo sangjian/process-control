@@ -39,6 +39,7 @@ public class TransmitTest {
             return r.length();
         }).thenAccept((ctx, r) -> assertEquals(11, (int)r));
         ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .declaringKeys(key, resultKey)
             .addProcessNodes(node)
             .build();
         ProcessInstance<String> instance = definition.newInstance();

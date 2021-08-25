@@ -1,7 +1,6 @@
 package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.exceptions.IllegalResultKeyException;
 import cn.ideabuffer.process.core.exceptions.UnregisteredKeyException;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.NodeGroup;
@@ -24,15 +23,11 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
     private Node[] nodes = new Node[0];
 
     @Nullable
-    private Key<R> resultKey;
-
-    private ReturnCondition<R> returnCondition;
+    private ResultHandler<R> resultHandler;
 
     private List<StatusWrapperHandler> handlers;
 
     private Set<Key<?>> declaringKeys = new HashSet<>();
-
-    private boolean declaredRestrict;
 
     private String name;
 
@@ -58,36 +53,6 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
         this.nodes = newArr;
     }
 
-    private void returnableCheck(Node... nodes) {
-        for (Node node : nodes) {
-            if (node instanceof ExecutableNode) {
-                Key<?> nodeResultKey = ((ExecutableNode) node).getResultKey();
-                if (((ExecutableNode) node).getReturnCondition() != null) {
-                    // 没有设置结果key
-                    if (nodeResultKey == null) {
-                        throw new NullPointerException(String.format("resultKey must be set for node:%s.", node));
-                    }
-                    if (resultKey == null) {
-                        throw new NullPointerException(
-                                String.format("the resultKey:[%s] must be set for the definition.", nodeResultKey));
-                    }
-                    // 结果Key不一致
-                    if (!nodeResultKey.equals(resultKey)) {
-                        throw new IllegalResultKeyException(String
-                                .format("resultKey[%s] of returnable node is not equals resultKey:[%s] of definition",
-                                        nodeResultKey, resultKey));
-                    }
-                }
-                // 没有返回条件，使用默认的返回条件
-                if (nodeResultKey != null && nodeResultKey.equals(resultKey)
-                        && ((ExecutableNode) node).getReturnCondition() == null) {
-                    //noinspection unchecked
-                    ((ExecutableNode) node).returnOn(returnCondition);
-                }
-            }
-        }
-    }
-
     private void checkKeyRegistry() {
         for (Node node : this.nodes) {
             checkKeyRegistry(node);
@@ -95,9 +60,6 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
     }
 
     private void checkKeyRegistry(Node node) {
-        if (!this.declaredRestrict) {
-            return;
-        }
         List<Node> currentNodes = new LinkedList<>();
         if (node instanceof ComplexNodes) {
             List<Node> nodes = ((ComplexNodes) node).getNodes();
@@ -128,7 +90,7 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
                 }
             }
         }
-        // TODO 如果有未注册key，抛异常
+        // 如果有未注册key，抛异常
         if (!unDeclaredKeys.isEmpty()) {
             String lineSeparator = System.getProperty("line.separator");
             StringBuilder builder = new StringBuilder();
@@ -256,13 +218,8 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
         return this;
     }
 
-    public ProcessDefinitionBuilder<R> resultKey(@NotNull Key<R> key) {
-        this.resultKey = key;
-        return this;
-    }
-
-    public ProcessDefinitionBuilder<R> returnOn(ReturnCondition<R> condition) {
-        this.returnCondition = condition;
+    public ProcessDefinitionBuilder<R> resultHandler(@NotNull ResultHandler<R> resultHandler) {
+        this.resultHandler = resultHandler;
         return this;
     }
 
@@ -280,11 +237,6 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
             this.handlers = new LinkedList<>();
         }
         this.handlers.addAll(Arrays.asList(handlers));
-        return this;
-    }
-
-    public ProcessDefinitionBuilder<R> declaredRestrict(boolean restrict) {
-        this.declaredRestrict = restrict;
         return this;
     }
 
@@ -315,13 +267,12 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
 
     @Override
     public ProcessDefinition<R> build() {
-        returnableCheck(nodes);
         checkKeyRegistry();
         if (initializeMode == InitializeMode.ON_REGISTER) {
             // 初始化节点
             LifecycleManager.initialize(Arrays.asList(nodes));
         }
-        return new DefaultProcessDefinition<>(initializeMode, nodes, resultKey, returnCondition, handlers,
-            declaringKeys, declaredRestrict, name, description);
+        return new DefaultProcessDefinition<>(initializeMode, nodes, resultHandler, handlers, declaringKeys, name,
+            description);
     }
 }

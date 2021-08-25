@@ -28,9 +28,7 @@ public interface ProcessDefinition<R> extends Lifecycle, Describable {
     ProcessInstance<R> newInstance();
 
     @Nullable
-    Key<R> getResultKey();
-
-    ReturnCondition<R> getReturnCondition();
+    ResultHandler<R> getResultHandler();
 
     /**
      * 返回包装处理器
@@ -40,8 +38,6 @@ public interface ProcessDefinition<R> extends Lifecycle, Describable {
      */
     @NotNull
     List<StatusWrapperHandler> getHandlers();
-
-    boolean isDeclaredRestrict();
 
     Set<Key<?>> getDeclaredKeys();
 

@@ -44,7 +44,6 @@ public class AggregateTest {
 
         GenericMergeableNode<List<String>> node1 = GenericMergeableNodeBuilder.<List<String>>newBuilder()
             .by(new TestListMergeNodeProcessor1())
-            .readableKeys(new Key<>("123", Integer.class))
             .build();
         GenericMergeableNode<List<String>> node2 = GenericMergeableNodeBuilder.<List<String>>newBuilder().by(
             new TestListMergeNodeProcessor2()).build();
@@ -79,9 +78,10 @@ public class AggregateTest {
             logger.info("result:{}", size);
         });
         ProcessDefinition<List<String>> definition = ProcessDefinitionBuilder.<List<String>>newBuilder()
-                .resultKey(resultKey)
-                .addAggregateNode(node)
-                .build();
+            .declaringKeys(resultKey)
+            .resultHandler(context -> context.get(resultKey))
+            .addAggregateNode(node)
+            .build();
 
         ProcessInstance<List<String>> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -127,9 +127,10 @@ public class AggregateTest {
             logger.info("result:{}", size);
         });
         ProcessDefinition<List<String>> definition = ProcessDefinitionBuilder.<List<String>>newBuilder()
-                .resultKey(resultKey)
-                .addAggregateNode(node)
-                .build();
+            .declaringKeys(resultKey)
+            .resultHandler(context -> context.get(resultKey))
+            .addAggregateNode(node)
+            .build();
 
         ProcessInstance<List<String>> instance = definition.newInstance();
         Context context = Contexts.newContext();
@@ -398,7 +399,8 @@ public class AggregateTest {
             return result;
         });
         ProcessDefinition<Person> definition = ProcessDefinitionBuilder.<Person>newBuilder()
-            .resultKey(resultKey)
+            .declaringKeys(resultKey)
+            .resultHandler(context -> context.get(resultKey))
             // 注册分布式聚合节点
             .addDistributeAggregateNode(node)
                 .build();

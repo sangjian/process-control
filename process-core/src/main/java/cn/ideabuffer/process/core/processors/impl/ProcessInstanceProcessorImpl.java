@@ -49,8 +49,8 @@ public class ProcessInstanceProcessorImpl<R> implements ProcessInstanceProcessor
             }
 
         }
-        if (definition.getResultKey() != null) {
-            result = context.get(definition.getResultKey());
+        if (definition.getResultHandler() != null) {
+            result = definition.getResultHandler().getResult(context);
         }
 
         return status;

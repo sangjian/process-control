@@ -37,6 +37,7 @@ public class ExecutableNodeTest {
 //        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
         ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .declaringKeys(key)
             .addProcessNodes(
                 ProcessNodeBuilder.<ProcessStatus>newBuilder()
                     .by(new TestExecutableNodeProcessor1())
@@ -93,6 +94,7 @@ public class ExecutableNodeTest {
             .writableKeys(key)
             .build();
         ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .declaringKeys(key)
             .addProcessNodes(node1, node2)
             .build();
         ProcessInstance<String> instance = definition.newInstance();

@@ -48,7 +48,8 @@ public class ProcessInstanceTest {
 
         Key<Integer> key = Contexts.newKey("k", int.class);
         ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
-            .resultKey(resultKey)
+            .declaringKeys(resultKey, key)
+            .resultHandler(context -> context.get(resultKey))
             // 注册执行节点
             .addProcessNodes(
                 ProcessNodeBuilder.<Integer>newBuilder()
@@ -85,7 +86,8 @@ public class ProcessInstanceTest {
 
         Key<Integer> key = Contexts.newKey("k", int.class);
         ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
-            .resultKey(resultKey)
+            .declaringKeys(resultKey, key)
+            .resultHandler(context -> context.get(resultKey))
             // 注册执行节点
             .addProcessNodes(
                 ProcessNodeBuilder.<Integer>newBuilder()
@@ -115,6 +117,7 @@ public class ProcessInstanceTest {
 //        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
         Key<Integer> key = Contexts.newKey("k", int.class);
         ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .declaringKeys(key)
             .addBranchNode(Nodes.newBranch(
                 ProcessNodeBuilder.<ProcessStatus>newBuilder()
                     .by(context -> {
@@ -243,10 +246,12 @@ public class ProcessInstanceTest {
             .otherwise(new TestFalseBranch())
             .build();
         ProcessDefinition<String> subDefine = ProcessDefinitionBuilder.<String>newBuilder()
+            .declaringKeys(key)
             .addIf(ifConditionNode)
             .build();
         ProcessInstance<String> subInstance = subDefine.newInstance();
         ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+            .declaringKeys(key)
             .addProcessNodes(
                 ProcessNodeBuilder.<Integer>newBuilder()
                     .readableKeys(key)

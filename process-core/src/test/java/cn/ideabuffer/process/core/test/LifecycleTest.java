@@ -30,7 +30,8 @@ public class LifecycleTest {
         Processor<String> processor1 = new TestLifecycleProcessor1();
         Processor<String> processor2 = new TestLifecycleProcessor2();
         ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
-            .resultKey(resultKey)
+            .declaringKeys(resultKey)
+            .resultHandler(context -> context.get(resultKey))
             // 注册执行节点
             .addProcessNodes(
                 ProcessNodeBuilder.<String>newBuilder()
