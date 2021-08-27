@@ -6,7 +6,7 @@
     <groupId>cn.ideabuffer</groupId>
     <artifactId>process-control</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.12</version>
+    <version>1.1.13</version>
     <modules>
         <module>process-core</module>
         <module>process-extension</module>
@@ -48,9 +48,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <logback-classic.version>1.2.3</logback-classic.version>
-        <process-core.version>1.1.12</process-core.version>
-        <process-extension.version>1.1.12</process-extension.version>
-        <process-annotation.version>1.1.12</process-annotation.version>
+        <process-core.version>1.1.13</process-core.version>
+        <process-extension.version>1.1.13</process-extension.version>
+        <process-annotation.version>1.1.13</process-annotation.version>
         <guava-retry.version>2.0.0</guava-retry.version>
     </properties>
 
