@@ -1,8 +1,7 @@
 package cn.ideabuffer.process.core;
 
-import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
-import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.processors.impl.ProcessInstanceProcessorImpl;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.ProcessInstanceProcessorProxy;
@@ -10,10 +9,8 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author sangjian.sj
@@ -22,7 +19,7 @@ import java.util.Set;
 public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessStatus, ProcessInstanceProcessor<R>>
     implements ProcessInstance<R> {
 
-    private ProcessDefinition<R> definition;
+    private final ProcessDefinition<R> definition;
 
     public DefaultProcessInstance(@NotNull ProcessDefinition<R> definition) {
         this.definition = definition;
@@ -30,6 +27,13 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
         wrapped = ProcessInstanceProcessorProxy.wrap(wrapped, definition.getHandlers());
         super.registerProcessor(wrapped);
         super.setReadableKeys(definition.getDeclaredKeys());
+    }
+
+    @Nullable
+    @Override
+    public R process(Context context) throws Exception{
+        execute(context);
+        return getResult();
     }
 
     @Nullable
@@ -43,10 +47,6 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
         return true;
     }
 
-    private void checkDeclaringKeys(ProcessDefinition<R> definition) {
-
-    }
-
     @Override
     public List<Node> getNodes() {
         List<Node> nodes = new LinkedList<>();
@@ -56,7 +56,7 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
         for (Node node : definition.getNodes()) {
             nodes.add(node);
             if (node instanceof ComplexNodes) {
-                List<Node> cascadeNodes = ((ComplexNodes<Node>) node).getNodes();
+                List<Node> cascadeNodes = ((ComplexNodes) node).getNodes();
                 if (cascadeNodes != null) {
                     nodes.addAll(cascadeNodes);
                 }
