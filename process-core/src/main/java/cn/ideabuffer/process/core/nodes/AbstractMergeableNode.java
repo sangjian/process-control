@@ -30,15 +30,15 @@ public abstract class AbstractMergeableNode extends AbstractKeyManagerNode imple
      */
     private long timeout;
 
-    public AbstractMergeableNode() {
+    protected AbstractMergeableNode() {
     }
 
-    public AbstractMergeableNode(Rule rule, long timeout) {
+    protected AbstractMergeableNode(Rule rule, long timeout) {
         this.rule = rule;
         this.timeout = timeout;
     }
 
-    public AbstractMergeableNode(Rule rule, long timeout, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys, KeyMapper keyMapper) {
+    protected AbstractMergeableNode(Rule rule, long timeout, Set<Key<?>> readableKeys, Set<Key<?>> writableKeys, KeyMapper keyMapper) {
         super(keyMapper, readableKeys, writableKeys);
         this.rule = rule;
         this.timeout = timeout;

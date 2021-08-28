@@ -23,19 +23,19 @@ public abstract class AbstractRetryableNode<R> extends AbstractExecutableNode<R,
 
     private RetryProcessor<R> retryProcessor;
 
-    public AbstractRetryableNode(Retryer<R> retryer) {
+    protected AbstractRetryableNode(Retryer<R> retryer) {
         this(false, retryer);
     }
 
-    public AbstractRetryableNode(boolean parallel, Retryer<R> retryer) {
+    protected AbstractRetryableNode(boolean parallel, Retryer<R> retryer) {
         this(parallel, null, retryer);
     }
 
-    public AbstractRetryableNode(Rule rule, Retryer<R> retryer) {
+    protected AbstractRetryableNode(Rule rule, Retryer<R> retryer) {
         this(false, rule, null, retryer);
     }
 
-    public AbstractRetryableNode(boolean parallel, Executor executor, Retryer<R> retryer) {
+    protected AbstractRetryableNode(boolean parallel, Executor executor, Retryer<R> retryer) {
         this(parallel, null, executor, retryer);
     }
 

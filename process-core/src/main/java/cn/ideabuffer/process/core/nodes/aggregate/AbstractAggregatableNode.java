@@ -17,11 +17,11 @@ public abstract class AbstractAggregatableNode<I, O>
 
     private long timeout;
 
-    public AbstractAggregatableNode(@NotNull AggregateProcessor<I, O> processor) {
+    protected AbstractAggregatableNode(@NotNull AggregateProcessor<I, O> processor) {
         this(0, processor);
     }
 
-    public AbstractAggregatableNode(long timeout, @NotNull AggregateProcessor<I, O> processor) {
+    protected AbstractAggregatableNode(long timeout, @NotNull AggregateProcessor<I, O> processor) {
         if (timeout < 0) {
             throw new IllegalArgumentException("timeout must > 0");
         }

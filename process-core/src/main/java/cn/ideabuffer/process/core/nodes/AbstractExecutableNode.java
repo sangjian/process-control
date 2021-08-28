@@ -31,47 +31,47 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     private Key<R> resultKey;
     private ReturnCondition<R> returnCondition;
 
-    public AbstractExecutableNode() {
+    protected AbstractExecutableNode() {
         this(false);
     }
 
-    public AbstractExecutableNode(boolean parallel) {
+    protected AbstractExecutableNode(boolean parallel) {
         this(parallel, null);
     }
 
-    public AbstractExecutableNode(Rule rule) {
+    protected AbstractExecutableNode(Rule rule) {
         this(false, rule, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Executor executor) {
+    protected AbstractExecutableNode(boolean parallel, Executor executor) {
         this(parallel, null, executor);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor) {
+    protected AbstractExecutableNode(boolean parallel, Rule rule, Executor executor) {
         this(parallel, rule, executor, null, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+    protected AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
         P processor) {
         this(parallel, rule, executor, listeners, processor, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+    protected AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
         P processor, KeyMapper mapper) {
         this(parallel, rule, executor, listeners, processor, mapper, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+    protected AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
         P processor, KeyMapper mapper, Key<R> resultKey) {
         this(parallel, rule, executor, listeners, processor, mapper, resultKey, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+    protected AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
         P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition) {
         this(parallel, rule, executor, listeners, processor, mapper, resultKey, returnCondition, null, null);
     }
 
-    public AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+    protected AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
         P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition, Set<Key<?>> readableKeys,
         Set<Key<?>> writableKeys) {
         super(mapper, readableKeys, writableKeys);

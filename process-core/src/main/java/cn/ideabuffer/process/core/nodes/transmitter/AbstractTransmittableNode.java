@@ -99,7 +99,11 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
         } catch (Throwable t) {
             logger.error("process error, node:{}, context:{}", this, context, t);
             notifyListeners(ctx, null, t, false);
-            throw new ProcessException(t);
+            if (t instanceof Exception) {
+                throw t;
+            } else {
+                throw new ProcessException(t);
+            }
         }
 
         return ProcessStatus.proceed();
