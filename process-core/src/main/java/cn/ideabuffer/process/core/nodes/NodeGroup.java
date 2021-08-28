@@ -1,26 +1,46 @@
 package cn.ideabuffer.process.core.nodes;
 
-import cn.ideabuffer.process.core.block.BlockFacade;
-import cn.ideabuffer.process.core.block.InnerBlock;
-import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.context.ContextWrapper;
-import cn.ideabuffer.process.core.context.Contexts;
-import cn.ideabuffer.process.core.nodes.branch.DefaultBranchNode;
+import cn.ideabuffer.process.core.Branch;
+import cn.ideabuffer.process.core.ComplexNodes;
+import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.ReturnCondition;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.nodes.branch.BranchNode;
+import cn.ideabuffer.process.core.processors.BranchProcessor;
+import cn.ideabuffer.process.core.processors.NodeGroupProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author sangjian.sj
  * @date 2020/03/01
  */
-public class NodeGroup extends DefaultBranchNode {
+public class NodeGroup<R> extends AbstractExecutableNode<R, NodeGroupProcessor<R>> implements Branch,
+    ComplexNodes<ExecutableNode<?, ?>> {
 
-    @NotNull
+    public NodeGroup() {
+    }
+
     @Override
-    public ProcessStatus execute(Context context) throws Exception {
-        InnerBlock block = new InnerBlock(context.getBlock());
-        ContextWrapper contextWrapper = Contexts.wrap(context, new BlockFacade(block));
-        return super.execute(contextWrapper);
+    public List<ExecutableNode<?, ?>> getNodes() {
+        List<ExecutableNode<?, ?>> nodes = new LinkedList<>();
+        List<ExecutableNode<?, ?>> currentNodes = getProcessor().getNodes();
+        if (currentNodes == null) {
+            return nodes;
+        }
+        for (ExecutableNode<?, ?> node : currentNodes) {
+            nodes.add(node);
+            if (node instanceof ComplexNodes) {
+                List<ExecutableNode<?, ?>> cascadeNodes = ((ComplexNodes<ExecutableNode<?, ?>>) node).getNodes();
+                if (cascadeNodes != null) {
+                    nodes.addAll(cascadeNodes);
+                }
+            }
+        }
+        return nodes;
     }
 
 }

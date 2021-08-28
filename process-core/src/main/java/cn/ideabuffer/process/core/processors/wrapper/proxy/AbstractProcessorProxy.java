@@ -39,13 +39,14 @@ public abstract class AbstractProcessorProxy<P extends Processor<R>, R> implemen
 
     @Override
     public R process(@NotNull Context context) throws Exception {
-        R result = null;
+        R result;
         try {
             handler.before(context);
             result = target.process(context);
         } catch (Throwable t) {
             try {
                 handler.afterThrowing(context, t);
+                return null;
             } catch (Throwable at) {
                 // 如果抛出的异常是Processor抛出的异常，则使用ProcessException
                 // 否则是afterThrowing中执行抛出的异常，使用WrapperHandlerProcessException

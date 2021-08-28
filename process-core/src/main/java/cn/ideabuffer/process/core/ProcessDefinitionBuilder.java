@@ -175,7 +175,7 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
      * @param group 节点组
      * @return 当前实例
      */
-    public ProcessDefinitionBuilder<R> addGroup(@NotNull NodeGroup group) {
+    public ProcessDefinitionBuilder<R> addGroup(@NotNull NodeGroup<?> group) {
         addNode(group);
         return this;
     }
