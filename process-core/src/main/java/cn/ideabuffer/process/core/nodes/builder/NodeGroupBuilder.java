@@ -14,17 +14,14 @@ import cn.ideabuffer.process.core.processors.wrapper.proxy.NodeGroupProcessorPro
 import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
 public class NodeGroupBuilder<R> extends AbstractExecutableNodeBuilder<R, NodeGroupProcessor<R>, NodeGroup<R>, WrapperHandler<R>> {
 
-    private ExecutableNode<?, ?>[] nodes;
+    private List<ExecutableNode<?, ?>> nodes = new LinkedList<>();
     private ResultHandler<R> resultHandler;
     
     private NodeGroupBuilder() {
@@ -36,7 +33,7 @@ public class NodeGroupBuilder<R> extends AbstractExecutableNodeBuilder<R, NodeGr
     }
 
     public NodeGroupBuilder<R> addNodes(@NotNull ExecutableNode<?, ?>... nodes) {
-        this.nodes = nodes;
+        this.nodes.addAll(Arrays.stream(nodes).collect(Collectors.toList()));
         return this;
     }
 
@@ -150,14 +147,14 @@ public class NodeGroupBuilder<R> extends AbstractExecutableNodeBuilder<R, NodeGr
     @Override
     public NodeGroup<R> build() {
         if (processor == null) {
-            processor = new NodeGroupProcessorImpl<>(Arrays.asList(nodes), resultHandler);
+            processor = new NodeGroupProcessorImpl<>(nodes, resultHandler);
         }
         processor = NodeGroupProcessorProxy.wrap(processor, handlers);
         if (readableKeys == null) {
             readableKeys = new HashSet<>();
         }
-        if (nodes != null && nodes.length > 0) {
-            readableKeys.addAll(Arrays.stream(nodes).map(ExecutableNode::getResultKey).collect(Collectors.toList()));
+        if (!nodes.isEmpty()) {
+            readableKeys.addAll(nodes.stream().map(ExecutableNode::getResultKey).collect(Collectors.toList()));
         }
         return super.build();
     }

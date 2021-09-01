@@ -62,7 +62,7 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
 
     @NotNull
     @Override
-    public ProcessStatus execute(Context context) throws Exception {
+    public ProcessStatus execute(@NotNull Context context) throws Exception {
         if (!enabled()) {
             return ProcessStatus.proceed();
         }
@@ -82,6 +82,12 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
             } catch (Throwable t) {
                 if (exceptionFn != null) {
                     result = exceptionFn.apply(t);
+                } else {
+                    if (t instanceof Exception) {
+                        throw t;
+                    } else {
+                        throw new ProcessException(t);
+                    }
                 }
             }
             if (getResultKey() != null) {

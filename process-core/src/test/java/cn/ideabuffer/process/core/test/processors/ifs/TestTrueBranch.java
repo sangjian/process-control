@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class TestTrueBranch extends DefaultBranchNode {
     @NotNull
     @Override
-    public ProcessStatus execute(Context context) throws Exception {
+    public ProcessStatus execute(@NotNull Context context) throws Exception {
         logger.info("in true branch");
         return super.execute(context);
     }

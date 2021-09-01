@@ -53,7 +53,11 @@ public class AggregateUtils {
             return processor.process(ctx);
         } catch (Exception e) {
             LOGGER.error("invoke process error", e);
-            throw new ProcessException(e);
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException)e;
+            } else {
+                throw new ProcessException(e);
+            }
         }
     }
 

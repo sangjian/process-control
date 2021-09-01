@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core;
 
 import cn.ideabuffer.process.core.context.Context;
+import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.processors.impl.ProcessInstanceProcessorImpl;
@@ -31,7 +32,14 @@ public class DefaultProcessInstance<R> extends AbstractExecutableNode<ProcessSta
 
     @Nullable
     @Override
-    public R process(Context context) throws Exception{
+    public R process(@NotNull Context context) throws Exception{
+        execute(context);
+        return getResult();
+    }
+
+    @Override
+    public @Nullable R process(@NotNull ContextBuilder builder) throws Exception {
+        Context context = builder.build();
         execute(context);
         return getResult();
     }

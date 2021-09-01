@@ -211,7 +211,10 @@ public class AggregateTest {
             Aggregators.newParallelGenericAggregator(executor, new TestStringListMerger(), 5000)).aggregate(nodes)
             .build();
         // 链式结果处理
-        node.thenApply(((ctx, result) -> {
+        node.exceptionally(t -> {
+            logger.warn("in exceptionally");
+            return null;
+        }).thenApply(((ctx, result) -> {
             assertEquals("test2", result.get(0));
             logger.info("result:{}", result);
             return result.size();

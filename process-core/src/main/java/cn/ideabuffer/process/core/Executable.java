@@ -23,7 +23,7 @@ public interface Executable {
      * @see ProcessStatus
      */
     @NotNull
-    ProcessStatus execute(Context context) throws Exception;
+    ProcessStatus execute(@NotNull Context context) throws Exception;
 
     /**
      * 获取当前执行的线程池

@@ -31,7 +31,7 @@ public class DefaultParallelBranchNode extends AbstractExecutableNode<ProcessSta
 
     @NotNull
     @Override
-    public ProcessStatus execute(Context context) throws Exception {
+    public ProcessStatus execute(@NotNull Context context) throws Exception {
         if (!enabled()) {
             return ProcessStatus.proceed();
         }

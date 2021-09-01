@@ -15,10 +15,13 @@ import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Collectors;
 
 /**
  * @author sangjian.sj
@@ -27,7 +30,7 @@ import java.util.function.BooleanSupplier;
 public class BranchNodeBuilder
     extends AbstractExecutableNodeBuilder<ProcessStatus, BranchProcessor, BranchNode, StatusWrapperHandler> {
 
-    private ExecutableNode[] nodes;
+    private List<ExecutableNode<?, ?>> nodes = new LinkedList<>();
 
     private BranchNodeBuilder() {
         super(Nodes.newBranch());
@@ -62,7 +65,7 @@ public class BranchNodeBuilder
     }
 
     public BranchNodeBuilder addNodes(@NotNull ExecutableNode<?, ?>... nodes) {
-        this.nodes = nodes;
+        this.nodes.addAll(Arrays.stream(nodes).collect(Collectors.toList()));
         return this;
     }
 
@@ -139,7 +142,7 @@ public class BranchNodeBuilder
         }
         processor = BranchProcessorProxy.wrap(processor, handlers);
         BranchNode node = super.build();
-        processor.addNodes(nodes);
+        processor.addNodes(nodes.toArray(new ExecutableNode[0]));
         return node;
     }
 }

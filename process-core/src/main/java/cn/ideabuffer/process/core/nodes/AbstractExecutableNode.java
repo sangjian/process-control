@@ -154,7 +154,7 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
 
     @NotNull
     @Override
-    public ProcessStatus execute(Context context) throws Exception {
+    public ProcessStatus execute(@NotNull Context context) throws Exception {
         if (!enabled()) {
             return ProcessStatus.proceed();
         }
@@ -286,7 +286,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @Override
     public void initialize() {
         super.initialize();
-        P processor = getProcessor();
         if (processor instanceof Lifecycle) {
             LifecycleManager.initialize((Lifecycle)processor);
         }
@@ -298,7 +297,6 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         if (executor instanceof ExecutorService && !((ExecutorService)executor).isShutdown()) {
             ((ExecutorService)executor).shutdown();
         }
-        P processor = getProcessor();
         if (processor instanceof Lifecycle) {
             LifecycleManager.destroy((Lifecycle)processor);
         }

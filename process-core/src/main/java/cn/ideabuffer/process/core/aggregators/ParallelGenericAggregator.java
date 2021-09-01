@@ -98,10 +98,11 @@ public class ParallelGenericAggregator<I, O> extends AbstractAggregator implemen
                 if (r != null) {
                     resultQueue.offer(r);
                 }
-            }).exceptionally(t -> {
-                logger.error("process error! node:{}", node, t);
-                return null;
             });
+//            .exceptionally(t -> {
+//                logger.error("process error! node:{}", node.getName(), t);
+//                return null;
+//            });
         if (node.getTimeout() <= 0) {
             return future;
         }

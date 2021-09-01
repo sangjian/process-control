@@ -102,10 +102,11 @@ public class ParallelDistributeAggregator<R> extends AbstractAggregator implemen
                 //noinspection unchecked
                 MergerNode<?, R> m = new MergerNode(node, v, result);
                 mergerNodes.offer(m);
-            }).exceptionally(t -> {
-                logger.error("process error! node:{}", node, t);
-                return null;
             });
+//            .exceptionally(t -> {
+//                logger.error("process error! node:{}", node, t);
+//                return null;
+//            });
         if (node.getTimeout() <= 0) {
             return future;
         }
@@ -119,7 +120,7 @@ public class ParallelDistributeAggregator<R> extends AbstractAggregator implemen
         }
     }
 
-    private class MergerNode<V, R> {
+    private static class MergerNode<V, R> {
         private DistributeMergeableNode<V, R> node;
         private V value;
         private R result;

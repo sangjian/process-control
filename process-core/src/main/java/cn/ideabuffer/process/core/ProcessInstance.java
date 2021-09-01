@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.processors.ProcessInstanceProcessor;
 import cn.ideabuffer.process.core.status.ProcessStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,7 +16,10 @@ import org.jetbrains.annotations.Nullable;
 public interface ProcessInstance<R> extends ExecutableNode<ProcessStatus, ProcessInstanceProcessor<R>>, ComplexNodes<Node> {
 
     @Nullable
-    R process(Context context) throws Exception;
+    R process(@NotNull Context context) throws Exception;
+
+    @Nullable
+    R process(@NotNull ContextBuilder builder) throws Exception;
 
     @Nullable
     R getResult();
