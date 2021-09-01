@@ -61,13 +61,12 @@ public class ProcessDefinitionBuilder<R> implements Builder<ProcessDefinition<R>
 
     private void checkKeyRegistry(Node node) {
         List<Node> currentNodes = new LinkedList<>();
+        currentNodes.add(node);
         if (node instanceof ComplexNodes) {
             List<Node> nodes = ((ComplexNodes) node).getNodes();
             if (nodes != null) {
                 currentNodes.addAll(nodes);
             }
-        } else {
-            currentNodes.add(node);
         }
         Map<Node, Key<?>> unDeclaredKeys = new HashMap<>();
         for (Node currentNode : currentNodes) {

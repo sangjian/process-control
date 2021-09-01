@@ -160,4 +160,16 @@ public class Aggregators {
         return new ParallelDistributeAggregator<>(executor, resultClass, timeout, unit);
     }
 
+    /**
+     * 创建串行分布式聚合器
+     *
+     * @param resultClass 返回结果类型，注意：必须有无参构造器
+     * @param <O>         聚合结果类型
+     * @return 并行分布式聚合节点
+     * @see DistributeAggregator
+     */
+    public static <O> DistributeAggregator<O> newSerialDistributeAggregator(@NotNull Class<O> resultClass) {
+        return new SerialDistributeAggregator<>(resultClass);
+    }
+
 }

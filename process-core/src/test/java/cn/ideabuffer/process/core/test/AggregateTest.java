@@ -351,35 +351,44 @@ public class AggregateTest {
 
     @Test
     public void testIntArray() throws Exception {
-//        ProcessDefinition<String> definition = new DefaultProcessDefinition<>();
-        GenericMergeableNode<int[]> node1 = GenericMergeableNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor1())
+        Key<int[]> resultKey = Contexts.newKey("resultKey", int[].class);
+        GenericMergeableNode<int[]> node1 = GenericMergeableNodeBuilder.<int[]>newBuilder()
+            .by(new IntArrayMergeNodeProcessor1())
             .build();
-        GenericMergeableNode<int[]> node2 = GenericMergeableNodeBuilder.<int[]>newBuilder().by(new IntArrayMergeNodeProcessor2())
+        GenericMergeableNode<int[]> node2 = GenericMergeableNodeBuilder.<int[]>newBuilder()
+            .by(new IntArrayMergeNodeProcessor2())
             .build();
         List<GenericMergeableNode<int[]>> nodes = new ArrayList<>();
         nodes.add(node1);
         nodes.add(node2);
-        UnitAggregatableNode<int[]> node = UnitAggregatableNodeBuilder.<int[]>newBuilder().aggregator(
-            Aggregators.newSerialUnitAggregator(new IntArrayMerger())).aggregate(nodes).build();
+        UnitAggregatableNode<int[]> node = UnitAggregatableNodeBuilder.<int[]>newBuilder()
+            .aggregator(
+                Aggregators.newSerialUnitAggregator(new IntArrayMerger())
+            )
+            .aggregate(nodes)
+            .resultKey(resultKey)
+            .build();
         node.thenApply(((ctx, result) -> {
             assertArrayEquals(new int[] {1, 2, 6, 3, 5, 8}, result);
             return result;
         }));
-        ProcessDefinition<String> definition = ProcessDefinitionBuilder.<String>newBuilder()
+        ProcessDefinition<int[]> definition = ProcessDefinitionBuilder.<int[]>newBuilder()
+            .declaringKeys(resultKey)
             .addAggregateNode(node)
-                .build();
-        ProcessInstance<String> instance = new DefaultProcessInstance<>(definition);
+            .resultHandler(context -> context.get(resultKey))
+            .build();
+        ProcessInstance<int[]> instance = definition.newInstance();
         Context context = Contexts.newContext();
 
-        instance.execute(context);
+        int[] result = instance.process(context);
+        assertArrayEquals(new int[] {1, 2, 6, 3, 5, 8}, result);
         //Thread.sleep(10000);
     }
 
     @Test
-    public void testDistributeAggregate() throws Exception {
+    public void testParallelDistributeAggregate() throws Exception {
         Executor executor = Executors.newFixedThreadPool(3);
         Key<Person> resultKey = Contexts.newKey("resultKey", Person.class);
-//        ProcessDefinition<Person> definition = new DefaultProcessDefinition<>(resultKey);
 
         DistributeMergeableNode<Integer, Person> node1 = DistributeMergeableNodeBuilder.<Integer, Person>newBuilder().by(
             new TestDistributeMergeNodeProcessor1()).build();
@@ -408,7 +417,45 @@ public class AggregateTest {
             .addDistributeAggregateNode(node)
                 .build();
         ProcessInstance<Person> instance = definition.newInstance();
-        instance.execute(Contexts.newContext());
+        Person result = instance.process(Contexts.newContext());
+        Person person = new Person(30, "Flash");
+        assertEquals(result, person);
+    }
+
+    @Test
+    public void testSerialDistributeAggregate() throws Exception {
+        Key<Person> resultKey = Contexts.newKey("resultKey", Person.class);
+
+        DistributeMergeableNode<Integer, Person> node1 = DistributeMergeableNodeBuilder.<Integer, Person>newBuilder().by(
+            new TestDistributeMergeNodeProcessor1()).build();
+        DistributeMergeableNode<String, Person> node2 = DistributeMergeableNodeBuilder.<String, Person>newBuilder().by(
+            new TestDistributeMergeNodeProcessor2()).build();
+
+        List<DistributeMergeableNode<?, Person>> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+        // 创建分布式聚合节点
+        DistributeAggregatableNode<Person> node = DistributeAggregatableNodeBuilder.<Person>newBuilder()
+            .aggregator(Aggregators.newSerialDistributeAggregator(Person.class))
+            .resultKey(resultKey)
+            // 注册分布式可合并节点，并设置结果处理器
+            .aggregate(nodes).build();
+        node.thenApply((ctx, result) -> {
+            logger.info("result:{}", result);
+            Person p = new Person(30, "Flash");
+            assertEquals(p, result);
+            return result;
+        });
+        ProcessDefinition<Person> definition = ProcessDefinitionBuilder.<Person>newBuilder()
+            .declaringKeys(resultKey)
+            .resultHandler(context -> context.get(resultKey))
+            // 注册分布式聚合节点
+            .addDistributeAggregateNode(node)
+            .build();
+        ProcessInstance<Person> instance = definition.newInstance();
+        Person result = instance.process(Contexts.newContext());
+        Person person = new Person(30, "Flash");
+        assertEquals(result, person);
     }
 
 }
