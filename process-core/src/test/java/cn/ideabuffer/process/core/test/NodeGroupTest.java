@@ -30,7 +30,8 @@ public class NodeGroupTest {
                     .resultKey(key1)
                     // 设置Processor
                     .by(context -> "hello")
-                    .build(),
+                    .build())
+                .addNodes(
                 ProcessNodeBuilder.<String>newBuilder()
                     .resultKey(key2)
                     .by(context -> " world")
