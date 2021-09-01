@@ -9,8 +9,6 @@ import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.NodeGroup;
 import cn.ideabuffer.process.core.nodes.builder.NodeGroupBuilder;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
-import cn.ideabuffer.process.core.test.processors.TestProcessor1;
-import cn.ideabuffer.process.core.test.processors.TestProcessor2;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +29,7 @@ public class NodeGroupTest {
                     // 设置Processor
                     .by(context -> "hello")
                     .build())
-                .addNodes(
+            .addNodes(
                 ProcessNodeBuilder.<String>newBuilder()
                     .resultKey(key2)
                     .by(context -> " world")
