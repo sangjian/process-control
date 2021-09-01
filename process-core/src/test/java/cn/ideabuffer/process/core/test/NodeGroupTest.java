@@ -53,4 +53,42 @@ public class NodeGroupTest {
         definition.destroy();
     }
 
+    @Test
+    public void resultTest2() throws Exception {
+        Key<Integer> resultKey = new Key<>("resultKey", Integer.class);
+
+        Key<String> key1 = Contexts.newKey("k1", String.class);
+        Key<String> key2 = Contexts.newKey("k2", String.class);
+        NodeGroup<Integer> group = NodeGroupBuilder.<Integer>newBuilder()
+            .addNodes(
+                ProcessNodeBuilder.<String>newBuilder()
+                    // 设置返回结果key
+                    .resultKey(key1)
+                    // 设置Processor
+                    .by(context -> "hello")
+                    .build())
+            .addNodes(
+                ProcessNodeBuilder.<String>newBuilder()
+                    .resultKey(key2)
+                    .by(context -> " world")
+                    .build())
+            .resultHandler(context -> context.get(key1).length() + context.get(key2).length())
+            .resultKey(resultKey)
+            .build();
+
+        ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
+            .declaringKeys(resultKey, key1, key2)
+            .resultHandler(context -> context.get(resultKey))
+            // 注册执行节点
+            .addGroup(group)
+            .build();
+        ProcessInstance<Integer> instance = definition.newInstance();
+        Context context = Contexts.newContext();
+
+        Integer result = instance.process(context);
+        // 输出执行结果
+        assertEquals(11L, result.longValue());
+        definition.destroy();
+    }
+
 }
