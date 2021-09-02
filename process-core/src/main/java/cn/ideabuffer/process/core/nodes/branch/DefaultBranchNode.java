@@ -9,7 +9,6 @@ import cn.ideabuffer.process.core.processors.BranchProcessor;
 import cn.ideabuffer.process.core.processors.impl.BranchProcessorImpl;
 import cn.ideabuffer.process.core.rules.Rule;
 import cn.ideabuffer.process.core.status.ProcessStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.LinkedList;

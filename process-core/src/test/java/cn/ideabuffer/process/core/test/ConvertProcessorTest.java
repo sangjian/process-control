@@ -6,8 +6,6 @@ import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
 import cn.ideabuffer.process.core.processors.builder.ConvertProcessorBuilder;
-import cn.ideabuffer.process.core.test.processors.TestProcessor1;
-import cn.ideabuffer.process.core.test.processors.TestProcessor2;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

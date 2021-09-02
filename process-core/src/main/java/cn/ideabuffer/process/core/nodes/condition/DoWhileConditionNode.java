@@ -3,8 +3,6 @@ package cn.ideabuffer.process.core.nodes.condition;
 import cn.ideabuffer.process.core.ComplexNodes;
 import cn.ideabuffer.process.core.KeyManager;
 import cn.ideabuffer.process.core.context.Context;
-import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.AbstractExecutableNode;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
@@ -16,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author sangjian.sj

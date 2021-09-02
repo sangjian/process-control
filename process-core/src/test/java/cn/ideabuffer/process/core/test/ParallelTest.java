@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.ProcessInstance;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.*;
 
 /**

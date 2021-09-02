@@ -1,10 +1,6 @@
 package cn.ideabuffer.process.core.nodes;
 
 import cn.ideabuffer.process.core.*;
-import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.context.KeyMapper;
-
-import java.util.Set;
 
 /**
  * 可合并结果的节点

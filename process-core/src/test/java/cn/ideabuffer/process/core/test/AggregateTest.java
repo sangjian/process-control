@@ -1,18 +1,20 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.*;
+import cn.ideabuffer.process.core.DefaultProcessInstance;
+import cn.ideabuffer.process.core.ProcessDefinition;
+import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
+import cn.ideabuffer.process.core.ProcessInstance;
 import cn.ideabuffer.process.core.aggregators.Aggregators;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
+import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
 import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
 import cn.ideabuffer.process.core.nodes.builder.*;
 import cn.ideabuffer.process.core.nodes.merger.*;
-import cn.ideabuffer.process.core.processors.impl.UnitAggregateProcessorImpl;
 import cn.ideabuffer.process.core.test.merger.TestStringListMerger;
 import cn.ideabuffer.process.core.test.processors.aggregate.*;
 import org.junit.Test;

@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.DefaultProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.context.Context;

@@ -1,8 +1,6 @@
 package cn.ideabuffer.process.core.processors.wrapper.proxy;
 
 import cn.ideabuffer.process.core.KeyManager;
-import cn.ideabuffer.process.core.context.Key;
-import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
 import cn.ideabuffer.process.core.processors.IfProcessor;
 import cn.ideabuffer.process.core.processors.wrapper.StatusWrapperHandler;
@@ -11,7 +9,6 @@ import cn.ideabuffer.process.core.status.ProcessStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author sangjian.sj
