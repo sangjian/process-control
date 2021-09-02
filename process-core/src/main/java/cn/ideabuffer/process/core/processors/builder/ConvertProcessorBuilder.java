@@ -4,7 +4,7 @@ import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ResultConverter;
 import cn.ideabuffer.process.core.processors.ConvertProcessor;
-import cn.ideabuffer.process.core.processors.impl.DefaultConvertProcessor;
+import cn.ideabuffer.process.core.processors.impl.ConvertProcessorImpl;
 import org.jetbrains.annotations.NotNull;
 
 public class ConvertProcessorBuilder<I, O> implements Builder<ConvertProcessor<I, O>> {
@@ -32,6 +32,6 @@ public class ConvertProcessorBuilder<I, O> implements Builder<ConvertProcessor<I
 
     @Override
     public ConvertProcessor<I, O> build() {
-        return new DefaultConvertProcessor<>(processor, converter);
+        return new ConvertProcessorImpl<>(processor, converter);
     }
 }

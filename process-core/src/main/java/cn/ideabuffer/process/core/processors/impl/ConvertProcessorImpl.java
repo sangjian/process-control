@@ -7,12 +7,12 @@ import cn.ideabuffer.process.core.processors.ConvertProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DefaultConvertProcessor<I, O> implements ConvertProcessor<I, O> {
+public class ConvertProcessorImpl<I, O> implements ConvertProcessor<I, O> {
 
     private Processor<I> processor;
     private ResultConverter<I, O> converter;
 
-    public DefaultConvertProcessor(@NotNull Processor<I> processor, @NotNull ResultConverter<I, O> converter) {
+    public ConvertProcessorImpl(@NotNull Processor<I> processor, @NotNull ResultConverter<I, O> converter) {
         this.processor = processor;
         this.converter = converter;
     }
