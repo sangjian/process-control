@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ResultHandler;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
@@ -103,18 +104,6 @@ public class NodeGroupBuilder<R> extends AbstractExecutableNodeBuilder<R, NodeGr
     }
 
     @Override
-    public NodeGroupBuilder<R> writableKeys(@NotNull Key<?>... keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public NodeGroupBuilder<R> writableKeys(@NotNull Set<Key<?>> keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
     public NodeGroupBuilder<R> enabled(BooleanSupplier supplier) {
         super.enabled(supplier);
         return this;
@@ -141,6 +130,30 @@ public class NodeGroupBuilder<R> extends AbstractExecutableNodeBuilder<R, NodeGr
     @Override
     public NodeGroupBuilder<R> description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    public NodeGroupBuilder<R> strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public NodeGroupBuilder<R> weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public NodeGroupBuilder<R> weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public NodeGroupBuilder<R> fallbackProcessor(Processor<R> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 

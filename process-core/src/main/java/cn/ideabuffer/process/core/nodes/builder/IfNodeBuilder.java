@@ -1,7 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
-import cn.ideabuffer.process.core.ReturnCondition;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -69,18 +69,6 @@ public class IfNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStatus, 
     }
 
     @Override
-    public IfNodeBuilder resultKey(Key<ProcessStatus> resultKey) {
-        super.resultKey(resultKey);
-        return this;
-    }
-
-    @Override
-    public IfNodeBuilder returnOn(ReturnCondition<ProcessStatus> condition) {
-        super.returnOn(condition);
-        return this;
-    }
-
-    @Override
     public IfNodeBuilder keyMapper(KeyMapper keyMapper) {
         super.keyMapper(keyMapper);
         return this;
@@ -95,18 +83,6 @@ public class IfNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStatus, 
     @Override
     public IfNodeBuilder readableKeys(@NotNull Set<Key<?>> keys) {
         super.readableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public IfNodeBuilder writableKeys(@NotNull Key<?>... keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public IfNodeBuilder writableKeys(@NotNull Set<Key<?>> keys) {
-        super.writableKeys(keys);
         return this;
     }
 
@@ -131,6 +107,30 @@ public class IfNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStatus, 
     public IfWhenBuilder then(@NotNull BranchNode branch) {
         this.trueBranch = branch;
         return new IfWhenBuilder(this);
+    }
+
+    @Override
+    public IfNodeBuilder strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public IfNodeBuilder weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public IfNodeBuilder weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public IfNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
+        return this;
     }
 
     public IfWhenBuilder then(@NotNull ExecutableNode<?, ?>... nodes) {

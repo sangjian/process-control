@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author sangjian.sj
@@ -30,6 +31,12 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     private List<ProcessListener<R>> listeners;
     private Key<R> resultKey;
     private ReturnCondition<R> returnCondition;
+    /**
+     * 默认强依赖
+     */
+    @NotNull
+    private BooleanSupplier weakDependencySupplier = STRONG_DEPENDENCY;
+    private Processor<R> fallbackProcessor;
 
     protected AbstractExecutableNode() {
         this(false);
@@ -74,6 +81,13 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     protected AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
         P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition, Set<Key<?>> readableKeys,
         Set<Key<?>> writableKeys) {
+        this(parallel, rule, executor, listeners, processor, mapper, resultKey, returnCondition, readableKeys,
+            writableKeys, STRONG_DEPENDENCY, null);
+    }
+
+    protected AbstractExecutableNode(boolean parallel, Rule rule, Executor executor, List<ProcessListener<R>> listeners,
+                                     P processor, KeyMapper mapper, Key<R> resultKey, ReturnCondition<R> returnCondition, Set<Key<?>> readableKeys,
+                                     Set<Key<?>> writableKeys, BooleanSupplier weakDependencySupplier, Processor<R> fallbackProcessor) {
         super(mapper, readableKeys, writableKeys);
         this.parallel = parallel;
         this.rule = rule;
@@ -85,6 +99,10 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
         if (resultKey != null) {
             addWritableKeys(resultKey);
         }
+        if (weakDependencySupplier != null) {
+            this.weakDependencySupplier = weakDependencySupplier;
+        }
+        this.fallbackProcessor = fallbackProcessor;
     }
 
     @Override
@@ -198,25 +216,47 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
 
     @Nullable
     private R doSerialExecute(Context context) throws Exception {
+        R result;
         try {
-            R result = getProcessor().process(context);
-            if (resultKey != null) {
-                if (result != null) {
-                    context.put(resultKey, result);
-                } else {
-                    context.remove(resultKey);
-                }
-            }
+            result = getProcessor().process(context);
+            processResult(context, result);
             notifyListeners(context, result, null, true);
             return result;
         } catch (Throwable t) {
-            context.setCurrentException(t);
             notifyListeners(context, null, t, false);
-            if (t instanceof Exception) {
-                throw t;
-            } else {
-                throw new ProcessException(t);
+            if (weakDependencySupplier.getAsBoolean()) {
+                if (fallbackProcessor != null) {
+                    result = fallbackProcessor.process(context);
+                } else {
+                    result = null;
+                }
+                processResult(context, result);
+                return result;
             }
+            context.setCurrentException(t);
+            if (t instanceof ProcessException) {
+                return onException(t.getCause());
+            } else {
+                return onException(t);
+            }
+        }
+    }
+
+    private void processResult(Context context, R result) {
+        if (resultKey != null) {
+            if (result != null) {
+                context.put(resultKey, result);
+            } else {
+                context.remove(resultKey);
+            }
+        }
+    }
+
+    protected R onException(@NotNull Throwable t) throws Exception {
+        if (t instanceof Exception) {
+            throw (Exception) t;
+        } else {
+            throw new ProcessException(t);
         }
     }
 
@@ -305,5 +345,25 @@ public abstract class AbstractExecutableNode<R, P extends Processor<R>> extends 
     @Override
     public String getName() {
         return name != null ? name : this.getClass().getSimpleName() + "-" + getProcessor().getClass().getSimpleName();
+    }
+
+    @Override
+    public boolean isWeakDependency() {
+        return weakDependencySupplier.getAsBoolean();
+    }
+
+    @Override
+    public @NotNull Processor<R> getFallbackProcessor() {
+        return fallbackProcessor;
+    }
+
+    @Override
+    public void setWeakDependency(@NotNull BooleanSupplier supplier) {
+        this.weakDependencySupplier = supplier;
+    }
+
+    @Override
+    public void setFallbackProcessor(Processor<R> fallbackProcessor) {
+        this.fallbackProcessor = fallbackProcessor;
     }
 }

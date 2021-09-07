@@ -134,6 +134,30 @@ public class ProcessNodeBuilder<R>
     }
 
     @Override
+    public ProcessNodeBuilder<R> strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public ProcessNodeBuilder<R> fallbackProcessor(Processor<R> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
+        return this;
+    }
+
+    @Override
     public ProcessNode<R> build() {
         if (processor != null) {
             processor = DefaultProcessorProxy.wrap(processor, handlers);

@@ -1,9 +1,11 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.aggregators.GenericAggregator;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.GenericAggregatableNode;
@@ -17,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
@@ -126,6 +129,48 @@ public class GenericAggregatableNodeBuilder<P, R>
     @Override
     public GenericAggregatableNodeBuilder<P, R> description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public GenericAggregatableNodeBuilder<P, R> fallbackProcessor(Processor<R> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 

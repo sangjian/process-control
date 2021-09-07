@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
@@ -75,12 +77,6 @@ public class DoWhileNodeBuilder
     }
 
     @Override
-    public DoWhileNodeBuilder returnOn(ReturnCondition<ProcessStatus> condition) {
-        super.returnOn(condition);
-        return this;
-    }
-
-    @Override
     public DoWhileNodeBuilder keyMapper(KeyMapper keyMapper) {
         super.keyMapper(keyMapper);
         return this;
@@ -95,18 +91,6 @@ public class DoWhileNodeBuilder
     @Override
     public DoWhileNodeBuilder readableKeys(@NotNull Set<Key<?>> keys) {
         super.readableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public DoWhileNodeBuilder writableKeys(@NotNull Key<?>... keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public DoWhileNodeBuilder writableKeys(@NotNull Set<Key<?>> keys) {
-        super.writableKeys(keys);
         return this;
     }
 
@@ -150,6 +134,30 @@ public class DoWhileNodeBuilder
     @Override
     public DoWhileNodeBuilder description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    public DoWhileNodeBuilder strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public DoWhileNodeBuilder weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public DoWhileNodeBuilder weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public DoWhileNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 

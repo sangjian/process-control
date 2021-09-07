@@ -4,6 +4,7 @@ import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.TransmissionNode;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.DefaultProcessorProxy;
@@ -11,6 +12,7 @@ import cn.ideabuffer.process.core.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
@@ -98,6 +100,48 @@ public class TransmissionNodeBuilder<R>
     @Override
     public TransmissionNodeBuilder<R> description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    public TransmissionNodeBuilder<R> keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
+        return this;
+    }
+
+    @Override
+    public TransmissionNodeBuilder<R> readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public TransmissionNodeBuilder<R> readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public TransmissionNodeBuilder<R> strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public TransmissionNodeBuilder<R> weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public TransmissionNodeBuilder<R> weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public TransmissionNodeBuilder<R> fallbackProcessor(Processor<R> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 

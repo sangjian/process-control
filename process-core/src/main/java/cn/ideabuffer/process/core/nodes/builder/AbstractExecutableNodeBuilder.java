@@ -16,6 +16,9 @@ import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
+import static cn.ideabuffer.process.core.Degradable.STRONG_DEPENDENCY;
+import static cn.ideabuffer.process.core.Degradable.WEAK_DEPENDENCY;
+
 /**
  * @author sangjian.sj
  * @date 2020/04/24
@@ -39,6 +42,8 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
     protected List<W> handlers;
     protected String name;
     protected String description;
+    protected BooleanSupplier weakDependencySupplier = STRONG_DEPENDENCY;
+    protected Processor<R> fallbackProcessor;
 
     protected AbstractExecutableNodeBuilder(T node) {
         this.node = node;
@@ -82,32 +87,32 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
-    public Builder<T> returnOn(ReturnCondition<R> condition) {
+    protected Builder<T> returnOn(ReturnCondition<R> condition) {
         this.returnCondition = condition;
         return this;
     }
 
-    public Builder<T> keyMapper(KeyMapper keyMapper) {
+    protected Builder<T> keyMapper(KeyMapper keyMapper) {
         this.keyMapper = keyMapper;
         return this;
     }
 
-    public Builder<T> readableKeys(@NotNull Key<?>... keys) {
+    protected Builder<T> readableKeys(@NotNull Key<?>... keys) {
         this.readableKeys.addAll(Arrays.stream(keys).collect(Collectors.toSet()));
         return this;
     }
 
-    public Builder<T> readableKeys(@NotNull Set<Key<?>> keys) {
+    protected Builder<T> readableKeys(@NotNull Set<Key<?>> keys) {
         this.readableKeys = keys;
         return this;
     }
 
-    public Builder<T> writableKeys(@NotNull Key<?>... keys) {
+    protected Builder<T> writableKeys(@NotNull Key<?>... keys) {
         this.writableKeys.addAll(Arrays.stream(keys).collect(Collectors.toSet()));
         return this;
     }
 
-    public Builder<T> writableKeys(@NotNull Set<Key<?>> keys) {
+    protected Builder<T> writableKeys(@NotNull Set<Key<?>> keys) {
         this.writableKeys = keys;
         return this;
     }
@@ -136,6 +141,26 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
 
     public Builder<T> description(String description) {
         this.description = description;
+        return this;
+    }
+
+    public Builder<T> strongDependency() {
+        this.weakDependencySupplier = STRONG_DEPENDENCY;
+        return this;
+    }
+
+    public Builder<T> weakDependency() {
+        this.weakDependencySupplier = WEAK_DEPENDENCY;
+        return this;
+    }
+
+    public Builder<T> weakDependency(@NotNull BooleanSupplier supplier) {
+        this.weakDependencySupplier = supplier;
+        return this;
+    }
+
+    public Builder<T> fallbackProcessor(Processor<R> fallbackProcessor) {
+        this.fallbackProcessor = fallbackProcessor;
         return this;
     }
 
@@ -168,6 +193,8 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
             node.setName(name);
         }
         node.setDescription(description);
+        node.setWeakDependency(weakDependencySupplier);
+        node.setFallbackProcessor(fallbackProcessor);
         return node;
     }
 

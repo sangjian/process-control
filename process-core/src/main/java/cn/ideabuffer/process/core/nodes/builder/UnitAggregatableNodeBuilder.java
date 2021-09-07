@@ -1,6 +1,8 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.aggregators.UnitAggregator;
 import cn.ideabuffer.process.core.context.Key;
@@ -125,18 +127,6 @@ public class UnitAggregatableNodeBuilder<R>
     }
 
     @Override
-    public UnitAggregatableNodeBuilder<R> writableKeys(@NotNull Key<?>... keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public UnitAggregatableNodeBuilder<R> writableKeys(@NotNull Set<Key<?>> keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
     public UnitAggregatableNodeBuilder<R> wrap(@NotNull WrapperHandler<R> handler) {
         super.wrap(handler);
         return this;
@@ -157,6 +147,30 @@ public class UnitAggregatableNodeBuilder<R>
     @Override
     public UnitAggregatableNodeBuilder<R> description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> fallbackProcessor(Processor<R> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 

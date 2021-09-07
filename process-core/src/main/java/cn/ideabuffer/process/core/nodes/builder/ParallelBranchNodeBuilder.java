@@ -1,6 +1,10 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
+import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.ParallelBranchNode;
@@ -16,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
@@ -106,6 +111,48 @@ public class ParallelBranchNodeBuilder
     @Override
     public ParallelBranchNodeBuilder description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    protected ParallelBranchNodeBuilder keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
+        return this;
+    }
+
+    @Override
+    protected ParallelBranchNodeBuilder readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    protected ParallelBranchNodeBuilder readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public ParallelBranchNodeBuilder strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public ParallelBranchNodeBuilder weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public ParallelBranchNodeBuilder weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public ParallelBranchNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 

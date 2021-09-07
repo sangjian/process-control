@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
@@ -77,48 +78,6 @@ public class TryCatchFinallyNodeBuilder extends
     }
 
     @Override
-    public TryCatchFinallyNodeBuilder resultKey(Key<ProcessStatus> resultKey) {
-        super.resultKey(resultKey);
-        return this;
-    }
-
-    @Override
-    public TryCatchFinallyNodeBuilder returnOn(ReturnCondition<ProcessStatus> condition) {
-        super.returnOn(condition);
-        return this;
-    }
-
-    @Override
-    public TryCatchFinallyNodeBuilder keyMapper(KeyMapper keyMapper) {
-        super.keyMapper(keyMapper);
-        return this;
-    }
-
-    @Override
-    public TryCatchFinallyNodeBuilder readableKeys(@NotNull Key<?>... keys) {
-        super.readableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public TryCatchFinallyNodeBuilder readableKeys(@NotNull Set<Key<?>> keys) {
-        super.readableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public TryCatchFinallyNodeBuilder writableKeys(@NotNull Key<?>... keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public TryCatchFinallyNodeBuilder writableKeys(@NotNull Set<Key<?>> keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
     public TryCatchFinallyNodeBuilder enabled(BooleanSupplier supplier) {
         super.enabled(supplier);
         return this;
@@ -158,6 +117,48 @@ public class TryCatchFinallyNodeBuilder extends
     @Override
     public TryCatchFinallyNodeBuilder description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    protected TryCatchFinallyNodeBuilder keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
+        return this;
+    }
+
+    @Override
+    protected TryCatchFinallyNodeBuilder readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    protected TryCatchFinallyNodeBuilder readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public TryCatchFinallyNodeBuilder strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public TryCatchFinallyNodeBuilder weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public TryCatchFinallyNodeBuilder weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public TryCatchFinallyNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 

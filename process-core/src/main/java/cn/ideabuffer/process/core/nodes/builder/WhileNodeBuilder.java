@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
@@ -99,18 +100,6 @@ public class WhileNodeBuilder
     }
 
     @Override
-    public WhileNodeBuilder writableKeys(@NotNull Key<?>... keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public WhileNodeBuilder writableKeys(@NotNull Set<Key<?>> keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
     public WhileNodeBuilder enabled(BooleanSupplier supplier) {
         super.enabled(supplier);
         return this;
@@ -150,6 +139,30 @@ public class WhileNodeBuilder
     @Override
     public WhileNodeBuilder description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    public WhileNodeBuilder strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public WhileNodeBuilder weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public WhileNodeBuilder weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public WhileNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 

@@ -33,7 +33,11 @@ public class DefaultParallelExecutor implements ParallelExecutor {
                 try {
                     return node.execute(context);
                 } catch (Exception e) {
-                    throw new ProcessException(e);
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException)e;
+                    } else {
+                        throw new ProcessException(e);
+                    }
                 }
             };
             return executor == null ? CompletableFuture.supplyAsync(supplier) : CompletableFuture.supplyAsync(supplier,

@@ -5,12 +5,13 @@ import cn.ideabuffer.process.core.context.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author sangjian.sj
  * @date 2020/01/19
  */
-public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executable, Parallelizable, Matchable, KeyManager {
+public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executable, Parallelizable, Matchable, KeyManager, Degradable<R, Processor<R>> {
 
     boolean isParallel();
 
@@ -29,4 +30,8 @@ public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executa
     void returnOn(ReturnCondition<R> condition);
 
     ReturnCondition<R> getReturnCondition();
+
+    void setWeakDependency(@NotNull BooleanSupplier supplier);
+
+    void setFallbackProcessor(Processor<R> fallbackProcessor);
 }

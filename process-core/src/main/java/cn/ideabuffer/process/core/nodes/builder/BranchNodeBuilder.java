@@ -1,6 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -81,36 +82,6 @@ public class BranchNodeBuilder
     }
 
     @Override
-    public BranchNodeBuilder keyMapper(KeyMapper keyMapper) {
-        super.keyMapper(keyMapper);
-        return this;
-    }
-
-    @Override
-    public BranchNodeBuilder readableKeys(@NotNull Key<?>... keys) {
-        super.readableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public BranchNodeBuilder readableKeys(@NotNull Set<Key<?>> keys) {
-        super.readableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public BranchNodeBuilder writableKeys(@NotNull Key<?>... keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
-    public BranchNodeBuilder writableKeys(@NotNull Set<Key<?>> keys) {
-        super.writableKeys(keys);
-        return this;
-    }
-
-    @Override
     public BranchNodeBuilder wrap(@NotNull StatusWrapperHandler handler) {
         super.wrap(handler);
         return this;
@@ -129,8 +100,50 @@ public class BranchNodeBuilder
     }
 
     @Override
+    protected BranchNodeBuilder keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
+        return this;
+    }
+
+    @Override
+    protected BranchNodeBuilder readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    protected BranchNodeBuilder readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
     public BranchNodeBuilder description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 

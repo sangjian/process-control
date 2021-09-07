@@ -1,9 +1,12 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.aggregators.DistributeAggregator;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
 import cn.ideabuffer.process.core.nodes.aggregate.DistributeAggregatableNode;
@@ -17,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
@@ -127,6 +131,48 @@ public class DistributeAggregatableNodeBuilder<R>
     @Override
     public DistributeAggregatableNodeBuilder<R> description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    protected DistributeAggregatableNodeBuilder<R> keyMapper(KeyMapper keyMapper) {
+        super.keyMapper(keyMapper);
+        return this;
+    }
+
+    @Override
+    protected DistributeAggregatableNodeBuilder<R> readableKeys(@NotNull Key<?>... keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    protected DistributeAggregatableNodeBuilder<R> readableKeys(@NotNull Set<Key<?>> keys) {
+        super.readableKeys(keys);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> strongDependency() {
+        super.strongDependency();
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> weakDependency() {
+        super.weakDependency();
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> weakDependency(@NotNull BooleanSupplier supplier) {
+        super.weakDependency(supplier);
+        return this;
+    }
+
+    @Override
+    public DistributeAggregatableNodeBuilder<R> fallbackProcessor(Processor<R> fallbackProcessor) {
+        super.fallbackProcessor(fallbackProcessor);
         return this;
     }
 
