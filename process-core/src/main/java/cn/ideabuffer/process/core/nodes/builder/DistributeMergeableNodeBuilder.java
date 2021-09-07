@@ -31,6 +31,7 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
     private Set<Key<?>> writableKeys;
     private String name;
     private String description;
+    private String id;
 
     private DistributeMergeableNodeBuilder() {
         this.readableKeys = new HashSet<>();
@@ -107,6 +108,11 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
         return this;
     }
 
+    public DistributeMergeableNodeBuilder<T, R> id(String id) {
+        this.id = id;
+        return this;
+    }
+
     @Override
     public DistributeMergeableNode<T, R> build() {
         long millis = timeUnit == null ? 0L : timeUnit.toMillis(timeout);
@@ -114,6 +120,7 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
         DistributeMergeableNode<T, R> node = new DefaultDistributeMergeableNode<>(rule, millis, processor, readableKeys, writableKeys, keyMapper);
         node.setName(name);
         node.setDescription(description);
+        node.setId(id);
         return node;
     }
 }

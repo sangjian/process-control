@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Key;
@@ -150,6 +151,12 @@ public class IfNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStatus, 
     @Override
     public IfNodeBuilder description(String description) {
         super.description(description);
+        return this;
+    }
+
+    @Override
+    public IfNodeBuilder id(String id) {
+        super.id(id);
         return this;
     }
 

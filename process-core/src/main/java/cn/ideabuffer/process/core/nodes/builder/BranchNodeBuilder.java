@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Key;
@@ -144,6 +145,12 @@ public class BranchNodeBuilder
     @Override
     public BranchNodeBuilder fallbackBy(Processor<ProcessStatus> fallbackProcessor) {
         super.fallbackBy(fallbackProcessor);
+        return this;
+    }
+
+    @Override
+    public BranchNodeBuilder id(String id) {
+        super.id(id);
         return this;
     }
 

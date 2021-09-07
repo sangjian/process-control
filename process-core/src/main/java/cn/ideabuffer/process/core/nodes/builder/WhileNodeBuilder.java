@@ -167,6 +167,12 @@ public class WhileNodeBuilder
     }
 
     @Override
+    public WhileNodeBuilder id(String id) {
+        super.id(id);
+        return this;
+    }
+
+    @Override
     public WhileConditionNode build() {
         if (rule == null) {
             throw new NullPointerException("rule cannot be null!");

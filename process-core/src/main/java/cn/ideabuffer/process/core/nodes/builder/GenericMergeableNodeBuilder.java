@@ -30,6 +30,7 @@ public class GenericMergeableNodeBuilder<T> implements Builder<GenericMergeableN
     private Set<Key<?>> writableKeys;
     private String name;
     private String description;
+    private String id;
 
     private GenericMergeableNodeBuilder() {
         this.readableKeys = new HashSet<>();
@@ -91,12 +92,18 @@ public class GenericMergeableNodeBuilder<T> implements Builder<GenericMergeableN
         return this;
     }
 
+    public GenericMergeableNodeBuilder<T> id(String id) {
+        this.id = id;
+        return this;
+    }
+
     @Override
     public GenericMergeableNode<T> build() {
         long millis = timeUnit == null ? 0L : timeUnit.toMillis(timeout);
         GenericMergeableNode<T> node = new DefaultGenericMergeableNode<>(rule, millis, processor, readableKeys, writableKeys, keyMapper);
         node.setName(name);
         node.setDescription(description);
+        node.setId(id);
         return node;
     }
 }

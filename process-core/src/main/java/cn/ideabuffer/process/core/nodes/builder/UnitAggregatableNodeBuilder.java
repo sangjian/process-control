@@ -1,5 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
+import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
@@ -170,6 +171,12 @@ public class UnitAggregatableNodeBuilder<R>
     @Override
     public UnitAggregatableNodeBuilder<R> fallbackBy(Processor<R> fallbackProcessor) {
         super.fallbackBy(fallbackProcessor);
+        return this;
+    }
+
+    @Override
+    public UnitAggregatableNodeBuilder<R> id(String id) {
+        super.id(id);
         return this;
     }
 

@@ -1,9 +1,6 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.ProcessListener;
-import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.ResultHandler;
-import cn.ideabuffer.process.core.ReturnCondition;
+import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -154,6 +151,12 @@ public class NodeGroupBuilder<R> extends AbstractExecutableNodeBuilder<R, NodeGr
     @Override
     public NodeGroupBuilder<R> fallbackBy(Processor<R> fallbackProcessor) {
         super.fallbackBy(fallbackProcessor);
+        return this;
+    }
+
+    @Override
+    public NodeGroupBuilder<R> id(String id) {
+        super.id(id);
         return this;
     }
 

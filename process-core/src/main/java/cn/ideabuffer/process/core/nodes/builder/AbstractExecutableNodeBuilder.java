@@ -40,6 +40,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
     protected Set<Key<?>> writableKeys;
     protected BooleanSupplier enableSupplier;
     protected List<W> handlers;
+    protected String id;
     protected String name;
     protected String description;
     protected BooleanSupplier weakDependencySupplier = STRONG_DEPENDENCY;
@@ -134,6 +135,11 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
+    public Builder<T> id(String id) {
+        this.id = id;
+        return this;
+    }
+
     public Builder<T> name(String name) {
         this.name = name;
         return this;
@@ -195,6 +201,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         node.setDescription(description);
         node.setWeakDependency(weakDependencySupplier);
         node.setFallbackProcessor(fallbackProcessor);
+        node.setId(id);
         return node;
     }
 

@@ -13,10 +13,13 @@ import java.util.function.BooleanSupplier;
 public abstract class AbstractNode implements Node {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     /**
      * 默认开启
      */
-    private BooleanSupplier enableSupplier = () -> true;
+    protected BooleanSupplier enableSupplier = () -> true;
+
+    protected String id;
 
     protected String name;
 
@@ -51,6 +54,11 @@ public abstract class AbstractNode implements Node {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public void setName(String name) {
         this.name = name;
     }
@@ -58,6 +66,11 @@ public abstract class AbstractNode implements Node {
     @Override
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override
