@@ -140,8 +140,8 @@ public class TransmissionNodeBuilder<R>
     }
 
     @Override
-    public TransmissionNodeBuilder<R> fallbackProcessor(Processor<R> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public TransmissionNodeBuilder<R> fallbackBy(Processor<R> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 

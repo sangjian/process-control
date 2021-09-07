@@ -152,8 +152,8 @@ public class NodeGroupBuilder<R> extends AbstractExecutableNodeBuilder<R, NodeGr
     }
 
     @Override
-    public NodeGroupBuilder<R> fallbackProcessor(Processor<R> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public NodeGroupBuilder<R> fallbackBy(Processor<R> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 

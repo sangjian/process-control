@@ -161,8 +161,8 @@ public class WhileNodeBuilder
     }
 
     @Override
-    public WhileNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public WhileNodeBuilder fallbackBy(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 

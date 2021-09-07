@@ -142,8 +142,8 @@ public class BranchNodeBuilder
     }
 
     @Override
-    public BranchNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public BranchNodeBuilder fallbackBy(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 

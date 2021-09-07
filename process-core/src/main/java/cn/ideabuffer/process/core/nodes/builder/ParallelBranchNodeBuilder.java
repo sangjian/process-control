@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Key;
@@ -151,8 +150,8 @@ public class ParallelBranchNodeBuilder
     }
 
     @Override
-    public ParallelBranchNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public ParallelBranchNodeBuilder fallbackBy(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 

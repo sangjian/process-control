@@ -169,8 +169,8 @@ public class GenericAggregatableNodeBuilder<P, R>
     }
 
     @Override
-    public GenericAggregatableNodeBuilder<P, R> fallbackProcessor(Processor<R> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public GenericAggregatableNodeBuilder<P, R> fallbackBy(Processor<R> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 

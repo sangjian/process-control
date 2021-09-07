@@ -152,8 +152,8 @@ public class ProcessNodeBuilder<R>
     }
 
     @Override
-    public ProcessNodeBuilder<R> fallbackProcessor(Processor<R> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public ProcessNodeBuilder<R> fallbackBy(Processor<R> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 

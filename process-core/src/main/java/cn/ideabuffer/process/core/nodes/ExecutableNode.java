@@ -11,7 +11,8 @@ import java.util.function.BooleanSupplier;
  * @author sangjian.sj
  * @date 2020/01/19
  */
-public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executable, Parallelizable, Matchable, KeyManager, Degradable<R, Processor<R>> {
+public interface ExecutableNode<R, P extends Processor<R>> extends Node, Executable, Parallelizable, Matchable,
+    KeyManager, Degradable<R, Processor<R>> {
 
     boolean isParallel();
 

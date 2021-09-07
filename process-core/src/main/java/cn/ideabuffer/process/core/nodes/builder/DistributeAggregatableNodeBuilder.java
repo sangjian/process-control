@@ -1,6 +1,5 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.ReturnCondition;
@@ -171,8 +170,8 @@ public class DistributeAggregatableNodeBuilder<R>
     }
 
     @Override
-    public DistributeAggregatableNodeBuilder<R> fallbackProcessor(Processor<R> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public DistributeAggregatableNodeBuilder<R> fallbackBy(Processor<R> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 

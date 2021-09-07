@@ -159,7 +159,7 @@ public abstract class AbstractExecutableNodeBuilder<R, P extends Processor<R>, T
         return this;
     }
 
-    public Builder<T> fallbackProcessor(Processor<R> fallbackProcessor) {
+    public Builder<T> fallbackBy(Processor<R> fallbackProcessor) {
         this.fallbackProcessor = fallbackProcessor;
         return this;
     }

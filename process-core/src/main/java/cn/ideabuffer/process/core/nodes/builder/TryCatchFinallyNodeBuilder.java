@@ -1,9 +1,7 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
-import cn.ideabuffer.process.core.Builder;
 import cn.ideabuffer.process.core.ProcessListener;
 import cn.ideabuffer.process.core.Processor;
-import cn.ideabuffer.process.core.ReturnCondition;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.ExecutableNode;
@@ -157,8 +155,8 @@ public class TryCatchFinallyNodeBuilder extends
     }
 
     @Override
-    public TryCatchFinallyNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public TryCatchFinallyNodeBuilder fallbackBy(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 

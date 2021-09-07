@@ -128,8 +128,8 @@ public class IfNodeBuilder extends AbstractExecutableNodeBuilder<ProcessStatus, 
     }
 
     @Override
-    public IfNodeBuilder fallbackProcessor(Processor<ProcessStatus> fallbackProcessor) {
-        super.fallbackProcessor(fallbackProcessor);
+    public IfNodeBuilder fallbackBy(Processor<ProcessStatus> fallbackProcessor) {
+        super.fallbackBy(fallbackProcessor);
         return this;
     }
 
