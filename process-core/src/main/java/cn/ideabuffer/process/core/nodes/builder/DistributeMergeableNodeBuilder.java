@@ -1,11 +1,14 @@
 package cn.ideabuffer.process.core.nodes.builder;
 
 import cn.ideabuffer.process.core.Builder;
+import cn.ideabuffer.process.core.Processor;
 import cn.ideabuffer.process.core.context.Key;
 import cn.ideabuffer.process.core.context.KeyMapper;
 import cn.ideabuffer.process.core.nodes.DefaultDistributeMergeableNode;
 import cn.ideabuffer.process.core.nodes.DistributeMergeableNode;
+import cn.ideabuffer.process.core.processors.DistributeMerger;
 import cn.ideabuffer.process.core.processors.DistributeProcessor;
+import cn.ideabuffer.process.core.processors.impl.DistributeProcessorAdaptor;
 import cn.ideabuffer.process.core.processors.wrapper.WrapperHandler;
 import cn.ideabuffer.process.core.processors.wrapper.proxy.DistributeProcessorProxy;
 import cn.ideabuffer.process.core.rules.Rule;
@@ -24,7 +27,7 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
     private Rule rule;
     private long timeout;
     private TimeUnit timeUnit;
-    private DistributeProcessor<T, R> processor;
+    private DistributeProcessor<T, R> distributeProcessor;
     private List<WrapperHandler<T>> handlers;
     private KeyMapper keyMapper;
     private Set<Key<?>> readableKeys;
@@ -32,6 +35,8 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
     private String name;
     private String description;
     private String id;
+    private Processor<T> processor;
+    private DistributeMerger<T, R> merger;
 
     private DistributeMergeableNodeBuilder() {
         this.readableKeys = new HashSet<>();
@@ -53,8 +58,14 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
         return this;
     }
 
-    public DistributeMergeableNodeBuilder<T, R> by(DistributeProcessor<T, R> processor) {
+    public DistributeMergeableNodeBuilder<T, R> by(@NotNull DistributeProcessor<T, R> distributeProcessor) {
+        this.distributeProcessor = distributeProcessor;
+        return this;
+    }
+
+    public DistributeMergeableNodeBuilder<T, R> by(@NotNull Processor<T> processor, @NotNull DistributeMerger<T, R> merger) {
         this.processor = processor;
+        this.merger = merger;
         return this;
     }
 
@@ -116,8 +127,14 @@ public class DistributeMergeableNodeBuilder<T, R> implements Builder<DistributeM
     @Override
     public DistributeMergeableNode<T, R> build() {
         long millis = timeUnit == null ? 0L : timeUnit.toMillis(timeout);
-        processor = DistributeProcessorProxy.wrap(processor, handlers);
-        DistributeMergeableNode<T, R> node = new DefaultDistributeMergeableNode<>(rule, millis, processor, readableKeys, writableKeys, keyMapper);
+        if (distributeProcessor == null) {
+            if (processor == null || merger == null) {
+                throw new NullPointerException("processor and merger must be set when distributeProcessor is not set");
+            }
+            distributeProcessor = new DistributeProcessorAdaptor<>(processor, merger);
+        }
+        distributeProcessor = DistributeProcessorProxy.wrap(distributeProcessor, handlers);
+        DistributeMergeableNode<T, R> node = new DefaultDistributeMergeableNode<>(rule, millis, distributeProcessor, readableKeys, writableKeys, keyMapper);
         node.setName(name);
         node.setDescription(description);
         node.setId(id);

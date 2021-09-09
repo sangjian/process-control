@@ -3,19 +3,24 @@ package cn.ideabuffer.process.core.test;
 import cn.ideabuffer.process.core.ProcessDefinition;
 import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
 import cn.ideabuffer.process.core.ProcessInstance;
+import cn.ideabuffer.process.core.aggregators.Aggregators;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
 import cn.ideabuffer.process.core.context.Key;
+import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.Nodes;
+import cn.ideabuffer.process.core.nodes.aggregate.UnitAggregatableNode;
 import cn.ideabuffer.process.core.nodes.branch.BranchNode;
-import cn.ideabuffer.process.core.nodes.builder.BranchNodeBuilder;
-import cn.ideabuffer.process.core.nodes.builder.IfNodeBuilder;
-import cn.ideabuffer.process.core.nodes.builder.ProcessNodeBuilder;
-import cn.ideabuffer.process.core.nodes.builder.TryCatchFinallyNodeBuilder;
+import cn.ideabuffer.process.core.nodes.builder.*;
 import cn.ideabuffer.process.core.nodes.condition.IfConditionNode;
+import cn.ideabuffer.process.core.nodes.merger.ArrayListMerger;
 import cn.ideabuffer.process.core.status.ProcessStatus;
 import cn.ideabuffer.process.core.test.processors.TestProcessor1;
 import cn.ideabuffer.process.core.test.processors.TestProcessor2;
+import cn.ideabuffer.process.core.test.processors.aggregate.TestListMergeNodeProcessor1;
+import cn.ideabuffer.process.core.test.processors.aggregate.TestListMergeNodeProcessor2;
+import cn.ideabuffer.process.core.test.processors.aggregate.TestUnitAggregatableNodeListener1;
+import cn.ideabuffer.process.core.test.processors.aggregate.TestUnitAggregatableNodeListener2;
 import cn.ideabuffer.process.core.test.processors.ifs.TestFalseBranch;
 import cn.ideabuffer.process.core.test.processors.ifs.TestIfRule;
 import cn.ideabuffer.process.core.test.processors.ifs.TestTrueBranch;
@@ -26,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -272,9 +278,53 @@ public class ProcessInstanceTest {
     }
 
     @Test
-    public void testKey() {
-        Key<List<String>> k = new Key<>("k", List.class);
-        Context context = Contexts.newContext();
-        context.put(k, new ArrayList<>());
+    public void testGetNodes() {
+        Executor executor = Executors.newFixedThreadPool(3);
+        GenericMergeableNode<List<String>> node1 = GenericMergeableNodeBuilder.<List<String>>newBuilder()
+            .by(new TestListMergeNodeProcessor1())
+            .build();
+        GenericMergeableNode<List<String>> node2 = GenericMergeableNodeBuilder.<List<String>>newBuilder().by(
+            new TestListMergeNodeProcessor2()).build();
+
+        List<GenericMergeableNode<List<String>>> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+
+        // 创建单元化聚合节点
+        UnitAggregatableNode<List<String>> aggregatableNode = UnitAggregatableNodeBuilder.<List<String>>newBuilder()
+            .aggregator(
+                Aggregators.newParallelUnitAggregator(executor, new ArrayListMerger<>())
+            )
+            .aggregate(nodes)
+            .addListeners(new TestUnitAggregatableNodeListener1(), new TestUnitAggregatableNodeListener2())
+            .build();
+        ProcessDefinition<Integer> definition = ProcessDefinitionBuilder.<Integer>newBuilder()
+            // 注册执行节点
+            .addProcessNodes(
+                ProcessNodeBuilder.<Integer>newBuilder()
+                    // 设置Processor
+                    .by(new TestProcessor2())
+                    // 返回条件
+                    .returnOn(result -> true)
+                    .build(),
+                ProcessNodeBuilder.<Integer>newBuilder()
+                    .by(new TestProcessor1())
+                    .returnOn(result -> false)
+                    .build())
+            .addBranchNode(Nodes.newBranch(
+                ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                    .by(context -> ProcessStatus.proceed())
+                    .returnOn(result -> false)
+                    .build(),
+                ProcessNodeBuilder.<ProcessStatus>newBuilder()
+                    .by(context -> ProcessStatus.proceed())
+                    .returnOn(result -> false)
+                    .build()))
+            .addAggregateNode(aggregatableNode)
+            .build();
+        ProcessInstance<Integer> instance = definition.newInstance();
+        assertEquals(instance.getNodes().size(), 8L);
     }
+
+
 }
