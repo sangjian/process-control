@@ -1,9 +1,6 @@
 package cn.ideabuffer.process.core.test;
 
-import cn.ideabuffer.process.core.DefaultProcessInstance;
-import cn.ideabuffer.process.core.ProcessDefinition;
-import cn.ideabuffer.process.core.ProcessDefinitionBuilder;
-import cn.ideabuffer.process.core.ProcessInstance;
+import cn.ideabuffer.process.core.*;
 import cn.ideabuffer.process.core.aggregators.Aggregators;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.context.Contexts;
@@ -17,6 +14,8 @@ import cn.ideabuffer.process.core.nodes.builder.*;
 import cn.ideabuffer.process.core.nodes.merger.*;
 import cn.ideabuffer.process.core.test.merger.TestStringListMerger;
 import cn.ideabuffer.process.core.test.processors.aggregate.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,6 +142,76 @@ public class AggregateTest {
         expectedList.add("test1");
         expectedList.add("test2");
         assertEquals(result, expectedList);
+    }
+
+    @Test
+    public void testGenericAggregateListSerial() throws Exception {
+        Key<List<String>> resultKey = Contexts.newKey("resultKey", List.class);
+        Key<String> k1 = Contexts.newKey("k1", String.class);
+        Key<String> k2 = Contexts.newKey("k2", String.class);
+
+        GenericMergeableNode<String> node1 = GenericMergeableNodeBuilder.<String>newBuilder().by(
+                new Processor<String>() {
+                    @Override
+                    public @Nullable String process(@NotNull Context context) throws Exception {
+                        String s = context.get(k1);
+                        return s;
+                    }
+                })
+            .readableKeys(k1)
+            .build();
+        GenericMergeableNode<String> node2 = GenericMergeableNodeBuilder.<String>newBuilder().by(
+                new Processor<String>() {
+                    @Override
+                    public @Nullable String process(@NotNull Context context) throws Exception {
+                        String s = context.get(k2);
+                        return s;
+                    }
+                })
+            .readableKeys(k2)
+            .build();
+
+        List<GenericMergeableNode<String>> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+
+        // 创建通用聚合节点
+        GenericAggregatableNode<String, List<String>> node
+            = GenericAggregatableNodeBuilder.<String, List<String>>newBuilder().aggregator(
+                Aggregators.newSerialGenericAggregator(new TestStringListMerger()))
+            .aggregate(nodes)
+//            .readableKeys(k1, k2)
+            .resultKey(resultKey)
+            .build();
+        // 链式结果处理
+        node.thenApply(((ctx, result) -> {
+            boolean condition = result != null && result.size() == 2;
+            condition = condition && result.stream().filter(r -> r.equals("test1") || r.equals("test2")).collect(
+                Collectors.toList()).size() == 2;
+            assertTrue("result.size must be 2", condition);
+            logger.info("result:{}", result);
+            return result.size();
+        })).thenAccept((ctx, size) -> {
+            assertEquals("size must be 2", 2, (int)size);
+            logger.info("result:{}", size);
+        });
+        ProcessDefinition<List<String>> definition = ProcessDefinitionBuilder.<List<String>>newBuilder()
+            .declaringKeys(resultKey, k1, k2)
+            .resultHandler(context -> context.get(resultKey))
+            .addAggregateNode(node)
+            .build();
+
+        ProcessInstance<List<String>> instance = definition.newInstance();
+        Context context = Contexts.newContext();
+
+        context.put(k1, "test1");
+        context.put(k2, "test2");
+        instance.execute(context);
+        List<String> result = instance.getResult();
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add("test1");
+        expectedList.add("test2");
+        assertEquals(expectedList, result);
     }
 
     @Test

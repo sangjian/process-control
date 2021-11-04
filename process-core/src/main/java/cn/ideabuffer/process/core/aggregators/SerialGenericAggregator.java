@@ -3,6 +3,7 @@ package cn.ideabuffer.process.core.aggregators;
 import cn.ideabuffer.process.core.context.Context;
 import cn.ideabuffer.process.core.nodes.GenericMergeableNode;
 import cn.ideabuffer.process.core.nodes.merger.Merger;
+import cn.ideabuffer.process.core.utils.AggregateUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -37,12 +38,14 @@ public class SerialGenericAggregator<I, O> extends AbstractAggregator implements
         if (nodes == null || nodes.isEmpty()) {
             return null;
         }
-        List<I> results = nodes.stream().map(GenericMergeableNode::getProcessor).filter(Objects::nonNull).map(p -> {
-            try {
-                return p.process(context);
-            } catch (Exception e) {
-                logger.error("process error!", e);
-            }
+        List<I> results = nodes.stream().filter(Objects::nonNull)
+            .filter(node -> node.getProcessor() != null)
+            .map(node -> {
+                try {
+                    return AggregateUtils.process(context, node);
+                } catch (Exception e) {
+                    logger.error("process error!", e);
+                }
             return null;
         }).filter(Objects::nonNull).collect(Collectors.toList());
         return merger.merge(results);
