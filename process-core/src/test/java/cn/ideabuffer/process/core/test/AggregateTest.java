@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -212,6 +213,93 @@ public class AggregateTest {
         expectedList.add("test1");
         expectedList.add("test2");
         assertEquals(expectedList, result);
+    }
+
+    @Test
+    public void testGenericAggregateListSerialReturn() throws Exception {
+        Key<List<String>> resultKey = Contexts.newKey("resultKey", List.class);
+        Key<String> k1 = Contexts.newKey("k1", String.class);
+        Key<String> k2 = Contexts.newKey("k2", String.class);
+
+        GenericMergeableNode<String> node1 = GenericMergeableNodeBuilder.<String>newBuilder().by(
+                new Processor<String>() {
+                    @Override
+                    public @Nullable String process(@NotNull Context context) throws Exception {
+                        String s = context.get(k1);
+                        return s;
+                    }
+                })
+            .readableKeys(k1)
+            .build();
+        GenericMergeableNode<String> node2 = GenericMergeableNodeBuilder.<String>newBuilder().by(
+                new Processor<String>() {
+                    @Override
+                    public @Nullable String process(@NotNull Context context) throws Exception {
+                        String s = context.get(k2);
+                        return s;
+                    }
+                })
+            .readableKeys(k2)
+            .build();
+
+        List<GenericMergeableNode<String>> nodes = new ArrayList<>();
+        nodes.add(node1);
+        nodes.add(node2);
+
+        // 创建通用聚合节点
+        GenericAggregatableNode<String, List<String>> node
+            = GenericAggregatableNodeBuilder.<String, List<String>>newBuilder().aggregator(
+                Aggregators.newSerialGenericAggregator(new TestStringListMerger()))
+            .aggregate(nodes)
+//            .readableKeys(k1, k2)
+            .resultKey(resultKey)
+            .returnOn(new ReturnCondition<List<String>>() {
+                @Override
+                public boolean onCondition(@Nullable List<String> result) {
+                    return result.size() == 2;
+                }
+            })
+            .build();
+        // 链式结果处理
+        node.thenApply(((ctx, result) -> {
+            boolean condition = result != null && result.size() == 2;
+            condition = condition && result.stream().filter(r -> r.equals("test1") || r.equals("test2")).collect(
+                Collectors.toList()).size() == 2;
+            assertTrue("result.size must be 2", condition);
+            logger.info("result:{}", result);
+            return result.size();
+        })).thenAccept((ctx, size) -> {
+            assertEquals("size must be 2", 2, (int)size);
+            logger.info("result:{}", size);
+        });
+        AtomicBoolean inProcessor = new AtomicBoolean(false);
+        ProcessDefinition<List<String>> definition = ProcessDefinitionBuilder.<List<String>>newBuilder()
+            .declaringKeys(resultKey, k1, k2)
+            .resultHandler(context -> context.get(resultKey))
+            .addAggregateNode(node)
+            .addProcessNode(ProcessNodeBuilder.<String>newBuilder().by(new Processor<String>() {
+                @Override
+                public @Nullable String process(@NotNull Context context) throws Exception {
+                    inProcessor.getAndSet(true);
+                    return "";
+                }
+            })
+                .build()
+            )
+            .build();
+
+        ProcessInstance<List<String>> instance = definition.newInstance();
+        Context context = Contexts.newContext();
+
+        context.put(k1, "test1");
+        context.put(k2, "test2");
+        instance.execute(context);
+        List<String> result = instance.getResult();
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add("test1");
+        expectedList.add("test2");
+        assertEquals(expectedList, result);
+        assertFalse(inProcessor.get());
     }
 
     @Test

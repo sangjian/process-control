@@ -101,6 +101,10 @@ public abstract class AbstractTransmittableNode<R, P extends Processor<R>> exten
                 //noinspection unchecked
                 transmittableProcessor.fire(ctx, result);
             }
+            // 判断是否满足returnCondition
+            if (!isParallel() && getReturnCondition() != null && getReturnCondition().onCondition(result)) {
+                return ProcessStatus.complete();
+            }
             notifyListeners(ctx, result, null, true);
         } catch (Throwable t) {
             logger.error("process error, node:{}, context:{}", this, context, t);
